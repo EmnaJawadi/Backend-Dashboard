@@ -1,0 +1,34 @@
+import * as Joi from 'joi';
+
+const validationSchema = Joi.object({
+  NODE_ENV: Joi.string()
+    .valid('development', 'test', 'production')
+    .default('development'),
+
+  PORT: Joi.number().default(3000),
+
+  APP_URL: Joi.string().uri().optional().allow('', null),
+
+  DATABASE_URL: Joi.string().required(),
+
+  JWT_ACCESS_SECRET: Joi.string().required(),
+  JWT_REFRESH_SECRET: Joi.string().required(),
+  JWT_ACCESS_EXPIRES_IN: Joi.string().default('15m'),
+  JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
+
+  OPENAI_API_KEY: Joi.string().optional().allow('', null),
+  OPENAI_MODEL: Joi.string().default('gpt-4.1-mini'),
+  OPENAI_EMBEDDING_MODEL: Joi.string().default('text-embedding-3-small'),
+
+  EVOLUTION_API_URL: Joi.string().uri().optional().allow('', null),
+  EVOLUTION_API_KEY: Joi.string().optional().allow('', null),
+  WHATSAPP_DEFAULT_INSTANCE: Joi.string().optional().allow('', null),
+
+  REDIS_HOST: Joi.string().default('127.0.0.1'),
+  REDIS_PORT: Joi.number().default(6379),
+  REDIS_PASSWORD: Joi.string().optional().allow('', null),
+
+  QUEUE_ATTEMPTS: Joi.number().default(3),
+});
+
+export default validationSchema;
