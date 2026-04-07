@@ -1,13 +1,36 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WebhookLog {
+  id                     String   @id @default(cuid())
+  provider               String
+  eventType              String
+  externalMessageId      String?
+  conversationExternalId String?
+  contactPhone           String?
+  contactName            String?
+  messageText            String?
+  messageType            String?
+  deliveryStatus         String?
+  direction              String?
+  eventAt                DateTime
+  rawPayload             Json
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String?
+  entityId   String?
+  userId     String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
 }

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PrismaModule } from './database/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ContactNotesModule } from './modules/contact-notes/contact-notes.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
@@ -9,9 +10,14 @@ import { MessagesModule } from './modules/messages/messages.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
+import { GeminiModule } from './integrations/gemini/gemini.module';
+import { ConversationsGateway } from './gateways/conversations.gateway';
+import { NotificationsGateway } from './gateways/notifications.gateway';
 
 @Module({
   imports: [
+    PrismaModule,
+    GeminiModule,
     AuthModule,
     ContactNotesModule,
     ContactsModule,
@@ -23,5 +29,6 @@ import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
     UsersModule,
     WhatsappModule,
   ],
+  providers: [ConversationsGateway, NotificationsGateway],
 })
 export class AppModule {}
