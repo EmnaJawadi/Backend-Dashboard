@@ -1,0 +1,1 @@
+export { QueryUsersDto as UserQueryDto } from './query-users.dto';
