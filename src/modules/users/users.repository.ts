@@ -52,7 +52,7 @@ export class UsersRepository {
     }
 
     if (query.role) {
-      data = data.filter((user) => user.role === query.role);
+      data = data.filter((user) => String(user.role) === String(query.role));
     }
 
     if (query.companyId) {

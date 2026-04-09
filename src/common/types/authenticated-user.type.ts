@@ -1,10 +1,6 @@
-import { UserRole } from '../enums/user-role.enum';
-
 export type AuthenticatedUser = {
-  id: string;
+  sub: string;
   email: string;
-  role: UserRole;
-  firstName?: string | null;
-  lastName?: string | null;
-  isActive?: boolean;
+  role: 'SUPER_ADMIN' | 'COMPANY_ADMIN' | 'EMPLOYEE';
+  companyId: string | null;
 };
