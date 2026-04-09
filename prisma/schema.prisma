@@ -34,3 +34,55 @@ model AuditLog {
   metadata   Json?
   createdAt  DateTime @default(now())
 }
+
+model Company {
+  id            String         @id @default(cuid())
+  name          String
+  legalName     String?
+  email         String?
+  phoneNumber   String?
+  website       String?
+  industry      String?
+  country       String?
+  city          String?
+  address       String?
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  users         User[]
+  subscriptions Subscription[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  firstName     String
+  lastName      String?
+  email         String    @unique
+  password      String?
+  phoneNumber   String?
+  role          String    @default("agent")
+  isActive      Boolean   @default(true)
+  companyId     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  company       Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+}
+
+model Subscription {
+  id            String    @id @default(cuid())
+  companyId     String
+  plan          String
+  status        String    @default("active")
+  billingCycle  String    @default("monthly")
+  price         Float     @default(0)
+  currency      String    @default("USD")
+  startDate     DateTime  @default(now())
+  endDate       DateTime?
+  autoRenew     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}

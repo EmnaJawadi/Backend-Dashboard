@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { UserQueryDto } from './dto/user-query.dto';
+import { QueryUsersDto } from './dto/query-users.dto';
 import { UserEntity } from './entities/user.entity';
-import { UserMapper } from './mappers/user.mapper';
 
 @Injectable()
 export class UsersRepository {
@@ -13,24 +12,26 @@ export class UsersRepository {
     const firstName = data.firstName?.trim() ?? '';
     const lastName = data.lastName?.trim() ?? null;
 
-    const user = UserMapper.toEntity({
+    const user = new UserEntity({
       id: randomUUID(),
       firstName,
       lastName,
       fullName: [firstName, lastName].filter(Boolean).join(' '),
       email: data.email?.trim() ?? '',
-      phoneNumber: data.phoneNumber ?? null,
-      role: data.role ?? 'agent',
+      phoneNumber: data.phoneNumber?.trim() ?? null,
+      role: data.role?.trim() ?? 'agent',
+      companyId: data.companyId?.trim() ?? null,
       isActive: data.isActive ?? true,
       createdAt: now,
       updatedAt: now,
     });
 
     this.users.push(user);
+
     return user;
   }
 
-  findAll(query: UserQueryDto) {
+  findMany(query: QueryUsersDto) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
@@ -38,18 +39,24 @@ export class UsersRepository {
 
     if (query.search) {
       const search = query.search.toLowerCase();
+
       data = data.filter(
         (user) =>
           user.firstName.toLowerCase().includes(search) ||
           user.lastName?.toLowerCase().includes(search) ||
           user.fullName.toLowerCase().includes(search) ||
           user.email.toLowerCase().includes(search) ||
-          user.phoneNumber?.toLowerCase().includes(search),
+          user.phoneNumber?.toLowerCase().includes(search) ||
+          user.role.toLowerCase().includes(search),
       );
     }
 
     if (query.role) {
       data = data.filter((user) => user.role === query.role);
+    }
+
+    if (query.companyId) {
+      data = data.filter((user) => user.companyId === query.companyId);
     }
 
     if (query.isActive !== undefined) {
@@ -98,11 +105,15 @@ export class UsersRepository {
     }
 
     if (data.phoneNumber !== undefined) {
-      user.phoneNumber = data.phoneNumber;
+      user.phoneNumber = data.phoneNumber?.trim() ?? null;
     }
 
     if (data.role !== undefined) {
-      user.role = data.role;
+      user.role = data.role.trim();
+    }
+
+    if (data.companyId !== undefined) {
+      user.companyId = data.companyId?.trim() ?? null;
     }
 
     if (data.isActive !== undefined) {

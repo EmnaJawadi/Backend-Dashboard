@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { QueryUsersDto } from './dto/query-users.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserQueryDto } from './dto/user-query.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -24,7 +24,7 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@Query() query: UserQueryDto) {
+  findAll(@Query() query: QueryUsersDto) {
     return this.usersService.findAll(query);
   }
 
@@ -34,10 +34,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 

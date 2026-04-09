@@ -1,10 +1,9 @@
-import { UserRole } from '../entities/user.entity';
-
 export class CreateUserDto {
   firstName!: string;
   lastName?: string | null;
   email!: string;
   phoneNumber?: string | null;
-  role?: UserRole;
+  role?: string;
+  companyId?: string | null;
   isActive?: boolean;
 }

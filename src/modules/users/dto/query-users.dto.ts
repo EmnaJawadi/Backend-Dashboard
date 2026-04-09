@@ -1,0 +1,8 @@
+export class QueryUsersDto {
+  page?: string;
+  limit?: string;
+  search?: string;
+  role?: string;
+  companyId?: string;
+  isActive?: string;
+}

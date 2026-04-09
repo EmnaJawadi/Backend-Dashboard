@@ -1,5 +1,3 @@
-export type UserRole = 'admin' | 'agent' | 'supervisor';
-
 export class UserEntity {
   id!: string;
   firstName!: string;
@@ -7,7 +5,8 @@ export class UserEntity {
   fullName!: string;
   email!: string;
   phoneNumber?: string | null;
-  role!: UserRole;
+  role!: string;
+  companyId?: string | null;
   isActive!: boolean;
   createdAt!: Date;
   updatedAt!: Date;
