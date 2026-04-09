@@ -1,5 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -85,4 +87,40 @@ model Subscription {
   updatedAt     DateTime  @updatedAt
 
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model AiRun {
+  id           String   @id @default(cuid())
+  provider     String?
+  model        String?
+  prompt       String?
+  response     String?
+  status       String   @default("completed")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model KbArticle {
+  id           String    @id @default(cuid())
+  title        String
+  content      String
+  source       String?
+  isPublished  Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  chunks       KbChunk[]
+}
+
+model KbChunk {
+  id           String    @id @default(cuid())
+  articleId    String
+  content      String
+  chunkIndex   Int
+  embedding    Json?
+  createdAt    DateTime  @default(now())
+
+  article      KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
 }
