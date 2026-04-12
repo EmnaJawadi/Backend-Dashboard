@@ -1,126 +1,185 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+  provider   = "prisma-client"
+  output     = "../src/generated/prisma"
+  engineType = "client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+model User {
+  id            String   @id @default(uuid())
+  is_active     Boolean
+  created_at    DateTime
+  updated_at    DateTime
+  company_id    String?
+  full_name     String?
+  email         String   @unique
+  password_hash String
+  role          String
+
+  company Company? @relation(fields: [company_id], references: [id])
 }
 
-model WebhookLog {
-  id                     String   @id @default(cuid())
-  provider               String
-  eventType              String
-  externalMessageId      String?
-  conversationExternalId String?
-  contactPhone           String?
-  contactName            String?
-  messageText            String?
-  messageType            String?
-  deliveryStatus         String?
-  direction              String?
-  eventAt                DateTime
-  rawPayload             Json
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-}
-
-model AuditLog {
-  id         String   @id @default(cuid())
-  action     String
-  entityType String?
-  entityId   String?
-  userId     String?
-  metadata   Json?
-  createdAt  DateTime @default(now())
-}
 
 model Company {
-  id            String         @id @default(cuid())
-  name          String
-  legalName     String?
-  email         String?
-  phoneNumber   String?
-  website       String?
-  industry      String?
-  country       String?
+  id    String @id @default(uuid())
+  name  String?
+
+  users User[]
+}
+
+
+model Contact {
+  id            String   @id @default(uuid())
+  created_at    DateTime
+  updated_at    DateTime
+  last_seen     DateTime?
+  tags          Json?
+  language      String?
   city          String?
-  address       String?
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  country       String?
+  status        String?
+  notes         String?
+  segment       String?
+  source        String?
+  phone         String?
+  whatsapp_name String?
+  full_name     String?
+  email         String?
 
-  users         User[]
-  subscriptions Subscription[]
+  notes_rel Note[]
 }
 
-model User {
-  id            String    @id @default(cuid())
-  firstName     String
-  lastName      String?
-  email         String    @unique
-  password      String?
-  phoneNumber   String?
-  role          String    @default("agent")
-  isActive      Boolean   @default(true)
-  companyId     String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
 
-  company       Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+model Note {
+  id         String   @id @default(uuid())
+  contact_id String
+  author_id  String
+  created_at DateTime
+  updated_at DateTime
+  note       String
+
+  contact Contact @relation(fields: [contact_id], references: [id])
 }
 
-model Subscription {
-  id            String    @id @default(cuid())
-  companyId     String
-  plan          String
-  status        String    @default("active")
-  billingCycle  String    @default("monthly")
-  price         Float     @default(0)
-  currency      String    @default("USD")
-  startDate     DateTime  @default(now())
-  endDate       DateTime?
-  autoRenew     Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
 
-  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+model Message {
+  id                   String   @id @default(uuid())
+  conversation_id      String
+  raw_payload          Json
+  created_at           DateTime
+  message_timestamp    DateTime
+  content              String?
+  message_type         String?
+  media_url            String?
+  mime_type            String?
+  error_message        String?
+  delivery_status      String?
+  external_message_id  String?
+  direction            String?
+  sender_type          String?
 }
 
-model AiRun {
-  id           String   @id @default(cuid())
-  provider     String?
-  model        String?
-  prompt       String?
-  response     String?
-  status       String   @default("completed")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+
+model AiLog {
+  id                String   @id @default(uuid())
+  created_at        DateTime
+  conversation_id   String
+  message_id        String
+  tags_to_apply     Json?
+  sources_used      Json?
+  raw_response      Json?
+  prompt_tokens     Int?
+  completion_tokens Int?
+  total_tokens      Int?
+  latency_ms        Int?
+  confidence        Float?
+  handoff_required  Boolean?
+  input_text        String?
+  output_text       String?
+  intent            String?
+  model             String?
 }
 
-model KbArticle {
-  id           String    @id @default(cuid())
-  title        String
-  content      String
-  source       String?
-  isPublished  Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
 
-  chunks       KbChunk[]
+model AuditLog {
+  id            String   @id @default(uuid())
+  created_at    DateTime
+  actor_user_id String?
+  ip_address    String?
+  entity_id     String?
+  details       Json?
+  action        String?
+  entity_type   String?
 }
 
-model KbChunk {
-  id           String    @id @default(cuid())
-  articleId    String
-  content      String
-  chunkIndex   Int
-  embedding    Json?
-  createdAt    DateTime  @default(now())
 
-  article      KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+model Article {
+  id                String   @id @default(uuid())
+  created_at        DateTime
+  updated_at        DateTime
+  published_at      DateTime?
+  version           Int?
+  author_id         String?
+  source_url        String?
+  title             String?
+  body              String?
+  category          String?
+  source_type       String?
+  lang              String?
+  status            String?
+  tags              Json?
 
-  @@index([articleId])
+  chunks Chunk[]
+}
+
+
+model Chunk {
+  id              String   @id @default(uuid())
+  created_at      DateTime
+  article_id      String
+  chunk_index     Int
+  embedding_vector Bytes?
+  metadata_json   Json?
+  chunk_text      String?
+
+  article Article @relation(fields: [article_id], references: [id])
+}
+
+
+model PromptTemplate {
+  id                 String   @id @default(uuid())
+  created_at         DateTime
+  updated_at         DateTime
+  category           String?
+  template_body      String?
+  provider_template  String?
+  status             String?
+  name               String?
+  language           String?
+}
+
+
+model Setting {
+  id          String   @id @default(uuid())
+  created_at  DateTime
+  updated_at  DateTime
+  value       Json?
+  updated_by  String?
+  description String?
+  key         String   @unique
+}
+
+
+model WebhookLog {
+  id                String   @id @default(uuid())
+  received_at       DateTime
+  processed_at      DateTime?
+  payload           Json?
+  error_message     String?
+  processing_status String?
+  provider          String?
+  event_type        String?
+  external_event_id String?
 }
