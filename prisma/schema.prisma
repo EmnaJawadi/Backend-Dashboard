@@ -7,179 +7,219 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
 model User {
-  id            String   @id @default(uuid())
-  is_active     Boolean
-  created_at    DateTime
-  updated_at    DateTime
-  company_id    String?
-  full_name     String?
-  email         String   @unique
-  password_hash String
-  role          String
+  id           String   @id @default(uuid())
+  fullName     String?  @map("full_name")
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String
+  isActive     Boolean  @map("is_active")
+  createdAt    DateTime @map("created_at")
+  updatedAt    DateTime @map("updated_at")
 
-  company Company? @relation(fields: [company_id], references: [id])
+  @@map("users")
 }
-
-
-model Company {
-  id    String @id @default(uuid())
-  name  String?
-
-  users User[]
-}
-
 
 model Contact {
-  id            String   @id @default(uuid())
-  created_at    DateTime
-  updated_at    DateTime
-  last_seen     DateTime?
-  tags          Json?
-  language      String?
-  city          String?
-  country       String?
-  status        String?
-  notes         String?
-  segment       String?
-  source        String?
-  phone         String?
-  whatsapp_name String?
-  full_name     String?
-  email         String?
+  id           String    @id @default(uuid())
+  phone        String?
+  whatsappName String?   @map("whatsapp_name")
+  fullName     String?   @map("full_name")
+  email        String?
+  language     String?
+  city         String?
+  country      String?
+  tags         Json?
+  notes        String?
+  segment      String?
+  source       String?
+  status       String?
+  lastSeen     DateTime? @map("last_seen")
+  createdAt    DateTime  @map("created_at")
+  updatedAt    DateTime  @map("updated_at")
 
-  notes_rel Note[]
+  notesRel      ContactNote[]
+  conversations Conversation[]
+
+  @@map("contacts")
 }
 
+model ContactNote {
+  id        String   @id @default(uuid())
+  contactId String   @map("contact_id")
+  authorId  String   @map("author_id")
+  note      String
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
 
-model Note {
-  id         String   @id @default(uuid())
-  contact_id String
-  author_id  String
-  created_at DateTime
-  updated_at DateTime
-  note       String
+  contact Contact @relation(fields: [contactId], references: [id])
 
-  contact Contact @relation(fields: [contact_id], references: [id])
+  @@map("contact_notes")
 }
 
+model Conversation {
+  id                  String              @id @default(uuid())
+  contactId           String              @map("contact_id")
+  channel             String?
+  status              String?
+  priority            String?
+  assignedTo          String?             @map("assigned_to")
+  botPaused           Boolean?            @map("bot_paused")
+  handoffRequired     Boolean?            @map("handoff_required")
+  unreadCount         Int?                @map("unread_count")
+  lastMessageAt       DateTime?           @map("last_message_at")
+  lastCustomerMessageAt DateTime?         @map("last_customer_message_at")
+  lastBotMessageAt    DateTime?           @map("last_bot_message_at")
+  lastHumanMessageAt  DateTime?           @map("last_human_message_at")
+  closedAt            DateTime?           @map("closed_at")
+  createdAt           DateTime            @map("created_at")
+  updatedAt           DateTime            @map("updated_at")
+
+  contact Contact           @relation(fields: [contactId], references: [id])
+  tags    ConversationTag[]
+  messages Message[]
+
+  @@map("conversations")
+}
+
+model ConversationTag {
+  id             String   @id @default(uuid())
+  conversationId String   @map("conversation_id")
+  tag            String
+  createdAt      DateTime @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+
+  @@map("conversation_tags")
+}
 
 model Message {
-  id                   String   @id @default(uuid())
-  conversation_id      String
-  raw_payload          Json
-  created_at           DateTime
-  message_timestamp    DateTime
-  content              String?
-  message_type         String?
-  media_url            String?
-  mime_type            String?
-  error_message        String?
-  delivery_status      String?
-  external_message_id  String?
-  direction            String?
-  sender_type          String?
+  id                String    @id @default(uuid())
+  conversationId    String    @map("conversation_id")
+  externalMessageId String?   @map("external_message_id")
+  direction         String?
+  senderType        String?   @map("sender_type")
+  content           String?
+  messageType       String?   @map("message_type")
+  mediaUrl          String?   @map("media_url")
+  mimeType          String?   @map("mime_type")
+  rawPayload        Json?     @map("raw_payload")
+  deliveryStatus    String?   @map("delivery_status")
+  errorMessage      String?   @map("error_message")
+  createdAt         DateTime  @map("created_at")
+  messageTimestamp  DateTime? @map("message_timestamp")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+
+  @@map("messages")
 }
 
+model AiRun {
+  id               String   @id @default(uuid())
+  conversationId   String   @map("conversation_id")
+  messageId        String   @map("message_id")
+  inputText        String?  @map("input_text")
+  outputText       String?  @map("output_text")
+  intent           String?
+  model            String?
+  promptTokens     Int?     @map("prompt_tokens")
+  completionTokens Int?     @map("completion_tokens")
+  totalTokens      Int?     @map("total_tokens")
+  latencyMs        Int?     @map("latency_ms")
+  handoffRequired  Boolean? @map("handoff_required")
+  tagsToApply      Json?    @map("tags_to_apply")
+  rawResponse      Json?    @map("raw_response")
+  createdAt        DateTime @map("created_at")
 
-model AiLog {
-  id                String   @id @default(uuid())
-  created_at        DateTime
-  conversation_id   String
-  message_id        String
-  tags_to_apply     Json?
-  sources_used      Json?
-  raw_response      Json?
-  prompt_tokens     Int?
-  completion_tokens Int?
-  total_tokens      Int?
-  latency_ms        Int?
-  confidence        Float?
-  handoff_required  Boolean?
-  input_text        String?
-  output_text       String?
-  intent            String?
-  model             String?
+  @@map("ai_runs")
 }
-
 
 model AuditLog {
-  id            String   @id @default(uuid())
-  created_at    DateTime
-  actor_user_id String?
-  ip_address    String?
-  entity_id     String?
-  details       Json?
-  action        String?
-  entity_type   String?
+  id          String   @id @default(uuid())
+  actorUserId String?  @map("actor_user_id")
+  action      String?
+  entityType  String?  @map("entity_type")
+  entityId    String?  @map("entity_id")
+  details     Json?
+  ipAddress   String?  @map("ip_address")
+  createdAt   DateTime @map("created_at")
+
+  @@map("audit_logs")
 }
 
+model KbArticle {
+  id          String    @id @default(uuid())
+  title       String?
+  body        String?
+  category    String?
+  tags        Json?
+  lang        String?
+  status      String?
+  version     Int?
+  sourceTypes String?   @map("source_types")
+  sourceUrl   String?   @map("source_url")
+  authorId    String?   @map("author_id")
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @map("created_at")
+  updatedAt   DateTime  @map("updated_at")
 
-model Article {
-  id                String   @id @default(uuid())
-  created_at        DateTime
-  updated_at        DateTime
-  published_at      DateTime?
-  version           Int?
-  author_id         String?
-  source_url        String?
-  title             String?
-  body              String?
-  category          String?
-  source_type       String?
-  lang              String?
-  status            String?
-  tags              Json?
+  chunks KbChunk[]
 
-  chunks Chunk[]
+  @@map("kb_articles")
 }
 
+model KbChunk {
+  id               String   @id @default(uuid())
+  articleId        String   @map("article_id")
+  chunkIndex       Int      @map("chunk_index")
+  chunkText        String?  @map("chunk_text")
+  embeddingsVector Bytes?   @map("embeddings_vector")
+  metadataJson     Json?    @map("metadata_json")
+  createdAt        DateTime @map("created_at")
 
-model Chunk {
-  id              String   @id @default(uuid())
-  created_at      DateTime
-  article_id      String
-  chunk_index     Int
-  embedding_vector Bytes?
-  metadata_json   Json?
-  chunk_text      String?
+  article KbArticle @relation(fields: [articleId], references: [id])
 
-  article Article @relation(fields: [article_id], references: [id])
+  @@map("kb_chunks")
 }
 
-
-model PromptTemplate {
+model MessageTemplate {
   id                 String   @id @default(uuid())
-  created_at         DateTime
-  updated_at         DateTime
-  category           String?
-  template_body      String?
-  provider_template  String?
-  status             String?
   name               String?
   language           String?
-}
+  category           String?
+  templateBody       String?  @map("template_body")
+  providerTemplateId String?  @map("provider_template_id")
+  status             String?
+  createdAt          DateTime @map("created_at")
+  updatedAt          DateTime @map("updated_at")
 
+  @@map("message_templates")
+}
 
 model Setting {
   id          String   @id @default(uuid())
-  created_at  DateTime
-  updated_at  DateTime
-  value       Json?
-  updated_by  String?
-  description String?
   key         String   @unique
+  value       Json?
+  description String?
+  updatedBy   String?  @map("updated_by")
+  createdAt   DateTime @map("created_at")
+  updatedAt   DateTime @map("updated_at")
+
+  @@map("settings")
 }
 
+model WebhookEvent {
+  id               String    @id @default(uuid())
+  provider         String?
+  eventType        String?   @map("event_type")
+  externalEventId  String?   @map("external_event_id")
+  payload          Json?
+  processingStatus String?   @map("processing_status")
+  errorMessage     String?   @map("error_message")
+  receivedAt       DateTime  @map("received_at")
+  processedAt      DateTime? @map("processed_at")
 
-model WebhookLog {
-  id                String   @id @default(uuid())
-  received_at       DateTime
-  processed_at      DateTime?
-  payload           Json?
-  error_message     String?
-  processing_status String?
-  provider          String?
-  event_type        String?
-  external_event_id String?
+  @@map("webhook_events")
 }

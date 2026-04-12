@@ -26,60 +26,60 @@ export type AggregateSetting = {
 
 export type SettingMinAggregateOutputType = {
   id: string | null
-  created_at: Date | null
-  updated_at: Date | null
-  updated_by: string | null
-  description: string | null
   key: string | null
+  description: string | null
+  updatedBy: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SettingMaxAggregateOutputType = {
   id: string | null
-  created_at: Date | null
-  updated_at: Date | null
-  updated_by: string | null
-  description: string | null
   key: string | null
+  description: string | null
+  updatedBy: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SettingCountAggregateOutputType = {
   id: number
-  created_at: number
-  updated_at: number
-  value: number
-  updated_by: number
-  description: number
   key: number
+  value: number
+  description: number
+  updatedBy: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
 export type SettingMinAggregateInputType = {
   id?: true
-  created_at?: true
-  updated_at?: true
-  updated_by?: true
-  description?: true
   key?: true
+  description?: true
+  updatedBy?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SettingMaxAggregateInputType = {
   id?: true
-  created_at?: true
-  updated_at?: true
-  updated_by?: true
-  description?: true
   key?: true
+  description?: true
+  updatedBy?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SettingCountAggregateInputType = {
   id?: true
-  created_at?: true
-  updated_at?: true
-  value?: true
-  updated_by?: true
-  description?: true
   key?: true
+  value?: true
+  description?: true
+  updatedBy?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -157,12 +157,12 @@ export type SettingGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type SettingGroupByOutputType = {
   id: string
-  created_at: Date
-  updated_at: Date
-  value: runtime.JsonValue | null
-  updated_by: string | null
-  description: string | null
   key: string
+  value: runtime.JsonValue | null
+  description: string | null
+  updatedBy: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: SettingCountAggregateOutputType | null
   _min: SettingMinAggregateOutputType | null
   _max: SettingMaxAggregateOutputType | null
@@ -188,22 +188,22 @@ export type SettingWhereInput = {
   OR?: Prisma.SettingWhereInput[]
   NOT?: Prisma.SettingWhereInput | Prisma.SettingWhereInput[]
   id?: Prisma.StringFilter<"Setting"> | string
-  created_at?: Prisma.DateTimeFilter<"Setting"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"Setting"> | Date | string
-  value?: Prisma.JsonNullableFilter<"Setting">
-  updated_by?: Prisma.StringNullableFilter<"Setting"> | string | null
-  description?: Prisma.StringNullableFilter<"Setting"> | string | null
   key?: Prisma.StringFilter<"Setting"> | string
+  value?: Prisma.JsonNullableFilter<"Setting">
+  description?: Prisma.StringNullableFilter<"Setting"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"Setting"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }
 
 export type SettingOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-  value?: Prisma.SortOrderInput | Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
+  value?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SettingWhereUniqueInput = Prisma.AtLeast<{
@@ -212,21 +212,21 @@ export type SettingWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SettingWhereInput | Prisma.SettingWhereInput[]
   OR?: Prisma.SettingWhereInput[]
   NOT?: Prisma.SettingWhereInput | Prisma.SettingWhereInput[]
-  created_at?: Prisma.DateTimeFilter<"Setting"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"Setting"> | Date | string
   value?: Prisma.JsonNullableFilter<"Setting">
-  updated_by?: Prisma.StringNullableFilter<"Setting"> | string | null
   description?: Prisma.StringNullableFilter<"Setting"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"Setting"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Setting"> | Date | string
 }, "id" | "key">
 
 export type SettingOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-  value?: Prisma.SortOrderInput | Prisma.SortOrder
-  updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
+  value?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.SettingCountOrderByAggregateInput
   _max?: Prisma.SettingMaxOrderByAggregateInput
   _min?: Prisma.SettingMinOrderByAggregateInput
@@ -237,167 +237,167 @@ export type SettingScalarWhereWithAggregatesInput = {
   OR?: Prisma.SettingScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SettingScalarWhereWithAggregatesInput | Prisma.SettingScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Setting"> | string
-  created_at?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
-  updated_at?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
-  value?: Prisma.JsonNullableWithAggregatesFilter<"Setting">
-  updated_by?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
   key?: Prisma.StringWithAggregatesFilter<"Setting"> | string
+  value?: Prisma.JsonNullableWithAggregatesFilter<"Setting">
+  description?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  updatedBy?: Prisma.StringNullableWithAggregatesFilter<"Setting"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Setting"> | Date | string
 }
 
 export type SettingCreateInput = {
   id?: string
-  created_at: Date | string
-  updated_at: Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: string | null
-  description?: string | null
   key: string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: string | null
+  updatedBy?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 export type SettingUncheckedCreateInput = {
   id?: string
-  created_at: Date | string
-  updated_at: Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: string | null
-  description?: string | null
   key: string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: string | null
+  updatedBy?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 export type SettingUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SettingUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SettingCreateManyInput = {
   id?: string
-  created_at: Date | string
-  updated_at: Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: string | null
-  description?: string | null
   key: string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: string | null
+  updatedBy?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 export type SettingUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SettingUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SettingCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-  value?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SettingMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SettingMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-  updated_by?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 
 
 export type SettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  created_at?: boolean
-  updated_at?: boolean
-  value?: boolean
-  updated_by?: boolean
-  description?: boolean
   key?: boolean
+  value?: boolean
+  description?: boolean
+  updatedBy?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
 export type SettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  created_at?: boolean
-  updated_at?: boolean
-  value?: boolean
-  updated_by?: boolean
-  description?: boolean
   key?: boolean
+  value?: boolean
+  description?: boolean
+  updatedBy?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
 export type SettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  created_at?: boolean
-  updated_at?: boolean
-  value?: boolean
-  updated_by?: boolean
-  description?: boolean
   key?: boolean
+  value?: boolean
+  description?: boolean
+  updatedBy?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["setting"]>
 
 export type SettingSelectScalar = {
   id?: boolean
-  created_at?: boolean
-  updated_at?: boolean
-  value?: boolean
-  updated_by?: boolean
-  description?: boolean
   key?: boolean
+  value?: boolean
+  description?: boolean
+  updatedBy?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "created_at" | "updated_at" | "value" | "updated_by" | "description" | "key", ExtArgs["result"]["setting"]>
+export type SettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "value" | "description" | "updatedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["setting"]>
 
 export type $SettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Setting"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    created_at: Date
-    updated_at: Date
-    value: runtime.JsonValue | null
-    updated_by: string | null
-    description: string | null
     key: string
+    value: runtime.JsonValue | null
+    description: string | null
+    updatedBy: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["setting"]>
   composites: {}
 }
@@ -822,12 +822,12 @@ export interface Prisma__SettingClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SettingFieldRefs {
   readonly id: Prisma.FieldRef<"Setting", 'String'>
-  readonly created_at: Prisma.FieldRef<"Setting", 'DateTime'>
-  readonly updated_at: Prisma.FieldRef<"Setting", 'DateTime'>
-  readonly value: Prisma.FieldRef<"Setting", 'Json'>
-  readonly updated_by: Prisma.FieldRef<"Setting", 'String'>
-  readonly description: Prisma.FieldRef<"Setting", 'String'>
   readonly key: Prisma.FieldRef<"Setting", 'String'>
+  readonly value: Prisma.FieldRef<"Setting", 'Json'>
+  readonly description: Prisma.FieldRef<"Setting", 'String'>
+  readonly updatedBy: Prisma.FieldRef<"Setting", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Setting", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Setting", 'DateTime'>
 }
     
 

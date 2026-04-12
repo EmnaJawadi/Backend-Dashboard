@@ -6,6 +6,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { AuthenticatedUser } from '../types/authenticated-user.type';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -26,11 +27,19 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest<TUser = unknown>(err: unknown, user: TUser): TUser {
+  handleRequest<TUser = AuthenticatedUser>(
+    err: any,
+    user: any,
+    info: any,
+    context: ExecutionContext,
+    status?: any,
+  ): TUser {
     if (err || !user) {
-      throw err instanceof Error ? err : new UnauthorizedException('Unauthorized');
+      throw err instanceof Error
+        ? err
+        : new UnauthorizedException('Unauthorized');
     }
 
-    return user;
+    return user as TUser;
   }
 }

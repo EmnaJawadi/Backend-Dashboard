@@ -52,17 +52,18 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Company: 'Company',
   Contact: 'Contact',
-  Note: 'Note',
+  ContactNote: 'ContactNote',
+  Conversation: 'Conversation',
+  ConversationTag: 'ConversationTag',
   Message: 'Message',
-  AiLog: 'AiLog',
+  AiRun: 'AiRun',
   AuditLog: 'AuditLog',
-  Article: 'Article',
-  Chunk: 'Chunk',
-  PromptTemplate: 'PromptTemplate',
+  KbArticle: 'KbArticle',
+  KbChunk: 'KbChunk',
+  MessageTemplate: 'MessageTemplate',
   Setting: 'Setting',
-  WebhookLog: 'WebhookLog'
+  WebhookEvent: 'WebhookEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -83,192 +84,213 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  company_id: 'company_id',
-  full_name: 'full_name',
+  fullName: 'fullName',
   email: 'email',
-  password_hash: 'password_hash',
-  role: 'role'
+  passwordHash: 'passwordHash',
+  role: 'role',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const CompanyScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
-
-
 export const ContactScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  last_seen: 'last_seen',
-  tags: 'tags',
+  phone: 'phone',
+  whatsappName: 'whatsappName',
+  fullName: 'fullName',
+  email: 'email',
   language: 'language',
   city: 'city',
   country: 'country',
-  status: 'status',
+  tags: 'tags',
   notes: 'notes',
   segment: 'segment',
   source: 'source',
-  phone: 'phone',
-  whatsapp_name: 'whatsapp_name',
-  full_name: 'full_name',
-  email: 'email'
+  status: 'status',
+  lastSeen: 'lastSeen',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
 
 
-export const NoteScalarFieldEnum = {
+export const ContactNoteScalarFieldEnum = {
   id: 'id',
-  contact_id: 'contact_id',
-  author_id: 'author_id',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  note: 'note'
+  contactId: 'contactId',
+  authorId: 'authorId',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof NoteScalarFieldEnum]
+export type ContactNoteScalarFieldEnum = (typeof ContactNoteScalarFieldEnum)[keyof typeof ContactNoteScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  contactId: 'contactId',
+  channel: 'channel',
+  status: 'status',
+  priority: 'priority',
+  assignedTo: 'assignedTo',
+  botPaused: 'botPaused',
+  handoffRequired: 'handoffRequired',
+  unreadCount: 'unreadCount',
+  lastMessageAt: 'lastMessageAt',
+  lastCustomerMessageAt: 'lastCustomerMessageAt',
+  lastBotMessageAt: 'lastBotMessageAt',
+  lastHumanMessageAt: 'lastHumanMessageAt',
+  closedAt: 'closedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const ConversationTagScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  tag: 'tag',
+  createdAt: 'createdAt'
+} as const
+
+export type ConversationTagScalarFieldEnum = (typeof ConversationTagScalarFieldEnum)[keyof typeof ConversationTagScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {
   id: 'id',
-  conversation_id: 'conversation_id',
-  raw_payload: 'raw_payload',
-  created_at: 'created_at',
-  message_timestamp: 'message_timestamp',
-  content: 'content',
-  message_type: 'message_type',
-  media_url: 'media_url',
-  mime_type: 'mime_type',
-  error_message: 'error_message',
-  delivery_status: 'delivery_status',
-  external_message_id: 'external_message_id',
+  conversationId: 'conversationId',
+  externalMessageId: 'externalMessageId',
   direction: 'direction',
-  sender_type: 'sender_type'
+  senderType: 'senderType',
+  content: 'content',
+  messageType: 'messageType',
+  mediaUrl: 'mediaUrl',
+  mimeType: 'mimeType',
+  rawPayload: 'rawPayload',
+  deliveryStatus: 'deliveryStatus',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  messageTimestamp: 'messageTimestamp'
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
-export const AiLogScalarFieldEnum = {
+export const AiRunScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  conversation_id: 'conversation_id',
-  message_id: 'message_id',
-  tags_to_apply: 'tags_to_apply',
-  sources_used: 'sources_used',
-  raw_response: 'raw_response',
-  prompt_tokens: 'prompt_tokens',
-  completion_tokens: 'completion_tokens',
-  total_tokens: 'total_tokens',
-  latency_ms: 'latency_ms',
-  confidence: 'confidence',
-  handoff_required: 'handoff_required',
-  input_text: 'input_text',
-  output_text: 'output_text',
+  conversationId: 'conversationId',
+  messageId: 'messageId',
+  inputText: 'inputText',
+  outputText: 'outputText',
   intent: 'intent',
-  model: 'model'
+  model: 'model',
+  promptTokens: 'promptTokens',
+  completionTokens: 'completionTokens',
+  totalTokens: 'totalTokens',
+  latencyMs: 'latencyMs',
+  handoffRequired: 'handoffRequired',
+  tagsToApply: 'tagsToApply',
+  rawResponse: 'rawResponse',
+  createdAt: 'createdAt'
 } as const
 
-export type AiLogScalarFieldEnum = (typeof AiLogScalarFieldEnum)[keyof typeof AiLogScalarFieldEnum]
+export type AiRunScalarFieldEnum = (typeof AiRunScalarFieldEnum)[keyof typeof AiRunScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  actor_user_id: 'actor_user_id',
-  ip_address: 'ip_address',
-  entity_id: 'entity_id',
-  details: 'details',
+  actorUserId: 'actorUserId',
   action: 'action',
-  entity_type: 'entity_type'
+  entityType: 'entityType',
+  entityId: 'entityId',
+  details: 'details',
+  ipAddress: 'ipAddress',
+  createdAt: 'createdAt'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
-export const ArticleScalarFieldEnum = {
+export const KbArticleScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  published_at: 'published_at',
-  version: 'version',
-  author_id: 'author_id',
-  source_url: 'source_url',
   title: 'title',
   body: 'body',
   category: 'category',
-  source_type: 'source_type',
+  tags: 'tags',
   lang: 'lang',
   status: 'status',
-  tags: 'tags'
+  version: 'version',
+  sourceTypes: 'sourceTypes',
+  sourceUrl: 'sourceUrl',
+  authorId: 'authorId',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+export type KbArticleScalarFieldEnum = (typeof KbArticleScalarFieldEnum)[keyof typeof KbArticleScalarFieldEnum]
 
 
-export const ChunkScalarFieldEnum = {
+export const KbChunkScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  article_id: 'article_id',
-  chunk_index: 'chunk_index',
-  embedding_vector: 'embedding_vector',
-  metadata_json: 'metadata_json',
-  chunk_text: 'chunk_text'
+  articleId: 'articleId',
+  chunkIndex: 'chunkIndex',
+  chunkText: 'chunkText',
+  embeddingsVector: 'embeddingsVector',
+  metadataJson: 'metadataJson',
+  createdAt: 'createdAt'
 } as const
 
-export type ChunkScalarFieldEnum = (typeof ChunkScalarFieldEnum)[keyof typeof ChunkScalarFieldEnum]
+export type KbChunkScalarFieldEnum = (typeof KbChunkScalarFieldEnum)[keyof typeof KbChunkScalarFieldEnum]
 
 
-export const PromptTemplateScalarFieldEnum = {
+export const MessageTemplateScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
-  category: 'category',
-  template_body: 'template_body',
-  provider_template: 'provider_template',
-  status: 'status',
   name: 'name',
-  language: 'language'
+  language: 'language',
+  category: 'category',
+  templateBody: 'templateBody',
+  providerTemplateId: 'providerTemplateId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
+export type MessageTemplateScalarFieldEnum = (typeof MessageTemplateScalarFieldEnum)[keyof typeof MessageTemplateScalarFieldEnum]
 
 
 export const SettingScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at',
-  updated_at: 'updated_at',
+  key: 'key',
   value: 'value',
-  updated_by: 'updated_by',
   description: 'description',
-  key: 'key'
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
 
-export const WebhookLogScalarFieldEnum = {
+export const WebhookEventScalarFieldEnum = {
   id: 'id',
-  received_at: 'received_at',
-  processed_at: 'processed_at',
-  payload: 'payload',
-  error_message: 'error_message',
-  processing_status: 'processing_status',
   provider: 'provider',
-  event_type: 'event_type',
-  external_event_id: 'external_event_id'
+  eventType: 'eventType',
+  externalEventId: 'externalEventId',
+  payload: 'payload',
+  processingStatus: 'processingStatus',
+  errorMessage: 'errorMessage',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt'
 } as const
 
-export type WebhookLogScalarFieldEnum = (typeof WebhookLogScalarFieldEnum)[keyof typeof WebhookLogScalarFieldEnum]
+export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -285,13 +307,6 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

@@ -47,57 +47,62 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
- * Model Company
- * 
- */
-export type Company = Prisma.CompanyModel
-/**
  * Model Contact
  * 
  */
 export type Contact = Prisma.ContactModel
 /**
- * Model Note
+ * Model ContactNote
  * 
  */
-export type Note = Prisma.NoteModel
+export type ContactNote = Prisma.ContactNoteModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model ConversationTag
+ * 
+ */
+export type ConversationTag = Prisma.ConversationTagModel
 /**
  * Model Message
  * 
  */
 export type Message = Prisma.MessageModel
 /**
- * Model AiLog
+ * Model AiRun
  * 
  */
-export type AiLog = Prisma.AiLogModel
+export type AiRun = Prisma.AiRunModel
 /**
  * Model AuditLog
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
- * Model Article
+ * Model KbArticle
  * 
  */
-export type Article = Prisma.ArticleModel
+export type KbArticle = Prisma.KbArticleModel
 /**
- * Model Chunk
+ * Model KbChunk
  * 
  */
-export type Chunk = Prisma.ChunkModel
+export type KbChunk = Prisma.KbChunkModel
 /**
- * Model PromptTemplate
+ * Model MessageTemplate
  * 
  */
-export type PromptTemplate = Prisma.PromptTemplateModel
+export type MessageTemplate = Prisma.MessageTemplateModel
 /**
  * Model Setting
  * 
  */
 export type Setting = Prisma.SettingModel
 /**
- * Model WebhookLog
+ * Model WebhookEvent
  * 
  */
-export type WebhookLog = Prisma.WebhookLogModel
+export type WebhookEvent = Prisma.WebhookEventModel

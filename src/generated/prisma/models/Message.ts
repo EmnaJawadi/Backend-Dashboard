@@ -26,102 +26,102 @@ export type AggregateMessage = {
 
 export type MessageMinAggregateOutputType = {
   id: string | null
-  conversation_id: string | null
-  created_at: Date | null
-  message_timestamp: Date | null
-  content: string | null
-  message_type: string | null
-  media_url: string | null
-  mime_type: string | null
-  error_message: string | null
-  delivery_status: string | null
-  external_message_id: string | null
+  conversationId: string | null
+  externalMessageId: string | null
   direction: string | null
-  sender_type: string | null
+  senderType: string | null
+  content: string | null
+  messageType: string | null
+  mediaUrl: string | null
+  mimeType: string | null
+  deliveryStatus: string | null
+  errorMessage: string | null
+  createdAt: Date | null
+  messageTimestamp: Date | null
 }
 
 export type MessageMaxAggregateOutputType = {
   id: string | null
-  conversation_id: string | null
-  created_at: Date | null
-  message_timestamp: Date | null
-  content: string | null
-  message_type: string | null
-  media_url: string | null
-  mime_type: string | null
-  error_message: string | null
-  delivery_status: string | null
-  external_message_id: string | null
+  conversationId: string | null
+  externalMessageId: string | null
   direction: string | null
-  sender_type: string | null
+  senderType: string | null
+  content: string | null
+  messageType: string | null
+  mediaUrl: string | null
+  mimeType: string | null
+  deliveryStatus: string | null
+  errorMessage: string | null
+  createdAt: Date | null
+  messageTimestamp: Date | null
 }
 
 export type MessageCountAggregateOutputType = {
   id: number
-  conversation_id: number
-  raw_payload: number
-  created_at: number
-  message_timestamp: number
-  content: number
-  message_type: number
-  media_url: number
-  mime_type: number
-  error_message: number
-  delivery_status: number
-  external_message_id: number
+  conversationId: number
+  externalMessageId: number
   direction: number
-  sender_type: number
+  senderType: number
+  content: number
+  messageType: number
+  mediaUrl: number
+  mimeType: number
+  rawPayload: number
+  deliveryStatus: number
+  errorMessage: number
+  createdAt: number
+  messageTimestamp: number
   _all: number
 }
 
 
 export type MessageMinAggregateInputType = {
   id?: true
-  conversation_id?: true
-  created_at?: true
-  message_timestamp?: true
-  content?: true
-  message_type?: true
-  media_url?: true
-  mime_type?: true
-  error_message?: true
-  delivery_status?: true
-  external_message_id?: true
+  conversationId?: true
+  externalMessageId?: true
   direction?: true
-  sender_type?: true
+  senderType?: true
+  content?: true
+  messageType?: true
+  mediaUrl?: true
+  mimeType?: true
+  deliveryStatus?: true
+  errorMessage?: true
+  createdAt?: true
+  messageTimestamp?: true
 }
 
 export type MessageMaxAggregateInputType = {
   id?: true
-  conversation_id?: true
-  created_at?: true
-  message_timestamp?: true
-  content?: true
-  message_type?: true
-  media_url?: true
-  mime_type?: true
-  error_message?: true
-  delivery_status?: true
-  external_message_id?: true
+  conversationId?: true
+  externalMessageId?: true
   direction?: true
-  sender_type?: true
+  senderType?: true
+  content?: true
+  messageType?: true
+  mediaUrl?: true
+  mimeType?: true
+  deliveryStatus?: true
+  errorMessage?: true
+  createdAt?: true
+  messageTimestamp?: true
 }
 
 export type MessageCountAggregateInputType = {
   id?: true
-  conversation_id?: true
-  raw_payload?: true
-  created_at?: true
-  message_timestamp?: true
-  content?: true
-  message_type?: true
-  media_url?: true
-  mime_type?: true
-  error_message?: true
-  delivery_status?: true
-  external_message_id?: true
+  conversationId?: true
+  externalMessageId?: true
   direction?: true
-  sender_type?: true
+  senderType?: true
+  content?: true
+  messageType?: true
+  mediaUrl?: true
+  mimeType?: true
+  rawPayload?: true
+  deliveryStatus?: true
+  errorMessage?: true
+  createdAt?: true
+  messageTimestamp?: true
   _all?: true
 }
 
@@ -199,19 +199,19 @@ export type MessageGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type MessageGroupByOutputType = {
   id: string
-  conversation_id: string
-  raw_payload: runtime.JsonValue
-  created_at: Date
-  message_timestamp: Date
-  content: string | null
-  message_type: string | null
-  media_url: string | null
-  mime_type: string | null
-  error_message: string | null
-  delivery_status: string | null
-  external_message_id: string | null
+  conversationId: string
+  externalMessageId: string | null
   direction: string | null
-  sender_type: string | null
+  senderType: string | null
+  content: string | null
+  messageType: string | null
+  mediaUrl: string | null
+  mimeType: string | null
+  rawPayload: runtime.JsonValue | null
+  deliveryStatus: string | null
+  errorMessage: string | null
+  createdAt: Date
+  messageTimestamp: Date | null
   _count: MessageCountAggregateOutputType | null
   _min: MessageMinAggregateOutputType | null
   _max: MessageMaxAggregateOutputType | null
@@ -237,36 +237,38 @@ export type MessageWhereInput = {
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   id?: Prisma.StringFilter<"Message"> | string
-  conversation_id?: Prisma.StringFilter<"Message"> | string
-  raw_payload?: Prisma.JsonFilter<"Message">
-  created_at?: Prisma.DateTimeFilter<"Message"> | Date | string
-  message_timestamp?: Prisma.DateTimeFilter<"Message"> | Date | string
-  content?: Prisma.StringNullableFilter<"Message"> | string | null
-  message_type?: Prisma.StringNullableFilter<"Message"> | string | null
-  media_url?: Prisma.StringNullableFilter<"Message"> | string | null
-  mime_type?: Prisma.StringNullableFilter<"Message"> | string | null
-  error_message?: Prisma.StringNullableFilter<"Message"> | string | null
-  delivery_status?: Prisma.StringNullableFilter<"Message"> | string | null
-  external_message_id?: Prisma.StringNullableFilter<"Message"> | string | null
+  conversationId?: Prisma.StringFilter<"Message"> | string
+  externalMessageId?: Prisma.StringNullableFilter<"Message"> | string | null
   direction?: Prisma.StringNullableFilter<"Message"> | string | null
-  sender_type?: Prisma.StringNullableFilter<"Message"> | string | null
+  senderType?: Prisma.StringNullableFilter<"Message"> | string | null
+  content?: Prisma.StringNullableFilter<"Message"> | string | null
+  messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
+  rawPayload?: Prisma.JsonNullableFilter<"Message">
+  deliveryStatus?: Prisma.StringNullableFilter<"Message"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"Message"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
+  messageTimestamp?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
+  conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
 }
 
 export type MessageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  conversation_id?: Prisma.SortOrder
-  raw_payload?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  message_timestamp?: Prisma.SortOrder
-  content?: Prisma.SortOrderInput | Prisma.SortOrder
-  message_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  media_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  mime_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  error_message?: Prisma.SortOrderInput | Prisma.SortOrder
-  delivery_status?: Prisma.SortOrderInput | Prisma.SortOrder
-  external_message_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationId?: Prisma.SortOrder
+  externalMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   direction?: Prisma.SortOrderInput | Prisma.SortOrder
-  sender_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  senderType?: Prisma.SortOrderInput | Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  messageType?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  rawPayload?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  messageTimestamp?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversation?: Prisma.ConversationOrderByWithRelationInput
 }
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
@@ -274,36 +276,37 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
-  conversation_id?: Prisma.StringFilter<"Message"> | string
-  raw_payload?: Prisma.JsonFilter<"Message">
-  created_at?: Prisma.DateTimeFilter<"Message"> | Date | string
-  message_timestamp?: Prisma.DateTimeFilter<"Message"> | Date | string
-  content?: Prisma.StringNullableFilter<"Message"> | string | null
-  message_type?: Prisma.StringNullableFilter<"Message"> | string | null
-  media_url?: Prisma.StringNullableFilter<"Message"> | string | null
-  mime_type?: Prisma.StringNullableFilter<"Message"> | string | null
-  error_message?: Prisma.StringNullableFilter<"Message"> | string | null
-  delivery_status?: Prisma.StringNullableFilter<"Message"> | string | null
-  external_message_id?: Prisma.StringNullableFilter<"Message"> | string | null
+  conversationId?: Prisma.StringFilter<"Message"> | string
+  externalMessageId?: Prisma.StringNullableFilter<"Message"> | string | null
   direction?: Prisma.StringNullableFilter<"Message"> | string | null
-  sender_type?: Prisma.StringNullableFilter<"Message"> | string | null
+  senderType?: Prisma.StringNullableFilter<"Message"> | string | null
+  content?: Prisma.StringNullableFilter<"Message"> | string | null
+  messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
+  rawPayload?: Prisma.JsonNullableFilter<"Message">
+  deliveryStatus?: Prisma.StringNullableFilter<"Message"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"Message"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
+  messageTimestamp?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
+  conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
 }, "id">
 
 export type MessageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  conversation_id?: Prisma.SortOrder
-  raw_payload?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  message_timestamp?: Prisma.SortOrder
-  content?: Prisma.SortOrderInput | Prisma.SortOrder
-  message_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  media_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  mime_type?: Prisma.SortOrderInput | Prisma.SortOrder
-  error_message?: Prisma.SortOrderInput | Prisma.SortOrder
-  delivery_status?: Prisma.SortOrderInput | Prisma.SortOrder
-  external_message_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationId?: Prisma.SortOrder
+  externalMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   direction?: Prisma.SortOrderInput | Prisma.SortOrder
-  sender_type?: Prisma.SortOrderInput | Prisma.SortOrder
+  senderType?: Prisma.SortOrderInput | Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  messageType?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  rawPayload?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  messageTimestamp?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.MessageCountOrderByAggregateInput
   _max?: Prisma.MessageMaxOrderByAggregateInput
   _min?: Prisma.MessageMinOrderByAggregateInput
@@ -314,279 +317,486 @@ export type MessageScalarWhereWithAggregatesInput = {
   OR?: Prisma.MessageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MessageScalarWhereWithAggregatesInput | Prisma.MessageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Message"> | string
-  conversation_id?: Prisma.StringWithAggregatesFilter<"Message"> | string
-  raw_payload?: Prisma.JsonWithAggregatesFilter<"Message">
-  created_at?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
-  message_timestamp?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
-  content?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  message_type?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  media_url?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  mime_type?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  error_message?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  delivery_status?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  external_message_id?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  conversationId?: Prisma.StringWithAggregatesFilter<"Message"> | string
+  externalMessageId?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   direction?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
-  sender_type?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  senderType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  content?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  messageType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  mediaUrl?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  mimeType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  rawPayload?: Prisma.JsonNullableWithAggregatesFilter<"Message">
+  deliveryStatus?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  errorMessage?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
+  messageTimestamp?: Prisma.DateTimeNullableWithAggregatesFilter<"Message"> | Date | string | null
 }
 
 export type MessageCreateInput = {
   id?: string
-  conversation_id: string
-  raw_payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at: Date | string
-  message_timestamp: Date | string
-  content?: string | null
-  message_type?: string | null
-  media_url?: string | null
-  mime_type?: string | null
-  error_message?: string | null
-  delivery_status?: string | null
-  external_message_id?: string | null
+  externalMessageId?: string | null
   direction?: string | null
-  sender_type?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+  conversation: Prisma.ConversationCreateNestedOneWithoutMessagesInput
 }
 
 export type MessageUncheckedCreateInput = {
   id?: string
-  conversation_id: string
-  raw_payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at: Date | string
-  message_timestamp: Date | string
-  content?: string | null
-  message_type?: string | null
-  media_url?: string | null
-  mime_type?: string | null
-  error_message?: string | null
-  delivery_status?: string | null
-  external_message_id?: string | null
+  conversationId: string
+  externalMessageId?: string | null
   direction?: string | null
-  sender_type?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
 }
 
 export type MessageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
-  raw_payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  message_timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  error_message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  external_message_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sender_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutMessagesNestedInput
 }
 
 export type MessageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
-  raw_payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  message_timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  error_message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  external_message_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sender_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MessageCreateManyInput = {
   id?: string
-  conversation_id: string
-  raw_payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at: Date | string
-  message_timestamp: Date | string
-  content?: string | null
-  message_type?: string | null
-  media_url?: string | null
-  mime_type?: string | null
-  error_message?: string | null
-  delivery_status?: string | null
-  external_message_id?: string | null
+  conversationId: string
+  externalMessageId?: string | null
   direction?: string | null
-  sender_type?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
 }
 
 export type MessageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
-  raw_payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  message_timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  error_message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  external_message_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sender_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MessageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
-  raw_payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  message_timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mime_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  error_message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  delivery_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  external_message_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sender_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type MessageListRelationFilter = {
+  every?: Prisma.MessageWhereInput
+  some?: Prisma.MessageWhereInput
+  none?: Prisma.MessageWhereInput
+}
+
+export type MessageOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type MessageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  conversation_id?: Prisma.SortOrder
-  raw_payload?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  message_timestamp?: Prisma.SortOrder
-  content?: Prisma.SortOrder
-  message_type?: Prisma.SortOrder
-  media_url?: Prisma.SortOrder
-  mime_type?: Prisma.SortOrder
-  error_message?: Prisma.SortOrder
-  delivery_status?: Prisma.SortOrder
-  external_message_id?: Prisma.SortOrder
+  conversationId?: Prisma.SortOrder
+  externalMessageId?: Prisma.SortOrder
   direction?: Prisma.SortOrder
-  sender_type?: Prisma.SortOrder
+  senderType?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  messageType?: Prisma.SortOrder
+  mediaUrl?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
+  rawPayload?: Prisma.SortOrder
+  deliveryStatus?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  messageTimestamp?: Prisma.SortOrder
 }
 
 export type MessageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  conversation_id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  message_timestamp?: Prisma.SortOrder
-  content?: Prisma.SortOrder
-  message_type?: Prisma.SortOrder
-  media_url?: Prisma.SortOrder
-  mime_type?: Prisma.SortOrder
-  error_message?: Prisma.SortOrder
-  delivery_status?: Prisma.SortOrder
-  external_message_id?: Prisma.SortOrder
+  conversationId?: Prisma.SortOrder
+  externalMessageId?: Prisma.SortOrder
   direction?: Prisma.SortOrder
-  sender_type?: Prisma.SortOrder
+  senderType?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  messageType?: Prisma.SortOrder
+  mediaUrl?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
+  deliveryStatus?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  messageTimestamp?: Prisma.SortOrder
 }
 
 export type MessageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  conversation_id?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  message_timestamp?: Prisma.SortOrder
-  content?: Prisma.SortOrder
-  message_type?: Prisma.SortOrder
-  media_url?: Prisma.SortOrder
-  mime_type?: Prisma.SortOrder
-  error_message?: Prisma.SortOrder
-  delivery_status?: Prisma.SortOrder
-  external_message_id?: Prisma.SortOrder
+  conversationId?: Prisma.SortOrder
+  externalMessageId?: Prisma.SortOrder
   direction?: Prisma.SortOrder
-  sender_type?: Prisma.SortOrder
+  senderType?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  messageType?: Prisma.SortOrder
+  mediaUrl?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
+  deliveryStatus?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  messageTimestamp?: Prisma.SortOrder
+}
+
+export type MessageCreateNestedManyWithoutConversationInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput> | Prisma.MessageCreateWithoutConversationInput[] | Prisma.MessageUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutConversationInput | Prisma.MessageCreateOrConnectWithoutConversationInput[]
+  createMany?: Prisma.MessageCreateManyConversationInputEnvelope
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+}
+
+export type MessageUncheckedCreateNestedManyWithoutConversationInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput> | Prisma.MessageCreateWithoutConversationInput[] | Prisma.MessageUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutConversationInput | Prisma.MessageCreateOrConnectWithoutConversationInput[]
+  createMany?: Prisma.MessageCreateManyConversationInputEnvelope
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+}
+
+export type MessageUpdateManyWithoutConversationNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput> | Prisma.MessageCreateWithoutConversationInput[] | Prisma.MessageUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutConversationInput | Prisma.MessageCreateOrConnectWithoutConversationInput[]
+  upsert?: Prisma.MessageUpsertWithWhereUniqueWithoutConversationInput | Prisma.MessageUpsertWithWhereUniqueWithoutConversationInput[]
+  createMany?: Prisma.MessageCreateManyConversationInputEnvelope
+  set?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  disconnect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  delete?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  update?: Prisma.MessageUpdateWithWhereUniqueWithoutConversationInput | Prisma.MessageUpdateWithWhereUniqueWithoutConversationInput[]
+  updateMany?: Prisma.MessageUpdateManyWithWhereWithoutConversationInput | Prisma.MessageUpdateManyWithWhereWithoutConversationInput[]
+  deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+}
+
+export type MessageUncheckedUpdateManyWithoutConversationNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput> | Prisma.MessageCreateWithoutConversationInput[] | Prisma.MessageUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutConversationInput | Prisma.MessageCreateOrConnectWithoutConversationInput[]
+  upsert?: Prisma.MessageUpsertWithWhereUniqueWithoutConversationInput | Prisma.MessageUpsertWithWhereUniqueWithoutConversationInput[]
+  createMany?: Prisma.MessageCreateManyConversationInputEnvelope
+  set?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  disconnect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  delete?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  update?: Prisma.MessageUpdateWithWhereUniqueWithoutConversationInput | Prisma.MessageUpdateWithWhereUniqueWithoutConversationInput[]
+  updateMany?: Prisma.MessageUpdateManyWithWhereWithoutConversationInput | Prisma.MessageUpdateManyWithWhereWithoutConversationInput[]
+  deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+}
+
+export type MessageCreateWithoutConversationInput = {
+  id?: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+}
+
+export type MessageUncheckedCreateWithoutConversationInput = {
+  id?: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+}
+
+export type MessageCreateOrConnectWithoutConversationInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput>
+}
+
+export type MessageCreateManyConversationInputEnvelope = {
+  data: Prisma.MessageCreateManyConversationInput | Prisma.MessageCreateManyConversationInput[]
+  skipDuplicates?: boolean
+}
+
+export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
+  where: Prisma.MessageWhereUniqueInput
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutConversationInput, Prisma.MessageUncheckedUpdateWithoutConversationInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutConversationInput, Prisma.MessageUncheckedCreateWithoutConversationInput>
+}
+
+export type MessageUpdateWithWhereUniqueWithoutConversationInput = {
+  where: Prisma.MessageWhereUniqueInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutConversationInput, Prisma.MessageUncheckedUpdateWithoutConversationInput>
+}
+
+export type MessageUpdateManyWithWhereWithoutConversationInput = {
+  where: Prisma.MessageScalarWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutConversationInput>
+}
+
+export type MessageScalarWhereInput = {
+  AND?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+  OR?: Prisma.MessageScalarWhereInput[]
+  NOT?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+  id?: Prisma.StringFilter<"Message"> | string
+  conversationId?: Prisma.StringFilter<"Message"> | string
+  externalMessageId?: Prisma.StringNullableFilter<"Message"> | string | null
+  direction?: Prisma.StringNullableFilter<"Message"> | string | null
+  senderType?: Prisma.StringNullableFilter<"Message"> | string | null
+  content?: Prisma.StringNullableFilter<"Message"> | string | null
+  messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
+  mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
+  rawPayload?: Prisma.JsonNullableFilter<"Message">
+  deliveryStatus?: Prisma.StringNullableFilter<"Message"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"Message"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
+  messageTimestamp?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
+}
+
+export type MessageCreateManyConversationInput = {
+  id?: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+}
+
+export type MessageUpdateWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type MessageUncheckedUpdateWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type MessageUncheckedUpdateManyWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
 
 export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  conversation_id?: boolean
-  raw_payload?: boolean
-  created_at?: boolean
-  message_timestamp?: boolean
-  content?: boolean
-  message_type?: boolean
-  media_url?: boolean
-  mime_type?: boolean
-  error_message?: boolean
-  delivery_status?: boolean
-  external_message_id?: boolean
+  conversationId?: boolean
+  externalMessageId?: boolean
   direction?: boolean
-  sender_type?: boolean
+  senderType?: boolean
+  content?: boolean
+  messageType?: boolean
+  mediaUrl?: boolean
+  mimeType?: boolean
+  rawPayload?: boolean
+  deliveryStatus?: boolean
+  errorMessage?: boolean
+  createdAt?: boolean
+  messageTimestamp?: boolean
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["message"]>
 
 export type MessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  conversation_id?: boolean
-  raw_payload?: boolean
-  created_at?: boolean
-  message_timestamp?: boolean
-  content?: boolean
-  message_type?: boolean
-  media_url?: boolean
-  mime_type?: boolean
-  error_message?: boolean
-  delivery_status?: boolean
-  external_message_id?: boolean
+  conversationId?: boolean
+  externalMessageId?: boolean
   direction?: boolean
-  sender_type?: boolean
+  senderType?: boolean
+  content?: boolean
+  messageType?: boolean
+  mediaUrl?: boolean
+  mimeType?: boolean
+  rawPayload?: boolean
+  deliveryStatus?: boolean
+  errorMessage?: boolean
+  createdAt?: boolean
+  messageTimestamp?: boolean
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["message"]>
 
 export type MessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  conversation_id?: boolean
-  raw_payload?: boolean
-  created_at?: boolean
-  message_timestamp?: boolean
-  content?: boolean
-  message_type?: boolean
-  media_url?: boolean
-  mime_type?: boolean
-  error_message?: boolean
-  delivery_status?: boolean
-  external_message_id?: boolean
+  conversationId?: boolean
+  externalMessageId?: boolean
   direction?: boolean
-  sender_type?: boolean
+  senderType?: boolean
+  content?: boolean
+  messageType?: boolean
+  mediaUrl?: boolean
+  mimeType?: boolean
+  rawPayload?: boolean
+  deliveryStatus?: boolean
+  errorMessage?: boolean
+  createdAt?: boolean
+  messageTimestamp?: boolean
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["message"]>
 
 export type MessageSelectScalar = {
   id?: boolean
-  conversation_id?: boolean
-  raw_payload?: boolean
-  created_at?: boolean
-  message_timestamp?: boolean
-  content?: boolean
-  message_type?: boolean
-  media_url?: boolean
-  mime_type?: boolean
-  error_message?: boolean
-  delivery_status?: boolean
-  external_message_id?: boolean
+  conversationId?: boolean
+  externalMessageId?: boolean
   direction?: boolean
-  sender_type?: boolean
+  senderType?: boolean
+  content?: boolean
+  messageType?: boolean
+  mediaUrl?: boolean
+  mimeType?: boolean
+  rawPayload?: boolean
+  deliveryStatus?: boolean
+  errorMessage?: boolean
+  createdAt?: boolean
+  messageTimestamp?: boolean
 }
 
-export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversation_id" | "raw_payload" | "created_at" | "message_timestamp" | "content" | "message_type" | "media_url" | "mime_type" | "error_message" | "delivery_status" | "external_message_id" | "direction" | "sender_type", ExtArgs["result"]["message"]>
+export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "externalMessageId" | "direction" | "senderType" | "content" | "messageType" | "mediaUrl" | "mimeType" | "rawPayload" | "deliveryStatus" | "errorMessage" | "createdAt" | "messageTimestamp", ExtArgs["result"]["message"]>
+export type MessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+}
+export type MessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+}
+export type MessageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+}
 
 export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Message"
-  objects: {}
+  objects: {
+    conversation: Prisma.$ConversationPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    conversation_id: string
-    raw_payload: runtime.JsonValue
-    created_at: Date
-    message_timestamp: Date
-    content: string | null
-    message_type: string | null
-    media_url: string | null
-    mime_type: string | null
-    error_message: string | null
-    delivery_status: string | null
-    external_message_id: string | null
+    conversationId: string
+    externalMessageId: string | null
     direction: string | null
-    sender_type: string | null
+    senderType: string | null
+    content: string | null
+    messageType: string | null
+    mediaUrl: string | null
+    mimeType: string | null
+    rawPayload: runtime.JsonValue | null
+    deliveryStatus: string | null
+    errorMessage: string | null
+    createdAt: Date
+    messageTimestamp: Date | null
   }, ExtArgs["result"]["message"]>
   composites: {}
 }
@@ -981,6 +1191,7 @@ readonly fields: MessageFieldRefs;
  */
 export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  conversation<T extends Prisma.ConversationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConversationClient<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1011,19 +1222,19 @@ export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface MessageFieldRefs {
   readonly id: Prisma.FieldRef<"Message", 'String'>
-  readonly conversation_id: Prisma.FieldRef<"Message", 'String'>
-  readonly raw_payload: Prisma.FieldRef<"Message", 'Json'>
-  readonly created_at: Prisma.FieldRef<"Message", 'DateTime'>
-  readonly message_timestamp: Prisma.FieldRef<"Message", 'DateTime'>
-  readonly content: Prisma.FieldRef<"Message", 'String'>
-  readonly message_type: Prisma.FieldRef<"Message", 'String'>
-  readonly media_url: Prisma.FieldRef<"Message", 'String'>
-  readonly mime_type: Prisma.FieldRef<"Message", 'String'>
-  readonly error_message: Prisma.FieldRef<"Message", 'String'>
-  readonly delivery_status: Prisma.FieldRef<"Message", 'String'>
-  readonly external_message_id: Prisma.FieldRef<"Message", 'String'>
+  readonly conversationId: Prisma.FieldRef<"Message", 'String'>
+  readonly externalMessageId: Prisma.FieldRef<"Message", 'String'>
   readonly direction: Prisma.FieldRef<"Message", 'String'>
-  readonly sender_type: Prisma.FieldRef<"Message", 'String'>
+  readonly senderType: Prisma.FieldRef<"Message", 'String'>
+  readonly content: Prisma.FieldRef<"Message", 'String'>
+  readonly messageType: Prisma.FieldRef<"Message", 'String'>
+  readonly mediaUrl: Prisma.FieldRef<"Message", 'String'>
+  readonly mimeType: Prisma.FieldRef<"Message", 'String'>
+  readonly rawPayload: Prisma.FieldRef<"Message", 'Json'>
+  readonly deliveryStatus: Prisma.FieldRef<"Message", 'String'>
+  readonly errorMessage: Prisma.FieldRef<"Message", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Message", 'DateTime'>
+  readonly messageTimestamp: Prisma.FieldRef<"Message", 'DateTime'>
 }
     
 
@@ -1040,6 +1251,10 @@ export type MessageFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * Filter, which Message to fetch.
    */
@@ -1059,6 +1274,10 @@ export type MessageFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  /**
    * Filter, which Message to fetch.
    */
   where: Prisma.MessageWhereUniqueInput
@@ -1076,6 +1295,10 @@ export type MessageFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * Filter, which Message to fetch.
    */
@@ -1125,6 +1348,10 @@ export type MessageFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  /**
    * Filter, which Message to fetch.
    */
   where?: Prisma.MessageWhereInput
@@ -1172,6 +1399,10 @@ export type MessageFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * Filter, which Messages to fetch.
    */
@@ -1221,6 +1452,10 @@ export type MessageCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  /**
    * The data needed to create a Message.
    */
   data: Prisma.XOR<Prisma.MessageCreateInput, Prisma.MessageUncheckedCreateInput>
@@ -1254,6 +1489,10 @@ export type MessageCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.MessageCreateManyInput | Prisma.MessageCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1268,6 +1507,10 @@ export type MessageUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * The data needed to update a Message.
    */
@@ -1320,6 +1563,10 @@ export type MessageUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Messages to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1334,6 +1581,10 @@ export type MessageUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * The filter to search for the Message to update in case it exists.
    */
@@ -1360,6 +1611,10 @@ export type MessageDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
   /**
    * Filter which Message to delete.
    */
@@ -1392,4 +1647,8 @@ export type MessageDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Message
    */
   omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
 }

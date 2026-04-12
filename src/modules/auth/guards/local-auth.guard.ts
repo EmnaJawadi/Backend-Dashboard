@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class LocalAuthGuard {
-  canActivate(): boolean {
-    return true;
-  }
-}
+export class LocalAuthGuard extends AuthGuard('local') {}

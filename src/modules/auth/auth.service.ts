@@ -12,8 +12,8 @@ type AuthUser = {
   email: string;
   password: string;
   phoneNumber?: string | null;
-  role: string;
-  isActive: boolean;
+role: 'SUPER_ADMIN' | 'ADMIN' | 'AGENT';
+   isActive: boolean;
 };
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AuthService {
       email: 'admin@example.com',
       password: 'admin123',
       phoneNumber: null,
-      role: 'admin',
+      role: 'ADMIN',
       isActive: true,
     },
   ];
@@ -47,7 +47,7 @@ export class AuthService {
       email: registerUserDto.email,
       password: registerUserDto.password,
       phoneNumber: registerUserDto.phoneNumber ?? null,
-      role: 'agent',
+      role: 'AGENT',
       isActive: true,
     };
 
