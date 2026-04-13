@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { Prisma } from '../../generated/prisma/client';
 import { CreateAuditLogDto } from './dto/create-audit-log.dto';
 import { AuditLogQueryDto } from './dto/audit-log-query.dto';
 
@@ -10,11 +11,15 @@ export class AuditLogsRepository {
   async create(data: CreateAuditLogDto) {
     return this.prisma.auditLog.create({
       data: {
-        action: data.action,
+        action: data.action ?? null,
         entityType: data.entityType ?? null,
         entityId: data.entityId ?? null,
-        userId: data.userId ?? null,
-        metadata: data.metadata ?? null,
+        actorUserId: data.userId ?? null,
+        details: data.metadata
+          ? (data.metadata as Prisma.InputJsonValue)
+          : Prisma.JsonNull,
+        ipAddress: null,
+        createdAt: new Date(),
       },
     });
   }
@@ -24,17 +29,37 @@ export class AuditLogsRepository {
     const limit = query.limit ?? 10;
     const skip = (page - 1) * limit;
 
-    const where = {
+    const where: Prisma.AuditLogWhereInput = {
       ...(query.action ? { action: query.action } : {}),
       ...(query.entityType ? { entityType: query.entityType } : {}),
-      ...(query.userId ? { userId: query.userId } : {}),
+      ...(query.userId ? { actorUserId: query.userId } : {}),
       ...(query.search
         ? {
             OR: [
-              { action: { contains: query.search } },
-              { entityType: { contains: query.search } },
-              { entityId: { contains: query.search } },
-              { userId: { contains: query.search } },
+              {
+                action: {
+                  contains: query.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                entityType: {
+                  contains: query.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                entityId: {
+                  contains: query.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                actorUserId: {
+                  contains: query.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
             ],
           }
         : {}),
@@ -64,14 +89,10 @@ export class AuditLogsRepository {
   }
 
   async findById(id: string) {
-    return this.prisma.auditLog.findUnique({
-      where: { id },
-    });
+    return this.prisma.auditLog.findUnique({ where: { id } });
   }
 
   async remove(id: string) {
-    return this.prisma.auditLog.delete({
-      where: { id },
-    });
+    return this.prisma.auditLog.delete({ where: { id } });
   }
 }

@@ -4,6 +4,5 @@ export class UpdateUserDto {
   email?: string;
   phoneNumber?: string | null;
   role?: string;
-  companyId?: string | null;
   isActive?: boolean;
 }

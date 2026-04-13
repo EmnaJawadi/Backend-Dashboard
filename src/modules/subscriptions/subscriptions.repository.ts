@@ -12,7 +12,6 @@ export class SubscriptionsRepository {
 
     const subscription = new SubscriptionEntity({
       id: randomUUID(),
-      companyId: data.companyId?.trim() ?? '',
       plan: data.plan?.trim() ?? 'starter',
       status: data.status?.trim() ?? 'active',
       billingCycle: data.billingCycle?.trim() ?? 'monthly',
@@ -41,17 +40,10 @@ export class SubscriptionsRepository {
 
       data = data.filter(
         (subscription) =>
-          subscription.companyId.toLowerCase().includes(search) ||
           subscription.plan.toLowerCase().includes(search) ||
           subscription.status.toLowerCase().includes(search) ||
           subscription.billingCycle.toLowerCase().includes(search) ||
           subscription.currency.toLowerCase().includes(search),
-      );
-    }
-
-    if (query.companyId) {
-      data = data.filter(
-        (subscription) => subscription.companyId === query.companyId,
       );
     }
 
@@ -103,10 +95,6 @@ export class SubscriptionsRepository {
 
   update(id: string, data: Partial<SubscriptionEntity>): SubscriptionEntity {
     const subscription = this.findById(id);
-
-    if (data.companyId !== undefined) {
-      subscription.companyId = data.companyId.trim();
-    }
 
     if (data.plan !== undefined) {
       subscription.plan = data.plan.trim();

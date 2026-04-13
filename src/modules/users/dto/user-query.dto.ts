@@ -4,11 +4,7 @@ export class UserQueryDto {
   page?: number;
   limit?: number;
 
-  
   role?: string;
 
- 
   isActive?: string;
-
-  companyId?: string;
 }

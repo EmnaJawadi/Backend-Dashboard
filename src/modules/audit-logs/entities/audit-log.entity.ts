@@ -1,13 +1,14 @@
 export class AuditLogEntity {
   id!: string;
-  action!: string;
+  action!: string | null;
   entityType!: string | null;
   entityId!: string | null;
-  userId!: string | null;
-  metadata!: Record<string, unknown> | null;
+  actorUserId!: string | null;
+  details!: unknown;
+  ipAddress!: string | null;
   createdAt!: Date;
 
-  constructor(partial: Partial<AuditLogEntity>) {
+  constructor(partial?: Partial<AuditLogEntity>) {
     Object.assign(this, partial);
   }
 }

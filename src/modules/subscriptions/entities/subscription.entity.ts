@@ -1,6 +1,5 @@
 export class SubscriptionEntity {
   id!: string;
-  companyId!: string;
   plan!: string;
   status!: string;
   billingCycle!: string;

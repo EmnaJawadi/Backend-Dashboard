@@ -1,66 +1,136 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { Prisma } from '../../generated/prisma/client';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { ContactQueryDto } from './dto/contact-query.dto';
 import { ContactEntity } from './entities/contact.entity';
-import { ContactMapper } from './mappers/contact.mapper';
+
+function splitName(fullName: string | null | undefined): {
+  firstName: string;
+  lastName: string | null;
+} {
+  const parts = (fullName ?? '').trim().split(/\s+/).filter(Boolean);
+
+  if (!parts.length) {
+    return {
+      firstName: '',
+      lastName: null,
+    };
+  }
+
+  return {
+    firstName: parts[0],
+    lastName: parts.length > 1 ? parts.slice(1).join(' ') : null,
+  };
+}
+
+function normalizeTags(value: Prisma.JsonValue | null): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((item) => (typeof item === 'string' ? item : String(item)))
+    .filter((item) => item.trim().length > 0);
+}
 
 @Injectable()
 export class ContactsRepository {
-  private readonly contacts: ContactEntity[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Partial<ContactEntity>): ContactEntity {
-    const now = new Date();
-    const firstName = data.firstName?.trim() ?? '';
-    const lastName = data.lastName?.trim() ?? null;
+  private toEntity(data: {
+    id: string;
+    fullName: string | null;
+    phone: string | null;
+    email: string | null;
+    notes: string | null;
+    tags: Prisma.JsonValue | null;
+    status: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }): ContactEntity {
+    const names = splitName(data.fullName);
 
-    const contact = ContactMapper.toEntity({
-      id: randomUUID(),
-      firstName,
-      lastName,
-      fullName: [firstName, lastName].filter(Boolean).join(' '),
-      phoneNumber: data.phoneNumber?.trim() ?? '',
-      email: data.email ?? null,
-      avatarUrl: data.avatarUrl ?? null,
-      notes: data.notes ?? null,
-      tags: data.tags ?? [],
-      isBlocked: data.isBlocked ?? false,
-      createdAt: now,
-      updatedAt: now,
+    return new ContactEntity({
+      id: data.id,
+      firstName: names.firstName,
+      lastName: names.lastName,
+      fullName: data.fullName ?? names.firstName,
+      phoneNumber: data.phone ?? '',
+      email: data.email,
+      avatarUrl: null,
+      notes: data.notes,
+      tags: normalizeTags(data.tags),
+      isBlocked: data.status === 'blocked',
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
     });
-
-    this.contacts.push(contact);
-    return contact;
   }
 
-  findAll(query: ContactQueryDto) {
+  async create(data: Partial<ContactEntity>): Promise<ContactEntity> {
+    const firstName = data.firstName?.trim() ?? '';
+    const lastName = data.lastName?.trim() ?? null;
+    const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
+
+    const created = await this.prisma.contact.create({
+      data: {
+        phone: data.phoneNumber?.trim() ?? null,
+        whatsappName: fullName || null,
+        fullName: fullName || null,
+        email: data.email ?? null,
+        notes: data.notes ?? null,
+        tags: data.tags ?? [],
+        status: data.isBlocked ? 'blocked' : 'active',
+        source: 'manual',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    return this.toEntity(created);
+  }
+
+  async findAll(query: ContactQueryDto) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
-    let data = [...this.contacts];
+    const andFilters: Prisma.ContactWhereInput[] = [];
 
-    if (query.search) {
-      const search = query.search.toLowerCase();
-      data = data.filter(
-        (contact) =>
-          contact.firstName.toLowerCase().includes(search) ||
-          contact.lastName?.toLowerCase().includes(search) ||
-          contact.fullName.toLowerCase().includes(search) ||
-          contact.phoneNumber.toLowerCase().includes(search) ||
-          contact.email?.toLowerCase().includes(search),
-      );
+    if (query.search?.trim()) {
+      const search = query.search.trim();
+      andFilters.push({
+        OR: [
+          { fullName: { contains: search, mode: 'insensitive' } },
+          { whatsappName: { contains: search, mode: 'insensitive' } },
+          { phone: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+        ],
+      });
     }
 
     if (query.isBlocked !== undefined) {
       const isBlocked = query.isBlocked === 'true';
-      data = data.filter((contact) => contact.isBlocked === isBlocked);
+      andFilters.push(
+        isBlocked
+          ? { status: 'blocked' }
+          : {
+              OR: [{ status: { not: 'blocked' } }, { status: null }],
+            },
+      );
     }
 
-    const total = data.length;
-    const start = (page - 1) * limit;
-    const paginated = data.slice(start, start + limit);
+    const where: Prisma.ContactWhereInput =
+      andFilters.length > 0 ? { AND: andFilters } : {};
+
+    const [rows, total] = await this.prisma.$transaction([
+      this.prisma.contact.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { updatedAt: 'desc' },
+      }),
+      this.prisma.contact.count({ where }),
+    ]);
 
     return {
-      data: paginated,
+      data: rows.map((item) => this.toEntity(item)),
       meta: {
         total,
         page,
@@ -70,67 +140,67 @@ export class ContactsRepository {
     };
   }
 
-  findById(id: string): ContactEntity {
-    const contact = this.contacts.find((item) => item.id === id);
+  async findById(id: string): Promise<ContactEntity> {
+    const contact = await this.prisma.contact.findUnique({ where: { id } });
 
     if (!contact) {
       throw new NotFoundException(`Contact with id ${id} not found`);
     }
 
-    return contact;
+    return this.toEntity(contact);
   }
 
-  findByPhoneNumber(phoneNumber: string): ContactEntity | null {
-    return (
-      this.contacts.find((item) => item.phoneNumber === phoneNumber) ?? null
-    );
+  async findByPhoneNumber(phoneNumber: string): Promise<ContactEntity | null> {
+    const contact = await this.prisma.contact.findFirst({
+      where: { phone: phoneNumber },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return contact ? this.toEntity(contact) : null;
   }
 
-  update(id: string, data: Partial<ContactEntity>): ContactEntity {
-    const contact = this.findById(id);
+  async update(id: string, data: Partial<ContactEntity>): Promise<ContactEntity> {
+    const existing = await this.findById(id);
+    const existingNames = splitName(existing.fullName);
 
-    if (data.firstName !== undefined) {
-      contact.firstName = data.firstName.trim();
-    }
+    const firstName =
+      data.firstName !== undefined ? data.firstName.trim() : existingNames.firstName;
+    const lastName =
+      data.lastName !== undefined ? data.lastName?.trim() ?? null : existingNames.lastName;
+    const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
 
-    if (data.lastName !== undefined) {
-      contact.lastName = data.lastName?.trim() ?? null;
-    }
+    const updated = await this.prisma.contact.update({
+      where: { id },
+      data: {
+        fullName: fullName || null,
+        whatsappName: fullName || null,
+        phone: data.phoneNumber !== undefined ? data.phoneNumber.trim() : existing.phoneNumber,
+        email: data.email !== undefined ? data.email : existing.email,
+        notes: data.notes !== undefined ? data.notes : existing.notes,
+        tags: data.tags !== undefined ? data.tags : existing.tags,
+        status:
+          data.isBlocked !== undefined
+            ? data.isBlocked
+              ? 'blocked'
+              : 'active'
+            : existing.isBlocked
+            ? 'blocked'
+            : 'active',
+        updatedAt: new Date(),
+      },
+    });
 
-    if (data.phoneNumber !== undefined) {
-      contact.phoneNumber = data.phoneNumber.trim();
-    }
-
-    if (data.email !== undefined) {
-      contact.email = data.email;
-    }
-
-    if (data.avatarUrl !== undefined) {
-      contact.avatarUrl = data.avatarUrl;
-    }
-
-    if (data.notes !== undefined) {
-      contact.notes = data.notes;
-    }
-
-    if (data.tags !== undefined) {
-      contact.tags = data.tags;
-    }
-
-    if (data.isBlocked !== undefined) {
-      contact.isBlocked = data.isBlocked;
-    }
-
-    contact.fullName = [contact.firstName, contact.lastName]
-      .filter(Boolean)
-      .join(' ');
-    contact.updatedAt = new Date();
-
-    return contact;
+    return this.toEntity(updated);
   }
 
-  upsert(data: Partial<ContactEntity>): ContactEntity {
-    const existing = this.findByPhoneNumber(data.phoneNumber ?? '');
+  async upsert(data: Partial<ContactEntity>): Promise<ContactEntity> {
+    const phoneNumber = data.phoneNumber?.trim() ?? '';
+
+    if (!phoneNumber) {
+      return this.create(data);
+    }
+
+    const existing = await this.findByPhoneNumber(phoneNumber);
 
     if (existing) {
       return this.update(existing.id, data);
@@ -139,16 +209,9 @@ export class ContactsRepository {
     return this.create(data);
   }
 
-  remove(id: string): ContactEntity {
-    const index = this.contacts.findIndex((item) => item.id === id);
-
-    if (index === -1) {
-      throw new NotFoundException(`Contact with id ${id} not found`);
-    }
-
-    const deleted = this.contacts[index];
-    this.contacts.splice(index, 1);
-
-    return deleted;
+  async remove(id: string): Promise<ContactEntity> {
+    const existing = await this.findById(id);
+    await this.prisma.contact.delete({ where: { id } });
+    return existing;
   }
 }

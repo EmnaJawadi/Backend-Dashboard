@@ -1,5 +1,4 @@
 export class CreateSubscriptionDto {
-  companyId!: string;
   plan!: string;
   status?: string;
   billingCycle?: string;

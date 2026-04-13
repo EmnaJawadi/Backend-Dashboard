@@ -4,7 +4,7 @@ import { Retriever, RetrieverResult } from './retriever.interface';
 
 type RawKbChunk = {
   id: string;
-  content: string;
+  chunkText: string | null;
 };
 
 @Injectable()
@@ -15,12 +15,16 @@ export class PgvectorRetriever implements Retriever {
     const chunks = await this.prisma.kbChunk.findMany({
       take: topK,
       orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        chunkText: true,
+      },
     });
 
     return chunks.map((c: RawKbChunk) => ({
-      content: c.content,
+      content: c.chunkText ?? '',
       score: 0.5,
-      metadata: { id: c.id },
+      metadata: { id: c.id, query },
     }));
   }
 }

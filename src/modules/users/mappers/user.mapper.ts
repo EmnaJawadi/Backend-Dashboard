@@ -7,7 +7,6 @@ type RawUser = {
   email: string;
   phoneNumber?: string | null;
   role: string;
-  companyId?: string | null;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -23,7 +22,6 @@ export class UserMapper {
       email: user.email,
       phoneNumber: user.phoneNumber ?? null,
       role: user.role,
-      companyId: user.companyId ?? null,
       isActive: user.isActive,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

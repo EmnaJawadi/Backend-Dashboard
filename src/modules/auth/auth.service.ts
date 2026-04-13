@@ -1,65 +1,96 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthMapper } from './mappers/auth.mapper';
 
-type AuthUser = {
-  id: string;
-  firstName: string;
-  lastName?: string | null;
-  email: string;
-  password: string;
-  phoneNumber?: string | null;
-role: 'SUPER_ADMIN' | 'ADMIN' | 'AGENT';
-   isActive: boolean;
-};
+type PersistedRole = 'admin' | 'supervisor' | 'agent';
+type ApiRole = 'SUPER_ADMIN' | 'ADMIN' | 'AGENT';
 
 @Injectable()
 export class AuthService {
-  private readonly users: AuthUser[] = [
-    {
-      id: randomUUID(),
-      firstName: 'Admin',
-      lastName: 'User',
-      email: 'admin@example.com',
-      password: 'admin123',
-      phoneNumber: null,
-      role: 'ADMIN',
-      isActive: true,
-    },
-  ];
+  constructor(private readonly prisma: PrismaService) {}
 
-  register(registerUserDto: RegisterUserDto) {
-    const existing = this.users.find(
-      (user) => user.email.toLowerCase() === registerUserDto.email.toLowerCase(),
-    );
+  private hashPassword(password: string): string {
+    return createHash('sha256').update(password).digest('hex');
+  }
+
+  private splitFullName(fullName?: string | null): {
+    firstName: string;
+    lastName: string | null;
+  } {
+    const normalized = (fullName ?? '').trim();
+    if (!normalized) {
+      return { firstName: 'User', lastName: null };
+    }
+
+    const parts = normalized.split(/\s+/);
+    const firstName = parts.shift() ?? 'User';
+    const lastName = parts.length > 0 ? parts.join(' ') : null;
+
+    return { firstName, lastName };
+  }
+
+  private toPersistedRole(role: string | undefined): PersistedRole {
+    if (role === 'ADMIN') return 'admin';
+    if (role === 'AGENT') return 'agent';
+    if (role === 'SUPER_ADMIN') return 'supervisor';
+
+    const lowered = (role ?? '').toLowerCase();
+    if (lowered === 'admin') return 'admin';
+    if (lowered === 'agent') return 'agent';
+    return 'supervisor';
+  }
+
+  private toApiRole(role: string | null | undefined): ApiRole {
+    if (role === 'agent') return 'AGENT';
+    if (role === 'admin') return 'ADMIN';
+    if (role === 'supervisor') return 'SUPER_ADMIN';
+
+    if (role === 'AGENT') return 'AGENT';
+    if (role === 'ADMIN') return 'ADMIN';
+    if (role === 'SUPER_ADMIN') return 'SUPER_ADMIN';
+
+    return 'AGENT';
+  }
+
+  async register(registerUserDto: RegisterUserDto) {
+    const email = registerUserDto.email.trim().toLowerCase();
+    const existing = await this.prisma.user.findUnique({ where: { email } });
 
     if (existing) {
       throw new UnauthorizedException('User already exists');
     }
 
-    const user: AuthUser = {
-      id: randomUUID(),
-      firstName: registerUserDto.firstName,
-      lastName: registerUserDto.lastName ?? null,
-      email: registerUserDto.email,
-      password: registerUserDto.password,
-      phoneNumber: registerUserDto.phoneNumber ?? null,
-      role: 'AGENT',
-      isActive: true,
-    };
+    const firstName = registerUserDto.firstName.trim();
+    const lastName = registerUserDto.lastName?.trim() || null;
+    const fullName = [firstName, lastName].filter(Boolean).join(' ');
+    const role: PersistedRole = this.toPersistedRole(registerUserDto.role);
+    const now = new Date();
 
-    this.users.push(user);
+    const user = await this.prisma.user.create({
+      data: {
+        fullName: fullName || null,
+        email,
+        passwordHash: this.hashPassword(registerUserDto.password),
+        role,
+        isActive: true,
+        createdAt: now,
+        updatedAt: now,
+      },
+    });
+
+    const names = this.splitFullName(user.fullName);
 
     return AuthMapper.toAuthResponse({
       user: {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: names.firstName,
+        lastName: names.lastName,
         email: user.email,
-        role: user.role,
+        role: this.toApiRole(user.role),
         isActive: user.isActive,
       },
       accessToken: `access-${user.id}`,
@@ -67,24 +98,28 @@ export class AuthService {
     });
   }
 
-  login(loginDto: LoginDto) {
-    const user = this.users.find(
-      (item) =>
-        item.email.toLowerCase() === loginDto.email.toLowerCase() &&
-        item.password === loginDto.password,
-    );
+  async login(loginDto: LoginDto) {
+    const email = loginDto.email.trim().toLowerCase();
+    const user = await this.prisma.user.findUnique({ where: { email } });
 
-    if (!user) {
+    if (!user || !user.isActive) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const passwordHash = this.hashPassword(loginDto.password);
+    if (user.passwordHash !== passwordHash) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const names = this.splitFullName(user.fullName);
+
     return AuthMapper.toAuthResponse({
       user: {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: names.firstName,
+        lastName: names.lastName,
         email: user.email,
-        role: user.role,
+        role: this.toApiRole(user.role),
         isActive: user.isActive,
       },
       accessToken: `access-${user.id}`,
@@ -92,25 +127,27 @@ export class AuthService {
     });
   }
 
-  refresh(refreshTokenDto: RefreshTokenDto) {
+  async refresh(refreshTokenDto: RefreshTokenDto) {
     if (!refreshTokenDto.refreshToken?.startsWith('refresh-')) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
     const userId = refreshTokenDto.refreshToken.replace('refresh-', '');
-    const user = this.users.find((item) => item.id === userId);
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user) {
+    if (!user || !user.isActive) {
       throw new UnauthorizedException('User not found');
     }
+
+    const names = this.splitFullName(user.fullName);
 
     return AuthMapper.toAuthResponse({
       user: {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: names.firstName,
+        lastName: names.lastName,
         email: user.email,
-        role: user.role,
+        role: this.toApiRole(user.role),
         isActive: user.isActive,
       },
       accessToken: `access-${user.id}`,
@@ -118,27 +155,29 @@ export class AuthService {
     });
   }
 
-  getProfileFromToken(token?: string) {
+  async getProfileFromToken(token?: string) {
     if (!token) {
       throw new UnauthorizedException('Missing authorization token');
     }
 
     const normalized = token.replace('Bearer ', '');
     const userId = normalized.replace('access-', '');
-    const user = this.users.find((item) => item.id === userId);
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user) {
+    if (!user || !user.isActive) {
       throw new UnauthorizedException('Invalid token');
     }
 
+    const names = this.splitFullName(user.fullName);
+
     return {
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fullName: [user.firstName, user.lastName].filter(Boolean).join(' '),
+      firstName: names.firstName,
+      lastName: names.lastName,
+      fullName: user.fullName ?? [names.firstName, names.lastName].filter(Boolean).join(' '),
       email: user.email,
-      phoneNumber: user.phoneNumber,
-      role: user.role,
+      phoneNumber: null,
+      role: this.toApiRole(user.role),
       isActive: user.isActive,
     };
   }

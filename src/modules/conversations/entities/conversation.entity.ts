@@ -1,8 +1,10 @@
 export type ConversationStatus =
+  | 'bot_active'
+  | 'human_assigned'
+  | 'waiting_customer'
+  | 'closed'
   | 'open'
   | 'pending'
-  | 'closed'
-  | 'bot_active'
   | 'human_handoff';
 
 export interface ConversationParticipant {

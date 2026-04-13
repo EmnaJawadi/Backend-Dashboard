@@ -1,99 +1,62 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
+
+type KbFindParams = {
+  search?: string;
+  tag?: string;
+  lang?: string;
+  status?: string;
+  skip?: number;
+  take?: number;
+  orderBy?: Prisma.KbArticleOrderByWithRelationInput;
+};
+
+type CreateKbChunkInput = {
+  content: string;
+  chunkIndex: number;
+  embedding?: number[] | null;
+  metadata?: Record<string, unknown> | null;
+};
+
+type CreateKbArticleInput = Omit<
+  Prisma.KbArticleCreateInput,
+  'createdAt' | 'updatedAt'
+>;
 
 @Injectable()
 export class KbRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  createArticle(data: {
-    title: string;
-    slug?: string | null;
-    summary?: string | null;
-    content: string;
-    language?: string | null;
-    sourceUrl?: string | null;
-    status?: string;
-    tags?: string[];
-    metadata?: Record<string, unknown> | null;
-    publishedAt?: Date | null;
-  }) {
+  createArticle(data: CreateKbArticleInput) {
+    const now = new Date();
+
     return this.prisma.kbArticle.create({
       data: {
-        title: data.title,
-        slug: data.slug ?? null,
-        summary: data.summary ?? null,
-        content: data.content,
-        language: data.language ?? null,
-        sourceUrl: data.sourceUrl ?? null,
-        status: data.status ?? 'draft',
-        tags: data.tags ?? [],
-        metadata: data.metadata ?? null,
-        publishedAt: data.publishedAt ?? null,
-      },
-      include: {
-        chunks: true,
+        ...data,
+        createdAt: now,
+        updatedAt: now,
       },
     });
   }
 
-  findMany(params: {
-    search?: string;
-    tag?: string;
-    language?: string;
-    status?: string;
-    skip?: number;
-    take?: number;
-    orderBy?: Record<string, 'asc' | 'desc'>;
-  }) {
-    const { search, tag, language, status, skip = 0, take = 10, orderBy } = params;
-
+  findMany(params: KbFindParams) {
     return this.prisma.kbArticle.findMany({
-      where: {
-        ...(search
-          ? {
-              OR: [
-                { title: { contains: search, mode: 'insensitive' } },
-                { summary: { contains: search, mode: 'insensitive' } },
-                { content: { contains: search, mode: 'insensitive' } },
-              ],
-            }
-          : {}),
-        ...(tag ? { tags: { has: tag } } : {}),
-        ...(language ? { language } : {}),
-        ...(status ? { status } : {}),
-      },
+      where: this.buildWhere(params),
+      skip: params.skip,
+      take: params.take,
+      orderBy: params.orderBy ?? { createdAt: 'desc' },
       include: {
-        chunks: true,
+        chunks: {
+          orderBy: { chunkIndex: 'asc' },
+        },
       },
-      skip,
-      take,
-      orderBy: orderBy ?? { createdAt: 'desc' },
     });
   }
 
-  count(params: {
-    search?: string;
-    tag?: string;
-    language?: string;
-    status?: string;
-  }) {
-    const { search, tag, language, status } = params;
-
+  count(params: KbFindParams) {
     return this.prisma.kbArticle.count({
-      where: {
-        ...(search
-          ? {
-              OR: [
-                { title: { contains: search, mode: 'insensitive' } },
-                { summary: { contains: search, mode: 'insensitive' } },
-                { content: { contains: search, mode: 'insensitive' } },
-              ],
-            }
-          : {}),
-        ...(tag ? { tags: { has: tag } } : {}),
-        ...(language ? { language } : {}),
-        ...(status ? { status } : {}),
-      },
+      where: this.buildWhere(params),
     });
   }
 
@@ -101,32 +64,17 @@ export class KbRepository {
     return this.prisma.kbArticle.findUnique({
       where: { id },
       include: {
-        chunks: true,
+        chunks: {
+          orderBy: { chunkIndex: 'asc' },
+        },
       },
     });
   }
 
-  updateArticle(
-    id: string,
-    data: {
-      title?: string;
-      slug?: string | null;
-      summary?: string | null;
-      content?: string;
-      language?: string | null;
-      sourceUrl?: string | null;
-      status?: string;
-      tags?: string[];
-      metadata?: Record<string, unknown> | null;
-      publishedAt?: Date | null;
-    },
-  ) {
+  updateArticle(id: string, data: Prisma.KbArticleUpdateInput) {
     return this.prisma.kbArticle.update({
       where: { id },
       data,
-      include: {
-        chunks: true,
-      },
     });
   }
 
@@ -136,31 +84,20 @@ export class KbRepository {
     });
   }
 
-  createChunks(
-    articleId: string,
-    chunks: Array<{
-      content: string;
-      chunkIndex: number;
-      tokens?: number | null;
-      embedding?: number[] | null;
-      metadata?: Record<string, unknown> | null;
-    }>,
-  ) {
-    return this.prisma.kbChunk.createMany({
+  async createChunks(articleId: string, chunks: CreateKbChunkInput[]) {
+    if (chunks.length === 0) {
+      return;
+    }
+
+    await this.prisma.kbChunk.createMany({
       data: chunks.map((chunk) => ({
         articleId,
-        content: chunk.content,
         chunkIndex: chunk.chunkIndex,
-        tokens: chunk.tokens ?? null,
-        embedding: chunk.embedding ?? null,
-        metadata: chunk.metadata ?? null,
+        chunkText: chunk.content,
+        embeddingsVector: null,
+        metadataJson: (chunk.metadata ?? null) as Prisma.InputJsonValue,
+        createdAt: new Date(),
       })),
-    });
-  }
-
-  deleteChunksByArticleId(articleId: string) {
-    return this.prisma.kbChunk.deleteMany({
-      where: { articleId },
     });
   }
 
@@ -169,5 +106,31 @@ export class KbRepository {
       where: { articleId },
       orderBy: { chunkIndex: 'asc' },
     });
+  }
+
+  private buildWhere(params: KbFindParams): Prisma.KbArticleWhereInput {
+    return {
+      ...(params.search
+        ? {
+            OR: [
+              {
+                title: {
+                  contains: params.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+              {
+                body: {
+                  contains: params.search,
+                  mode: Prisma.QueryMode.insensitive,
+                },
+              },
+            ],
+          }
+        : {}),
+      ...(params.tag ? { tags: { array_contains: [params.tag] } } : {}),
+      ...(params.lang ? { lang: params.lang } : {}),
+      ...(params.status ? { status: params.status } : {}),
+    };
   }
 }

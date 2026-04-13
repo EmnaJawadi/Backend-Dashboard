@@ -1,20 +1,20 @@
 export class AiRunEntity {
-  id = '';
-  conversationId: string | null = null;
-  contactId: string | null = null;
-  prompt: string | null = null;
-  response: string | null = null;
-  provider = '';
-  model = '';
-  status = '';
-  latencyMs: number | null = null;
-  tokensUsed: number | null = null;
-  confidenceScore: number | null = null;
-  estimatedCost: number | null = null;
-  blockedReason: string | null = null;
-  metadata: Record<string, unknown> | null = null;
-  createdAt = new Date();
-  updatedAt = new Date();
+  id!: string;
+  conversationId!: string;
+  messageId!: string;
+  inputText!: string | null;
+  outputText!: string | null;
+  intent!: string | null;
+  provider!: string | null;
+  model!: string | null;
+  status!: string | null;
+  confidenceScore!: number | null;
+  latencyMs!: number | null;
+  tokensUsed!: number | null;
+  estimatedCost!: number | null;
+  handoffRequired!: boolean | null;
+  rawResponse!: unknown;
+  createdAt!: Date;
 
   constructor(partial?: Partial<AiRunEntity>) {
     Object.assign(this, partial);

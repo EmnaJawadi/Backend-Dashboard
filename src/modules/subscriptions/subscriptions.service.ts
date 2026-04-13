@@ -12,7 +12,6 @@ export class SubscriptionsService {
 
   create(createSubscriptionDto: CreateSubscriptionDto) {
     return this.subscriptionsRepository.create({
-      companyId: createSubscriptionDto.companyId,
       plan: createSubscriptionDto.plan,
       status: createSubscriptionDto.status ?? 'active',
       billingCycle: createSubscriptionDto.billingCycle ?? 'monthly',
@@ -38,7 +37,6 @@ export class SubscriptionsService {
 
   update(id: string, updateSubscriptionDto: UpdateSubscriptionDto) {
     return this.subscriptionsRepository.update(id, {
-      companyId: updateSubscriptionDto.companyId,
       plan: updateSubscriptionDto.plan,
       status: updateSubscriptionDto.status,
       billingCycle: updateSubscriptionDto.billingCycle,

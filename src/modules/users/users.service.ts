@@ -18,7 +18,6 @@ export class UsersService {
       email: createUserDto.email,
       phoneNumber: createUserDto.phoneNumber ?? null,
       role: createUserDto.role ?? 'agent',
-      companyId: createUserDto.companyId ?? null,
       isActive: createUserDto.isActive ?? true,
     });
 
@@ -51,7 +50,6 @@ export class UsersService {
       email: updateUserDto.email,
       phoneNumber: updateUserDto.phoneNumber,
       role: updateUserDto.role,
-      companyId: updateUserDto.companyId,
       isActive: updateUserDto.isActive,
     });
 

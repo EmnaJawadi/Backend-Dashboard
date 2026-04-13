@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { KbArticleEntity, KbArticleStatus } from '../entities/kb-article.entity';
+import {
+  KbArticleEntity,
+  KbArticleStatus,
+} from '../entities/kb-article.entity';
 import { KbChunkEntity } from '../entities/kb-chunk.entity';
 
 type RawKbArticle = {
   id: string;
-  title: string;
-  slug?: string | null;
-  summary?: string | null;
-  content: string;
-  language?: string | null;
+  title: string | null;
+  body: string | null;
+  category?: string | null;
+  lang?: string | null;
   sourceUrl?: string | null;
   status?: string | null;
-  tags?: string[] | null;
-  metadata?: Record<string, unknown> | null;
+  tags?: unknown;
   publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -22,13 +23,11 @@ type RawKbArticle = {
 type RawKbChunk = {
   id: string;
   articleId: string;
-  content: string;
+  chunkText: string | null;
   chunkIndex: number;
-  tokens?: number | null;
-  embedding?: number[] | null;
-  metadata?: Record<string, unknown> | null;
+  embeddingsVector?: Uint8Array | null;
+  metadataJson?: unknown;
   createdAt?: Date | string;
-  updatedAt?: Date | string;
 };
 
 @Injectable()
@@ -36,15 +35,15 @@ export class KbMapper {
   toArticleEntity(data: RawKbArticle): KbArticleEntity {
     return new KbArticleEntity({
       id: data.id,
-      title: data.title,
-      slug: data.slug ?? null,
-      summary: data.summary ?? null,
-      content: data.content,
-      language: data.language ?? null,
+      title: data.title ?? '',
+      slug: null,
+      summary: data.category ?? null,
+      content: data.body ?? '',
+      language: data.lang ?? null,
       sourceUrl: data.sourceUrl ?? null,
       status: this.toArticleStatus(data.status),
-      tags: data.tags ?? [],
-      metadata: data.metadata ?? null,
+      tags: this.toStringArray(data.tags),
+      metadata: null,
       publishedAt: this.toNullableDate(data.publishedAt),
       createdAt: this.toDate(data.createdAt),
       updatedAt: this.toDate(data.updatedAt),
@@ -56,13 +55,13 @@ export class KbMapper {
     return new KbChunkEntity({
       id: data.id,
       articleId: data.articleId,
-      content: data.content,
+      content: data.chunkText ?? '',
       chunkIndex: data.chunkIndex,
-      tokens: data.tokens ?? null,
-      embedding: data.embedding ?? null,
-      metadata: data.metadata ?? null,
+      tokens: null,
+      embedding: null,
+      metadata: this.toRecord(data.metadataJson),
       createdAt: this.toDate(data.createdAt),
-      updatedAt: this.toDate(data.updatedAt),
+      updatedAt: this.toDate(data.createdAt),
     });
   }
 
@@ -142,5 +141,21 @@ export class KbMapper {
     }
 
     return value instanceof Date ? value : new Date(value);
+  }
+
+  private toStringArray(value: unknown): string[] {
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === 'string');
+    }
+
+    return [];
+  }
+
+  private toRecord(value: unknown): Record<string, unknown> | null {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return value as Record<string, unknown>;
+    }
+
+    return null;
   }
 }

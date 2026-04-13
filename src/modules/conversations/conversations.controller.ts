@@ -16,7 +16,6 @@ import { ReactivateBotDto } from './dto/reactivate-bot.dto';
 import { UpdateConversationStatusDto } from './dto/update-conversation-status.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { ConversationsService } from './conversations.service';
-import { ConversationEntity } from './entities/conversation.entity';
 
 @Controller('conversations')
 export class ConversationsController {
@@ -25,7 +24,7 @@ export class ConversationsController {
   ) {}
 
   @Post()
-  create(@Body() createConversationDto: CreateConversationDto): ConversationEntity {
+  create(@Body() createConversationDto: CreateConversationDto) {
     return this.conversationsService.create(createConversationDto);
   }
 
@@ -35,7 +34,7 @@ export class ConversationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ConversationEntity {
+  findOne(@Param('id') id: string) {
     return this.conversationsService.findOne(id);
   }
 

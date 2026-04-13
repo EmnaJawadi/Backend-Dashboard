@@ -9,6 +9,7 @@ import { ConversationTagsModule } from './modules/conversation-tags/conversation
 import { ConversationsModule } from './modules/conversations/conversations.module';
 import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
 import { MessagesModule } from './modules/messages/messages.module';
+import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
@@ -31,6 +32,7 @@ import { NotificationsGateway } from './gateways/notifications.gateway';
     ConversationsModule,
     MessageTemplatesModule,
     MessagesModule,
+    KnowledgeBaseModule,
     SettingsModule,
     UsersModule,
     WhatsappModule,

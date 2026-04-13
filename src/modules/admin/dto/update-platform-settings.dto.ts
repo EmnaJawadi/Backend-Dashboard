@@ -4,6 +4,5 @@ export class UpdatePlatformSettingsDto {
   defaultLanguage?: string;
   defaultCurrency?: string;
   maintenanceMode?: boolean;
-  allowNewCompanyRegistration?: boolean;
   allowUserInvitations?: boolean;
 }

@@ -1,5 +1,4 @@
 export class UpdateSubscriptionDto {
-  companyId?: string;
   plan?: string;
   status?: string;
   billingCycle?: string;

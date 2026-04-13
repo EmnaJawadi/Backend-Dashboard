@@ -10,9 +10,12 @@ import { KbArticleQueryDto } from './dto/kb-article-query.dto';
 import { IngestKbSourceDto } from './dto/ingest-kb-source.dto';
 import { KbRepository } from './kb.repository';
 import { KbMapper } from './mappers/kb.mapper';
-import { IngestionService, IngestionSourceType } from './ingestion/ingestion.service';
+import {
+  IngestionService,
+  IngestionSourceType,
+} from './ingestion/ingestion.service';
 
-type RawKbChunk = {
+type RawKbChunkInput = {
   content: string;
   chunkIndex: number;
   embedding?: number[] | null;
@@ -21,28 +24,24 @@ type RawKbChunk = {
 
 type RawKbArticle = {
   id: string;
-  title: string;
-  slug?: string | null;
-  summary?: string | null;
-  content: string;
-  language?: string | null;
+  title: string | null;
+  body: string | null;
+  category?: string | null;
+  lang?: string | null;
   sourceUrl?: string | null;
   status?: string | null;
-  tags?: string[] | null;
-  metadata?: Record<string, unknown> | null;
+  tags?: unknown;
   publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
   chunks?: Array<{
     id: string;
     articleId: string;
-    content: string;
+    chunkText: string | null;
     chunkIndex: number;
-    tokens?: number | null;
-    embedding?: number[] | null;
-    metadata?: Record<string, unknown> | null;
+    embeddingsVector?: Uint8Array | null;
+    metadataJson?: unknown;
     createdAt?: Date | string;
-    updatedAt?: Date | string;
   }> | null;
 };
 
@@ -57,18 +56,19 @@ export class KbArticlesService {
   async create(createKbArticleDto: CreateKbArticleDto) {
     const article = await this.kbRepository.createArticle({
       title: createKbArticleDto.title,
-      slug: createKbArticleDto.slug ?? null,
-      summary: createKbArticleDto.summary ?? null,
-      content: createKbArticleDto.content,
-      language: createKbArticleDto.language ?? null,
+      body: createKbArticleDto.content,
+      lang: createKbArticleDto.language ?? null,
       sourceUrl: createKbArticleDto.sourceUrl ?? null,
       tags: createKbArticleDto.tags ?? [],
-      metadata: createKbArticleDto.metadata ?? null,
       status: 'draft',
       publishedAt: null,
+      category: createKbArticleDto.summary ?? null,
+      version: 1,
+      sourceTypes: null,
+      authorId: null,
     });
 
-    return this.kbMapper.toArticleEntity(article);
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
   }
 
   async findAll(query: KbArticleQueryDto) {
@@ -80,24 +80,24 @@ export class KbArticlesService {
       this.kbRepository.findMany({
         search: query.search,
         tag: query.tag,
-        language: query.language,
+        lang: query.language,
         status: query.status,
         skip,
         take: limit,
-        orderBy: {
-          [query.sortBy ?? 'createdAt']: query.sortOrder ?? 'desc',
-        },
+        orderBy: { [query.sortBy ?? 'createdAt']: query.sortOrder ?? 'desc' },
       }),
       this.kbRepository.count({
         search: query.search,
         tag: query.tag,
-        language: query.language,
+        lang: query.language,
         status: query.status,
       }),
     ]);
 
     return {
-      items: items.map((item: RawKbArticle) => this.kbMapper.toArticleEntity(item)),
+      items: items.map((item: RawKbArticle) =>
+        this.kbMapper.toArticleEntity(item as RawKbArticle),
+      ),
       meta: {
         page,
         limit,
@@ -114,7 +114,7 @@ export class KbArticlesService {
       throw new NotFoundException('Knowledge base article not found');
     }
 
-    return this.kbMapper.toArticleEntity(article);
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
   }
 
   async update(id: string, updateKbArticleDto: UpdateKbArticleDto) {
@@ -122,16 +122,14 @@ export class KbArticlesService {
 
     const article = await this.kbRepository.updateArticle(id, {
       title: updateKbArticleDto.title,
-      slug: updateKbArticleDto.slug ?? null,
-      summary: updateKbArticleDto.summary ?? null,
-      content: updateKbArticleDto.content,
-      language: updateKbArticleDto.language ?? null,
-      sourceUrl: updateKbArticleDto.sourceUrl ?? null,
+      body: updateKbArticleDto.content,
+      lang: updateKbArticleDto.language,
+      sourceUrl: updateKbArticleDto.sourceUrl,
       tags: updateKbArticleDto.tags,
-      metadata: updateKbArticleDto.metadata ?? null,
+      category: updateKbArticleDto.summary,
     });
 
-    return this.kbMapper.toArticleEntity(article);
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
   }
 
   async publish(id: string, publishKbArticleDto: PublishKbArticleDto) {
@@ -148,7 +146,7 @@ export class KbArticlesService {
         : null,
     });
 
-    return this.kbMapper.toArticleEntity(article);
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
   }
 
   async remove(id: string) {
@@ -182,24 +180,25 @@ export class KbArticlesService {
 
     const article = await this.kbRepository.createArticle({
       title: ingestionResult.title ?? ingestKbSourceDto.title ?? 'Untitled article',
-      slug: null,
-      summary: null,
-      content: ingestionResult.content,
-      language: ingestKbSourceDto.language ?? null,
+      body: ingestionResult.content,
+      lang: ingestKbSourceDto.language ?? null,
       sourceUrl: ingestKbSourceDto.sourceUrl ?? null,
       tags: ingestKbSourceDto.tags ?? [],
-      metadata: ingestionResult.metadata ?? null,
       status: ingestKbSourceDto.autoPublish ? 'published' : 'draft',
       publishedAt: ingestKbSourceDto.autoPublish ? new Date() : null,
+      category: null,
+      version: 1,
+      sourceTypes: ingestKbSourceDto.sourceType,
+      authorId: null,
     });
 
     if (ingestionResult.chunks.length > 0) {
       await this.kbRepository.createChunks(
         article.id,
-        ingestionResult.chunks.map((chunk: RawKbChunk) => ({
+        ingestionResult.chunks.map((chunk: RawKbChunkInput) => ({
           content: chunk.content,
           chunkIndex: chunk.chunkIndex,
-          embedding: chunk.embedding,
+          embedding: chunk.embedding ?? null,
           metadata: chunk.metadata ?? null,
         })),
       );
@@ -211,7 +210,7 @@ export class KbArticlesService {
       throw new NotFoundException('Created article not found');
     }
 
-    return this.kbMapper.toArticleEntity(createdArticle);
+    return this.kbMapper.toArticleEntity(createdArticle as RawKbArticle);
   }
 
   private async ensureArticleExists(id: string) {

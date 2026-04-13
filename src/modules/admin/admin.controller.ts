@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Patch, Query } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { QueryAdminCompaniesDto } from './dto/query-admin-companies.dto';
 import { QueryAdminUsersDto } from './dto/query-admin-users.dto';
 import { UpdatePlatformSettingsDto } from './dto/update-platform-settings.dto';
 
@@ -16,11 +15,6 @@ export class AdminController {
   @Get('users')
   findAllUsers(@Query() query: QueryAdminUsersDto) {
     return this.adminService.findAllUsers(query);
-  }
-
-  @Get('companies')
-  findAllCompanies(@Query() query: QueryAdminCompaniesDto) {
-    return this.adminService.findAllCompanies(query);
   }
 
   @Get('platform-settings')

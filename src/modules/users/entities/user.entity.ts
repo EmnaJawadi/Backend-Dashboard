@@ -6,7 +6,6 @@ export class UserEntity {
   email!: string;
   phoneNumber?: string | null;
   role!: string;
-  companyId?: string | null;
   isActive!: boolean;
   createdAt!: Date;
   updatedAt!: Date;

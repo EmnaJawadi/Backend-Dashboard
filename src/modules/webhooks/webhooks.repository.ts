@@ -1,27 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
-import { NormalizedWebhookDto } from './dto/normalized-webhook.dto';
+import { Prisma } from '../../generated/prisma/client';
 import { WebhookQueryDto } from './dto/webhook-query.dto';
+import { NormalizedWebhookDto } from './dto/normalized-webhook.dto';
 
 @Injectable()
 export class WebhooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createWebhookLog(payload: NormalizedWebhookDto) {
-    return this.prisma.webhookLog.create({
+  async createWebhookLog(data: NormalizedWebhookDto) {
+    return this.prisma.webhookEvent.create({
       data: {
-        provider: payload.provider,
-        eventType: payload.eventType,
-        externalMessageId: payload.externalMessageId,
-        conversationExternalId: payload.conversationExternalId,
-        contactPhone: payload.contactPhone,
-        contactName: payload.contactName,
-        messageText: payload.messageText,
-        messageType: payload.messageType,
-        deliveryStatus: payload.deliveryStatus,
-        direction: payload.direction,
-        eventAt: payload.eventAt,
-        rawPayload: payload.rawPayload,
+        provider: data.provider ?? null,
+        eventType: data.eventType ?? null,
+        externalEventId: data.externalMessageId ?? null,
+        payload: {
+          conversationExternalId: data.conversationExternalId,
+          contactPhone: data.contactPhone,
+          contactName: data.contactName,
+          messageText: data.messageText,
+          messageType: data.messageType,
+          deliveryStatus: data.deliveryStatus,
+          direction: data.direction,
+          eventAt: data.eventAt,
+          rawPayload: data.rawPayload as Prisma.InputJsonValue,
+        } as Prisma.InputJsonValue,
+        processingStatus: 'received',
+        errorMessage: null,
+        receivedAt: data.eventAt ?? new Date(),
+        processedAt: null,
       },
     });
   }
@@ -34,25 +41,34 @@ export class WebhooksRepository {
     const where = {
       ...(query.provider ? { provider: query.provider } : {}),
       ...(query.eventType ? { eventType: query.eventType } : {}),
-      ...(query.contactPhone ? { contactPhone: query.contactPhone } : {}),
+      ...(query.contactPhone
+        ? {
+            payload: {
+              path: ['contactPhone'],
+              string_contains: query.contactPhone,
+            },
+          }
+        : {}),
     };
 
-    const [data, total] = await this.prisma.$transaction([
-      this.prisma.webhookLog.findMany({
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.webhookEvent.findMany({
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: query.sortOrder ?? 'desc' },
+        orderBy: {
+          receivedAt: query.sortOrder ?? 'desc',
+        },
       }),
-      this.prisma.webhookLog.count({ where }),
+      this.prisma.webhookEvent.count({ where }),
     ]);
 
     return {
-      data,
+      items,
       meta: {
-        total,
         page,
         limit,
+        total,
         totalPages: Math.ceil(total / limit),
       },
     };

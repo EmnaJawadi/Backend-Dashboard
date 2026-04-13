@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { Prisma } from '../../generated/prisma/client';
 import { CreateAiRunDto } from './dto/create-ai-run.dto';
 import { AiRunQueryDto } from './dto/ai-run-query.dto';
 
@@ -10,19 +11,22 @@ export class AiRunsRepository {
   async create(data: CreateAiRunDto) {
     return this.prisma.aiRun.create({
       data: {
-        conversationId: data.conversationId ?? null,
-        contactId: data.contactId ?? null,
-        prompt: data.prompt ?? null,
-        response: data.response ?? null,
-        provider: data.provider ?? 'gemini',
-        model: data.model ?? 'gemini-1.5-flash',
-        status: data.status ?? 'success',
+        conversationId: data.conversationId ?? '',
+        messageId: data.contactId ?? '',
+        inputText: data.prompt ?? null,
+        outputText: data.response ?? null,
+        intent: null,
+        model: data.model ?? null,
+        promptTokens: null,
+        completionTokens: null,
+        totalTokens: data.tokensUsed ?? null,
         latencyMs: data.latencyMs ?? null,
-        tokensUsed: data.tokensUsed ?? null,
-        confidenceScore: data.confidenceScore ?? null,
-        estimatedCost: data.estimatedCost ?? null,
-        blockedReason: data.blockedReason ?? null,
-        metadata: data.metadata ?? null,
+        handoffRequired: null,
+        tagsToApply: undefined,
+        rawResponse: data.metadata
+          ? (data.metadata as Prisma.InputJsonValue)
+          : undefined,
+        createdAt: new Date(),
       },
     });
   }
@@ -33,10 +37,10 @@ export class AiRunsRepository {
     const skip = (page - 1) * limit;
 
     const where = {
-      ...(query.provider ? { provider: query.provider } : {}),
-      ...(query.model ? { model: query.model } : {}),
-      ...(query.status ? { status: query.status } : {}),
       ...(query.conversationId ? { conversationId: query.conversationId } : {}),
+      ...(query.model ? { model: query.model } : {}),
+      ...(query.provider ? { model: { contains: query.provider } } : {}),
+      ...(query.status ? { intent: query.status } : {}),
     };
 
     const [data, total] = await this.prisma.$transaction([

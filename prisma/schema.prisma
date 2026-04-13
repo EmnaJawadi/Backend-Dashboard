@@ -2,6 +2,7 @@ generator client {
   provider   = "prisma-client"
   output     = "../src/generated/prisma"
   engineType = "client"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -158,7 +159,7 @@ model KbArticle {
   lang        String?
   status      String?
   version     Int?
-  sourceTypes String?   @map("source_types")
+  sourceTypes String?   @map("source_type")
   sourceUrl   String?   @map("source_url")
   authorId    String?   @map("author_id")
   publishedAt DateTime? @map("published_at")
@@ -175,7 +176,7 @@ model KbChunk {
   articleId        String   @map("article_id")
   chunkIndex       Int      @map("chunk_index")
   chunkText        String?  @map("chunk_text")
-  embeddingsVector Bytes?   @map("embeddings_vector")
+  embeddingsVector Bytes?   @map("embedding_vector")
   metadataJson     Json?    @map("metadata_json")
   createdAt        DateTime @map("created_at")
 

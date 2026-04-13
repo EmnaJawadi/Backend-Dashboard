@@ -17,7 +17,7 @@ export class AiRunsService {
     const result = await this.aiRunsRepository.findMany(query);
 
     return {
-      data: result.data.map((item: Partial<AiRunEntity>) => new AiRunEntity(item)),
+      data: result.data.map((item) => new AiRunEntity(item)),
       meta: result.meta,
     };
   }
@@ -36,8 +36,6 @@ export class AiRunsService {
     await this.findOne(id);
     await this.aiRunsRepository.remove(id);
 
-    return {
-      message: 'AI run deleted successfully',
-    };
+    return { message: 'AI run deleted successfully' };
   }
 }

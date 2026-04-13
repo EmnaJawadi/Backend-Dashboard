@@ -13,7 +13,6 @@ export class UserQueryDto {
   /**
    * Filters
    */
-  role?: 'SUPER_ADMIN' | 'COMPANY_ADMIN' | 'EMPLOYEE';
-  companyId?: string;
+  role?: 'SUPER_ADMIN' | 'EMPLOYEE';
   isActive?: boolean;
 }

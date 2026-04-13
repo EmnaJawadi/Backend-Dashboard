@@ -9,7 +9,6 @@ type UserWriteData = Partial<{
   email: string;
   phoneNumber: string | null;
   role: string;
-  companyId: string | null;
   isActive: boolean;
 }>;
 
@@ -30,7 +29,6 @@ export class UsersRepository {
       email: data.email?.trim() ?? '',
       phoneNumber: data.phoneNumber?.trim() ?? null,
       role: data.role?.trim() ?? 'EMPLOYEE',
-      companyId: data.companyId?.trim() ?? null,
       isActive: data.isActive ?? true,
       createdAt: now,
       updatedAt: now,
@@ -60,10 +58,6 @@ export class UsersRepository {
 
     if (query.role) {
       data = data.filter((user) => String(user.role) === String(query.role));
-    }
-
-    if (query.companyId) {
-      data = data.filter((user) => user.companyId === query.companyId);
     }
 
     if (query.isActive !== undefined) {
@@ -102,7 +96,6 @@ export class UsersRepository {
     if (data.email !== undefined) user.email = data.email.trim();
     if (data.phoneNumber !== undefined) user.phoneNumber = data.phoneNumber?.trim() ?? null;
     if (data.role !== undefined) user.role = data.role.trim();
-    if (data.companyId !== undefined) user.companyId = data.companyId?.trim() ?? null;
     if (data.isActive !== undefined) user.isActive = data.isActive;
 
     user.fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');

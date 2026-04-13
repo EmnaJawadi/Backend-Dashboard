@@ -26,10 +26,10 @@ export class MailService {
     to: string;
     invitedBy?: string;
     inviteLink: string;
-    companyName?: string;
+    workspaceName?: string;
   }) {
     this.logger.log(
-      `[MAIL][INVITE_USER] to=${params.to} company=${params.companyName ?? ''} link=${params.inviteLink}`,
+      `[MAIL][INVITE_USER] to=${params.to} workspace=${params.workspaceName ?? ''} link=${params.inviteLink}`,
     );
     return true;
   }

@@ -17,7 +17,7 @@ export class AuditLogsService {
     const result = await this.auditLogsRepository.findMany(query);
 
     return {
-      data: result.data.map((item: Partial<AuditLogEntity>) => new AuditLogEntity(item)),
+      data: result.data.map((item) => new AuditLogEntity(item)),
       meta: result.meta,
     };
   }
@@ -35,9 +35,6 @@ export class AuditLogsService {
   async remove(id: string): Promise<{ message: string }> {
     await this.findOne(id);
     await this.auditLogsRepository.remove(id);
-
-    return {
-      message: 'Audit log deleted successfully',
-    };
+    return { message: 'Audit log deleted successfully' };
   }
 }
