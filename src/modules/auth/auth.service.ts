@@ -1,20 +1,72 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'node:crypto';
+import type { StringValue } from 'ms';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AuthMapper } from './mappers/auth.mapper';
 
 type PersistedRole = 'admin' | 'supervisor' | 'agent';
 type ApiRole = 'SUPER_ADMIN' | 'ADMIN' | 'AGENT';
 
+type ResetPasswordTokenPayload = {
+  sub: string;
+  email: string;
+  passwordHash: string;
+  type: 'password_reset';
+};
+
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   private hashPassword(password: string): string {
     return createHash('sha256').update(password).digest('hex');
+  }
+
+  private getResetPasswordSecret(): string {
+    return (
+      process.env.JWT_RESET_PASSWORD_SECRET ??
+      process.env.JWT_ACCESS_SECRET ??
+      'dev-reset-password-secret'
+    );
+  }
+
+  private getResetPasswordExpiresIn(): StringValue | number {
+    const expiresIn = process.env.JWT_RESET_PASSWORD_EXPIRES_IN?.trim();
+
+    if (!expiresIn) {
+      return '30m';
+    }
+
+    const asNumber = Number(expiresIn);
+    if (Number.isFinite(asNumber)) {
+      return asNumber;
+    }
+
+    return expiresIn as StringValue;
+  }
+
+  private buildResetPasswordLink(token: string): string {
+    const baseUrl =
+      process.env.RESET_PASSWORD_BASE_URL?.trim() ||
+      'http://localhost:3000/reset-password';
+
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${separator}token=${encodeURIComponent(token)}`;
   }
 
   private splitFullName(fullName?: string | null): {
@@ -153,6 +205,85 @@ export class AuthService {
       accessToken: `access-${user.id}`,
       refreshToken: `refresh-${user.id}`,
     });
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const email = forgotPasswordDto.email.trim().toLowerCase();
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (user?.isActive) {
+      const payload: ResetPasswordTokenPayload = {
+        sub: user.id,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        type: 'password_reset',
+      };
+
+      const token = await this.jwtService.signAsync(payload, {
+        secret: this.getResetPasswordSecret(),
+        expiresIn: this.getResetPasswordExpiresIn(),
+      });
+
+      const resetLink = this.buildResetPasswordLink(token);
+      const isSent = await this.mailService.sendForgotPasswordEmail({
+        to: user.email,
+        fullName: user.fullName ?? undefined,
+        resetLink,
+      });
+
+      if (!isSent) {
+        const reason = this.mailService.getLastErrorMessage();
+        throw new InternalServerErrorException(
+          reason ?? 'Unable to send password reset email',
+        );
+      }
+    }
+
+    return {
+      message:
+        'If an account exists for this email, a reset link has been sent.',
+    };
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    let payload: ResetPasswordTokenPayload;
+
+    try {
+      payload = await this.jwtService.verifyAsync<ResetPasswordTokenPayload>(
+        resetPasswordDto.token,
+        {
+          secret: this.getResetPasswordSecret(),
+        },
+      );
+    } catch {
+      throw new UnauthorizedException('Invalid or expired reset token');
+    }
+
+    if (payload.type !== 'password_reset') {
+      throw new UnauthorizedException('Invalid reset token');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub },
+    });
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('Invalid reset token');
+    }
+
+    if (payload.email !== user.email || payload.passwordHash !== user.passwordHash) {
+      throw new UnauthorizedException('Reset token is no longer valid');
+    }
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: this.hashPassword(resetPasswordDto.newPassword),
+        updatedAt: new Date(),
+      },
+    });
+
+    return { message: 'Password reset successful' };
   }
 
   async getProfileFromToken(token?: string) {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { WhatsappProviderService } from '../../integrations/whatsapp/whatsapp-provider.interface';
 import { CheckWindowDto } from './dto/check-window.dto';
 import { SendTemplateMessageDto } from './dto/send-template-message.dto';
 import { SendWhatsappMessageDto } from './dto/send-whatsapp-message.dto';
@@ -9,6 +10,7 @@ import { WhatsappComplianceService } from './policies/whatsapp-compliance.servic
 @Injectable()
 export class WhatsappService {
   constructor(
+    private readonly whatsappProviderService: WhatsappProviderService,
     private readonly conversationWindowService: ConversationWindowService,
     private readonly whatsappComplianceService: WhatsappComplianceService,
   ) {}
@@ -28,7 +30,7 @@ export class WhatsappService {
     };
   }
 
-  sendMessage(sendWhatsappMessageDto: SendWhatsappMessageDto) {
+  async sendMessage(sendWhatsappMessageDto: SendWhatsappMessageDto) {
     const phoneNumber = this.whatsappComplianceService.validatePhoneNumber(
       sendWhatsappMessageDto.phoneNumber,
     );
@@ -43,16 +45,23 @@ export class WhatsappService {
       conversationId: sendWhatsappMessageDto.conversationId,
     });
 
+    const providerResult = await this.whatsappProviderService.sendTextMessage({
+      to: phoneNumber,
+      text: message,
+    });
+
     return {
-      success: true,
+      success: providerResult.success,
       channel: 'whatsapp',
-      provider: 'mock',
+      provider: providerResult.provider,
+      messageId: providerResult.messageId,
+      raw: providerResult.raw,
       payload,
       sentAt: new Date(),
     };
   }
 
-  sendTemplateMessage(sendTemplateMessageDto: SendTemplateMessageDto) {
+  async sendTemplateMessage(sendTemplateMessageDto: SendTemplateMessageDto) {
     const phoneNumber = this.whatsappComplianceService.validatePhoneNumber(
       sendTemplateMessageDto.phoneNumber,
     );
@@ -69,12 +78,31 @@ export class WhatsappService {
       conversationId: sendTemplateMessageDto.conversationId,
     });
 
+    // Evolution API template support differs by provider configuration.
+    // For n8n MVP we guarantee delivery by sending a text fallback.
+    const fallbackMessage = [
+      `[template:${templateName}]`,
+      ...(sendTemplateMessageDto.variables
+        ? Object.entries(sendTemplateMessageDto.variables).map(
+            ([key, value]) => `${key}: ${value}`,
+          )
+        : []),
+    ].join('\n');
+
+    const providerResult = await this.whatsappProviderService.sendTextMessage({
+      to: phoneNumber,
+      text: fallbackMessage,
+    });
+
     return {
-      success: true,
+      success: providerResult.success,
       channel: 'whatsapp',
-      provider: 'mock',
+      provider: providerResult.provider,
+      messageId: providerResult.messageId,
+      raw: providerResult.raw,
       payload,
       sentAt: new Date(),
+      templateDeliveryMode: 'text-fallback',
     };
   }
 }

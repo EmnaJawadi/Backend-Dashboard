@@ -1,13 +1,161 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '../../../generated/prisma/client';
+import { PrismaService } from '../../../database/prisma/prisma.service';
 import { NormalizedWebhookDto } from '../dto/normalized-webhook.dto';
 
 @Injectable()
 export class InboundMessagesHandler {
   private readonly logger = new Logger(InboundMessagesHandler.name);
 
+  constructor(private readonly prisma: PrismaService) {}
+
+  private normalizePhone(raw?: string | null): string | null {
+    if (!raw) return null;
+
+    const normalized = raw
+      .replace(/@s\.whatsapp\.net$/i, '')
+      .replace(/[^0-9+]/g, '')
+      .trim();
+
+    if (!normalized) return null;
+    return normalized.startsWith('+') ? normalized : `+${normalized}`;
+  }
+
+  private splitName(fullName?: string | null): { firstName: string; lastName: string | null } {
+    const value = (fullName ?? '').trim();
+
+    if (!value) {
+      return { firstName: 'Client', lastName: null };
+    }
+
+    const parts = value.split(/\s+/);
+    const firstName = parts.shift() ?? 'Client';
+    const lastName = parts.length > 0 ? parts.join(' ') : null;
+
+    return { firstName, lastName };
+  }
+
   async handle(payload: NormalizedWebhookDto): Promise<void> {
+    const now = payload.eventAt ?? new Date();
+    const phone = this.normalizePhone(payload.contactPhone);
+    const names = this.splitName(payload.contactName);
+
+    const existingContact = phone
+      ? await this.prisma.contact.findFirst({
+          where: { phone },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    const contact = existingContact
+      ? await this.prisma.contact.update({
+          where: { id: existingContact.id },
+          data: {
+            whatsappName: payload.contactName ?? undefined,
+            fullName: payload.contactName ?? undefined,
+            lastSeen: now,
+            updatedAt: now,
+          },
+        })
+      : await this.prisma.contact.create({
+          data: {
+            phone,
+            whatsappName: payload.contactName ?? names.firstName,
+            fullName: payload.contactName ?? names.firstName,
+            email: null,
+            language: null,
+            city: null,
+            country: null,
+            tags: [],
+            notes: null,
+            segment: null,
+            source: 'whatsapp_webhook',
+            status: 'active',
+            lastSeen: now,
+            createdAt: now,
+            updatedAt: now,
+          },
+        });
+
+    const existingConversation = await this.prisma.conversation.findFirst({
+      where: {
+        contactId: contact.id,
+        status: { not: 'closed' },
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    const conversation =
+      existingConversation ??
+      (await this.prisma.conversation.create({
+        data: {
+          contactId: contact.id,
+          channel: 'whatsapp',
+          status: 'bot_active',
+          priority: 'medium',
+          assignedTo: null,
+          botPaused: false,
+          handoffRequired: false,
+          unreadCount: 0,
+          lastMessageAt: now,
+          lastCustomerMessageAt: now,
+          lastBotMessageAt: null,
+          lastHumanMessageAt: null,
+          closedAt: null,
+          createdAt: now,
+          updatedAt: now,
+        },
+      }));
+
+    if (payload.externalMessageId) {
+      const duplicated = await this.prisma.message.findFirst({
+        where: {
+          externalMessageId: payload.externalMessageId,
+          direction: 'inbound',
+        },
+      });
+
+      if (duplicated) {
+        this.logger.warn(
+          `Skipping duplicated inbound webhook message externalId=${payload.externalMessageId}`,
+        );
+        return;
+      }
+    }
+
+    await this.prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        externalMessageId: payload.externalMessageId,
+        direction: 'inbound',
+        senderType: 'customer',
+        content: payload.messageText ?? '',
+        messageType: payload.messageType ?? 'text',
+        mediaUrl: null,
+        mimeType: null,
+        rawPayload: payload.rawPayload as Prisma.InputJsonValue,
+        deliveryStatus: payload.deliveryStatus ?? 'delivered',
+        errorMessage: null,
+        createdAt: now,
+        messageTimestamp: now,
+      },
+    });
+
+    await this.prisma.conversation.update({
+      where: { id: conversation.id },
+      data: {
+        status: conversation.status === 'closed' ? 'waiting_customer' : conversation.status,
+        unreadCount: {
+          increment: 1,
+        },
+        lastMessageAt: now,
+        lastCustomerMessageAt: now,
+        updatedAt: now,
+      },
+    });
+
     this.logger.log(
-      `Inbound message received from ${payload.contactPhone ?? 'unknown'}: ${payload.messageText ?? ''}`,
+      `Inbound message stored: contact=${contact.id} conversation=${conversation.id} externalId=${payload.externalMessageId ?? 'n/a'}`,
     );
   }
 }

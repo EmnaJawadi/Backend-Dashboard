@@ -22,7 +22,19 @@ const validationSchema = Joi.object({
 
   EVOLUTION_API_URL: Joi.string().uri().optional().allow('', null),
   EVOLUTION_API_KEY: Joi.string().optional().allow('', null),
+  EVOLUTION_INSTANCE: Joi.string().optional().allow('', null),
   WHATSAPP_DEFAULT_INSTANCE: Joi.string().optional().allow('', null),
+
+  JWT_RESET_PASSWORD_SECRET: Joi.string().optional().allow('', null),
+  JWT_RESET_PASSWORD_EXPIRES_IN: Joi.string().default('30m'),
+  RESET_PASSWORD_BASE_URL: Joi.string().uri().optional().allow('', null),
+
+  SMTP_HOST: Joi.string().optional().allow('', null),
+  SMTP_PORT: Joi.number().default(587),
+  SMTP_SECURE: Joi.boolean().truthy('true').falsy('false').default(false),
+  SMTP_USER: Joi.string().optional().allow('', null),
+  SMTP_PASS: Joi.string().optional().allow('', null),
+  SMTP_FROM: Joi.string().optional().allow('', null),
 
   REDIS_HOST: Joi.string().default('127.0.0.1'),
   REDIS_PORT: Joi.number().default(6379),

@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './database/prisma/prisma.module';
+import { AiModule } from './modules/ai/ai.module';
+import { AiRunsModule } from './modules/ai-runs/ai-runs.module';
+import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 
@@ -9,7 +13,9 @@ import { ConversationTagsModule } from './modules/conversation-tags/conversation
 import { ConversationsModule } from './modules/conversations/conversations.module';
 import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
 import { MessagesModule } from './modules/messages/messages.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
@@ -20,11 +26,15 @@ import { NotificationsGateway } from './gateways/notifications.gateway';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     GeminiModule,
 
     MailModule,
     AuthModule,
+    AiModule,
+    AiRunsModule,
+    AuditLogsModule,
 
     ContactNotesModule,
     ContactsModule,
@@ -32,7 +42,9 @@ import { NotificationsGateway } from './gateways/notifications.gateway';
     ConversationsModule,
     MessageTemplatesModule,
     MessagesModule,
+    AnalyticsModule,
     KnowledgeBaseModule,
+    WebhooksModule,
     SettingsModule,
     UsersModule,
     WhatsappModule,

@@ -25,16 +25,44 @@ export class WebhooksService {
     success: boolean;
     message: string;
     eventType: string;
+    normalized: {
+      contactPhone: string | null;
+      contactName: string | null;
+      messageText: string | null;
+      messageType: string | null;
+      deliveryStatus: string | null;
+      eventAt: Date;
+      conversationExternalId: string | null;
+      externalMessageId: string | null;
+    };
   }> {
     const normalized: NormalizedWebhookDto = normalizeEvolutionWebhook(payload);
+    const webhookLog = await this.webhooksRepository.createWebhookLog(normalized);
 
-    await this.webhooksRepository.createWebhookLog(normalized);
-    await this.dispatch(normalized);
+    try {
+      await this.dispatch(normalized);
+      await this.webhooksRepository.markProcessed(webhookLog.id);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unexpected webhook processing error';
+      await this.webhooksRepository.markFailed(webhookLog.id, message);
+      throw error;
+    }
 
     return {
       success: true,
       message: 'Webhook processed successfully',
       eventType: normalized.eventType,
+      normalized: {
+        contactPhone: normalized.contactPhone,
+        contactName: normalized.contactName,
+        messageText: normalized.messageText,
+        messageType: normalized.messageType,
+        deliveryStatus: normalized.deliveryStatus,
+        eventAt: normalized.eventAt,
+        conversationExternalId: normalized.conversationExternalId,
+        externalMessageId: normalized.externalMessageId,
+      },
     };
   }
 

@@ -11,8 +11,8 @@ import { MessageSerializer } from './serializers/message.serializer';
 export class MessagesService {
   constructor(private readonly messagesRepository: MessagesRepository) {}
 
-  create(createMessageDto: CreateMessageDto) {
-    const message = this.messagesRepository.create({
+  async create(createMessageDto: CreateMessageDto) {
+    const message = await this.messagesRepository.create({
       conversationId: createMessageDto.conversationId,
       senderType: createMessageDto.senderType,
       senderId: createMessageDto.senderId ?? null,
@@ -25,8 +25,8 @@ export class MessagesService {
     return MessageSerializer.serialize(message);
   }
 
-  receiveInboundMessage(inboundMessageDto: InboundMessageDto) {
-    const message = this.messagesRepository.create({
+  async receiveInboundMessage(inboundMessageDto: InboundMessageDto) {
+    const message = await this.messagesRepository.create({
       conversationId: inboundMessageDto.conversationId,
       senderType: 'customer',
       senderId: null,
@@ -39,8 +39,8 @@ export class MessagesService {
     return MessageSerializer.serialize(message);
   }
 
-  sendMessage(sendMessageDto: SendMessageDto) {
-    const message = this.messagesRepository.create({
+  async sendMessage(sendMessageDto: SendMessageDto) {
+    const message = await this.messagesRepository.create({
       conversationId: sendMessageDto.conversationId,
       senderType: 'agent',
       senderId: sendMessageDto.senderId ?? null,
@@ -53,8 +53,8 @@ export class MessagesService {
     return MessageSerializer.serialize(message);
   }
 
-  findAll(query: MessageQueryDto) {
-    const result = this.messagesRepository.findAll(query);
+  async findAll(query: MessageQueryDto) {
+    const result = await this.messagesRepository.findAll(query);
 
     return {
       data: MessageSerializer.serializeMany(result.data),
@@ -62,13 +62,13 @@ export class MessagesService {
     };
   }
 
-  findOne(id: string) {
-    const message = this.messagesRepository.findById(id);
+  async findOne(id: string) {
+    const message = await this.messagesRepository.findById(id);
     return MessageSerializer.serialize(message);
   }
 
-  updateStatus(id: string, updateMessageStatusDto: UpdateMessageStatusDto) {
-    const message = this.messagesRepository.updateStatus(
+  async updateStatus(id: string, updateMessageStatusDto: UpdateMessageStatusDto) {
+    const message = await this.messagesRepository.updateStatus(
       id,
       updateMessageStatusDto.status,
     );
@@ -76,8 +76,8 @@ export class MessagesService {
     return MessageSerializer.serialize(message);
   }
 
-  remove(id: string) {
-    const message = this.messagesRepository.remove(id);
+  async remove(id: string) {
+    const message = await this.messagesRepository.remove(id);
     return MessageSerializer.serialize(message);
   }
 }

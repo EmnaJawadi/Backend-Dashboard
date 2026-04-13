@@ -25,10 +25,32 @@ export class WebhooksRepository {
           eventAt: data.eventAt,
           rawPayload: data.rawPayload as Prisma.InputJsonValue,
         } as Prisma.InputJsonValue,
-        processingStatus: 'received',
+        processingStatus: 'pending',
         errorMessage: null,
-        receivedAt: data.eventAt ?? new Date(),
+        receivedAt: new Date(),
         processedAt: null,
+      },
+    });
+  }
+
+  async markProcessed(id: string) {
+    return this.prisma.webhookEvent.update({
+      where: { id },
+      data: {
+        processingStatus: 'processed',
+        processedAt: new Date(),
+        errorMessage: null,
+      },
+    });
+  }
+
+  async markFailed(id: string, errorMessage: string) {
+    return this.prisma.webhookEvent.update({
+      where: { id },
+      data: {
+        processingStatus: 'failed',
+        processedAt: new Date(),
+        errorMessage,
       },
     });
   }

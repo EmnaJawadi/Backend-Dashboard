@@ -1,26 +1,6 @@
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 
-export class EvolutionWebhookMessageDto {
-  @IsOptional()
-  @IsString()
-  key?: string;
-
-  @IsOptional()
-  @IsString()
-  from?: string;
-
-  @IsOptional()
-  @IsString()
-  body?: string;
-
-  @IsOptional()
-  @IsString()
-  type?: string;
-
-  @IsOptional()
-  @IsString()
-  timestamp?: string;
-}
+export type EvolutionWebhookMessageDto = Record<string, unknown>;
 
 export class EvolutionWebhookDto {
   @IsOptional()

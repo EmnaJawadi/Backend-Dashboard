@@ -1,65 +1,104 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { Prisma } from '../../generated/prisma/client';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { MessageQueryDto } from './dto/message-query.dto';
-import { MessageEntity } from './entities/message.entity';
-import { MessageMapper } from './mappers/message.mapper';
+import { MessageEntity, MessageStatus, MessageType } from './entities/message.entity';
+
+type MessageWriteData = Partial<MessageEntity>;
 
 @Injectable()
 export class MessagesRepository {
-  private readonly messages: MessageEntity[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Partial<MessageEntity>): MessageEntity {
-    const now = new Date();
-
-    const message = MessageMapper.toEntity({
-      id: randomUUID(),
-      conversationId: data.conversationId,
-      senderType: data.senderType,
-      senderId: data.senderId ?? null,
-      content: data.content,
-      type: data.type ?? 'text',
-      status: data.status ?? 'sent',
-      isFromCustomer: data.isFromCustomer ?? false,
-      createdAt: now,
-      updatedAt: now,
-    });
-
-    this.messages.push(message);
-    return message;
+  private normalizeType(value?: string | null): MessageType {
+    if (value === 'image' || value === 'audio' || value === 'document' || value === 'video') {
+      return value;
+    }
+    return 'text';
   }
 
-  findAll(query: MessageQueryDto) {
+  private normalizeStatus(value?: string | null): MessageStatus {
+    if (value === 'delivered' || value === 'read' || value === 'failed') {
+      return value;
+    }
+    return 'sent';
+  }
+
+  private toEntity(row: {
+    id: string;
+    conversationId: string;
+    senderType: string | null;
+    content: string | null;
+    messageType: string | null;
+    deliveryStatus: string | null;
+    direction: string | null;
+    createdAt: Date;
+  }): MessageEntity {
+    const senderType = (row.senderType ?? 'system') as MessageEntity['senderType'];
+
+    return new MessageEntity({
+      id: row.id,
+      conversationId: row.conversationId,
+      senderType,
+      senderId: null,
+      content: row.content ?? '',
+      type: this.normalizeType(row.messageType),
+      status: this.normalizeStatus(row.deliveryStatus),
+      isFromCustomer: row.direction === 'inbound' || senderType === 'customer',
+      createdAt: row.createdAt,
+      updatedAt: row.createdAt,
+    });
+  }
+
+  async create(data: MessageWriteData): Promise<MessageEntity> {
+    const now = new Date();
+    const senderType = data.senderType ?? 'system';
+    const direction = data.isFromCustomer || senderType === 'customer' ? 'inbound' : 'outbound';
+
+    const created = await this.prisma.message.create({
+      data: {
+        conversationId: data.conversationId ?? '',
+        externalMessageId: null,
+        direction,
+        senderType,
+        content: data.content ?? null,
+        messageType: data.type ?? 'text',
+        mediaUrl: null,
+        mimeType: null,
+        rawPayload: Prisma.JsonNull,
+        deliveryStatus: data.status ?? 'sent',
+        errorMessage: null,
+        createdAt: now,
+        messageTimestamp: now,
+      },
+    });
+
+    return this.toEntity(created);
+  }
+
+  async findAll(query: MessageQueryDto) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 20);
 
-    let data = [...this.messages];
+    const where = {
+      ...(query.conversationId ? { conversationId: query.conversationId } : {}),
+      ...(query.senderType ? { senderType: query.senderType } : {}),
+      ...(query.type ? { messageType: query.type } : {}),
+      ...(query.status ? { deliveryStatus: query.status } : {}),
+    };
 
-    if (query.conversationId) {
-      data = data.filter(
-        (message) => message.conversationId === query.conversationId,
-      );
-    }
-
-    if (query.senderType) {
-      data = data.filter((message) => message.senderType === query.senderType);
-    }
-
-    if (query.type) {
-      data = data.filter((message) => message.type === query.type);
-    }
-
-    if (query.status) {
-      data = data.filter((message) => message.status === query.status);
-    }
-
-    data.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-
-    const total = data.length;
-    const start = (page - 1) * limit;
-    const paginated = data.slice(start, start + limit);
+    const [rows, total] = await this.prisma.$transaction([
+      this.prisma.message.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'asc' },
+      }),
+      this.prisma.message.count({ where }),
+    ]);
 
     return {
-      data: paginated,
+      data: rows.map((row) => this.toEntity(row)),
       meta: {
         total,
         page,
@@ -69,34 +108,32 @@ export class MessagesRepository {
     };
   }
 
-  findById(id: string): MessageEntity {
-    const message = this.messages.find((item) => item.id === id);
+  async findById(id: string): Promise<MessageEntity> {
+    const row = await this.prisma.message.findUnique({ where: { id } });
 
-    if (!message) {
+    if (!row) {
       throw new NotFoundException(`Message with id ${id} not found`);
     }
 
-    return message;
+    return this.toEntity(row);
   }
 
-  updateStatus(id: string, status: MessageEntity['status']): MessageEntity {
-    const message = this.findById(id);
-    message.status = status;
-    message.updatedAt = new Date();
+  async updateStatus(id: string, status: MessageEntity['status']): Promise<MessageEntity> {
+    const row = await this.prisma.message.update({
+      where: { id },
+      data: {
+        deliveryStatus: status,
+      },
+    });
 
-    return message;
+    return this.toEntity(row);
   }
 
-  remove(id: string): MessageEntity {
-    const index = this.messages.findIndex((item) => item.id === id);
+  async remove(id: string): Promise<MessageEntity> {
+    const row = await this.prisma.message.delete({
+      where: { id },
+    });
 
-    if (index === -1) {
-      throw new NotFoundException(`Message with id ${id} not found`);
-    }
-
-    const deleted = this.messages[index];
-    this.messages.splice(index, 1);
-
-    return deleted;
+    return this.toEntity(row);
   }
 }

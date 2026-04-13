@@ -1,5 +1,4 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EvolutionApiClient {
@@ -8,10 +7,10 @@ export class EvolutionApiClient {
   private readonly apiKey: string;
   private readonly instance: string;
 
-  constructor(private readonly configService: ConfigService) {
-    this.baseUrl = (this.configService.get<string>('EVOLUTION_API_URL') ?? '').replace(/\/+$/, '');
-    this.apiKey = this.configService.get<string>('EVOLUTION_API_KEY') ?? '';
-    this.instance = this.configService.get<string>('EVOLUTION_INSTANCE') ?? '';
+  constructor() {
+    this.baseUrl = (process.env.EVOLUTION_API_URL ?? '').replace(/\/+$/, '');
+    this.apiKey = process.env.EVOLUTION_API_KEY ?? '';
+    this.instance = process.env.EVOLUTION_INSTANCE ?? process.env.WHATSAPP_DEFAULT_INSTANCE ?? '';
   }
 
   async sendTextMessage(params: {
