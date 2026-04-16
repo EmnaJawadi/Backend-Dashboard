@@ -1,27 +1,30 @@
 import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
 
-export class UpdatePlatformSettingsDto {
+export class CreateCompanyDto {
+  @IsString()
+  name!: string;
+
   @IsOptional()
   @IsString()
-  platformName?: string;
+  legalName?: string | null;
 
   @IsOptional()
   @IsEmail()
-  supportEmail?: string | null;
+  email?: string | null;
 
   @IsOptional()
   @IsString()
-  defaultLanguage?: string;
+  phone?: string | null;
 
   @IsOptional()
   @IsString()
-  defaultCurrency?: string;
+  website?: string | null;
+
+  @IsOptional()
+  @IsString()
+  address?: string | null;
 
   @IsOptional()
   @IsBoolean()
-  maintenanceMode?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  allowUserInvitations?: boolean;
+  isActive?: boolean;
 }

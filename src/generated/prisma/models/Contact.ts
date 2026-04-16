@@ -560,10 +560,6 @@ export type ContactScalarRelationFilter = {
   isNot?: Prisma.ContactWhereInput
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type ContactCreateNestedOneWithoutNotesRelInput = {
   create?: Prisma.XOR<Prisma.ContactCreateWithoutNotesRelInput, Prisma.ContactUncheckedCreateWithoutNotesRelInput>
   connectOrCreate?: Prisma.ContactCreateOrConnectWithoutNotesRelInput

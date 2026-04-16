@@ -1,11 +1,14 @@
 import {
+  BadRequestException,
   Injectable,
-  InternalServerErrorException,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'node:crypto';
 import type { StringValue } from 'ms';
+import { UserRole } from '../../common/enums/user-role.enum';
+import { JwtPayload } from '../../common/types/jwt-payload.type';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -15,14 +18,15 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AuthMapper } from './mappers/auth.mapper';
 
-type PersistedRole = 'admin' | 'supervisor' | 'agent';
-type ApiRole = 'SUPER_ADMIN' | 'ADMIN' | 'AGENT';
-
 type ResetPasswordTokenPayload = {
   sub: string;
   email: string;
   passwordHash: string;
   type: 'password_reset';
+};
+
+type RefreshTokenPayload = JwtPayload & {
+  type: 'refresh';
 };
 
 @Injectable()
@@ -35,6 +39,44 @@ export class AuthService {
 
   private hashPassword(password: string): string {
     return createHash('sha256').update(password).digest('hex');
+  }
+
+  private getAccessSecret(): string {
+    return process.env.JWT_ACCESS_SECRET ?? 'dev-access-secret';
+  }
+
+  private getRefreshSecret(): string {
+    return process.env.JWT_REFRESH_SECRET ?? 'dev-refresh-secret';
+  }
+
+  private getAccessExpiresIn(): StringValue | number {
+    const expiresIn = process.env.JWT_ACCESS_EXPIRES_IN?.trim();
+
+    if (!expiresIn) {
+      return '15m';
+    }
+
+    const asNumber = Number(expiresIn);
+    if (Number.isFinite(asNumber)) {
+      return asNumber;
+    }
+
+    return expiresIn as StringValue;
+  }
+
+  private getRefreshExpiresIn(): StringValue | number {
+    const expiresIn = process.env.JWT_REFRESH_EXPIRES_IN?.trim();
+
+    if (!expiresIn) {
+      return '7d';
+    }
+
+    const asNumber = Number(expiresIn);
+    if (Number.isFinite(asNumber)) {
+      return asNumber;
+    }
+
+    return expiresIn as StringValue;
   }
 
   private getResetPasswordSecret(): string {
@@ -85,27 +127,87 @@ export class AuthService {
     return { firstName, lastName };
   }
 
-  private toPersistedRole(role: string | undefined): PersistedRole {
-    if (role === 'ADMIN') return 'admin';
-    if (role === 'AGENT') return 'agent';
-    if (role === 'SUPER_ADMIN') return 'supervisor';
+  private normalizeRole(role: string | UserRole | null | undefined): UserRole {
+    if (role === UserRole.SUPER_ADMIN || role === 'supervisor') {
+      return UserRole.SUPER_ADMIN;
+    }
 
-    const lowered = (role ?? '').toLowerCase();
-    if (lowered === 'admin') return 'admin';
-    if (lowered === 'agent') return 'agent';
-    return 'supervisor';
+    if (role === UserRole.COMPANY_ADMIN || role === 'admin') {
+      return UserRole.COMPANY_ADMIN;
+    }
+
+    if (role === UserRole.AGENT || role === 'agent') {
+      return UserRole.AGENT;
+    }
+
+    return UserRole.EMPLOYEE;
   }
 
-  private toApiRole(role: string | null | undefined): ApiRole {
-    if (role === 'agent') return 'AGENT';
-    if (role === 'admin') return 'ADMIN';
-    if (role === 'supervisor') return 'SUPER_ADMIN';
+  private normalizeRoleFromInput(role: UserRole | undefined): UserRole {
+    if (role === UserRole.SUPER_ADMIN) return UserRole.SUPER_ADMIN;
+    if (role === UserRole.COMPANY_ADMIN) return UserRole.COMPANY_ADMIN;
+    if (role === UserRole.EMPLOYEE) return UserRole.EMPLOYEE;
+    return UserRole.AGENT;
+  }
 
-    if (role === 'AGENT') return 'AGENT';
-    if (role === 'ADMIN') return 'ADMIN';
-    if (role === 'SUPER_ADMIN') return 'SUPER_ADMIN';
+  private async buildTokens(payload: JwtPayload): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.getAccessSecret(),
+      expiresIn: this.getAccessExpiresIn(),
+    });
 
-    return 'AGENT';
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        ...payload,
+        type: 'refresh',
+      },
+      {
+        secret: this.getRefreshSecret(),
+        expiresIn: this.getRefreshExpiresIn(),
+      },
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  private async buildAuthResponse(user: {
+    id: string;
+    fullName: string | null;
+    email: string;
+    role: string | UserRole;
+    isActive: boolean;
+    companyId: string | null;
+  }) {
+    const names = this.splitFullName(user.fullName);
+    const role = this.normalizeRole(user.role);
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role,
+      companyId: user.companyId,
+    };
+
+    const tokens = await this.buildTokens(payload);
+
+    return AuthMapper.toAuthResponse({
+      user: {
+        id: user.id,
+        firstName: names.firstName,
+        lastName: names.lastName,
+        email: user.email,
+        role,
+        isActive: user.isActive,
+        companyId: user.companyId,
+      },
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    });
   }
 
   async register(registerUserDto: RegisterUserDto) {
@@ -116,11 +218,34 @@ export class AuthService {
       throw new UnauthorizedException('User already exists');
     }
 
+    const role = this.normalizeRoleFromInput(registerUserDto.role);
+    const companyId = registerUserDto.companyId ?? null;
+
+    if (role === UserRole.SUPER_ADMIN && companyId) {
+      throw new BadRequestException(
+        'SUPER_ADMIN accounts cannot be attached to a company',
+      );
+    }
+
+    if (role !== UserRole.SUPER_ADMIN && !companyId) {
+      throw new BadRequestException(
+        'companyId is required for non-super-admin users',
+      );
+    }
+
+    if (companyId) {
+      const company = await this.prisma.company.findUnique({
+        where: { id: companyId },
+      });
+
+      if (!company) {
+        throw new BadRequestException('Invalid companyId');
+      }
+    }
+
     const firstName = registerUserDto.firstName.trim();
     const lastName = registerUserDto.lastName?.trim() || null;
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
-    const role: PersistedRole = this.toPersistedRole(registerUserDto.role);
-    const now = new Date();
 
     const user = await this.prisma.user.create({
       data: {
@@ -128,26 +253,12 @@ export class AuthService {
         email,
         passwordHash: this.hashPassword(registerUserDto.password),
         role,
+        companyId: role === UserRole.SUPER_ADMIN ? null : companyId,
         isActive: true,
-        createdAt: now,
-        updatedAt: now,
       },
     });
 
-    const names = this.splitFullName(user.fullName);
-
-    return AuthMapper.toAuthResponse({
-      user: {
-        id: user.id,
-        firstName: names.firstName,
-        lastName: names.lastName,
-        email: user.email,
-        role: this.toApiRole(user.role),
-        isActive: user.isActive,
-      },
-      accessToken: `access-${user.id}`,
-      refreshToken: `refresh-${user.id}`,
-    });
+    return this.buildAuthResponse(user);
   }
 
   async login(loginDto: LoginDto) {
@@ -163,48 +274,34 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const names = this.splitFullName(user.fullName);
-
-    return AuthMapper.toAuthResponse({
-      user: {
-        id: user.id,
-        firstName: names.firstName,
-        lastName: names.lastName,
-        email: user.email,
-        role: this.toApiRole(user.role),
-        isActive: user.isActive,
-      },
-      accessToken: `access-${user.id}`,
-      refreshToken: `refresh-${user.id}`,
-    });
+    return this.buildAuthResponse(user);
   }
 
   async refresh(refreshTokenDto: RefreshTokenDto) {
-    if (!refreshTokenDto.refreshToken?.startsWith('refresh-')) {
+    let payload: RefreshTokenPayload;
+
+    try {
+      payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
+        refreshTokenDto.refreshToken,
+        {
+          secret: this.getRefreshSecret(),
+        },
+      );
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const userId = refreshTokenDto.refreshToken.replace('refresh-', '');
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (payload.type !== 'refresh') {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });
 
     if (!user || !user.isActive) {
       throw new UnauthorizedException('User not found');
     }
 
-    const names = this.splitFullName(user.fullName);
-
-    return AuthMapper.toAuthResponse({
-      user: {
-        id: user.id,
-        firstName: names.firstName,
-        lastName: names.lastName,
-        email: user.email,
-        role: this.toApiRole(user.role),
-        isActive: user.isActive,
-      },
-      accessToken: `access-${user.id}`,
-      refreshToken: `refresh-${user.id}`,
-    });
+    return this.buildAuthResponse(user);
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
@@ -233,7 +330,7 @@ export class AuthService {
 
       if (!isSent) {
         const reason = this.mailService.getLastErrorMessage();
-        throw new InternalServerErrorException(
+        throw new ServiceUnavailableException(
           reason ?? 'Unable to send password reset email',
         );
       }
@@ -279,7 +376,6 @@ export class AuthService {
       where: { id: user.id },
       data: {
         passwordHash: this.hashPassword(resetPasswordDto.newPassword),
-        updatedAt: new Date(),
       },
     });
 
@@ -291,8 +387,24 @@ export class AuthService {
       throw new UnauthorizedException('Missing authorization token');
     }
 
-    const normalized = token.replace('Bearer ', '');
-    const userId = normalized.replace('access-', '');
+    const normalized = token.replace(/^Bearer\s+/i, '').trim();
+
+    let userId: string | null = null;
+
+    if (normalized.startsWith('access-')) {
+      userId = normalized.replace('access-', '');
+    } else {
+      try {
+        const payload = await this.jwtService.verifyAsync<JwtPayload>(normalized, {
+          secret: this.getAccessSecret(),
+        });
+
+        userId = payload.sub;
+      } catch {
+        throw new UnauthorizedException('Invalid token');
+      }
+    }
+
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user || !user.isActive) {
@@ -308,7 +420,8 @@ export class AuthService {
       fullName: user.fullName ?? [names.firstName, names.lastName].filter(Boolean).join(' '),
       email: user.email,
       phoneNumber: null,
-      role: this.toApiRole(user.role),
+      role: this.normalizeRole(user.role),
+      companyId: user.companyId,
       isActive: user.isActive,
     };
   }

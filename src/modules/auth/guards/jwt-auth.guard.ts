@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
 import type { AuthenticatedUser } from '../types/authenticated-user.type';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  handleRequest<TUser = AuthenticatedUser>(err: unknown, user: TUser, _info: unknown, _ctx?: unknown) {
+  handleRequest<TUser = AuthenticatedUser>(
+    err: unknown,
+    user: TUser,
+    _info: unknown,
+    _ctx?: unknown,
+  ) {
     if (err || !user) {
-      throw err;
+      throw err ?? new UnauthorizedException('Unauthorized');
     }
     return user;
   }

@@ -5,6 +5,7 @@ import { AiModule } from './modules/ai/ai.module';
 import { AiRunsModule } from './modules/ai-runs/ai-runs.module';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { MailModule } from './modules/mail/mail.module';
 
 import { ContactNotesModule } from './modules/contact-notes/contact-notes.module';
@@ -32,6 +33,7 @@ import { NotificationsGateway } from './gateways/notifications.gateway';
 
     MailModule,
     AuthModule,
+    AdminModule,
     AiModule,
     AiRunsModule,
     AuditLogsModule,

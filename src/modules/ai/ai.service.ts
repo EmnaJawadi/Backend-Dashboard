@@ -27,7 +27,7 @@ export class AiService {
       return AiMapper.toReplyResponse({
         reply: '',
         provider: 'gemini',
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.5-flash',
         safe: false,
         shouldEscalate: true,
         escalationReason: safety.reason,
@@ -47,7 +47,7 @@ export class AiService {
     const generated = await this.geminiService.generateText({
       prompt,
       systemInstruction: SYSTEM_PROMPT,
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       temperature: 0.4,
       maxOutputTokens: 400,
     });
@@ -101,7 +101,7 @@ export class AiService {
     const result = await this.geminiService.generateText({
       prompt: buildSummarizerPrompt(history),
       systemInstruction: SYSTEM_PROMPT,
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       temperature: 0.2,
       maxOutputTokens: 180,
     });
@@ -115,13 +115,13 @@ export class AiService {
     const result = await this.geminiService.generateText({
       prompt,
       systemInstruction: 'Return valid JSON only.',
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       temperature: 0.1,
       maxOutputTokens: 300,
     });
 
     try {
-      const parsed = JSON.parse(result.text) as T;
+      const parsed = JSON.parse(this.normalizeJsonText(result.text)) as T;
 
       return new StructuredOutputDto<T>({
         success: true,
@@ -137,5 +137,16 @@ export class AiService {
         error: 'Invalid JSON returned by Gemini.',
       });
     }
+  }
+
+  private normalizeJsonText(rawText: string): string {
+    const trimmed = rawText.trim();
+    const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+
+    if (fencedMatch?.[1]) {
+      return fencedMatch[1].trim();
+    }
+
+    return trimmed;
   }
 }

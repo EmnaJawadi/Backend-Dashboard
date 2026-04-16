@@ -30,7 +30,7 @@ export class CreateAiRunDto {
 
   @IsOptional()
   @IsString()
-  model?: string = 'gemini-1.5-flash';
+  model?: string = 'gemini-2.5-flash';
 
   @IsOptional()
   @IsIn(['success', 'failed', 'blocked', 'pending'])

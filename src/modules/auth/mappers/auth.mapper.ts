@@ -7,6 +7,7 @@ export class AuthMapper {
       email: string;
       role: string;
       isActive: boolean;
+      companyId?: string | null;
     };
     accessToken: string;
     refreshToken: string;

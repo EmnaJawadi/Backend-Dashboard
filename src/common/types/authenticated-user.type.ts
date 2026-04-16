@@ -1,5 +1,8 @@
+import { UserRole } from '../enums/user-role.enum';
+
 export type AuthenticatedUser = {
   sub: string;
   email: string;
-  role: 'SUPER_ADMIN' | 'EMPLOYEE';
+  role: UserRole;
+  companyId: string | null;
 };

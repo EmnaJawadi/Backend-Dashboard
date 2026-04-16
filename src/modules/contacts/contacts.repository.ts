@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ContactQueryDto } from './dto/contact-query.dto';
@@ -69,20 +69,31 @@ export class ContactsRepository {
     const lastName = data.lastName?.trim() ?? null;
     const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
 
-    const created = await this.prisma.contact.create({
-      data: {
-        phone: data.phoneNumber?.trim() ?? null,
-        whatsappName: fullName || null,
-        fullName: fullName || null,
-        email: data.email ?? null,
-        notes: data.notes ?? null,
-        tags: data.tags ?? [],
-        status: data.isBlocked ? 'blocked' : 'active',
-        source: 'manual',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
+    let created;
+    try {
+      created = await this.prisma.contact.create({
+        data: {
+          phone: data.phoneNumber?.trim() ?? null,
+          whatsappName: fullName || null,
+          fullName: fullName || null,
+          email: data.email ?? null,
+          notes: data.notes ?? null,
+          tags: data.tags ?? [],
+          status: data.isBlocked ? 'blocked' : 'active',
+          source: 'manual',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('A contact with this phone number already exists');
+      }
+      throw error;
+    }
 
     return this.toEntity(created);
   }
@@ -169,26 +180,37 @@ export class ContactsRepository {
       data.lastName !== undefined ? data.lastName?.trim() ?? null : existingNames.lastName;
     const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
 
-    const updated = await this.prisma.contact.update({
-      where: { id },
-      data: {
-        fullName: fullName || null,
-        whatsappName: fullName || null,
-        phone: data.phoneNumber !== undefined ? data.phoneNumber.trim() : existing.phoneNumber,
-        email: data.email !== undefined ? data.email : existing.email,
-        notes: data.notes !== undefined ? data.notes : existing.notes,
-        tags: data.tags !== undefined ? data.tags : existing.tags,
-        status:
-          data.isBlocked !== undefined
-            ? data.isBlocked
+    let updated;
+    try {
+      updated = await this.prisma.contact.update({
+        where: { id },
+        data: {
+          fullName: fullName || null,
+          whatsappName: fullName || null,
+          phone: data.phoneNumber !== undefined ? data.phoneNumber.trim() : existing.phoneNumber,
+          email: data.email !== undefined ? data.email : existing.email,
+          notes: data.notes !== undefined ? data.notes : existing.notes,
+          tags: data.tags !== undefined ? data.tags : existing.tags,
+          status:
+            data.isBlocked !== undefined
+              ? data.isBlocked
+                ? 'blocked'
+                : 'active'
+              : existing.isBlocked
               ? 'blocked'
-              : 'active'
-            : existing.isBlocked
-            ? 'blocked'
-            : 'active',
-        updatedAt: new Date(),
-      },
-    });
+              : 'active',
+          updatedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('A contact with this phone number already exists');
+      }
+      throw error;
+    }
 
     return this.toEntity(updated);
   }

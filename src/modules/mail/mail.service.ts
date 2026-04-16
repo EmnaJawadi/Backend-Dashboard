@@ -31,7 +31,8 @@ export class MailService {
     const host = process.env.SMTP_HOST?.trim();
     const port = Number(process.env.SMTP_PORT ?? 587);
     const user = process.env.SMTP_USER?.trim();
-    const pass = process.env.SMTP_PASS;
+    const rawPass = process.env.SMTP_PASS ?? '';
+    const pass = rawPass.replace(/\s+/g, '').trim();
     const secure = process.env.SMTP_SECURE === 'true';
 
     if (!host) {
@@ -42,9 +43,14 @@ export class MailService {
       return null;
     }
 
-    if (!user || !pass || pass === 'your_app_password') {
+    if (
+      !user ||
+      !pass ||
+      pass === 'your_app_password' ||
+      pass === 'GMAIL_APP_PASSWORD_16_CHARS'
+    ) {
       this.lastErrorMessage =
-        'SMTP credentials are invalid or missing. Set SMTP_USER and a valid SMTP_PASS (App Password).';
+        'SMTP credentials are invalid or missing. Configure SMTP_USER and SMTP_PASS (Gmail App Password) in backend .env.';
       this.logger.warn(
         'SMTP credentials are invalid or missing. Email sending is disabled.',
       );

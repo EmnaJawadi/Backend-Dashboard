@@ -1,7 +1,7 @@
 generator client {
-  provider   = "prisma-client"
-  output     = "../src/generated/prisma"
-  engineType = "client"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  engineType   = "client"
   moduleFormat = "cjs"
 }
 
@@ -9,18 +9,79 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  SUPER_ADMIN
+  COMPANY_ADMIN
+  AGENT
+  EMPLOYEE
+}
+
+enum CompanyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  CANCELED
+}
 
 model User {
   id           String   @id @default(uuid())
+  companyId    String?  @map("company_id")
   fullName     String?  @map("full_name")
   email        String   @unique
   passwordHash String   @map("password_hash")
-  role         String
-  isActive     Boolean  @map("is_active")
-  createdAt    DateTime @map("created_at")
-  updatedAt    DateTime @map("updated_at")
+  role         UserRole @default(AGENT)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
+  company   Company?   @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  auditLogs AuditLog[] @relation("AuditLogActor")
+
+  @@index([companyId])
+  @@index([role])
   @@map("users")
+}
+
+model Company {
+  id        String        @id @default(uuid())
+  name      String        @unique
+  legalName String?       @map("legal_name")
+  email     String?
+  phone     String?
+  website   String?
+  address   String?
+  status    CompanyStatus @default(ACTIVE)
+  isActive  Boolean       @default(true) @map("is_active")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  users         User[]
+  subscriptions Subscription[]
+
+  @@map("companies")
+}
+
+model Subscription {
+  id        String             @id @default(uuid())
+  companyId String             @map("company_id")
+  plan      String
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime           @map("start_date")
+  endDate   DateTime?          @map("end_date")
+  isActive  Boolean            @default(true) @map("is_active")
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([status])
+  @@map("subscriptions")
 }
 
 model Contact {
@@ -61,25 +122,25 @@ model ContactNote {
 }
 
 model Conversation {
-  id                  String              @id @default(uuid())
-  contactId           String              @map("contact_id")
-  channel             String?
-  status              String?
-  priority            String?
-  assignedTo          String?             @map("assigned_to")
-  botPaused           Boolean?            @map("bot_paused")
-  handoffRequired     Boolean?            @map("handoff_required")
-  unreadCount         Int?                @map("unread_count")
-  lastMessageAt       DateTime?           @map("last_message_at")
-  lastCustomerMessageAt DateTime?         @map("last_customer_message_at")
-  lastBotMessageAt    DateTime?           @map("last_bot_message_at")
-  lastHumanMessageAt  DateTime?           @map("last_human_message_at")
-  closedAt            DateTime?           @map("closed_at")
-  createdAt           DateTime            @map("created_at")
-  updatedAt           DateTime            @map("updated_at")
+  id                    String    @id @default(uuid())
+  contactId             String    @map("contact_id")
+  channel               String?
+  status                String?
+  priority              String?
+  assignedTo            String?   @map("assigned_to")
+  botPaused             Boolean?  @map("bot_paused")
+  handoffRequired       Boolean?  @map("handoff_required")
+  unreadCount           Int?      @map("unread_count")
+  lastMessageAt         DateTime? @map("last_message_at")
+  lastCustomerMessageAt DateTime? @map("last_customer_message_at")
+  lastBotMessageAt      DateTime? @map("last_bot_message_at")
+  lastHumanMessageAt    DateTime? @map("last_human_message_at")
+  closedAt              DateTime? @map("closed_at")
+  createdAt             DateTime  @map("created_at")
+  updatedAt             DateTime  @map("updated_at")
 
-  contact Contact           @relation(fields: [contactId], references: [id])
-  tags    ConversationTag[]
+  contact  Contact           @relation(fields: [contactId], references: [id])
+  tags     ConversationTag[]
   messages Message[]
 
   @@map("conversations")
@@ -147,6 +208,10 @@ model AuditLog {
   ipAddress   String?  @map("ip_address")
   createdAt   DateTime @map("created_at")
 
+  actorUser User? @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId])
+  @@index([entityType])
   @@map("audit_logs")
 }
 

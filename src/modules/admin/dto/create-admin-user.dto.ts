@@ -1,7 +1,7 @@
 import { IsEmail, IsEnum, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
 import { UserRole } from '../../../common/enums/user-role.enum';
 
-export class RegisterUserDto {
+export class CreateAdminUserDto {
   @IsString()
   firstName!: string;
 
@@ -15,10 +15,6 @@ export class RegisterUserDto {
   @IsString()
   @MinLength(6)
   password!: string;
-
-  @IsOptional()
-  @IsString()
-  phoneNumber?: string | null;
 
   @IsOptional()
   @IsEnum(UserRole)

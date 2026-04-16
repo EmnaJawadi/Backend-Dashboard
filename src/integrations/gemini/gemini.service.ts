@@ -33,7 +33,7 @@ export class GeminiService {
 
   constructor(private readonly configService: ConfigService) {
     this.defaultModel =
-      this.configService.get<string>('GEMINI_MODEL') || 'gemini-1.5-flash';
+      this.configService.get<string>('GEMINI_MODEL') || 'gemini-2.5-flash';
   }
 
   private async getClient(): Promise<GoogleGenAIInstance> {

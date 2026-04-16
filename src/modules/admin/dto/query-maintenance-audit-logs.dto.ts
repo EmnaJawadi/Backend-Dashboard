@@ -1,18 +1,22 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class QueryAdminCompaniesDto {
+export class QueryMaintenanceAuditLogsDto {
+  @IsOptional()
+  @IsString()
+  action?: string;
+
+  @IsOptional()
+  @IsString()
+  entityType?: string;
+
+  @IsOptional()
+  @IsUUID()
+  userId?: string;
+
   @IsOptional()
   @IsString()
   search?: string;
-
-  @IsOptional()
-  @IsString()
-  status?: string;
-
-  @IsOptional()
-  @IsString()
-  isActive?: string;
 
   @IsOptional()
   @Type(() => Number)
