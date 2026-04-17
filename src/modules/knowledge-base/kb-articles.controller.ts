@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,12 +9,16 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { KbArticlesService } from './kb-articles.service';
 import { CreateKbArticleDto } from './dto/create-kb-article.dto';
 import { UpdateKbArticleDto } from './dto/update-kb-article.dto';
 import { PublishKbArticleDto } from './dto/publish-kb-article.dto';
 import { KbArticleQueryDto } from './dto/kb-article-query.dto';
+import { IngestKbFileDto } from './dto/ingest-kb-file.dto';
 import { IngestKbSourceDto } from './dto/ingest-kb-source.dto';
 import { KbChunksService } from './kb-chunks.service';
 
@@ -32,6 +37,25 @@ export class KbArticlesController {
   @Post('ingest')
   ingest(@Body() ingestKbSourceDto: IngestKbSourceDto) {
     return this.kbArticlesService.ingest(ingestKbSourceDto);
+  }
+
+  @Post('ingest/file')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+      },
+    }),
+  )
+  ingestFile(
+    @UploadedFile() file: { buffer: Buffer; originalname: string; mimetype: string; size: number } | undefined,
+    @Body() ingestKbFileDto: IngestKbFileDto,
+  ) {
+    if (!file) {
+      throw new BadRequestException('A file is required');
+    }
+
+    return this.kbArticlesService.ingestFile(file, ingestKbFileDto);
   }
 
   @Get()

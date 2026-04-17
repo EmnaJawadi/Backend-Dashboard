@@ -16,14 +16,13 @@ const validationSchema = Joi.object({
   JWT_ACCESS_EXPIRES_IN: Joi.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
 
-  OPENAI_API_KEY: Joi.string().optional().allow('', null),
-  OPENAI_MODEL: Joi.string().default('gpt-4.1-mini'),
-  OPENAI_EMBEDDING_MODEL: Joi.string().default('text-embedding-3-small'),
-
   EVOLUTION_API_URL: Joi.string().uri().optional().allow('', null),
   EVOLUTION_API_KEY: Joi.string().optional().allow('', null),
   EVOLUTION_INSTANCE: Joi.string().optional().allow('', null),
   WHATSAPP_DEFAULT_INSTANCE: Joi.string().optional().allow('', null),
+  N8N_WEBHOOK_URL: Joi.string().uri().optional().allow('', null),
+  N8N_WEBHOOK_SECRET: Joi.string().optional().allow('', null),
+  N8N_WEBHOOK_TIMEOUT_MS: Joi.number().default(8000),
 
   JWT_RESET_PASSWORD_SECRET: Joi.string().optional().allow('', null),
   JWT_RESET_PASSWORD_EXPIRES_IN: Joi.string().default('30m'),

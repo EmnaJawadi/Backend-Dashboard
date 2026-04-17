@@ -11,11 +11,13 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { JwtPayload } from '../../common/types/jwt-payload.type';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AuthMapper } from './mappers/auth.mapper';
 
 type ResetPasswordTokenPayload = {
@@ -127,6 +129,38 @@ export class AuthService {
     return { firstName, lastName };
   }
 
+  private async resolveUserFromAuthorization(authorization?: string) {
+    if (!authorization) {
+      throw new UnauthorizedException('Missing authorization token');
+    }
+
+    const normalized = authorization.replace(/^Bearer\s+/i, '').trim();
+
+    let userId: string | null = null;
+
+    if (normalized.startsWith('access-')) {
+      userId = normalized.replace('access-', '');
+    } else {
+      try {
+        const payload = await this.jwtService.verifyAsync<JwtPayload>(normalized, {
+          secret: this.getAccessSecret(),
+        });
+
+        userId = payload.sub;
+      } catch {
+        throw new UnauthorizedException('Invalid token');
+      }
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    return user;
+  }
+
   private normalizeRole(role: string | UserRole | null | undefined): UserRole {
     if (role === UserRole.SUPER_ADMIN || role === 'supervisor') {
       return UserRole.SUPER_ADMIN;
@@ -219,27 +253,56 @@ export class AuthService {
     }
 
     const role = this.normalizeRoleFromInput(registerUserDto.role);
-    const companyId = registerUserDto.companyId ?? null;
+    const companyName = registerUserDto.companyName?.trim();
+    let companyId = registerUserDto.companyId?.trim() ?? null;
 
-    if (role === UserRole.SUPER_ADMIN && companyId) {
-      throw new BadRequestException(
-        'SUPER_ADMIN accounts cannot be attached to a company',
-      );
-    }
+    if (role === UserRole.SUPER_ADMIN) {
+      if (companyId || companyName) {
+        throw new BadRequestException(
+          'SUPER_ADMIN accounts cannot be attached to a company',
+        );
+      }
+    } else {
+      if (!companyId && !companyName) {
+        throw new BadRequestException(
+          'companyId or companyName is required for non-super-admin users',
+        );
+      }
 
-    if (role !== UserRole.SUPER_ADMIN && !companyId) {
-      throw new BadRequestException(
-        'companyId is required for non-super-admin users',
-      );
-    }
+      if (!companyId && companyName) {
+        const existingCompany = await this.prisma.company.findFirst({
+          where: {
+            name: {
+              equals: companyName,
+              mode: 'insensitive',
+            },
+          },
+          select: { id: true },
+        });
 
-    if (companyId) {
-      const company = await this.prisma.company.findUnique({
-        where: { id: companyId },
-      });
+        if (existingCompany) {
+          companyId = existingCompany.id;
+        } else {
+          const createdCompany = await this.prisma.company.create({
+            data: {
+              name: companyName,
+            },
+            select: { id: true },
+          });
 
-      if (!company) {
-        throw new BadRequestException('Invalid companyId');
+          companyId = createdCompany.id;
+        }
+      }
+
+      if (companyId) {
+        const company = await this.prisma.company.findUnique({
+          where: { id: companyId },
+          select: { id: true },
+        });
+
+        if (!company) {
+          throw new BadRequestException('Invalid companyId');
+        }
       }
     }
 
@@ -383,33 +446,7 @@ export class AuthService {
   }
 
   async getProfileFromToken(token?: string) {
-    if (!token) {
-      throw new UnauthorizedException('Missing authorization token');
-    }
-
-    const normalized = token.replace(/^Bearer\s+/i, '').trim();
-
-    let userId: string | null = null;
-
-    if (normalized.startsWith('access-')) {
-      userId = normalized.replace('access-', '');
-    } else {
-      try {
-        const payload = await this.jwtService.verifyAsync<JwtPayload>(normalized, {
-          secret: this.getAccessSecret(),
-        });
-
-        userId = payload.sub;
-      } catch {
-        throw new UnauthorizedException('Invalid token');
-      }
-    }
-
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-
-    if (!user || !user.isActive) {
-      throw new UnauthorizedException('Invalid token');
-    }
+    const user = await this.resolveUserFromAuthorization(token);
 
     const names = this.splitFullName(user.fullName);
 
@@ -424,5 +461,73 @@ export class AuthService {
       companyId: user.companyId,
       isActive: user.isActive,
     };
+  }
+
+  async updateProfileFromToken(
+    authorization: string | undefined,
+    updateProfileDto: UpdateProfileDto,
+  ) {
+    const user = await this.resolveUserFromAuthorization(authorization);
+
+    if (
+      updateProfileDto.firstName === undefined &&
+      updateProfileDto.lastName === undefined
+    ) {
+      throw new BadRequestException('firstName or lastName is required');
+    }
+
+    const currentNames = this.splitFullName(user.fullName);
+
+    const nextFirstName =
+      updateProfileDto.firstName !== undefined
+        ? updateProfileDto.firstName.trim()
+        : currentNames.firstName;
+    const nextLastName =
+      updateProfileDto.lastName !== undefined
+        ? updateProfileDto.lastName.trim() || null
+        : currentNames.lastName;
+
+    if (!nextFirstName) {
+      throw new BadRequestException('firstName cannot be empty');
+    }
+
+    const fullName = [nextFirstName, nextLastName].filter(Boolean).join(' ');
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        fullName: fullName || null,
+      },
+    });
+
+    return this.getProfileFromToken(`access-${updatedUser.id}`);
+  }
+
+  async changePasswordFromToken(
+    authorization: string | undefined,
+    changePasswordDto: ChangePasswordDto,
+  ) {
+    const user = await this.resolveUserFromAuthorization(authorization);
+
+    const currentPasswordHash = this.hashPassword(changePasswordDto.currentPassword);
+    if (currentPasswordHash !== user.passwordHash) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    const newPasswordHash = this.hashPassword(changePasswordDto.newPassword);
+    if (newPasswordHash === user.passwordHash) {
+      throw new BadRequestException(
+        'New password must be different from current password',
+      );
+    }
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash: newPasswordHash,
+      },
+    });
+
+    return { message: 'Password updated successfully' };
   }
 }

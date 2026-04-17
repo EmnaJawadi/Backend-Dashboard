@@ -277,7 +277,6 @@ export const KbChunkScalarFieldEnum = {
   articleId: 'articleId',
   chunkIndex: 'chunkIndex',
   chunkText: 'chunkText',
-  embeddingsVector: 'embeddingsVector',
   metadataJson: 'metadataJson',
   createdAt: 'createdAt'
 } as const

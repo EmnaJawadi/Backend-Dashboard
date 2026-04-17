@@ -10,6 +10,7 @@ import { IngestionService } from './ingestion/ingestion.service';
 import { UrlParser } from './ingestion/parsers/url.parser';
 import { PdfParser } from './ingestion/parsers/pdf.parser';
 import { DocParser } from './ingestion/parsers/doc.parser';
+import { PptParser } from './ingestion/parsers/ppt.parser';
 import { PrismaService } from '../../database/prisma/prisma.service';
 
 @Module({
@@ -26,6 +27,7 @@ import { PrismaService } from '../../database/prisma/prisma.service';
     UrlParser,
     PdfParser,
     DocParser,
+    PptParser,
   ],
   exports: [KbArticlesService, KbChunksService],
 })

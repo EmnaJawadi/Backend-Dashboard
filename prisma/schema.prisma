@@ -241,7 +241,7 @@ model KbChunk {
   articleId        String   @map("article_id")
   chunkIndex       Int      @map("chunk_index")
   chunkText        String?  @map("chunk_text")
-  embeddingsVector Bytes?   @map("embedding_vector")
+  embeddingsVector Unsupported("vector")? @map("embedding_vector")
   metadataJson     Json?    @map("metadata_json")
   createdAt        DateTime @map("created_at")
 

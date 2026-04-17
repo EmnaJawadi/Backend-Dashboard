@@ -232,8 +232,58 @@ export class ContactsRepository {
   }
 
   async remove(id: string): Promise<ContactEntity> {
-    const existing = await this.findById(id);
-    await this.prisma.contact.delete({ where: { id } });
-    return existing;
+    try {
+      const deleted = await this.prisma.$transaction(async (tx) => {
+        const existing = await tx.contact.findUnique({ where: { id } });
+
+        if (!existing) {
+          throw new NotFoundException(`Contact with id ${id} not found`);
+        }
+
+        await tx.contactNote.deleteMany({
+          where: { contactId: id },
+        });
+
+        const conversations = await tx.conversation.findMany({
+          where: { contactId: id },
+          select: { id: true },
+        });
+
+        const conversationIds = conversations.map((item) => item.id);
+
+        if (conversationIds.length > 0) {
+          await tx.aiRun.deleteMany({
+            where: { conversationId: { in: conversationIds } },
+          });
+
+          await tx.message.deleteMany({
+            where: { conversationId: { in: conversationIds } },
+          });
+
+          await tx.conversationTag.deleteMany({
+            where: { conversationId: { in: conversationIds } },
+          });
+
+          await tx.conversation.deleteMany({
+            where: { id: { in: conversationIds } },
+          });
+        }
+
+        return tx.contact.delete({ where: { id } });
+      });
+
+      return this.toEntity(deleted);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2003'
+      ) {
+        throw new ConflictException(
+          'Impossible de supprimer ce contact car il est encore lie a des donnees dependantes.',
+        );
+      }
+
+      throw error;
+    }
   }
 }

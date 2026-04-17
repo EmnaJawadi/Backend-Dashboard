@@ -39,7 +39,6 @@ export type KbChunkMinAggregateOutputType = {
   articleId: string | null
   chunkIndex: number | null
   chunkText: string | null
-  embeddingsVector: runtime.Bytes | null
   createdAt: Date | null
 }
 
@@ -48,7 +47,6 @@ export type KbChunkMaxAggregateOutputType = {
   articleId: string | null
   chunkIndex: number | null
   chunkText: string | null
-  embeddingsVector: runtime.Bytes | null
   createdAt: Date | null
 }
 
@@ -57,7 +55,6 @@ export type KbChunkCountAggregateOutputType = {
   articleId: number
   chunkIndex: number
   chunkText: number
-  embeddingsVector: number
   metadataJson: number
   createdAt: number
   _all: number
@@ -77,7 +74,6 @@ export type KbChunkMinAggregateInputType = {
   articleId?: true
   chunkIndex?: true
   chunkText?: true
-  embeddingsVector?: true
   createdAt?: true
 }
 
@@ -86,7 +82,6 @@ export type KbChunkMaxAggregateInputType = {
   articleId?: true
   chunkIndex?: true
   chunkText?: true
-  embeddingsVector?: true
   createdAt?: true
 }
 
@@ -95,7 +90,6 @@ export type KbChunkCountAggregateInputType = {
   articleId?: true
   chunkIndex?: true
   chunkText?: true
-  embeddingsVector?: true
   metadataJson?: true
   createdAt?: true
   _all?: true
@@ -192,7 +186,6 @@ export type KbChunkGroupByOutputType = {
   articleId: string
   chunkIndex: number
   chunkText: string | null
-  embeddingsVector: runtime.Bytes | null
   metadataJson: runtime.JsonValue | null
   createdAt: Date
   _count: KbChunkCountAggregateOutputType | null
@@ -225,7 +218,6 @@ export type KbChunkWhereInput = {
   articleId?: Prisma.StringFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
-  embeddingsVector?: Prisma.BytesNullableFilter<"KbChunk"> | runtime.Bytes | null
   metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
   createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
   article?: Prisma.XOR<Prisma.KbArticleScalarRelationFilter, Prisma.KbArticleWhereInput>
@@ -236,7 +228,6 @@ export type KbChunkOrderByWithRelationInput = {
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrderInput | Prisma.SortOrder
-  embeddingsVector?: Prisma.SortOrderInput | Prisma.SortOrder
   metadataJson?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   article?: Prisma.KbArticleOrderByWithRelationInput
@@ -250,7 +241,6 @@ export type KbChunkWhereUniqueInput = Prisma.AtLeast<{
   articleId?: Prisma.StringFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
-  embeddingsVector?: Prisma.BytesNullableFilter<"KbChunk"> | runtime.Bytes | null
   metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
   createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
   article?: Prisma.XOR<Prisma.KbArticleScalarRelationFilter, Prisma.KbArticleWhereInput>
@@ -261,7 +251,6 @@ export type KbChunkOrderByWithAggregationInput = {
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrderInput | Prisma.SortOrder
-  embeddingsVector?: Prisma.SortOrderInput | Prisma.SortOrder
   metadataJson?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.KbChunkCountOrderByAggregateInput
@@ -279,7 +268,6 @@ export type KbChunkScalarWhereWithAggregatesInput = {
   articleId?: Prisma.StringWithAggregatesFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntWithAggregatesFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableWithAggregatesFilter<"KbChunk"> | string | null
-  embeddingsVector?: Prisma.BytesNullableWithAggregatesFilter<"KbChunk"> | runtime.Bytes | null
   metadataJson?: Prisma.JsonNullableWithAggregatesFilter<"KbChunk">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"KbChunk"> | Date | string
 }
@@ -288,7 +276,6 @@ export type KbChunkCreateInput = {
   id?: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
   article: Prisma.KbArticleCreateNestedOneWithoutChunksInput
@@ -299,7 +286,6 @@ export type KbChunkUncheckedCreateInput = {
   articleId: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
@@ -308,7 +294,6 @@ export type KbChunkUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   article?: Prisma.KbArticleUpdateOneRequiredWithoutChunksNestedInput
@@ -319,7 +304,6 @@ export type KbChunkUncheckedUpdateInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -329,7 +313,6 @@ export type KbChunkCreateManyInput = {
   articleId: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
@@ -338,7 +321,6 @@ export type KbChunkUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -348,7 +330,6 @@ export type KbChunkUncheckedUpdateManyInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,7 +349,6 @@ export type KbChunkCountOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
-  embeddingsVector?: Prisma.SortOrder
   metadataJson?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -382,7 +362,6 @@ export type KbChunkMaxOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
-  embeddingsVector?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -391,7 +370,6 @@ export type KbChunkMinOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
-  embeddingsVector?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -449,15 +427,10 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableBytesFieldUpdateOperationsInput = {
-  set?: runtime.Bytes | null
-}
-
 export type KbChunkCreateWithoutArticleInput = {
   id?: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
@@ -466,7 +439,6 @@ export type KbChunkUncheckedCreateWithoutArticleInput = {
   id?: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
@@ -505,7 +477,6 @@ export type KbChunkScalarWhereInput = {
   articleId?: Prisma.StringFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
-  embeddingsVector?: Prisma.BytesNullableFilter<"KbChunk"> | runtime.Bytes | null
   metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
   createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
 }
@@ -514,7 +485,6 @@ export type KbChunkCreateManyArticleInput = {
   id?: string
   chunkIndex: number
   chunkText?: string | null
-  embeddingsVector?: runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
@@ -523,7 +493,6 @@ export type KbChunkUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -532,7 +501,6 @@ export type KbChunkUncheckedUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -541,7 +509,6 @@ export type KbChunkUncheckedUpdateManyWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  embeddingsVector?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -553,7 +520,6 @@ export type KbChunkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
-  embeddingsVector?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
@@ -564,7 +530,6 @@ export type KbChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
-  embeddingsVector?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
@@ -575,7 +540,6 @@ export type KbChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
-  embeddingsVector?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
@@ -586,12 +550,11 @@ export type KbChunkSelectScalar = {
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
-  embeddingsVector?: boolean
   metadataJson?: boolean
   createdAt?: boolean
 }
 
-export type KbChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "chunkIndex" | "chunkText" | "embeddingsVector" | "metadataJson" | "createdAt", ExtArgs["result"]["kbChunk"]>
+export type KbChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "chunkIndex" | "chunkText" | "metadataJson" | "createdAt", ExtArgs["result"]["kbChunk"]>
 export type KbChunkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
 }
@@ -612,7 +575,6 @@ export type $KbChunkPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     articleId: string
     chunkIndex: number
     chunkText: string | null
-    embeddingsVector: runtime.Bytes | null
     metadataJson: runtime.JsonValue | null
     createdAt: Date
   }, ExtArgs["result"]["kbChunk"]>
@@ -1043,7 +1005,6 @@ export interface KbChunkFieldRefs {
   readonly articleId: Prisma.FieldRef<"KbChunk", 'String'>
   readonly chunkIndex: Prisma.FieldRef<"KbChunk", 'Int'>
   readonly chunkText: Prisma.FieldRef<"KbChunk", 'String'>
-  readonly embeddingsVector: Prisma.FieldRef<"KbChunk", 'Bytes'>
   readonly metadataJson: Prisma.FieldRef<"KbChunk", 'Json'>
   readonly createdAt: Prisma.FieldRef<"KbChunk", 'DateTime'>
 }

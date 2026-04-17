@@ -27,4 +27,8 @@ export class RegisterUserDto {
   @IsOptional()
   @IsUUID()
   companyId?: string;
+
+  @IsOptional()
+  @IsString()
+  companyName?: string;
 }

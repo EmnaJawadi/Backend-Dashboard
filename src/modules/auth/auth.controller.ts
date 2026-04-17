@@ -3,13 +3,16 @@ import {
   Controller,
   Get,
   Headers,
+  Patch,
   Post,
 } from '@nestjs/common';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -44,5 +47,21 @@ export class AuthController {
   @Get('me')
   me(@Headers('authorization') authorization?: string) {
     return this.authService.getProfileFromToken(authorization);
+  }
+
+  @Patch('me')
+  updateMe(
+    @Headers('authorization') authorization: string | undefined,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.authService.updateProfileFromToken(authorization, updateProfileDto);
+  }
+
+  @Post('change-password')
+  changePassword(
+    @Headers('authorization') authorization: string | undefined,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePasswordFromToken(authorization, changePasswordDto);
   }
 }

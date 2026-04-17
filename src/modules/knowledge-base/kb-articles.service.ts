@@ -7,6 +7,7 @@ import { CreateKbArticleDto } from './dto/create-kb-article.dto';
 import { UpdateKbArticleDto } from './dto/update-kb-article.dto';
 import { PublishKbArticleDto } from './dto/publish-kb-article.dto';
 import { KbArticleQueryDto } from './dto/kb-article-query.dto';
+import { IngestKbFileDto } from './dto/ingest-kb-file.dto';
 import { IngestKbSourceDto } from './dto/ingest-kb-source.dto';
 import { KbRepository } from './kb.repository';
 import { KbMapper } from './mappers/kb.mapper';
@@ -178,17 +179,112 @@ export class KbArticlesService {
       chunkOverlap: ingestKbSourceDto.chunkOverlap,
     });
 
+    return this.createArticleFromIngestionResult(ingestionResult, {
+      title: ingestKbSourceDto.title,
+      language: ingestKbSourceDto.language,
+      sourceUrl: ingestKbSourceDto.sourceUrl,
+      tags: ingestKbSourceDto.tags,
+      autoPublish: ingestKbSourceDto.autoPublish,
+      summary: null,
+      sourceType: ingestKbSourceDto.sourceType,
+    });
+  }
+
+  async ingestFile(
+    file: { buffer: Buffer; originalname: string; mimetype: string; size: number },
+    ingestKbFileDto: IngestKbFileDto,
+  ) {
+    const sourceType = this.resolveIngestionFileType(file.originalname, file.mimetype);
+
+    const ingestionResult = await this.ingestionService.ingest({
+      sourceType,
+      fileBuffer: file.buffer,
+      filename: file.originalname,
+      title: ingestKbFileDto.title,
+      language: ingestKbFileDto.language,
+      tags: ingestKbFileDto.tags,
+      chunkSize: ingestKbFileDto.chunkSize,
+      chunkOverlap: ingestKbFileDto.chunkOverlap,
+    });
+
+    return this.createArticleFromIngestionResult(ingestionResult, {
+      title: ingestKbFileDto.title,
+      language: ingestKbFileDto.language,
+      sourceUrl: null,
+      tags: ingestKbFileDto.tags,
+      autoPublish: ingestKbFileDto.autoPublish,
+      summary: ingestKbFileDto.summary ?? null,
+      sourceType: sourceType.toLowerCase(),
+    });
+  }
+
+  private async ensureArticleExists(id: string) {
+    const article = await this.kbRepository.findById(id);
+
+    if (!article) {
+      throw new NotFoundException('Knowledge base article not found');
+    }
+
+    return article;
+  }
+
+  private resolveIngestionFileType(
+    filename: string,
+    mimetype: string,
+  ): IngestionSourceType {
+    const lowerName = filename.toLowerCase();
+    const lowerMime = (mimetype ?? '').toLowerCase();
+
+    if (lowerName.endsWith('.pdf') || lowerMime.includes('pdf')) {
+      return IngestionSourceType.PDF;
+    }
+
+    if (
+      lowerName.endsWith('.docx') ||
+      lowerName.endsWith('.doc') ||
+      lowerMime.includes('wordprocessingml') ||
+      lowerMime.includes('msword')
+    ) {
+      return IngestionSourceType.DOC;
+    }
+
+    if (
+      lowerName.endsWith('.pptx') ||
+      lowerName.endsWith('.ppt') ||
+      lowerMime.includes('presentationml') ||
+      lowerMime.includes('powerpoint')
+    ) {
+      return IngestionSourceType.PPT;
+    }
+
+    throw new BadRequestException(
+      'Unsupported file type. Allowed: PDF, DOC/DOCX, PPT/PPTX',
+    );
+  }
+
+  private async createArticleFromIngestionResult(
+    ingestionResult: Awaited<ReturnType<IngestionService['ingest']>>,
+    input: {
+      title?: string | null;
+      language?: string | null;
+      sourceUrl?: string | null;
+      tags?: string[];
+      autoPublish?: boolean;
+      summary?: string | null;
+      sourceType: string;
+    },
+  ) {
     const article = await this.kbRepository.createArticle({
-      title: ingestionResult.title ?? ingestKbSourceDto.title ?? 'Untitled article',
+      title: ingestionResult.title ?? input.title ?? 'Untitled article',
       body: ingestionResult.content,
-      lang: ingestKbSourceDto.language ?? null,
-      sourceUrl: ingestKbSourceDto.sourceUrl ?? null,
-      tags: ingestKbSourceDto.tags ?? [],
-      status: ingestKbSourceDto.autoPublish ? 'published' : 'draft',
-      publishedAt: ingestKbSourceDto.autoPublish ? new Date() : null,
-      category: null,
+      lang: input.language ?? null,
+      sourceUrl: input.sourceUrl ?? null,
+      tags: input.tags ?? [],
+      status: input.autoPublish ? 'published' : 'draft',
+      publishedAt: input.autoPublish ? new Date() : null,
+      category: input.summary ?? null,
       version: 1,
-      sourceTypes: ingestKbSourceDto.sourceType,
+      sourceTypes: this.normalizeSourceTypeForDatabase(input.sourceType),
       authorId: null,
     });
 
@@ -213,13 +309,18 @@ export class KbArticlesService {
     return this.kbMapper.toArticleEntity(createdArticle as RawKbArticle);
   }
 
-  private async ensureArticleExists(id: string) {
-    const article = await this.kbRepository.findById(id);
+  private normalizeSourceTypeForDatabase(sourceType: string): string {
+    const normalized = sourceType.toLowerCase();
 
-    if (!article) {
-      throw new NotFoundException('Knowledge base article not found');
+    if (normalized === 'url' || normalized === 'text' || normalized === 'pdf' || normalized === 'doc') {
+      return normalized;
     }
 
-    return article;
+    if (normalized === 'ppt') {
+      // Backward-compatible with existing DB check constraint.
+      return 'doc';
+    }
+
+    return 'text';
   }
 }

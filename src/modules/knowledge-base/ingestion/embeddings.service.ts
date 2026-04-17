@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+﻿import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class EmbeddingsService {
@@ -11,8 +11,8 @@ export class EmbeddingsService {
       return [];
     }
 
-    // Placeholder logic
-    // بعد تنجم تبدلها بـ OpenAI / Ollama / Voyage / autre provider
+    // Placeholder logic.
+    // Replace with a real Gemini embedding provider when ready.
     const values = normalized
       .slice(0, 256)
       .split('')

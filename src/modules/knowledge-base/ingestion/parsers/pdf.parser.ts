@@ -1,4 +1,5 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PDFParse } from 'pdf-parse';
 
 @Injectable()
 export class PdfParser {
@@ -7,7 +8,9 @@ export class PdfParser {
       throw new BadRequestException('PDF buffer is empty');
     }
 
-    const content = buffer.toString('utf-8').replace(/\s+/g, ' ').trim();
+    const parser = new PDFParse({ data: buffer });
+    const parsed = await parser.getText();
+    const content = parsed.text.replace(/\s+/g, ' ').trim();
 
     if (!content) {
       throw new BadRequestException(`Unable to parse PDF file: ${filename ?? 'unknown file'}`);

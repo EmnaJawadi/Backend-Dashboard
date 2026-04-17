@@ -63,6 +63,14 @@ export class AdminService {
 
     const normalized = role.trim().toUpperCase();
 
+    if (normalized === 'OWNER' || normalized === 'ADMIN') {
+      return UserRole.COMPANY_ADMIN;
+    }
+
+    if (normalized === 'COMPANY_ADMIN') {
+      return UserRole.COMPANY_ADMIN;
+    }
+
     if (!(normalized in UserRole)) {
       throw new BadRequestException(`Invalid role value: ${role}`);
     }

@@ -8,12 +8,14 @@ import { EmbeddingsService } from './embeddings.service';
 import { UrlParser } from './parsers/url.parser';
 import { PdfParser } from './parsers/pdf.parser';
 import { DocParser } from './parsers/doc.parser';
+import { PptParser } from './parsers/ppt.parser';
 
 export enum IngestionSourceType {
   TEXT = 'text',
   URL = 'url',
   PDF = 'pdf',
   DOC = 'doc',
+  PPT = 'ppt',
 }
 
 export interface IngestSourceInput {
@@ -54,6 +56,7 @@ export class IngestionService {
     private readonly urlParser: UrlParser,
     private readonly pdfParser: PdfParser,
     private readonly docParser: DocParser,
+    private readonly pptParser: PptParser,
   ) {}
 
   async ingest(source: IngestSourceInput): Promise<IngestionResult> {
@@ -142,6 +145,20 @@ export class IngestionService {
           content: await this.docParser.parse(source.fileBuffer, source.filename),
           metadata: {
             sourceType: IngestionSourceType.DOC,
+            filename: source.filename,
+          },
+        };
+
+      case IngestionSourceType.PPT:
+        if (!source.fileBuffer) {
+          throw new BadRequestException('PPT file buffer is required');
+        }
+
+        return {
+          title: source.title ?? source.filename,
+          content: await this.pptParser.parse(source.fileBuffer, source.filename),
+          metadata: {
+            sourceType: IngestionSourceType.PPT,
             filename: source.filename,
           },
         };

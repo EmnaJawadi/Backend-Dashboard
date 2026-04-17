@@ -78,9 +78,15 @@ export class KbRepository {
     });
   }
 
-  deleteArticle(id: string) {
-    return this.prisma.kbArticle.delete({
-      where: { id },
+  async deleteArticle(id: string) {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.kbChunk.deleteMany({
+        where: { articleId: id },
+      });
+
+      return tx.kbArticle.delete({
+        where: { id },
+      });
     });
   }
 
@@ -94,7 +100,6 @@ export class KbRepository {
         articleId,
         chunkIndex: chunk.chunkIndex,
         chunkText: chunk.content,
-        embeddingsVector: null,
         metadataJson: (chunk.metadata ?? null) as Prisma.InputJsonValue,
         createdAt: new Date(),
       })),

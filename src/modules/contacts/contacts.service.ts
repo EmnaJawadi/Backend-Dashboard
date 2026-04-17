@@ -4,10 +4,14 @@ import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UpsertContactDto } from './dto/upsert-contact.dto';
 import { ContactsRepository } from './contacts.repository';
+import { N8nService } from '../../integrations/n8n/n8n.service';
 
 @Injectable()
 export class ContactsService {
-  constructor(private readonly contactsRepository: ContactsRepository) {}
+  constructor(
+    private readonly contactsRepository: ContactsRepository,
+    private readonly n8nService: N8nService,
+  ) {}
 
   create(createContactDto: CreateContactDto) {
     return this.contactsRepository.create({
@@ -55,7 +59,9 @@ export class ContactsService {
     });
   }
 
-  remove(id: string) {
-    return this.contactsRepository.remove(id);
+  async remove(id: string) {
+    const deleted = await this.contactsRepository.remove(id);
+    await this.n8nService.notifyContactDeleted(deleted);
+    return deleted;
   }
 }

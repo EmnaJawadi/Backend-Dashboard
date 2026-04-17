@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../../database/prisma/prisma.module';
+import { N8nModule } from '../../integrations/n8n/n8n.module';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksService } from './webhooks.service';
 import { WebhooksRepository } from './webhooks.repository';
@@ -8,7 +9,7 @@ import { DeliveryStatusHandler } from './handlers/delivery-status.handler';
 import { ConversationEventsHandler } from './handlers/conversation-event.handler';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, N8nModule],
   controllers: [WebhooksController],
   providers: [
     WebhooksService,

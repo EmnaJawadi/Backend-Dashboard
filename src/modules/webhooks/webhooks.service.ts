@@ -7,6 +7,7 @@ import { InboundMessagesHandler } from './handlers/inbound-message.handler';
 import { DeliveryStatusHandler } from './handlers/delivery-status.handler';
 import { ConversationEventsHandler } from './handlers/conversation-event.handler';
 import { NormalizedWebhookDto } from './dto/normalized-webhook.dto';
+import { N8nService } from '../../integrations/n8n/n8n.service';
 
 @Injectable()
 export class WebhooksService {
@@ -17,6 +18,7 @@ export class WebhooksService {
     private readonly inboundMessagesHandler: InboundMessagesHandler,
     private readonly deliveryStatusHandler: DeliveryStatusHandler,
     private readonly conversationEventsHandler: ConversationEventsHandler,
+    private readonly n8nService: N8nService,
   ) {}
 
   async receiveEvolutionWebhook(
@@ -42,6 +44,10 @@ export class WebhooksService {
     try {
       await this.dispatch(normalized);
       await this.webhooksRepository.markProcessed(webhookLog.id);
+      await this.n8nService.notifyWebhookProcessed({
+        webhookEventId: webhookLog.id,
+        normalized,
+      });
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Unexpected webhook processing error';
