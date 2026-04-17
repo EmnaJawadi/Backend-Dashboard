@@ -60,8 +60,20 @@ model Company {
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
 
-  users         User[]
-  subscriptions Subscription[]
+  users            User[]
+  subscriptions    Subscription[]
+  contacts         Contact[]
+  contactNotes     ContactNote[]
+  conversations    Conversation[]
+  conversationTags ConversationTag[]
+  messages         Message[]
+  aiRuns           AiRun[]
+  auditLogs        AuditLog[]
+  kbArticles       KbArticle[]
+  kbChunks         KbChunk[]
+  messageTemplates MessageTemplate[]
+  settings         Setting[]
+  webhookEvents    WebhookEvent[]
 
   @@map("companies")
 }
@@ -86,6 +98,7 @@ model Subscription {
 
 model Contact {
   id           String    @id @default(uuid())
+  companyId    String?   @map("company_id")
   phone        String?
   whatsappName String?   @map("whatsapp_name")
   fullName     String?   @map("full_name")
@@ -102,27 +115,33 @@ model Contact {
   createdAt    DateTime  @map("created_at")
   updatedAt    DateTime  @map("updated_at")
 
+  company       Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
   notesRel      ContactNote[]
   conversations Conversation[]
 
+  @@index([companyId])
   @@map("contacts")
 }
 
 model ContactNote {
   id        String   @id @default(uuid())
+  companyId String?  @map("company_id")
   contactId String   @map("contact_id")
   authorId  String   @map("author_id")
   note      String
   createdAt DateTime @map("created_at")
   updatedAt DateTime @map("updated_at")
 
-  contact Contact @relation(fields: [contactId], references: [id])
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  contact Contact  @relation(fields: [contactId], references: [id])
 
+  @@index([companyId])
   @@map("contact_notes")
 }
 
 model Conversation {
   id                    String    @id @default(uuid())
+  companyId             String?   @map("company_id")
   contactId             String    @map("contact_id")
   channel               String?
   status                String?
@@ -139,26 +158,32 @@ model Conversation {
   createdAt             DateTime  @map("created_at")
   updatedAt             DateTime  @map("updated_at")
 
+  company  Company?          @relation(fields: [companyId], references: [id], onDelete: SetNull)
   contact  Contact           @relation(fields: [contactId], references: [id])
   tags     ConversationTag[]
   messages Message[]
 
+  @@index([companyId])
   @@map("conversations")
 }
 
 model ConversationTag {
   id             String   @id @default(uuid())
+  companyId      String?  @map("company_id")
   conversationId String   @map("conversation_id")
   tag            String
   createdAt      DateTime @map("created_at")
 
+  company      Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
   conversation Conversation @relation(fields: [conversationId], references: [id])
 
+  @@index([companyId])
   @@map("conversation_tags")
 }
 
 model Message {
   id                String    @id @default(uuid())
+  companyId         String?   @map("company_id")
   conversationId    String    @map("conversation_id")
   externalMessageId String?   @map("external_message_id")
   direction         String?
@@ -173,13 +198,16 @@ model Message {
   createdAt         DateTime  @map("created_at")
   messageTimestamp  DateTime? @map("message_timestamp")
 
+  company      Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
   conversation Conversation @relation(fields: [conversationId], references: [id])
 
+  @@index([companyId])
   @@map("messages")
 }
 
 model AiRun {
   id               String   @id @default(uuid())
+  companyId        String?  @map("company_id")
   conversationId   String   @map("conversation_id")
   messageId        String   @map("message_id")
   inputText        String?  @map("input_text")
@@ -195,11 +223,15 @@ model AiRun {
   rawResponse      Json?    @map("raw_response")
   createdAt        DateTime @map("created_at")
 
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
   @@map("ai_runs")
 }
 
 model AuditLog {
   id          String   @id @default(uuid())
+  companyId   String?  @map("company_id")
   actorUserId String?  @map("actor_user_id")
   action      String?
   entityType  String?  @map("entity_type")
@@ -208,8 +240,10 @@ model AuditLog {
   ipAddress   String?  @map("ip_address")
   createdAt   DateTime @map("created_at")
 
-  actorUser User? @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  actorUser User?    @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
 
+  @@index([companyId])
   @@index([actorUserId])
   @@index([entityType])
   @@map("audit_logs")
@@ -217,6 +251,7 @@ model AuditLog {
 
 model KbArticle {
   id          String    @id @default(uuid())
+  companyId   String?   @map("company_id")
   title       String?
   body        String?
   category    String?
@@ -231,27 +266,33 @@ model KbArticle {
   createdAt   DateTime  @map("created_at")
   updatedAt   DateTime  @map("updated_at")
 
-  chunks KbChunk[]
+  company Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  chunks  KbChunk[]
 
+  @@index([companyId])
   @@map("kb_articles")
 }
 
 model KbChunk {
-  id               String   @id @default(uuid())
-  articleId        String   @map("article_id")
-  chunkIndex       Int      @map("chunk_index")
-  chunkText        String?  @map("chunk_text")
+  id               String                 @id @default(uuid())
+  companyId        String?                @map("company_id")
+  articleId        String                 @map("article_id")
+  chunkIndex       Int                    @map("chunk_index")
+  chunkText        String?                @map("chunk_text")
   embeddingsVector Unsupported("vector")? @map("embedding_vector")
-  metadataJson     Json?    @map("metadata_json")
-  createdAt        DateTime @map("created_at")
+  metadataJson     Json?                  @map("metadata_json")
+  createdAt        DateTime               @map("created_at")
 
   article KbArticle @relation(fields: [articleId], references: [id])
+  company Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
+  @@index([companyId])
   @@map("kb_chunks")
 }
 
 model MessageTemplate {
   id                 String   @id @default(uuid())
+  companyId          String?  @map("company_id")
   name               String?
   language           String?
   category           String?
@@ -261,11 +302,15 @@ model MessageTemplate {
   createdAt          DateTime @map("created_at")
   updatedAt          DateTime @map("updated_at")
 
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
   @@map("message_templates")
 }
 
 model Setting {
   id          String   @id @default(uuid())
+  companyId   String?  @map("company_id")
   key         String   @unique
   value       Json?
   description String?
@@ -273,11 +318,15 @@ model Setting {
   createdAt   DateTime @map("created_at")
   updatedAt   DateTime @map("updated_at")
 
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
   @@map("settings")
 }
 
 model WebhookEvent {
   id               String    @id @default(uuid())
+  companyId        String?   @map("company_id")
   provider         String?
   eventType        String?   @map("event_type")
   externalEventId  String?   @map("external_event_id")
@@ -287,5 +336,8 @@ model WebhookEvent {
   receivedAt       DateTime  @map("received_at")
   processedAt      DateTime? @map("processed_at")
 
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
   @@map("webhook_events")
 }
