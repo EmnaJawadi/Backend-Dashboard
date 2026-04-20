@@ -9,26 +9,46 @@ export class AiRunsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateAiRunDto) {
+    const companyId = await this.resolveExistingCompanyId(data.companyId);
+
     return this.prisma.aiRun.create({
       data: {
+        companyId,
         conversationId: data.conversationId ?? '',
-        messageId: data.contactId ?? '',
+        messageId: data.messageId ?? data.contactId ?? '',
         inputText: data.prompt ?? null,
         outputText: data.response ?? null,
-        intent: null,
+        intent: data.intent ?? data.status ?? null,
         model: data.model ?? null,
-        promptTokens: null,
-        completionTokens: null,
+        promptTokens: data.promptTokens ?? null,
+        completionTokens: data.completionTokens ?? null,
         totalTokens: data.tokensUsed ?? null,
         latencyMs: data.latencyMs ?? null,
-        handoffRequired: null,
-        tagsToApply: undefined,
+        handoffRequired: data.handoffRequired ?? null,
+        tagsToApply: data.tagsToApply
+          ? (data.tagsToApply as Prisma.InputJsonValue)
+          : undefined,
         rawResponse: data.metadata
           ? (data.metadata as Prisma.InputJsonValue)
           : undefined,
         createdAt: new Date(),
       },
     });
+  }
+
+  private async resolveExistingCompanyId(companyId?: string | null) {
+    const normalizedCompanyId = companyId?.trim();
+
+    if (!normalizedCompanyId) {
+      return null;
+    }
+
+    const company = await this.prisma.company.findUnique({
+      where: { id: normalizedCompanyId },
+      select: { id: true },
+    });
+
+    return company?.id ?? null;
   }
 
   async findMany(query: AiRunQueryDto) {

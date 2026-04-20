@@ -10,7 +10,10 @@ export class EvolutionApiClient {
   constructor() {
     this.baseUrl = (process.env.EVOLUTION_API_URL ?? '').replace(/\/+$/, '');
     this.apiKey = process.env.EVOLUTION_API_KEY ?? '';
-    this.instance = process.env.EVOLUTION_INSTANCE ?? process.env.WHATSAPP_DEFAULT_INSTANCE ?? '';
+    this.instance =
+      process.env.EVOLUTION_INSTANCE ??
+      process.env.WHATSAPP_DEFAULT_INSTANCE ??
+      '';
   }
 
   async sendTextMessage(params: {
@@ -21,6 +24,40 @@ export class EvolutionApiClient {
       number: params.to,
       text: params.text,
     });
+  }
+
+  async sendTemplateMessage(params: {
+    to: string;
+    templateName: string;
+    language?: string;
+    parameters?: string[];
+    variables?: Record<string, string>;
+  }): Promise<Record<string, unknown>> {
+    const bodyParameters = (params.parameters ?? []).map((text) => ({
+      type: 'text',
+      text,
+    }));
+
+    return this.post(
+      '/message/sendTemplate',
+      this.omitUndefined({
+        number: params.to,
+        name: params.templateName,
+        language: {
+          code: params.language ?? 'fr',
+        },
+        components:
+          bodyParameters.length > 0
+            ? [
+                {
+                  type: 'body',
+                  parameters: bodyParameters,
+                },
+              ]
+            : undefined,
+        variables: params.variables,
+      }),
+    );
   }
 
   async sendMediaMessage(params: {
@@ -39,9 +76,20 @@ export class EvolutionApiClient {
     });
   }
 
-  private async post(path: string, body: Record<string, unknown>): Promise<Record<string, unknown>> {
+  private omitUndefined(data: Record<string, unknown>): Record<string, unknown> {
+    return Object.fromEntries(
+      Object.entries(data).filter(([, value]) => value !== undefined),
+    );
+  }
+
+  private async post(
+    path: string,
+    body: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
     if (!this.baseUrl || !this.instance) {
-      throw new InternalServerErrorException('Evolution API configuration is missing');
+      throw new InternalServerErrorException(
+        'Evolution API configuration is missing',
+      );
     }
 
     const url = `${this.baseUrl}${path}/${this.instance}`;
@@ -74,7 +122,9 @@ export class EvolutionApiClient {
         throw error;
       }
 
-      this.logger.error(`Evolution API request failed: ${(error as Error).message}`);
+      this.logger.error(
+        `Evolution API request failed: ${(error as Error).message}`,
+      );
       throw new InternalServerErrorException('Failed to communicate with Evolution API');
     }
   }

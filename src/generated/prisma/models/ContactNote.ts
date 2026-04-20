@@ -26,6 +26,7 @@ export type AggregateContactNote = {
 
 export type ContactNoteMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   contactId: string | null
   authorId: string | null
   note: string | null
@@ -35,6 +36,7 @@ export type ContactNoteMinAggregateOutputType = {
 
 export type ContactNoteMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   contactId: string | null
   authorId: string | null
   note: string | null
@@ -44,6 +46,7 @@ export type ContactNoteMaxAggregateOutputType = {
 
 export type ContactNoteCountAggregateOutputType = {
   id: number
+  companyId: number
   contactId: number
   authorId: number
   note: number
@@ -55,6 +58,7 @@ export type ContactNoteCountAggregateOutputType = {
 
 export type ContactNoteMinAggregateInputType = {
   id?: true
+  companyId?: true
   contactId?: true
   authorId?: true
   note?: true
@@ -64,6 +68,7 @@ export type ContactNoteMinAggregateInputType = {
 
 export type ContactNoteMaxAggregateInputType = {
   id?: true
+  companyId?: true
   contactId?: true
   authorId?: true
   note?: true
@@ -73,6 +78,7 @@ export type ContactNoteMaxAggregateInputType = {
 
 export type ContactNoteCountAggregateInputType = {
   id?: true
+  companyId?: true
   contactId?: true
   authorId?: true
   note?: true
@@ -155,6 +161,7 @@ export type ContactNoteGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type ContactNoteGroupByOutputType = {
   id: string
+  companyId: string | null
   contactId: string
   authorId: string
   note: string
@@ -185,21 +192,25 @@ export type ContactNoteWhereInput = {
   OR?: Prisma.ContactNoteWhereInput[]
   NOT?: Prisma.ContactNoteWhereInput | Prisma.ContactNoteWhereInput[]
   id?: Prisma.StringFilter<"ContactNote"> | string
+  companyId?: Prisma.StringNullableFilter<"ContactNote"> | string | null
   contactId?: Prisma.StringFilter<"ContactNote"> | string
   authorId?: Prisma.StringFilter<"ContactNote"> | string
   note?: Prisma.StringFilter<"ContactNote"> | string
   createdAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   contact?: Prisma.XOR<Prisma.ContactScalarRelationFilter, Prisma.ContactWhereInput>
 }
 
 export type ContactNoteOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   contactId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
   contact?: Prisma.ContactOrderByWithRelationInput
 }
 
@@ -208,16 +219,19 @@ export type ContactNoteWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ContactNoteWhereInput | Prisma.ContactNoteWhereInput[]
   OR?: Prisma.ContactNoteWhereInput[]
   NOT?: Prisma.ContactNoteWhereInput | Prisma.ContactNoteWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"ContactNote"> | string | null
   contactId?: Prisma.StringFilter<"ContactNote"> | string
   authorId?: Prisma.StringFilter<"ContactNote"> | string
   note?: Prisma.StringFilter<"ContactNote"> | string
   createdAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   contact?: Prisma.XOR<Prisma.ContactScalarRelationFilter, Prisma.ContactWhereInput>
 }, "id">
 
 export type ContactNoteOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   contactId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   note?: Prisma.SortOrder
@@ -233,6 +247,7 @@ export type ContactNoteScalarWhereWithAggregatesInput = {
   OR?: Prisma.ContactNoteScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ContactNoteScalarWhereWithAggregatesInput | Prisma.ContactNoteScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ContactNote"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"ContactNote"> | string | null
   contactId?: Prisma.StringWithAggregatesFilter<"ContactNote"> | string
   authorId?: Prisma.StringWithAggregatesFilter<"ContactNote"> | string
   note?: Prisma.StringWithAggregatesFilter<"ContactNote"> | string
@@ -246,11 +261,13 @@ export type ContactNoteCreateInput = {
   note: string
   createdAt: Date | string
   updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutContactNotesInput
   contact: Prisma.ContactCreateNestedOneWithoutNotesRelInput
 }
 
 export type ContactNoteUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   contactId: string
   authorId: string
   note: string
@@ -264,11 +281,13 @@ export type ContactNoteUpdateInput = {
   note?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutContactNotesNestedInput
   contact?: Prisma.ContactUpdateOneRequiredWithoutNotesRelNestedInput
 }
 
 export type ContactNoteUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactId?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.StringFieldUpdateOperationsInput | string
@@ -278,6 +297,7 @@ export type ContactNoteUncheckedUpdateInput = {
 
 export type ContactNoteCreateManyInput = {
   id?: string
+  companyId?: string | null
   contactId: string
   authorId: string
   note: string
@@ -295,6 +315,7 @@ export type ContactNoteUpdateManyMutationInput = {
 
 export type ContactNoteUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactId?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.StringFieldUpdateOperationsInput | string
@@ -314,6 +335,7 @@ export type ContactNoteOrderByRelationAggregateInput = {
 
 export type ContactNoteCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   note?: Prisma.SortOrder
@@ -323,6 +345,7 @@ export type ContactNoteCountOrderByAggregateInput = {
 
 export type ContactNoteMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   note?: Prisma.SortOrder
@@ -332,11 +355,54 @@ export type ContactNoteMaxOrderByAggregateInput = {
 
 export type ContactNoteMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ContactNoteCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput> | Prisma.ContactNoteCreateWithoutCompanyInput[] | Prisma.ContactNoteUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ContactNoteCreateOrConnectWithoutCompanyInput | Prisma.ContactNoteCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.ContactNoteCreateManyCompanyInputEnvelope
+  connect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+}
+
+export type ContactNoteUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput> | Prisma.ContactNoteCreateWithoutCompanyInput[] | Prisma.ContactNoteUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ContactNoteCreateOrConnectWithoutCompanyInput | Prisma.ContactNoteCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.ContactNoteCreateManyCompanyInputEnvelope
+  connect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+}
+
+export type ContactNoteUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput> | Prisma.ContactNoteCreateWithoutCompanyInput[] | Prisma.ContactNoteUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ContactNoteCreateOrConnectWithoutCompanyInput | Prisma.ContactNoteCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.ContactNoteUpsertWithWhereUniqueWithoutCompanyInput | Prisma.ContactNoteUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.ContactNoteCreateManyCompanyInputEnvelope
+  set?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  disconnect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  delete?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  connect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  update?: Prisma.ContactNoteUpdateWithWhereUniqueWithoutCompanyInput | Prisma.ContactNoteUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.ContactNoteUpdateManyWithWhereWithoutCompanyInput | Prisma.ContactNoteUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
+}
+
+export type ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput> | Prisma.ContactNoteCreateWithoutCompanyInput[] | Prisma.ContactNoteUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ContactNoteCreateOrConnectWithoutCompanyInput | Prisma.ContactNoteCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.ContactNoteUpsertWithWhereUniqueWithoutCompanyInput | Prisma.ContactNoteUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.ContactNoteCreateManyCompanyInputEnvelope
+  set?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  disconnect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  delete?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  connect?: Prisma.ContactNoteWhereUniqueInput | Prisma.ContactNoteWhereUniqueInput[]
+  update?: Prisma.ContactNoteUpdateWithWhereUniqueWithoutCompanyInput | Prisma.ContactNoteUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.ContactNoteUpdateManyWithWhereWithoutCompanyInput | Prisma.ContactNoteUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
 }
 
 export type ContactNoteCreateNestedManyWithoutContactInput = {
@@ -381,16 +447,75 @@ export type ContactNoteUncheckedUpdateManyWithoutContactNestedInput = {
   deleteMany?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
 }
 
-export type ContactNoteCreateWithoutContactInput = {
+export type ContactNoteCreateWithoutCompanyInput = {
   id?: string
+  authorId: string
+  note: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  contact: Prisma.ContactCreateNestedOneWithoutNotesRelInput
+}
+
+export type ContactNoteUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  contactId: string
   authorId: string
   note: string
   createdAt: Date | string
   updatedAt: Date | string
 }
 
+export type ContactNoteCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.ContactNoteWhereUniqueInput
+  create: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput>
+}
+
+export type ContactNoteCreateManyCompanyInputEnvelope = {
+  data: Prisma.ContactNoteCreateManyCompanyInput | Prisma.ContactNoteCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type ContactNoteUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.ContactNoteWhereUniqueInput
+  update: Prisma.XOR<Prisma.ContactNoteUpdateWithoutCompanyInput, Prisma.ContactNoteUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.ContactNoteCreateWithoutCompanyInput, Prisma.ContactNoteUncheckedCreateWithoutCompanyInput>
+}
+
+export type ContactNoteUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.ContactNoteWhereUniqueInput
+  data: Prisma.XOR<Prisma.ContactNoteUpdateWithoutCompanyInput, Prisma.ContactNoteUncheckedUpdateWithoutCompanyInput>
+}
+
+export type ContactNoteUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.ContactNoteScalarWhereInput
+  data: Prisma.XOR<Prisma.ContactNoteUpdateManyMutationInput, Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type ContactNoteScalarWhereInput = {
+  AND?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
+  OR?: Prisma.ContactNoteScalarWhereInput[]
+  NOT?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
+  id?: Prisma.StringFilter<"ContactNote"> | string
+  companyId?: Prisma.StringNullableFilter<"ContactNote"> | string | null
+  contactId?: Prisma.StringFilter<"ContactNote"> | string
+  authorId?: Prisma.StringFilter<"ContactNote"> | string
+  note?: Prisma.StringFilter<"ContactNote"> | string
+  createdAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
+}
+
+export type ContactNoteCreateWithoutContactInput = {
+  id?: string
+  authorId: string
+  note: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutContactNotesInput
+}
+
 export type ContactNoteUncheckedCreateWithoutContactInput = {
   id?: string
+  companyId?: string | null
   authorId: string
   note: string
   createdAt: Date | string
@@ -423,20 +548,45 @@ export type ContactNoteUpdateManyWithWhereWithoutContactInput = {
   data: Prisma.XOR<Prisma.ContactNoteUpdateManyMutationInput, Prisma.ContactNoteUncheckedUpdateManyWithoutContactInput>
 }
 
-export type ContactNoteScalarWhereInput = {
-  AND?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
-  OR?: Prisma.ContactNoteScalarWhereInput[]
-  NOT?: Prisma.ContactNoteScalarWhereInput | Prisma.ContactNoteScalarWhereInput[]
-  id?: Prisma.StringFilter<"ContactNote"> | string
-  contactId?: Prisma.StringFilter<"ContactNote"> | string
-  authorId?: Prisma.StringFilter<"ContactNote"> | string
-  note?: Prisma.StringFilter<"ContactNote"> | string
-  createdAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"ContactNote"> | Date | string
+export type ContactNoteCreateManyCompanyInput = {
+  id?: string
+  contactId: string
+  authorId: string
+  note: string
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type ContactNoteUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contact?: Prisma.ContactUpdateOneRequiredWithoutNotesRelNestedInput
+}
+
+export type ContactNoteUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ContactNoteUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContactNoteCreateManyContactInput = {
   id?: string
+  companyId?: string | null
   authorId: string
   note: string
   createdAt: Date | string
@@ -449,10 +599,12 @@ export type ContactNoteUpdateWithoutContactInput = {
   note?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutContactNotesNestedInput
 }
 
 export type ContactNoteUncheckedUpdateWithoutContactInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -461,6 +613,7 @@ export type ContactNoteUncheckedUpdateWithoutContactInput = {
 
 export type ContactNoteUncheckedUpdateManyWithoutContactInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -471,36 +624,43 @@ export type ContactNoteUncheckedUpdateManyWithoutContactInput = {
 
 export type ContactNoteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   contactId?: boolean
   authorId?: boolean
   note?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contactNote"]>
 
 export type ContactNoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   contactId?: boolean
   authorId?: boolean
   note?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contactNote"]>
 
 export type ContactNoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   contactId?: boolean
   authorId?: boolean
   note?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contactNote"]>
 
 export type ContactNoteSelectScalar = {
   id?: boolean
+  companyId?: boolean
   contactId?: boolean
   authorId?: boolean
   note?: boolean
@@ -508,24 +668,29 @@ export type ContactNoteSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ContactNoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contactId" | "authorId" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["contactNote"]>
+export type ContactNoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "contactId" | "authorId" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["contactNote"]>
 export type ContactNoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }
 export type ContactNoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }
 export type ContactNoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ContactNote$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
 }
 
 export type $ContactNotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContactNote"
   objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
     contact: Prisma.$ContactPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     contactId: string
     authorId: string
     note: string
@@ -925,6 +1090,7 @@ readonly fields: ContactNoteFieldRefs;
  */
 export interface Prisma__ContactNoteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.ContactNote$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContactNote$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   contact<T extends Prisma.ContactDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContactDefaultArgs<ExtArgs>>): Prisma.Prisma__ContactClient<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -956,6 +1122,7 @@ export interface Prisma__ContactNoteClient<T, Null = never, ExtArgs extends runt
  */
 export interface ContactNoteFieldRefs {
   readonly id: Prisma.FieldRef<"ContactNote", 'String'>
+  readonly companyId: Prisma.FieldRef<"ContactNote", 'String'>
   readonly contactId: Prisma.FieldRef<"ContactNote", 'String'>
   readonly authorId: Prisma.FieldRef<"ContactNote", 'String'>
   readonly note: Prisma.FieldRef<"ContactNote", 'String'>
@@ -1359,6 +1526,25 @@ export type ContactNoteDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many ContactNotes to delete.
    */
   limit?: number
+}
+
+/**
+ * ContactNote.company
+ */
+export type ContactNote$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
 }
 
 /**

@@ -26,6 +26,7 @@ export type AggregateConversationTag = {
 
 export type ConversationTagMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   conversationId: string | null
   tag: string | null
   createdAt: Date | null
@@ -33,6 +34,7 @@ export type ConversationTagMinAggregateOutputType = {
 
 export type ConversationTagMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   conversationId: string | null
   tag: string | null
   createdAt: Date | null
@@ -40,6 +42,7 @@ export type ConversationTagMaxAggregateOutputType = {
 
 export type ConversationTagCountAggregateOutputType = {
   id: number
+  companyId: number
   conversationId: number
   tag: number
   createdAt: number
@@ -49,6 +52,7 @@ export type ConversationTagCountAggregateOutputType = {
 
 export type ConversationTagMinAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   tag?: true
   createdAt?: true
@@ -56,6 +60,7 @@ export type ConversationTagMinAggregateInputType = {
 
 export type ConversationTagMaxAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   tag?: true
   createdAt?: true
@@ -63,6 +68,7 @@ export type ConversationTagMaxAggregateInputType = {
 
 export type ConversationTagCountAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   tag?: true
   createdAt?: true
@@ -143,6 +149,7 @@ export type ConversationTagGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 
 export type ConversationTagGroupByOutputType = {
   id: string
+  companyId: string | null
   conversationId: string
   tag: string
   createdAt: Date
@@ -171,17 +178,21 @@ export type ConversationTagWhereInput = {
   OR?: Prisma.ConversationTagWhereInput[]
   NOT?: Prisma.ConversationTagWhereInput | Prisma.ConversationTagWhereInput[]
   id?: Prisma.StringFilter<"ConversationTag"> | string
+  companyId?: Prisma.StringNullableFilter<"ConversationTag"> | string | null
   conversationId?: Prisma.StringFilter<"ConversationTag"> | string
   tag?: Prisma.StringFilter<"ConversationTag"> | string
   createdAt?: Prisma.DateTimeFilter<"ConversationTag"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
 }
 
 export type ConversationTagOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
   conversation?: Prisma.ConversationOrderByWithRelationInput
 }
 
@@ -190,14 +201,17 @@ export type ConversationTagWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ConversationTagWhereInput | Prisma.ConversationTagWhereInput[]
   OR?: Prisma.ConversationTagWhereInput[]
   NOT?: Prisma.ConversationTagWhereInput | Prisma.ConversationTagWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"ConversationTag"> | string | null
   conversationId?: Prisma.StringFilter<"ConversationTag"> | string
   tag?: Prisma.StringFilter<"ConversationTag"> | string
   createdAt?: Prisma.DateTimeFilter<"ConversationTag"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
 }, "id">
 
 export type ConversationTagOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -211,6 +225,7 @@ export type ConversationTagScalarWhereWithAggregatesInput = {
   OR?: Prisma.ConversationTagScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ConversationTagScalarWhereWithAggregatesInput | Prisma.ConversationTagScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ConversationTag"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"ConversationTag"> | string | null
   conversationId?: Prisma.StringWithAggregatesFilter<"ConversationTag"> | string
   tag?: Prisma.StringWithAggregatesFilter<"ConversationTag"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ConversationTag"> | Date | string
@@ -220,11 +235,13 @@ export type ConversationTagCreateInput = {
   id?: string
   tag: string
   createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationTagsInput
   conversation: Prisma.ConversationCreateNestedOneWithoutTagsInput
 }
 
 export type ConversationTagUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   conversationId: string
   tag: string
   createdAt: Date | string
@@ -234,11 +251,13 @@ export type ConversationTagUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationTagsNestedInput
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutTagsNestedInput
 }
 
 export type ConversationTagUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -246,6 +265,7 @@ export type ConversationTagUncheckedUpdateInput = {
 
 export type ConversationTagCreateManyInput = {
   id?: string
+  companyId?: string | null
   conversationId: string
   tag: string
   createdAt: Date | string
@@ -259,6 +279,7 @@ export type ConversationTagUpdateManyMutationInput = {
 
 export type ConversationTagUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -276,6 +297,7 @@ export type ConversationTagOrderByRelationAggregateInput = {
 
 export type ConversationTagCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -283,6 +305,7 @@ export type ConversationTagCountOrderByAggregateInput = {
 
 export type ConversationTagMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -290,9 +313,52 @@ export type ConversationTagMaxOrderByAggregateInput = {
 
 export type ConversationTagMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   tag?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type ConversationTagCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput> | Prisma.ConversationTagCreateWithoutCompanyInput[] | Prisma.ConversationTagUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ConversationTagCreateOrConnectWithoutCompanyInput | Prisma.ConversationTagCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.ConversationTagCreateManyCompanyInputEnvelope
+  connect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+}
+
+export type ConversationTagUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput> | Prisma.ConversationTagCreateWithoutCompanyInput[] | Prisma.ConversationTagUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ConversationTagCreateOrConnectWithoutCompanyInput | Prisma.ConversationTagCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.ConversationTagCreateManyCompanyInputEnvelope
+  connect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+}
+
+export type ConversationTagUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput> | Prisma.ConversationTagCreateWithoutCompanyInput[] | Prisma.ConversationTagUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ConversationTagCreateOrConnectWithoutCompanyInput | Prisma.ConversationTagCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.ConversationTagUpsertWithWhereUniqueWithoutCompanyInput | Prisma.ConversationTagUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.ConversationTagCreateManyCompanyInputEnvelope
+  set?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  disconnect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  delete?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  connect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  update?: Prisma.ConversationTagUpdateWithWhereUniqueWithoutCompanyInput | Prisma.ConversationTagUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.ConversationTagUpdateManyWithWhereWithoutCompanyInput | Prisma.ConversationTagUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
+}
+
+export type ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput> | Prisma.ConversationTagCreateWithoutCompanyInput[] | Prisma.ConversationTagUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.ConversationTagCreateOrConnectWithoutCompanyInput | Prisma.ConversationTagCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.ConversationTagUpsertWithWhereUniqueWithoutCompanyInput | Prisma.ConversationTagUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.ConversationTagCreateManyCompanyInputEnvelope
+  set?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  disconnect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  delete?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  connect?: Prisma.ConversationTagWhereUniqueInput | Prisma.ConversationTagWhereUniqueInput[]
+  update?: Prisma.ConversationTagUpdateWithWhereUniqueWithoutCompanyInput | Prisma.ConversationTagUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.ConversationTagUpdateManyWithWhereWithoutCompanyInput | Prisma.ConversationTagUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
 }
 
 export type ConversationTagCreateNestedManyWithoutConversationInput = {
@@ -337,14 +403,67 @@ export type ConversationTagUncheckedUpdateManyWithoutConversationNestedInput = {
   deleteMany?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
 }
 
-export type ConversationTagCreateWithoutConversationInput = {
+export type ConversationTagCreateWithoutCompanyInput = {
   id?: string
+  tag: string
+  createdAt: Date | string
+  conversation: Prisma.ConversationCreateNestedOneWithoutTagsInput
+}
+
+export type ConversationTagUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  conversationId: string
   tag: string
   createdAt: Date | string
 }
 
+export type ConversationTagCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.ConversationTagWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput>
+}
+
+export type ConversationTagCreateManyCompanyInputEnvelope = {
+  data: Prisma.ConversationTagCreateManyCompanyInput | Prisma.ConversationTagCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type ConversationTagUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.ConversationTagWhereUniqueInput
+  update: Prisma.XOR<Prisma.ConversationTagUpdateWithoutCompanyInput, Prisma.ConversationTagUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.ConversationTagCreateWithoutCompanyInput, Prisma.ConversationTagUncheckedCreateWithoutCompanyInput>
+}
+
+export type ConversationTagUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.ConversationTagWhereUniqueInput
+  data: Prisma.XOR<Prisma.ConversationTagUpdateWithoutCompanyInput, Prisma.ConversationTagUncheckedUpdateWithoutCompanyInput>
+}
+
+export type ConversationTagUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.ConversationTagScalarWhereInput
+  data: Prisma.XOR<Prisma.ConversationTagUpdateManyMutationInput, Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type ConversationTagScalarWhereInput = {
+  AND?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
+  OR?: Prisma.ConversationTagScalarWhereInput[]
+  NOT?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
+  id?: Prisma.StringFilter<"ConversationTag"> | string
+  companyId?: Prisma.StringNullableFilter<"ConversationTag"> | string | null
+  conversationId?: Prisma.StringFilter<"ConversationTag"> | string
+  tag?: Prisma.StringFilter<"ConversationTag"> | string
+  createdAt?: Prisma.DateTimeFilter<"ConversationTag"> | Date | string
+}
+
+export type ConversationTagCreateWithoutConversationInput = {
+  id?: string
+  tag: string
+  createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationTagsInput
+}
+
 export type ConversationTagUncheckedCreateWithoutConversationInput = {
   id?: string
+  companyId?: string | null
   tag: string
   createdAt: Date | string
 }
@@ -375,18 +494,37 @@ export type ConversationTagUpdateManyWithWhereWithoutConversationInput = {
   data: Prisma.XOR<Prisma.ConversationTagUpdateManyMutationInput, Prisma.ConversationTagUncheckedUpdateManyWithoutConversationInput>
 }
 
-export type ConversationTagScalarWhereInput = {
-  AND?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
-  OR?: Prisma.ConversationTagScalarWhereInput[]
-  NOT?: Prisma.ConversationTagScalarWhereInput | Prisma.ConversationTagScalarWhereInput[]
-  id?: Prisma.StringFilter<"ConversationTag"> | string
-  conversationId?: Prisma.StringFilter<"ConversationTag"> | string
-  tag?: Prisma.StringFilter<"ConversationTag"> | string
-  createdAt?: Prisma.DateTimeFilter<"ConversationTag"> | Date | string
+export type ConversationTagCreateManyCompanyInput = {
+  id?: string
+  conversationId: string
+  tag: string
+  createdAt: Date | string
+}
+
+export type ConversationTagUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutTagsNestedInput
+}
+
+export type ConversationTagUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ConversationTagUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationTagCreateManyConversationInput = {
   id?: string
+  companyId?: string | null
   tag: string
   createdAt: Date | string
 }
@@ -395,16 +533,19 @@ export type ConversationTagUpdateWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationTagsNestedInput
 }
 
 export type ConversationTagUncheckedUpdateWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationTagUncheckedUpdateManyWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tag?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,53 +554,65 @@ export type ConversationTagUncheckedUpdateManyWithoutConversationInput = {
 
 export type ConversationTagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   tag?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationTag"]>
 
 export type ConversationTagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   tag?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationTag"]>
 
 export type ConversationTagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   tag?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationTag"]>
 
 export type ConversationTagSelectScalar = {
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   tag?: boolean
   createdAt?: boolean
 }
 
-export type ConversationTagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "tag" | "createdAt", ExtArgs["result"]["conversationTag"]>
+export type ConversationTagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "tag" | "createdAt", ExtArgs["result"]["conversationTag"]>
 export type ConversationTagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }
 export type ConversationTagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }
 export type ConversationTagIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.ConversationTag$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
 }
 
 export type $ConversationTagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ConversationTag"
   objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
     conversation: Prisma.$ConversationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     conversationId: string
     tag: string
     createdAt: Date
@@ -857,6 +1010,7 @@ readonly fields: ConversationTagFieldRefs;
  */
 export interface Prisma__ConversationTagClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.ConversationTag$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationTag$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   conversation<T extends Prisma.ConversationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConversationClient<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -888,6 +1042,7 @@ export interface Prisma__ConversationTagClient<T, Null = never, ExtArgs extends 
  */
 export interface ConversationTagFieldRefs {
   readonly id: Prisma.FieldRef<"ConversationTag", 'String'>
+  readonly companyId: Prisma.FieldRef<"ConversationTag", 'String'>
   readonly conversationId: Prisma.FieldRef<"ConversationTag", 'String'>
   readonly tag: Prisma.FieldRef<"ConversationTag", 'String'>
   readonly createdAt: Prisma.FieldRef<"ConversationTag", 'DateTime'>
@@ -1289,6 +1444,25 @@ export type ConversationTagDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many ConversationTags to delete.
    */
   limit?: number
+}
+
+/**
+ * ConversationTag.company
+ */
+export type ConversationTag$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
 }
 
 /**

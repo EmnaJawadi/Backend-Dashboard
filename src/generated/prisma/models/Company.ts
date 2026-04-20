@@ -232,6 +232,18 @@ export type CompanyWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   users?: Prisma.UserListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
+  contacts?: Prisma.ContactListRelationFilter
+  contactNotes?: Prisma.ContactNoteListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
+  conversationTags?: Prisma.ConversationTagListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
+  aiRuns?: Prisma.AiRunListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  kbArticles?: Prisma.KbArticleListRelationFilter
+  kbChunks?: Prisma.KbChunkListRelationFilter
+  messageTemplates?: Prisma.MessageTemplateListRelationFilter
+  settings?: Prisma.SettingListRelationFilter
+  webhookEvents?: Prisma.WebhookEventListRelationFilter
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -248,6 +260,18 @@ export type CompanyOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
+  contacts?: Prisma.ContactOrderByRelationAggregateInput
+  contactNotes?: Prisma.ContactNoteOrderByRelationAggregateInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
+  conversationTags?: Prisma.ConversationTagOrderByRelationAggregateInput
+  messages?: Prisma.MessageOrderByRelationAggregateInput
+  aiRuns?: Prisma.AiRunOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  kbArticles?: Prisma.KbArticleOrderByRelationAggregateInput
+  kbChunks?: Prisma.KbChunkOrderByRelationAggregateInput
+  messageTemplates?: Prisma.MessageTemplateOrderByRelationAggregateInput
+  settings?: Prisma.SettingOrderByRelationAggregateInput
+  webhookEvents?: Prisma.WebhookEventOrderByRelationAggregateInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +291,18 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   users?: Prisma.UserListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
+  contacts?: Prisma.ContactListRelationFilter
+  contactNotes?: Prisma.ContactNoteListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
+  conversationTags?: Prisma.ConversationTagListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
+  aiRuns?: Prisma.AiRunListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  kbArticles?: Prisma.KbArticleListRelationFilter
+  kbChunks?: Prisma.KbChunkListRelationFilter
+  messageTemplates?: Prisma.MessageTemplateListRelationFilter
+  settings?: Prisma.SettingListRelationFilter
+  webhookEvents?: Prisma.WebhookEventListRelationFilter
 }, "id" | "name">
 
 export type CompanyOrderByWithAggregationInput = {
@@ -317,6 +353,18 @@ export type CompanyCreateInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -333,6 +381,18 @@ export type CompanyUncheckedCreateInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -349,6 +409,18 @@ export type CompanyUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -365,6 +437,18 @@ export type CompanyUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -495,6 +579,198 @@ export type CompanyUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.CompanyUpdateWithoutSubscriptionsInput>, Prisma.CompanyUncheckedUpdateWithoutSubscriptionsInput>
 }
 
+export type CompanyCreateNestedOneWithoutContactsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutContactsInput, Prisma.CompanyUncheckedCreateWithoutContactsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutContactsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutContactsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutContactsInput, Prisma.CompanyUncheckedCreateWithoutContactsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutContactsInput
+  upsert?: Prisma.CompanyUpsertWithoutContactsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutContactsInput, Prisma.CompanyUpdateWithoutContactsInput>, Prisma.CompanyUncheckedUpdateWithoutContactsInput>
+}
+
+export type CompanyCreateNestedOneWithoutContactNotesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutContactNotesInput, Prisma.CompanyUncheckedCreateWithoutContactNotesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutContactNotesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutContactNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutContactNotesInput, Prisma.CompanyUncheckedCreateWithoutContactNotesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutContactNotesInput
+  upsert?: Prisma.CompanyUpsertWithoutContactNotesInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutContactNotesInput, Prisma.CompanyUpdateWithoutContactNotesInput>, Prisma.CompanyUncheckedUpdateWithoutContactNotesInput>
+}
+
+export type CompanyCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutConversationsInput, Prisma.CompanyUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutConversationsInput, Prisma.CompanyUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.CompanyUpsertWithoutConversationsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutConversationsInput, Prisma.CompanyUpdateWithoutConversationsInput>, Prisma.CompanyUncheckedUpdateWithoutConversationsInput>
+}
+
+export type CompanyCreateNestedOneWithoutConversationTagsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutConversationTagsInput, Prisma.CompanyUncheckedCreateWithoutConversationTagsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutConversationTagsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutConversationTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutConversationTagsInput, Prisma.CompanyUncheckedCreateWithoutConversationTagsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutConversationTagsInput
+  upsert?: Prisma.CompanyUpsertWithoutConversationTagsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutConversationTagsInput, Prisma.CompanyUpdateWithoutConversationTagsInput>, Prisma.CompanyUncheckedUpdateWithoutConversationTagsInput>
+}
+
+export type CompanyCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessagesInput, Prisma.CompanyUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessagesInput, Prisma.CompanyUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.CompanyUpsertWithoutMessagesInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutMessagesInput, Prisma.CompanyUpdateWithoutMessagesInput>, Prisma.CompanyUncheckedUpdateWithoutMessagesInput>
+}
+
+export type CompanyCreateNestedOneWithoutAiRunsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiRunsInput, Prisma.CompanyUncheckedCreateWithoutAiRunsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiRunsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutAiRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiRunsInput, Prisma.CompanyUncheckedCreateWithoutAiRunsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiRunsInput
+  upsert?: Prisma.CompanyUpsertWithoutAiRunsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAiRunsInput, Prisma.CompanyUpdateWithoutAiRunsInput>, Prisma.CompanyUncheckedUpdateWithoutAiRunsInput>
+}
+
+export type CompanyCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.CompanyUpsertWithoutAuditLogsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.CompanyUpdateWithoutAuditLogsInput>, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type CompanyCreateNestedOneWithoutKbArticlesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutKbArticlesInput, Prisma.CompanyUncheckedCreateWithoutKbArticlesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutKbArticlesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutKbArticlesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutKbArticlesInput, Prisma.CompanyUncheckedCreateWithoutKbArticlesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutKbArticlesInput
+  upsert?: Prisma.CompanyUpsertWithoutKbArticlesInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutKbArticlesInput, Prisma.CompanyUpdateWithoutKbArticlesInput>, Prisma.CompanyUncheckedUpdateWithoutKbArticlesInput>
+}
+
+export type CompanyCreateNestedOneWithoutKbChunksInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutKbChunksInput, Prisma.CompanyUncheckedCreateWithoutKbChunksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutKbChunksInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutKbChunksNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutKbChunksInput, Prisma.CompanyUncheckedCreateWithoutKbChunksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutKbChunksInput
+  upsert?: Prisma.CompanyUpsertWithoutKbChunksInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutKbChunksInput, Prisma.CompanyUpdateWithoutKbChunksInput>, Prisma.CompanyUncheckedUpdateWithoutKbChunksInput>
+}
+
+export type CompanyCreateNestedOneWithoutMessageTemplatesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessageTemplatesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutMessageTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessageTemplatesInput
+  upsert?: Prisma.CompanyUpsertWithoutMessageTemplatesInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutMessageTemplatesInput, Prisma.CompanyUpdateWithoutMessageTemplatesInput>, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
+}
+
+export type CompanyCreateNestedOneWithoutSettingsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutSettingsInput, Prisma.CompanyUncheckedCreateWithoutSettingsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutSettingsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutSettingsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutSettingsInput, Prisma.CompanyUncheckedCreateWithoutSettingsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutSettingsInput
+  upsert?: Prisma.CompanyUpsertWithoutSettingsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutSettingsInput, Prisma.CompanyUpdateWithoutSettingsInput>, Prisma.CompanyUncheckedUpdateWithoutSettingsInput>
+}
+
+export type CompanyCreateNestedOneWithoutWebhookEventsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWebhookEventsInput, Prisma.CompanyUncheckedCreateWithoutWebhookEventsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWebhookEventsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutWebhookEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWebhookEventsInput, Prisma.CompanyUncheckedCreateWithoutWebhookEventsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWebhookEventsInput
+  upsert?: Prisma.CompanyUpsertWithoutWebhookEventsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutWebhookEventsInput, Prisma.CompanyUpdateWithoutWebhookEventsInput>, Prisma.CompanyUncheckedUpdateWithoutWebhookEventsInput>
+}
+
 export type CompanyCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -508,6 +784,18 @@ export type CompanyCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -523,6 +811,18 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -554,6 +854,18 @@ export type CompanyUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -569,6 +881,18 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSubscriptionsInput = {
@@ -584,6 +908,18 @@ export type CompanyCreateWithoutSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
@@ -599,6 +935,18 @@ export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSubscriptionsInput = {
@@ -630,6 +978,18 @@ export type CompanyUpdateWithoutSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
@@ -645,6 +1005,1506 @@ export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutContactsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutContactsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutContactsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutContactsInput, Prisma.CompanyUncheckedCreateWithoutContactsInput>
+}
+
+export type CompanyUpsertWithoutContactsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutContactsInput, Prisma.CompanyUncheckedUpdateWithoutContactsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutContactsInput, Prisma.CompanyUncheckedCreateWithoutContactsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutContactsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutContactsInput, Prisma.CompanyUncheckedUpdateWithoutContactsInput>
+}
+
+export type CompanyUpdateWithoutContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutContactNotesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutContactNotesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutContactNotesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutContactNotesInput, Prisma.CompanyUncheckedCreateWithoutContactNotesInput>
+}
+
+export type CompanyUpsertWithoutContactNotesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutContactNotesInput, Prisma.CompanyUncheckedUpdateWithoutContactNotesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutContactNotesInput, Prisma.CompanyUncheckedCreateWithoutContactNotesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutContactNotesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutContactNotesInput, Prisma.CompanyUncheckedUpdateWithoutContactNotesInput>
+}
+
+export type CompanyUpdateWithoutContactNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutContactNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutConversationsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutConversationsInput, Prisma.CompanyUncheckedCreateWithoutConversationsInput>
+}
+
+export type CompanyUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutConversationsInput, Prisma.CompanyUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutConversationsInput, Prisma.CompanyUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutConversationsInput, Prisma.CompanyUncheckedUpdateWithoutConversationsInput>
+}
+
+export type CompanyUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutConversationTagsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutConversationTagsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutConversationTagsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutConversationTagsInput, Prisma.CompanyUncheckedCreateWithoutConversationTagsInput>
+}
+
+export type CompanyUpsertWithoutConversationTagsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutConversationTagsInput, Prisma.CompanyUncheckedUpdateWithoutConversationTagsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutConversationTagsInput, Prisma.CompanyUncheckedCreateWithoutConversationTagsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutConversationTagsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutConversationTagsInput, Prisma.CompanyUncheckedUpdateWithoutConversationTagsInput>
+}
+
+export type CompanyUpdateWithoutConversationTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutConversationTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutMessagesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutMessagesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessagesInput, Prisma.CompanyUncheckedCreateWithoutMessagesInput>
+}
+
+export type CompanyUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutMessagesInput, Prisma.CompanyUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessagesInput, Prisma.CompanyUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutMessagesInput, Prisma.CompanyUncheckedUpdateWithoutMessagesInput>
+}
+
+export type CompanyUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAiRunsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAiRunsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAiRunsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiRunsInput, Prisma.CompanyUncheckedCreateWithoutAiRunsInput>
+}
+
+export type CompanyUpsertWithoutAiRunsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAiRunsInput, Prisma.CompanyUncheckedUpdateWithoutAiRunsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiRunsInput, Prisma.CompanyUncheckedCreateWithoutAiRunsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAiRunsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAiRunsInput, Prisma.CompanyUncheckedUpdateWithoutAiRunsInput>
+}
+
+export type CompanyUpdateWithoutAiRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAiRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAuditLogsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type CompanyUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAuditLogsInput, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAuditLogsInput, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type CompanyUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutKbArticlesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutKbArticlesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutKbArticlesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutKbArticlesInput, Prisma.CompanyUncheckedCreateWithoutKbArticlesInput>
+}
+
+export type CompanyUpsertWithoutKbArticlesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutKbArticlesInput, Prisma.CompanyUncheckedUpdateWithoutKbArticlesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutKbArticlesInput, Prisma.CompanyUncheckedCreateWithoutKbArticlesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutKbArticlesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutKbArticlesInput, Prisma.CompanyUncheckedUpdateWithoutKbArticlesInput>
+}
+
+export type CompanyUpdateWithoutKbArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutKbArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutKbChunksInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutKbChunksInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutKbChunksInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutKbChunksInput, Prisma.CompanyUncheckedCreateWithoutKbChunksInput>
+}
+
+export type CompanyUpsertWithoutKbChunksInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutKbChunksInput, Prisma.CompanyUncheckedUpdateWithoutKbChunksInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutKbChunksInput, Prisma.CompanyUncheckedCreateWithoutKbChunksInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutKbChunksInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutKbChunksInput, Prisma.CompanyUncheckedUpdateWithoutKbChunksInput>
+}
+
+export type CompanyUpdateWithoutKbChunksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutKbChunksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutMessageTemplatesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutMessageTemplatesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutMessageTemplatesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+}
+
+export type CompanyUpsertWithoutMessageTemplatesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutMessageTemplatesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
+}
+
+export type CompanyUpdateWithoutMessageTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutMessageTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutSettingsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutSettingsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutSettingsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutSettingsInput, Prisma.CompanyUncheckedCreateWithoutSettingsInput>
+}
+
+export type CompanyUpsertWithoutSettingsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutSettingsInput, Prisma.CompanyUncheckedUpdateWithoutSettingsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutSettingsInput, Prisma.CompanyUncheckedCreateWithoutSettingsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutSettingsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutSettingsInput, Prisma.CompanyUncheckedUpdateWithoutSettingsInput>
+}
+
+export type CompanyUpdateWithoutSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutWebhookEventsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutWebhookEventsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutWebhookEventsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWebhookEventsInput, Prisma.CompanyUncheckedCreateWithoutWebhookEventsInput>
+}
+
+export type CompanyUpsertWithoutWebhookEventsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutWebhookEventsInput, Prisma.CompanyUncheckedUpdateWithoutWebhookEventsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWebhookEventsInput, Prisma.CompanyUncheckedCreateWithoutWebhookEventsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutWebhookEventsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutWebhookEventsInput, Prisma.CompanyUncheckedUpdateWithoutWebhookEventsInput>
+}
+
+export type CompanyUpdateWithoutWebhookEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutWebhookEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 
@@ -655,11 +2515,35 @@ export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
 export type CompanyCountOutputType = {
   users: number
   subscriptions: number
+  contacts: number
+  contactNotes: number
+  conversations: number
+  conversationTags: number
+  messages: number
+  aiRuns: number
+  auditLogs: number
+  kbArticles: number
+  kbChunks: number
+  messageTemplates: number
+  settings: number
+  webhookEvents: number
 }
 
 export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | CompanyCountOutputTypeCountUsersArgs
   subscriptions?: boolean | CompanyCountOutputTypeCountSubscriptionsArgs
+  contacts?: boolean | CompanyCountOutputTypeCountContactsArgs
+  contactNotes?: boolean | CompanyCountOutputTypeCountContactNotesArgs
+  conversations?: boolean | CompanyCountOutputTypeCountConversationsArgs
+  conversationTags?: boolean | CompanyCountOutputTypeCountConversationTagsArgs
+  messages?: boolean | CompanyCountOutputTypeCountMessagesArgs
+  aiRuns?: boolean | CompanyCountOutputTypeCountAiRunsArgs
+  auditLogs?: boolean | CompanyCountOutputTypeCountAuditLogsArgs
+  kbArticles?: boolean | CompanyCountOutputTypeCountKbArticlesArgs
+  kbChunks?: boolean | CompanyCountOutputTypeCountKbChunksArgs
+  messageTemplates?: boolean | CompanyCountOutputTypeCountMessageTemplatesArgs
+  settings?: boolean | CompanyCountOutputTypeCountSettingsArgs
+  webhookEvents?: boolean | CompanyCountOutputTypeCountWebhookEventsArgs
 }
 
 /**
@@ -686,6 +2570,90 @@ export type CompanyCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime
   where?: Prisma.SubscriptionWhereInput
 }
 
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountContactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContactWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountContactNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContactNoteWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountConversationTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationTagWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MessageWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountAiRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiRunWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountKbArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbArticleWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountKbChunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbChunkWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountMessageTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MessageTemplateWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SettingWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountWebhookEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WebhookEventWhereInput
+}
+
 
 export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -701,6 +2669,18 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Company$subscriptionsArgs<ExtArgs>
+  contacts?: boolean | Prisma.Company$contactsArgs<ExtArgs>
+  contactNotes?: boolean | Prisma.Company$contactNotesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Company$conversationsArgs<ExtArgs>
+  conversationTags?: boolean | Prisma.Company$conversationTagsArgs<ExtArgs>
+  messages?: boolean | Prisma.Company$messagesArgs<ExtArgs>
+  aiRuns?: boolean | Prisma.Company$aiRunsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
+  kbArticles?: boolean | Prisma.Company$kbArticlesArgs<ExtArgs>
+  kbChunks?: boolean | Prisma.Company$kbChunksArgs<ExtArgs>
+  messageTemplates?: boolean | Prisma.Company$messageTemplatesArgs<ExtArgs>
+  settings?: boolean | Prisma.Company$settingsArgs<ExtArgs>
+  webhookEvents?: boolean | Prisma.Company$webhookEventsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
@@ -750,6 +2730,18 @@ export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Company$subscriptionsArgs<ExtArgs>
+  contacts?: boolean | Prisma.Company$contactsArgs<ExtArgs>
+  contactNotes?: boolean | Prisma.Company$contactNotesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Company$conversationsArgs<ExtArgs>
+  conversationTags?: boolean | Prisma.Company$conversationTagsArgs<ExtArgs>
+  messages?: boolean | Prisma.Company$messagesArgs<ExtArgs>
+  aiRuns?: boolean | Prisma.Company$aiRunsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
+  kbArticles?: boolean | Prisma.Company$kbArticlesArgs<ExtArgs>
+  kbChunks?: boolean | Prisma.Company$kbChunksArgs<ExtArgs>
+  messageTemplates?: boolean | Prisma.Company$messageTemplatesArgs<ExtArgs>
+  settings?: boolean | Prisma.Company$settingsArgs<ExtArgs>
+  webhookEvents?: boolean | Prisma.Company$webhookEventsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -760,6 +2752,18 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     users: Prisma.$UserPayload<ExtArgs>[]
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+    contacts: Prisma.$ContactPayload<ExtArgs>[]
+    contactNotes: Prisma.$ContactNotePayload<ExtArgs>[]
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
+    conversationTags: Prisma.$ConversationTagPayload<ExtArgs>[]
+    messages: Prisma.$MessagePayload<ExtArgs>[]
+    aiRuns: Prisma.$AiRunPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    kbArticles: Prisma.$KbArticlePayload<ExtArgs>[]
+    kbChunks: Prisma.$KbChunkPayload<ExtArgs>[]
+    messageTemplates: Prisma.$MessageTemplatePayload<ExtArgs>[]
+    settings: Prisma.$SettingPayload<ExtArgs>[]
+    webhookEvents: Prisma.$WebhookEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1169,6 +3173,18 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   users<T extends Prisma.Company$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.Company$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contacts<T extends Prisma.Company$contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contactNotes<T extends Prisma.Company$contactNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$contactNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContactNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversations<T extends Prisma.Company$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversationTags<T extends Prisma.Company$conversationTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$conversationTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messages<T extends Prisma.Company$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiRuns<T extends Prisma.Company$aiRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.Company$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  kbArticles<T extends Prisma.Company$kbArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$kbArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  kbChunks<T extends Prisma.Company$kbChunksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$kbChunksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbChunkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messageTemplates<T extends Prisma.Company$messageTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$messageTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  settings<T extends Prisma.Company$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$settingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  webhookEvents<T extends Prisma.Company$webhookEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$webhookEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1647,6 +3663,294 @@ export type Company$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Company.contacts
+ */
+export type Company$contactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contact
+   */
+  select?: Prisma.ContactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contact
+   */
+  omit?: Prisma.ContactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContactInclude<ExtArgs> | null
+  where?: Prisma.ContactWhereInput
+  orderBy?: Prisma.ContactOrderByWithRelationInput | Prisma.ContactOrderByWithRelationInput[]
+  cursor?: Prisma.ContactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContactScalarFieldEnum | Prisma.ContactScalarFieldEnum[]
+}
+
+/**
+ * Company.contactNotes
+ */
+export type Company$contactNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContactNote
+   */
+  select?: Prisma.ContactNoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContactNote
+   */
+  omit?: Prisma.ContactNoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContactNoteInclude<ExtArgs> | null
+  where?: Prisma.ContactNoteWhereInput
+  orderBy?: Prisma.ContactNoteOrderByWithRelationInput | Prisma.ContactNoteOrderByWithRelationInput[]
+  cursor?: Prisma.ContactNoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContactNoteScalarFieldEnum | Prisma.ContactNoteScalarFieldEnum[]
+}
+
+/**
+ * Company.conversations
+ */
+export type Company$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
+}
+
+/**
+ * Company.conversationTags
+ */
+export type Company$conversationTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConversationTag
+   */
+  select?: Prisma.ConversationTagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConversationTag
+   */
+  omit?: Prisma.ConversationTagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationTagInclude<ExtArgs> | null
+  where?: Prisma.ConversationTagWhereInput
+  orderBy?: Prisma.ConversationTagOrderByWithRelationInput | Prisma.ConversationTagOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationTagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationTagScalarFieldEnum | Prisma.ConversationTagScalarFieldEnum[]
+}
+
+/**
+ * Company.messages
+ */
+export type Company$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Message
+   */
+  select?: Prisma.MessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Message
+   */
+  omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  where?: Prisma.MessageWhereInput
+  orderBy?: Prisma.MessageOrderByWithRelationInput | Prisma.MessageOrderByWithRelationInput[]
+  cursor?: Prisma.MessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * Company.aiRuns
+ */
+export type Company$aiRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiRun
+   */
+  select?: Prisma.AiRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiRun
+   */
+  omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  where?: Prisma.AiRunWhereInput
+  orderBy?: Prisma.AiRunOrderByWithRelationInput | Prisma.AiRunOrderByWithRelationInput[]
+  cursor?: Prisma.AiRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiRunScalarFieldEnum | Prisma.AiRunScalarFieldEnum[]
+}
+
+/**
+ * Company.auditLogs
+ */
+export type Company$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * Company.kbArticles
+ */
+export type Company$kbArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbArticle
+   */
+  select?: Prisma.KbArticleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbArticle
+   */
+  omit?: Prisma.KbArticleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbArticleInclude<ExtArgs> | null
+  where?: Prisma.KbArticleWhereInput
+  orderBy?: Prisma.KbArticleOrderByWithRelationInput | Prisma.KbArticleOrderByWithRelationInput[]
+  cursor?: Prisma.KbArticleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbArticleScalarFieldEnum | Prisma.KbArticleScalarFieldEnum[]
+}
+
+/**
+ * Company.kbChunks
+ */
+export type Company$kbChunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbChunk
+   */
+  select?: Prisma.KbChunkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbChunk
+   */
+  omit?: Prisma.KbChunkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbChunkInclude<ExtArgs> | null
+  where?: Prisma.KbChunkWhereInput
+  orderBy?: Prisma.KbChunkOrderByWithRelationInput | Prisma.KbChunkOrderByWithRelationInput[]
+  cursor?: Prisma.KbChunkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbChunkScalarFieldEnum | Prisma.KbChunkScalarFieldEnum[]
+}
+
+/**
+ * Company.messageTemplates
+ */
+export type Company$messageTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MessageTemplate
+   */
+  select?: Prisma.MessageTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MessageTemplate
+   */
+  omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  where?: Prisma.MessageTemplateWhereInput
+  orderBy?: Prisma.MessageTemplateOrderByWithRelationInput | Prisma.MessageTemplateOrderByWithRelationInput[]
+  cursor?: Prisma.MessageTemplateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MessageTemplateScalarFieldEnum | Prisma.MessageTemplateScalarFieldEnum[]
+}
+
+/**
+ * Company.settings
+ */
+export type Company$settingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Setting
+   */
+  select?: Prisma.SettingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Setting
+   */
+  omit?: Prisma.SettingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SettingInclude<ExtArgs> | null
+  where?: Prisma.SettingWhereInput
+  orderBy?: Prisma.SettingOrderByWithRelationInput | Prisma.SettingOrderByWithRelationInput[]
+  cursor?: Prisma.SettingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SettingScalarFieldEnum | Prisma.SettingScalarFieldEnum[]
+}
+
+/**
+ * Company.webhookEvents
+ */
+export type Company$webhookEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WebhookEvent
+   */
+  select?: Prisma.WebhookEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WebhookEvent
+   */
+  omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  where?: Prisma.WebhookEventWhereInput
+  orderBy?: Prisma.WebhookEventOrderByWithRelationInput | Prisma.WebhookEventOrderByWithRelationInput[]
+  cursor?: Prisma.WebhookEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WebhookEventScalarFieldEnum | Prisma.WebhookEventScalarFieldEnum[]
 }
 
 /**

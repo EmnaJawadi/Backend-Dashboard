@@ -1,4 +1,12 @@
-import { IsArray, IsBoolean, IsIn, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsIn,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AiReplyContextItemDto {
@@ -16,7 +24,15 @@ export class AiReplyRequestDto {
 
   @IsOptional()
   @IsString()
+  messageId?: string;
+
+  @IsOptional()
+  @IsString()
   conversationId?: string;
+
+  @IsOptional()
+  @IsString()
+  companyId?: string;
 
   @IsOptional()
   @IsString()
@@ -29,6 +45,18 @@ export class AiReplyRequestDto {
   @IsOptional()
   @IsString()
   channel?: string;
+
+  @IsOptional()
+  @IsIn(['inbound', 'outbound', 'system'])
+  direction?: 'inbound' | 'outbound' | 'system';
+
+  @IsOptional()
+  @IsString()
+  messageType?: string;
+
+  @IsOptional()
+  @IsISO8601()
+  lastCustomerMessageAt?: string;
 
   @IsOptional()
   @IsBoolean()

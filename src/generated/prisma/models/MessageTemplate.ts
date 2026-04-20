@@ -26,6 +26,7 @@ export type AggregateMessageTemplate = {
 
 export type MessageTemplateMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   name: string | null
   language: string | null
   category: string | null
@@ -38,6 +39,7 @@ export type MessageTemplateMinAggregateOutputType = {
 
 export type MessageTemplateMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   name: string | null
   language: string | null
   category: string | null
@@ -50,6 +52,7 @@ export type MessageTemplateMaxAggregateOutputType = {
 
 export type MessageTemplateCountAggregateOutputType = {
   id: number
+  companyId: number
   name: number
   language: number
   category: number
@@ -64,6 +67,7 @@ export type MessageTemplateCountAggregateOutputType = {
 
 export type MessageTemplateMinAggregateInputType = {
   id?: true
+  companyId?: true
   name?: true
   language?: true
   category?: true
@@ -76,6 +80,7 @@ export type MessageTemplateMinAggregateInputType = {
 
 export type MessageTemplateMaxAggregateInputType = {
   id?: true
+  companyId?: true
   name?: true
   language?: true
   category?: true
@@ -88,6 +93,7 @@ export type MessageTemplateMaxAggregateInputType = {
 
 export type MessageTemplateCountAggregateInputType = {
   id?: true
+  companyId?: true
   name?: true
   language?: true
   category?: true
@@ -173,6 +179,7 @@ export type MessageTemplateGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 
 export type MessageTemplateGroupByOutputType = {
   id: string
+  companyId: string | null
   name: string | null
   language: string | null
   category: string | null
@@ -206,6 +213,7 @@ export type MessageTemplateWhereInput = {
   OR?: Prisma.MessageTemplateWhereInput[]
   NOT?: Prisma.MessageTemplateWhereInput | Prisma.MessageTemplateWhereInput[]
   id?: Prisma.StringFilter<"MessageTemplate"> | string
+  companyId?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   name?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   language?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   category?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
@@ -214,10 +222,12 @@ export type MessageTemplateWhereInput = {
   status?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }
 
 export type MessageTemplateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   language?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -226,6 +236,7 @@ export type MessageTemplateOrderByWithRelationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -233,6 +244,7 @@ export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.MessageTemplateWhereInput | Prisma.MessageTemplateWhereInput[]
   OR?: Prisma.MessageTemplateWhereInput[]
   NOT?: Prisma.MessageTemplateWhereInput | Prisma.MessageTemplateWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   name?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   language?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   category?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
@@ -241,10 +253,12 @@ export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }, "id">
 
 export type MessageTemplateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   language?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -263,6 +277,7 @@ export type MessageTemplateScalarWhereWithAggregatesInput = {
   OR?: Prisma.MessageTemplateScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MessageTemplateScalarWhereWithAggregatesInput | Prisma.MessageTemplateScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"MessageTemplate"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
   name?: Prisma.StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
   language?: Prisma.StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
   category?: Prisma.StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
@@ -283,10 +298,12 @@ export type MessageTemplateCreateInput = {
   status?: string | null
   createdAt: Date | string
   updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutMessageTemplatesInput
 }
 
 export type MessageTemplateUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   name?: string | null
   language?: string | null
   category?: string | null
@@ -307,10 +324,12 @@ export type MessageTemplateUpdateInput = {
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutMessageTemplatesNestedInput
 }
 
 export type MessageTemplateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -323,6 +342,7 @@ export type MessageTemplateUncheckedUpdateInput = {
 
 export type MessageTemplateCreateManyInput = {
   id?: string
+  companyId?: string | null
   name?: string | null
   language?: string | null
   category?: string | null
@@ -347,6 +367,7 @@ export type MessageTemplateUpdateManyMutationInput = {
 
 export type MessageTemplateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -357,8 +378,19 @@ export type MessageTemplateUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type MessageTemplateListRelationFilter = {
+  every?: Prisma.MessageTemplateWhereInput
+  some?: Prisma.MessageTemplateWhereInput
+  none?: Prisma.MessageTemplateWhereInput
+}
+
+export type MessageTemplateOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type MessageTemplateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   language?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -371,6 +403,7 @@ export type MessageTemplateCountOrderByAggregateInput = {
 
 export type MessageTemplateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   language?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -383,6 +416,7 @@ export type MessageTemplateMaxOrderByAggregateInput = {
 
 export type MessageTemplateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   language?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -393,10 +427,167 @@ export type MessageTemplateMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type MessageTemplateCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput> | Prisma.MessageTemplateCreateWithoutCompanyInput[] | Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput | Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.MessageTemplateCreateManyCompanyInputEnvelope
+  connect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+}
+
+export type MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput> | Prisma.MessageTemplateCreateWithoutCompanyInput[] | Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput | Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.MessageTemplateCreateManyCompanyInputEnvelope
+  connect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+}
+
+export type MessageTemplateUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput> | Prisma.MessageTemplateCreateWithoutCompanyInput[] | Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput | Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.MessageTemplateUpsertWithWhereUniqueWithoutCompanyInput | Prisma.MessageTemplateUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.MessageTemplateCreateManyCompanyInputEnvelope
+  set?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  disconnect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  delete?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  connect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  update?: Prisma.MessageTemplateUpdateWithWhereUniqueWithoutCompanyInput | Prisma.MessageTemplateUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.MessageTemplateUpdateManyWithWhereWithoutCompanyInput | Prisma.MessageTemplateUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.MessageTemplateScalarWhereInput | Prisma.MessageTemplateScalarWhereInput[]
+}
+
+export type MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput> | Prisma.MessageTemplateCreateWithoutCompanyInput[] | Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput | Prisma.MessageTemplateCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.MessageTemplateUpsertWithWhereUniqueWithoutCompanyInput | Prisma.MessageTemplateUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.MessageTemplateCreateManyCompanyInputEnvelope
+  set?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  disconnect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  delete?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  connect?: Prisma.MessageTemplateWhereUniqueInput | Prisma.MessageTemplateWhereUniqueInput[]
+  update?: Prisma.MessageTemplateUpdateWithWhereUniqueWithoutCompanyInput | Prisma.MessageTemplateUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.MessageTemplateUpdateManyWithWhereWithoutCompanyInput | Prisma.MessageTemplateUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.MessageTemplateScalarWhereInput | Prisma.MessageTemplateScalarWhereInput[]
+}
+
+export type MessageTemplateCreateWithoutCompanyInput = {
+  id?: string
+  name?: string | null
+  language?: string | null
+  category?: string | null
+  templateBody?: string | null
+  providerTemplateId?: string | null
+  status?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type MessageTemplateUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  name?: string | null
+  language?: string | null
+  category?: string | null
+  templateBody?: string | null
+  providerTemplateId?: string | null
+  status?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type MessageTemplateCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.MessageTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput>
+}
+
+export type MessageTemplateCreateManyCompanyInputEnvelope = {
+  data: Prisma.MessageTemplateCreateManyCompanyInput | Prisma.MessageTemplateCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type MessageTemplateUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.MessageTemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.MessageTemplateUpdateWithoutCompanyInput, Prisma.MessageTemplateUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.MessageTemplateCreateWithoutCompanyInput, Prisma.MessageTemplateUncheckedCreateWithoutCompanyInput>
+}
+
+export type MessageTemplateUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.MessageTemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.MessageTemplateUpdateWithoutCompanyInput, Prisma.MessageTemplateUncheckedUpdateWithoutCompanyInput>
+}
+
+export type MessageTemplateUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.MessageTemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.MessageTemplateUpdateManyMutationInput, Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type MessageTemplateScalarWhereInput = {
+  AND?: Prisma.MessageTemplateScalarWhereInput | Prisma.MessageTemplateScalarWhereInput[]
+  OR?: Prisma.MessageTemplateScalarWhereInput[]
+  NOT?: Prisma.MessageTemplateScalarWhereInput | Prisma.MessageTemplateScalarWhereInput[]
+  id?: Prisma.StringFilter<"MessageTemplate"> | string
+  companyId?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  name?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  language?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  category?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  templateBody?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  providerTemplateId?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  status?: Prisma.StringNullableFilter<"MessageTemplate"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"MessageTemplate"> | Date | string
+}
+
+export type MessageTemplateCreateManyCompanyInput = {
+  id?: string
+  name?: string | null
+  language?: string | null
+  category?: string | null
+  templateBody?: string | null
+  providerTemplateId?: string | null
+  status?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type MessageTemplateUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MessageTemplateUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MessageTemplateUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type MessageTemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   name?: boolean
   language?: boolean
   category?: boolean
@@ -405,10 +596,12 @@ export type MessageTemplateSelect<ExtArgs extends runtime.Types.Extensions.Inter
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
 }, ExtArgs["result"]["messageTemplate"]>
 
 export type MessageTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   name?: boolean
   language?: boolean
   category?: boolean
@@ -417,10 +610,12 @@ export type MessageTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
 }, ExtArgs["result"]["messageTemplate"]>
 
 export type MessageTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   name?: boolean
   language?: boolean
   category?: boolean
@@ -429,10 +624,12 @@ export type MessageTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
 }, ExtArgs["result"]["messageTemplate"]>
 
 export type MessageTemplateSelectScalar = {
   id?: boolean
+  companyId?: boolean
   name?: boolean
   language?: boolean
   category?: boolean
@@ -443,13 +640,25 @@ export type MessageTemplateSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MessageTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "language" | "category" | "templateBody" | "providerTemplateId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["messageTemplate"]>
+export type MessageTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "name" | "language" | "category" | "templateBody" | "providerTemplateId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["messageTemplate"]>
+export type MessageTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
+}
+export type MessageTemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
+}
+export type MessageTemplateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.MessageTemplate$companyArgs<ExtArgs>
+}
 
 export type $MessageTemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "MessageTemplate"
-  objects: {}
+  objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     name: string | null
     language: string | null
     category: string | null
@@ -852,6 +1061,7 @@ readonly fields: MessageTemplateFieldRefs;
  */
 export interface Prisma__MessageTemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.MessageTemplate$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MessageTemplate$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -882,6 +1092,7 @@ export interface Prisma__MessageTemplateClient<T, Null = never, ExtArgs extends 
  */
 export interface MessageTemplateFieldRefs {
   readonly id: Prisma.FieldRef<"MessageTemplate", 'String'>
+  readonly companyId: Prisma.FieldRef<"MessageTemplate", 'String'>
   readonly name: Prisma.FieldRef<"MessageTemplate", 'String'>
   readonly language: Prisma.FieldRef<"MessageTemplate", 'String'>
   readonly category: Prisma.FieldRef<"MessageTemplate", 'String'>
@@ -907,6 +1118,10 @@ export type MessageTemplateFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  /**
    * Filter, which MessageTemplate to fetch.
    */
   where: Prisma.MessageTemplateWhereUniqueInput
@@ -925,6 +1140,10 @@ export type MessageTemplateFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  /**
    * Filter, which MessageTemplate to fetch.
    */
   where: Prisma.MessageTemplateWhereUniqueInput
@@ -942,6 +1161,10 @@ export type MessageTemplateFindFirstArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the MessageTemplate
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
   /**
    * Filter, which MessageTemplate to fetch.
    */
@@ -991,6 +1214,10 @@ export type MessageTemplateFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  /**
    * Filter, which MessageTemplate to fetch.
    */
   where?: Prisma.MessageTemplateWhereInput
@@ -1038,6 +1265,10 @@ export type MessageTemplateFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the MessageTemplate
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
   /**
    * Filter, which MessageTemplates to fetch.
    */
@@ -1087,6 +1318,10 @@ export type MessageTemplateCreateArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  /**
    * The data needed to create a MessageTemplate.
    */
   data: Prisma.XOR<Prisma.MessageTemplateCreateInput, Prisma.MessageTemplateUncheckedCreateInput>
@@ -1120,6 +1355,10 @@ export type MessageTemplateCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    */
   data: Prisma.MessageTemplateCreateManyInput | Prisma.MessageTemplateCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1134,6 +1373,10 @@ export type MessageTemplateUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the MessageTemplate
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
   /**
    * The data needed to update a MessageTemplate.
    */
@@ -1186,6 +1429,10 @@ export type MessageTemplateUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
    * Limit how many MessageTemplates to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1200,6 +1447,10 @@ export type MessageTemplateUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the MessageTemplate
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
   /**
    * The filter to search for the MessageTemplate to update in case it exists.
    */
@@ -1227,6 +1478,10 @@ export type MessageTemplateDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
+  /**
    * Filter which MessageTemplate to delete.
    */
   where: Prisma.MessageTemplateWhereUniqueInput
@@ -1247,6 +1502,25 @@ export type MessageTemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
+ * MessageTemplate.company
+ */
+export type MessageTemplate$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
+}
+
+/**
  * MessageTemplate without action
  */
 export type MessageTemplateDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1258,4 +1532,8 @@ export type MessageTemplateDefaultArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the MessageTemplate
    */
   omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
 }

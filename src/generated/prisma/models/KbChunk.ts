@@ -36,6 +36,7 @@ export type KbChunkSumAggregateOutputType = {
 
 export type KbChunkMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   articleId: string | null
   chunkIndex: number | null
   chunkText: string | null
@@ -44,6 +45,7 @@ export type KbChunkMinAggregateOutputType = {
 
 export type KbChunkMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   articleId: string | null
   chunkIndex: number | null
   chunkText: string | null
@@ -52,6 +54,7 @@ export type KbChunkMaxAggregateOutputType = {
 
 export type KbChunkCountAggregateOutputType = {
   id: number
+  companyId: number
   articleId: number
   chunkIndex: number
   chunkText: number
@@ -71,6 +74,7 @@ export type KbChunkSumAggregateInputType = {
 
 export type KbChunkMinAggregateInputType = {
   id?: true
+  companyId?: true
   articleId?: true
   chunkIndex?: true
   chunkText?: true
@@ -79,6 +83,7 @@ export type KbChunkMinAggregateInputType = {
 
 export type KbChunkMaxAggregateInputType = {
   id?: true
+  companyId?: true
   articleId?: true
   chunkIndex?: true
   chunkText?: true
@@ -87,6 +92,7 @@ export type KbChunkMaxAggregateInputType = {
 
 export type KbChunkCountAggregateInputType = {
   id?: true
+  companyId?: true
   articleId?: true
   chunkIndex?: true
   chunkText?: true
@@ -183,6 +189,7 @@ export type KbChunkGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type KbChunkGroupByOutputType = {
   id: string
+  companyId: string | null
   articleId: string
   chunkIndex: number
   chunkText: string | null
@@ -215,22 +222,26 @@ export type KbChunkWhereInput = {
   OR?: Prisma.KbChunkWhereInput[]
   NOT?: Prisma.KbChunkWhereInput | Prisma.KbChunkWhereInput[]
   id?: Prisma.StringFilter<"KbChunk"> | string
+  companyId?: Prisma.StringNullableFilter<"KbChunk"> | string | null
   articleId?: Prisma.StringFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
   metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
   createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
   article?: Prisma.XOR<Prisma.KbArticleScalarRelationFilter, Prisma.KbArticleWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }
 
 export type KbChunkOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrderInput | Prisma.SortOrder
   metadataJson?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   article?: Prisma.KbArticleOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type KbChunkWhereUniqueInput = Prisma.AtLeast<{
@@ -238,16 +249,19 @@ export type KbChunkWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.KbChunkWhereInput | Prisma.KbChunkWhereInput[]
   OR?: Prisma.KbChunkWhereInput[]
   NOT?: Prisma.KbChunkWhereInput | Prisma.KbChunkWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"KbChunk"> | string | null
   articleId?: Prisma.StringFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
   metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
   createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
   article?: Prisma.XOR<Prisma.KbArticleScalarRelationFilter, Prisma.KbArticleWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }, "id">
 
 export type KbChunkOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -265,6 +279,7 @@ export type KbChunkScalarWhereWithAggregatesInput = {
   OR?: Prisma.KbChunkScalarWhereWithAggregatesInput[]
   NOT?: Prisma.KbChunkScalarWhereWithAggregatesInput | Prisma.KbChunkScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"KbChunk"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"KbChunk"> | string | null
   articleId?: Prisma.StringWithAggregatesFilter<"KbChunk"> | string
   chunkIndex?: Prisma.IntWithAggregatesFilter<"KbChunk"> | number
   chunkText?: Prisma.StringNullableWithAggregatesFilter<"KbChunk"> | string | null
@@ -279,10 +294,12 @@ export type KbChunkCreateInput = {
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
   article: Prisma.KbArticleCreateNestedOneWithoutChunksInput
+  company?: Prisma.CompanyCreateNestedOneWithoutKbChunksInput
 }
 
 export type KbChunkUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   articleId: string
   chunkIndex: number
   chunkText?: string | null
@@ -297,10 +314,12 @@ export type KbChunkUpdateInput = {
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   article?: Prisma.KbArticleUpdateOneRequiredWithoutChunksNestedInput
+  company?: Prisma.CompanyUpdateOneWithoutKbChunksNestedInput
 }
 
 export type KbChunkUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -310,6 +329,7 @@ export type KbChunkUncheckedUpdateInput = {
 
 export type KbChunkCreateManyInput = {
   id?: string
+  companyId?: string | null
   articleId: string
   chunkIndex: number
   chunkText?: string | null
@@ -327,6 +347,7 @@ export type KbChunkUpdateManyMutationInput = {
 
 export type KbChunkUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -346,6 +367,7 @@ export type KbChunkOrderByRelationAggregateInput = {
 
 export type KbChunkCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
@@ -359,6 +381,7 @@ export type KbChunkAvgOrderByAggregateInput = {
 
 export type KbChunkMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
@@ -367,6 +390,7 @@ export type KbChunkMaxOrderByAggregateInput = {
 
 export type KbChunkMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   articleId?: Prisma.SortOrder
   chunkIndex?: Prisma.SortOrder
   chunkText?: Prisma.SortOrder
@@ -375,6 +399,48 @@ export type KbChunkMinOrderByAggregateInput = {
 
 export type KbChunkSumOrderByAggregateInput = {
   chunkIndex?: Prisma.SortOrder
+}
+
+export type KbChunkCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput> | Prisma.KbChunkCreateWithoutCompanyInput[] | Prisma.KbChunkUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbChunkCreateOrConnectWithoutCompanyInput | Prisma.KbChunkCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.KbChunkCreateManyCompanyInputEnvelope
+  connect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+}
+
+export type KbChunkUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput> | Prisma.KbChunkCreateWithoutCompanyInput[] | Prisma.KbChunkUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbChunkCreateOrConnectWithoutCompanyInput | Prisma.KbChunkCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.KbChunkCreateManyCompanyInputEnvelope
+  connect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+}
+
+export type KbChunkUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput> | Prisma.KbChunkCreateWithoutCompanyInput[] | Prisma.KbChunkUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbChunkCreateOrConnectWithoutCompanyInput | Prisma.KbChunkCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.KbChunkUpsertWithWhereUniqueWithoutCompanyInput | Prisma.KbChunkUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.KbChunkCreateManyCompanyInputEnvelope
+  set?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  disconnect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  delete?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  connect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  update?: Prisma.KbChunkUpdateWithWhereUniqueWithoutCompanyInput | Prisma.KbChunkUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.KbChunkUpdateManyWithWhereWithoutCompanyInput | Prisma.KbChunkUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
+}
+
+export type KbChunkUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput> | Prisma.KbChunkCreateWithoutCompanyInput[] | Prisma.KbChunkUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbChunkCreateOrConnectWithoutCompanyInput | Prisma.KbChunkCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.KbChunkUpsertWithWhereUniqueWithoutCompanyInput | Prisma.KbChunkUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.KbChunkCreateManyCompanyInputEnvelope
+  set?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  disconnect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  delete?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  connect?: Prisma.KbChunkWhereUniqueInput | Prisma.KbChunkWhereUniqueInput[]
+  update?: Prisma.KbChunkUpdateWithWhereUniqueWithoutCompanyInput | Prisma.KbChunkUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.KbChunkUpdateManyWithWhereWithoutCompanyInput | Prisma.KbChunkUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
 }
 
 export type KbChunkCreateNestedManyWithoutArticleInput = {
@@ -427,16 +493,75 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type KbChunkCreateWithoutArticleInput = {
+export type KbChunkCreateWithoutCompanyInput = {
   id?: string
+  chunkIndex: number
+  chunkText?: string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+  article: Prisma.KbArticleCreateNestedOneWithoutChunksInput
+}
+
+export type KbChunkUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  articleId: string
   chunkIndex: number
   chunkText?: string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
 }
 
+export type KbChunkCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.KbChunkWhereUniqueInput
+  create: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput>
+}
+
+export type KbChunkCreateManyCompanyInputEnvelope = {
+  data: Prisma.KbChunkCreateManyCompanyInput | Prisma.KbChunkCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type KbChunkUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.KbChunkWhereUniqueInput
+  update: Prisma.XOR<Prisma.KbChunkUpdateWithoutCompanyInput, Prisma.KbChunkUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.KbChunkCreateWithoutCompanyInput, Prisma.KbChunkUncheckedCreateWithoutCompanyInput>
+}
+
+export type KbChunkUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.KbChunkWhereUniqueInput
+  data: Prisma.XOR<Prisma.KbChunkUpdateWithoutCompanyInput, Prisma.KbChunkUncheckedUpdateWithoutCompanyInput>
+}
+
+export type KbChunkUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.KbChunkScalarWhereInput
+  data: Prisma.XOR<Prisma.KbChunkUpdateManyMutationInput, Prisma.KbChunkUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type KbChunkScalarWhereInput = {
+  AND?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
+  OR?: Prisma.KbChunkScalarWhereInput[]
+  NOT?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
+  id?: Prisma.StringFilter<"KbChunk"> | string
+  companyId?: Prisma.StringNullableFilter<"KbChunk"> | string | null
+  articleId?: Prisma.StringFilter<"KbChunk"> | string
+  chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
+  chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
+  metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
+  createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
+}
+
+export type KbChunkCreateWithoutArticleInput = {
+  id?: string
+  chunkIndex: number
+  chunkText?: string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutKbChunksInput
+}
+
 export type KbChunkUncheckedCreateWithoutArticleInput = {
   id?: string
+  companyId?: string | null
   chunkIndex: number
   chunkText?: string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -469,20 +594,45 @@ export type KbChunkUpdateManyWithWhereWithoutArticleInput = {
   data: Prisma.XOR<Prisma.KbChunkUpdateManyMutationInput, Prisma.KbChunkUncheckedUpdateManyWithoutArticleInput>
 }
 
-export type KbChunkScalarWhereInput = {
-  AND?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
-  OR?: Prisma.KbChunkScalarWhereInput[]
-  NOT?: Prisma.KbChunkScalarWhereInput | Prisma.KbChunkScalarWhereInput[]
-  id?: Prisma.StringFilter<"KbChunk"> | string
-  articleId?: Prisma.StringFilter<"KbChunk"> | string
-  chunkIndex?: Prisma.IntFilter<"KbChunk"> | number
-  chunkText?: Prisma.StringNullableFilter<"KbChunk"> | string | null
-  metadataJson?: Prisma.JsonNullableFilter<"KbChunk">
-  createdAt?: Prisma.DateTimeFilter<"KbChunk"> | Date | string
+export type KbChunkCreateManyCompanyInput = {
+  id?: string
+  articleId: string
+  chunkIndex: number
+  chunkText?: string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type KbChunkUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  article?: Prisma.KbArticleUpdateOneRequiredWithoutChunksNestedInput
+}
+
+export type KbChunkUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  articleId?: Prisma.StringFieldUpdateOperationsInput | string
+  chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type KbChunkUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  articleId?: Prisma.StringFieldUpdateOperationsInput | string
+  chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type KbChunkCreateManyArticleInput = {
   id?: string
+  companyId?: string | null
   chunkIndex: number
   chunkText?: string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -495,10 +645,12 @@ export type KbChunkUpdateWithoutArticleInput = {
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutKbChunksNestedInput
 }
 
 export type KbChunkUncheckedUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -507,6 +659,7 @@ export type KbChunkUncheckedUpdateWithoutArticleInput = {
 
 export type KbChunkUncheckedUpdateManyWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkIndex?: Prisma.IntFieldUpdateOperationsInput | number
   chunkText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadataJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -517,36 +670,43 @@ export type KbChunkUncheckedUpdateManyWithoutArticleInput = {
 
 export type KbChunkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }, ExtArgs["result"]["kbChunk"]>
 
 export type KbChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }, ExtArgs["result"]["kbChunk"]>
 
 export type KbChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
   metadataJson?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }, ExtArgs["result"]["kbChunk"]>
 
 export type KbChunkSelectScalar = {
   id?: boolean
+  companyId?: boolean
   articleId?: boolean
   chunkIndex?: boolean
   chunkText?: boolean
@@ -554,24 +714,29 @@ export type KbChunkSelectScalar = {
   createdAt?: boolean
 }
 
-export type KbChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "chunkIndex" | "chunkText" | "metadataJson" | "createdAt", ExtArgs["result"]["kbChunk"]>
+export type KbChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "articleId" | "chunkIndex" | "chunkText" | "metadataJson" | "createdAt", ExtArgs["result"]["kbChunk"]>
 export type KbChunkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }
 export type KbChunkIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }
 export type KbChunkIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.KbArticleDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.KbChunk$companyArgs<ExtArgs>
 }
 
 export type $KbChunkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "KbChunk"
   objects: {
     article: Prisma.$KbArticlePayload<ExtArgs>
+    company: Prisma.$CompanyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     articleId: string
     chunkIndex: number
     chunkText: string | null
@@ -972,6 +1137,7 @@ readonly fields: KbChunkFieldRefs;
 export interface Prisma__KbChunkClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   article<T extends Prisma.KbArticleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KbArticleDefaultArgs<ExtArgs>>): Prisma.Prisma__KbArticleClient<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.KbChunk$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KbChunk$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1002,6 +1168,7 @@ export interface Prisma__KbChunkClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface KbChunkFieldRefs {
   readonly id: Prisma.FieldRef<"KbChunk", 'String'>
+  readonly companyId: Prisma.FieldRef<"KbChunk", 'String'>
   readonly articleId: Prisma.FieldRef<"KbChunk", 'String'>
   readonly chunkIndex: Prisma.FieldRef<"KbChunk", 'Int'>
   readonly chunkText: Prisma.FieldRef<"KbChunk", 'String'>
@@ -1405,6 +1572,25 @@ export type KbChunkDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many KbChunks to delete.
    */
   limit?: number
+}
+
+/**
+ * KbChunk.company
+ */
+export type KbChunk$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
 }
 
 /**

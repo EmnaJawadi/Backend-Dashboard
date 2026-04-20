@@ -3,6 +3,14 @@ export type WhatsappSendTextMessageInput = {
   text: string;
 };
 
+export type WhatsappSendTemplateMessageInput = {
+  to: string;
+  templateName: string;
+  language?: string;
+  parameters?: string[];
+  variables?: Record<string, string>;
+};
+
 export type WhatsappSendMediaMessageInput = {
   to: string;
   mediaUrl: string;

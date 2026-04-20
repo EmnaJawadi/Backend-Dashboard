@@ -112,6 +112,7 @@ export class ConversationsService {
         handoffRequired: status === 'human_assigned',
         unreadCount: 0,
         lastMessageAt: createConversationDto.lastMessage ? now : null,
+        lastCustomerMessageAt: createConversationDto.lastMessage ? now : null,
         createdAt: now,
         updatedAt: now,
         messages: createConversationDto.lastMessage
@@ -315,6 +316,15 @@ export class ConversationsService {
           deliveryStatus: 'sent',
           createdAt: now,
           messageTimestamp: now,
+        },
+      });
+
+      await this.prisma.conversation.update({
+        where: { id },
+        data: {
+          lastMessageAt: now,
+          lastHumanMessageAt: now,
+          updatedAt: now,
         },
       });
     }

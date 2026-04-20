@@ -18,6 +18,7 @@ export class MessagesService {
       senderId: createMessageDto.senderId ?? null,
       content: createMessageDto.content,
       type: createMessageDto.type ?? 'text',
+      templateName: createMessageDto.templateName ?? null,
       status: createMessageDto.status ?? 'sent',
       isFromCustomer: createMessageDto.isFromCustomer ?? false,
     });
@@ -46,6 +47,7 @@ export class MessagesService {
       senderId: sendMessageDto.senderId ?? null,
       content: sendMessageDto.content,
       type: sendMessageDto.type ?? 'text',
+      templateName: sendMessageDto.templateName ?? null,
       status: 'sent',
       isFromCustomer: false,
     });

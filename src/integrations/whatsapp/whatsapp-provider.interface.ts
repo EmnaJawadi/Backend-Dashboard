@@ -3,6 +3,7 @@ import { EvolutionApiClient } from './evolution-api.client';
 import {
   WhatsappSendMediaMessageInput,
   WhatsappSendMessageResult,
+  WhatsappSendTemplateMessageInput,
   WhatsappSendTextMessageInput,
 } from './whatsapp.types';
 
@@ -16,6 +17,25 @@ export class WhatsappProviderService {
     const raw = await this.evolutionApiClient.sendTextMessage({
       to: input.to,
       text: input.text,
+    });
+
+    return {
+      success: true,
+      provider: 'evolution',
+      messageId: this.extractMessageId(raw),
+      raw,
+    };
+  }
+
+  async sendTemplateMessage(
+    input: WhatsappSendTemplateMessageInput,
+  ): Promise<WhatsappSendMessageResult> {
+    const raw = await this.evolutionApiClient.sendTemplateMessage({
+      to: input.to,
+      templateName: input.templateName,
+      language: input.language,
+      parameters: input.parameters,
+      variables: input.variables,
     });
 
     return {

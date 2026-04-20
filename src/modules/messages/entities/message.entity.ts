@@ -1,5 +1,11 @@
 export type MessageSenderType = 'customer' | 'agent' | 'bot' | 'system';
-export type MessageType = 'text' | 'image' | 'audio' | 'document' | 'video';
+export type MessageType =
+  | 'text'
+  | 'template'
+  | 'image'
+  | 'audio'
+  | 'document'
+  | 'video';
 export type MessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
 export class MessageEntity {
@@ -9,6 +15,7 @@ export class MessageEntity {
   senderId?: string | null;
   content!: string;
   type!: MessageType;
+  templateName?: string | null;
   status!: MessageStatus;
   isFromCustomer!: boolean;
   createdAt!: Date;

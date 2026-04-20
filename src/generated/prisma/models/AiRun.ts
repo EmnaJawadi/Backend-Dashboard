@@ -42,6 +42,7 @@ export type AiRunSumAggregateOutputType = {
 
 export type AiRunMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   conversationId: string | null
   messageId: string | null
   inputText: string | null
@@ -58,6 +59,7 @@ export type AiRunMinAggregateOutputType = {
 
 export type AiRunMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   conversationId: string | null
   messageId: string | null
   inputText: string | null
@@ -74,6 +76,7 @@ export type AiRunMaxAggregateOutputType = {
 
 export type AiRunCountAggregateOutputType = {
   id: number
+  companyId: number
   conversationId: number
   messageId: number
   inputText: number
@@ -108,6 +111,7 @@ export type AiRunSumAggregateInputType = {
 
 export type AiRunMinAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   messageId?: true
   inputText?: true
@@ -124,6 +128,7 @@ export type AiRunMinAggregateInputType = {
 
 export type AiRunMaxAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   messageId?: true
   inputText?: true
@@ -140,6 +145,7 @@ export type AiRunMaxAggregateInputType = {
 
 export type AiRunCountAggregateInputType = {
   id?: true
+  companyId?: true
   conversationId?: true
   messageId?: true
   inputText?: true
@@ -245,6 +251,7 @@ export type AiRunGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type AiRunGroupByOutputType = {
   id: string
+  companyId: string | null
   conversationId: string
   messageId: string
   inputText: string | null
@@ -286,6 +293,7 @@ export type AiRunWhereInput = {
   OR?: Prisma.AiRunWhereInput[]
   NOT?: Prisma.AiRunWhereInput | Prisma.AiRunWhereInput[]
   id?: Prisma.StringFilter<"AiRun"> | string
+  companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringFilter<"AiRun"> | string
   messageId?: Prisma.StringFilter<"AiRun"> | string
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
@@ -300,10 +308,12 @@ export type AiRunWhereInput = {
   tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableFilter<"AiRun">
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }
 
 export type AiRunOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -318,6 +328,7 @@ export type AiRunOrderByWithRelationInput = {
   tagsToApply?: Prisma.SortOrderInput | Prisma.SortOrder
   rawResponse?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type AiRunWhereUniqueInput = Prisma.AtLeast<{
@@ -325,6 +336,7 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.AiRunWhereInput | Prisma.AiRunWhereInput[]
   OR?: Prisma.AiRunWhereInput[]
   NOT?: Prisma.AiRunWhereInput | Prisma.AiRunWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringFilter<"AiRun"> | string
   messageId?: Prisma.StringFilter<"AiRun"> | string
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
@@ -339,10 +351,12 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableFilter<"AiRun">
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }, "id">
 
 export type AiRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -369,6 +383,7 @@ export type AiRunScalarWhereWithAggregatesInput = {
   OR?: Prisma.AiRunScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AiRunScalarWhereWithAggregatesInput | Prisma.AiRunScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
   messageId?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
   inputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
@@ -401,10 +416,12 @@ export type AiRunCreateInput = {
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   conversationId: string
   messageId: string
   inputText?: string | null
@@ -437,10 +454,12 @@ export type AiRunUpdateInput = {
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -459,6 +478,7 @@ export type AiRunUncheckedUpdateInput = {
 
 export type AiRunCreateManyInput = {
   id?: string
+  companyId?: string | null
   conversationId: string
   messageId: string
   inputText?: string | null
@@ -495,6 +515,7 @@ export type AiRunUpdateManyMutationInput = {
 
 export type AiRunUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -511,8 +532,19 @@ export type AiRunUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type AiRunListRelationFilter = {
+  every?: Prisma.AiRunWhereInput
+  some?: Prisma.AiRunWhereInput
+  none?: Prisma.AiRunWhereInput
+}
+
+export type AiRunOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type AiRunCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
@@ -538,6 +570,7 @@ export type AiRunAvgOrderByAggregateInput = {
 
 export type AiRunMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
@@ -554,6 +587,7 @@ export type AiRunMaxOrderByAggregateInput = {
 
 export type AiRunMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
@@ -575,10 +609,209 @@ export type AiRunSumOrderByAggregateInput = {
   latencyMs?: Prisma.SortOrder
 }
 
+export type AiRunCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput> | Prisma.AiRunCreateWithoutCompanyInput[] | Prisma.AiRunUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutCompanyInput | Prisma.AiRunCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.AiRunCreateManyCompanyInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput> | Prisma.AiRunCreateWithoutCompanyInput[] | Prisma.AiRunUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutCompanyInput | Prisma.AiRunCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.AiRunCreateManyCompanyInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput> | Prisma.AiRunCreateWithoutCompanyInput[] | Prisma.AiRunUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutCompanyInput | Prisma.AiRunCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutCompanyInput | Prisma.AiRunUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.AiRunCreateManyCompanyInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput | Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput | Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput> | Prisma.AiRunCreateWithoutCompanyInput[] | Prisma.AiRunUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutCompanyInput | Prisma.AiRunCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutCompanyInput | Prisma.AiRunUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.AiRunCreateManyCompanyInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput | Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput | Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunCreateWithoutCompanyInput = {
+  id?: string
+  conversationId: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  model?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  conversationId: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  model?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput>
+}
+
+export type AiRunCreateManyCompanyInputEnvelope = {
+  data: Prisma.AiRunCreateManyCompanyInput | Prisma.AiRunCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiRunUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiRunUpdateWithoutCompanyInput, Prisma.AiRunUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutCompanyInput, Prisma.AiRunUncheckedCreateWithoutCompanyInput>
+}
+
+export type AiRunUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiRunUpdateWithoutCompanyInput, Prisma.AiRunUncheckedUpdateWithoutCompanyInput>
+}
+
+export type AiRunUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.AiRunScalarWhereInput
+  data: Prisma.XOR<Prisma.AiRunUpdateManyMutationInput, Prisma.AiRunUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type AiRunScalarWhereInput = {
+  AND?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+  OR?: Prisma.AiRunScalarWhereInput[]
+  NOT?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+  id?: Prisma.StringFilter<"AiRun"> | string
+  companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  conversationId?: Prisma.StringFilter<"AiRun"> | string
+  messageId?: Prisma.StringFilter<"AiRun"> | string
+  inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  latencyMs?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  handoffRequired?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
+  rawResponse?: Prisma.JsonNullableFilter<"AiRun">
+  createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
+}
+
+export type AiRunCreateManyCompanyInput = {
+  id?: string
+  conversationId: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  model?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
   inputText?: boolean
@@ -593,10 +826,12 @@ export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
   inputText?: boolean
@@ -611,10 +846,12 @@ export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
   inputText?: boolean
@@ -629,10 +866,12 @@ export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectScalar = {
   id?: boolean
+  companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
   inputText?: boolean
@@ -649,13 +888,25 @@ export type AiRunSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "messageId" | "inputText" | "outputText" | "intent" | "model" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
+export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "inputText" | "outputText" | "intent" | "model" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
+export type AiRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+}
+export type AiRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+}
+export type AiRunIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+}
 
 export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AiRun"
-  objects: {}
+  objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     conversationId: string
     messageId: string
     inputText: string | null
@@ -1064,6 +1315,7 @@ readonly fields: AiRunFieldRefs;
  */
 export interface Prisma__AiRunClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.AiRun$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1094,6 +1346,7 @@ export interface Prisma__AiRunClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface AiRunFieldRefs {
   readonly id: Prisma.FieldRef<"AiRun", 'String'>
+  readonly companyId: Prisma.FieldRef<"AiRun", 'String'>
   readonly conversationId: Prisma.FieldRef<"AiRun", 'String'>
   readonly messageId: Prisma.FieldRef<"AiRun", 'String'>
   readonly inputText: Prisma.FieldRef<"AiRun", 'String'>
@@ -1125,6 +1378,10 @@ export type AiRunFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  /**
    * Filter, which AiRun to fetch.
    */
   where: Prisma.AiRunWhereUniqueInput
@@ -1143,6 +1400,10 @@ export type AiRunFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  /**
    * Filter, which AiRun to fetch.
    */
   where: Prisma.AiRunWhereUniqueInput
@@ -1160,6 +1421,10 @@ export type AiRunFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the AiRun
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
   /**
    * Filter, which AiRun to fetch.
    */
@@ -1209,6 +1474,10 @@ export type AiRunFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  /**
    * Filter, which AiRun to fetch.
    */
   where?: Prisma.AiRunWhereInput
@@ -1256,6 +1525,10 @@ export type AiRunFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the AiRun
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
   /**
    * Filter, which AiRuns to fetch.
    */
@@ -1305,6 +1578,10 @@ export type AiRunCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  /**
    * The data needed to create a AiRun.
    */
   data: Prisma.XOR<Prisma.AiRunCreateInput, Prisma.AiRunUncheckedCreateInput>
@@ -1338,6 +1615,10 @@ export type AiRunCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.AiRunCreateManyInput | Prisma.AiRunCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1352,6 +1633,10 @@ export type AiRunUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the AiRun
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
   /**
    * The data needed to update a AiRun.
    */
@@ -1404,6 +1689,10 @@ export type AiRunUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many AiRuns to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1418,6 +1707,10 @@ export type AiRunUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the AiRun
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
   /**
    * The filter to search for the AiRun to update in case it exists.
    */
@@ -1445,6 +1738,10 @@ export type AiRunDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  /**
    * Filter which AiRun to delete.
    */
   where: Prisma.AiRunWhereUniqueInput
@@ -1465,6 +1762,25 @@ export type AiRunDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * AiRun.company
+ */
+export type AiRun$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
+}
+
+/**
  * AiRun without action
  */
 export type AiRunDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1476,4 +1792,8 @@ export type AiRunDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the AiRun
    */
   omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
 }

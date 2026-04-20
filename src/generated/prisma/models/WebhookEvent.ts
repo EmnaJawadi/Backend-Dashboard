@@ -26,6 +26,7 @@ export type AggregateWebhookEvent = {
 
 export type WebhookEventMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   provider: string | null
   eventType: string | null
   externalEventId: string | null
@@ -37,6 +38,7 @@ export type WebhookEventMinAggregateOutputType = {
 
 export type WebhookEventMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   provider: string | null
   eventType: string | null
   externalEventId: string | null
@@ -48,6 +50,7 @@ export type WebhookEventMaxAggregateOutputType = {
 
 export type WebhookEventCountAggregateOutputType = {
   id: number
+  companyId: number
   provider: number
   eventType: number
   externalEventId: number
@@ -62,6 +65,7 @@ export type WebhookEventCountAggregateOutputType = {
 
 export type WebhookEventMinAggregateInputType = {
   id?: true
+  companyId?: true
   provider?: true
   eventType?: true
   externalEventId?: true
@@ -73,6 +77,7 @@ export type WebhookEventMinAggregateInputType = {
 
 export type WebhookEventMaxAggregateInputType = {
   id?: true
+  companyId?: true
   provider?: true
   eventType?: true
   externalEventId?: true
@@ -84,6 +89,7 @@ export type WebhookEventMaxAggregateInputType = {
 
 export type WebhookEventCountAggregateInputType = {
   id?: true
+  companyId?: true
   provider?: true
   eventType?: true
   externalEventId?: true
@@ -169,6 +175,7 @@ export type WebhookEventGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type WebhookEventGroupByOutputType = {
   id: string
+  companyId: string | null
   provider: string | null
   eventType: string | null
   externalEventId: string | null
@@ -202,6 +209,7 @@ export type WebhookEventWhereInput = {
   OR?: Prisma.WebhookEventWhereInput[]
   NOT?: Prisma.WebhookEventWhereInput | Prisma.WebhookEventWhereInput[]
   id?: Prisma.StringFilter<"WebhookEvent"> | string
+  companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
@@ -210,10 +218,12 @@ export type WebhookEventWhereInput = {
   errorMessage?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   receivedAt?: Prisma.DateTimeFilter<"WebhookEvent"> | Date | string
   processedAt?: Prisma.DateTimeNullableFilter<"WebhookEvent"> | Date | string | null
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }
 
 export type WebhookEventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrderInput | Prisma.SortOrder
   externalEventId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -222,6 +232,7 @@ export type WebhookEventOrderByWithRelationInput = {
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type WebhookEventWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +240,7 @@ export type WebhookEventWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.WebhookEventWhereInput | Prisma.WebhookEventWhereInput[]
   OR?: Prisma.WebhookEventWhereInput[]
   NOT?: Prisma.WebhookEventWhereInput | Prisma.WebhookEventWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
@@ -237,10 +249,12 @@ export type WebhookEventWhereUniqueInput = Prisma.AtLeast<{
   errorMessage?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   receivedAt?: Prisma.DateTimeFilter<"WebhookEvent"> | Date | string
   processedAt?: Prisma.DateTimeNullableFilter<"WebhookEvent"> | Date | string | null
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
 }, "id">
 
 export type WebhookEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrderInput | Prisma.SortOrder
   externalEventId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -259,6 +273,7 @@ export type WebhookEventScalarWhereWithAggregatesInput = {
   OR?: Prisma.WebhookEventScalarWhereWithAggregatesInput[]
   NOT?: Prisma.WebhookEventScalarWhereWithAggregatesInput | Prisma.WebhookEventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"WebhookEvent"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
@@ -279,10 +294,12 @@ export type WebhookEventCreateInput = {
   errorMessage?: string | null
   receivedAt: Date | string
   processedAt?: Date | string | null
+  company?: Prisma.CompanyCreateNestedOneWithoutWebhookEventsInput
 }
 
 export type WebhookEventUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   provider?: string | null
   eventType?: string | null
   externalEventId?: string | null
@@ -303,10 +320,12 @@ export type WebhookEventUpdateInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  company?: Prisma.CompanyUpdateOneWithoutWebhookEventsNestedInput
 }
 
 export type WebhookEventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -319,6 +338,7 @@ export type WebhookEventUncheckedUpdateInput = {
 
 export type WebhookEventCreateManyInput = {
   id?: string
+  companyId?: string | null
   provider?: string | null
   eventType?: string | null
   externalEventId?: string | null
@@ -343,6 +363,7 @@ export type WebhookEventUpdateManyMutationInput = {
 
 export type WebhookEventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -353,8 +374,19 @@ export type WebhookEventUncheckedUpdateManyInput = {
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+export type WebhookEventListRelationFilter = {
+  every?: Prisma.WebhookEventWhereInput
+  some?: Prisma.WebhookEventWhereInput
+  none?: Prisma.WebhookEventWhereInput
+}
+
+export type WebhookEventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type WebhookEventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
@@ -367,6 +399,7 @@ export type WebhookEventCountOrderByAggregateInput = {
 
 export type WebhookEventMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
@@ -378,6 +411,7 @@ export type WebhookEventMaxOrderByAggregateInput = {
 
 export type WebhookEventMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
@@ -387,10 +421,167 @@ export type WebhookEventMinOrderByAggregateInput = {
   processedAt?: Prisma.SortOrder
 }
 
+export type WebhookEventCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput> | Prisma.WebhookEventCreateWithoutCompanyInput[] | Prisma.WebhookEventUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.WebhookEventCreateOrConnectWithoutCompanyInput | Prisma.WebhookEventCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.WebhookEventCreateManyCompanyInputEnvelope
+  connect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+}
+
+export type WebhookEventUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput> | Prisma.WebhookEventCreateWithoutCompanyInput[] | Prisma.WebhookEventUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.WebhookEventCreateOrConnectWithoutCompanyInput | Prisma.WebhookEventCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.WebhookEventCreateManyCompanyInputEnvelope
+  connect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+}
+
+export type WebhookEventUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput> | Prisma.WebhookEventCreateWithoutCompanyInput[] | Prisma.WebhookEventUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.WebhookEventCreateOrConnectWithoutCompanyInput | Prisma.WebhookEventCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.WebhookEventUpsertWithWhereUniqueWithoutCompanyInput | Prisma.WebhookEventUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.WebhookEventCreateManyCompanyInputEnvelope
+  set?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  disconnect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  delete?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  connect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  update?: Prisma.WebhookEventUpdateWithWhereUniqueWithoutCompanyInput | Prisma.WebhookEventUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.WebhookEventUpdateManyWithWhereWithoutCompanyInput | Prisma.WebhookEventUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.WebhookEventScalarWhereInput | Prisma.WebhookEventScalarWhereInput[]
+}
+
+export type WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput> | Prisma.WebhookEventCreateWithoutCompanyInput[] | Prisma.WebhookEventUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.WebhookEventCreateOrConnectWithoutCompanyInput | Prisma.WebhookEventCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.WebhookEventUpsertWithWhereUniqueWithoutCompanyInput | Prisma.WebhookEventUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.WebhookEventCreateManyCompanyInputEnvelope
+  set?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  disconnect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  delete?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  connect?: Prisma.WebhookEventWhereUniqueInput | Prisma.WebhookEventWhereUniqueInput[]
+  update?: Prisma.WebhookEventUpdateWithWhereUniqueWithoutCompanyInput | Prisma.WebhookEventUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.WebhookEventUpdateManyWithWhereWithoutCompanyInput | Prisma.WebhookEventUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.WebhookEventScalarWhereInput | Prisma.WebhookEventScalarWhereInput[]
+}
+
+export type WebhookEventCreateWithoutCompanyInput = {
+  id?: string
+  provider?: string | null
+  eventType?: string | null
+  externalEventId?: string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: string | null
+  errorMessage?: string | null
+  receivedAt: Date | string
+  processedAt?: Date | string | null
+}
+
+export type WebhookEventUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  provider?: string | null
+  eventType?: string | null
+  externalEventId?: string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: string | null
+  errorMessage?: string | null
+  receivedAt: Date | string
+  processedAt?: Date | string | null
+}
+
+export type WebhookEventCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.WebhookEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput>
+}
+
+export type WebhookEventCreateManyCompanyInputEnvelope = {
+  data: Prisma.WebhookEventCreateManyCompanyInput | Prisma.WebhookEventCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type WebhookEventUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.WebhookEventWhereUniqueInput
+  update: Prisma.XOR<Prisma.WebhookEventUpdateWithoutCompanyInput, Prisma.WebhookEventUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.WebhookEventCreateWithoutCompanyInput, Prisma.WebhookEventUncheckedCreateWithoutCompanyInput>
+}
+
+export type WebhookEventUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.WebhookEventWhereUniqueInput
+  data: Prisma.XOR<Prisma.WebhookEventUpdateWithoutCompanyInput, Prisma.WebhookEventUncheckedUpdateWithoutCompanyInput>
+}
+
+export type WebhookEventUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.WebhookEventScalarWhereInput
+  data: Prisma.XOR<Prisma.WebhookEventUpdateManyMutationInput, Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type WebhookEventScalarWhereInput = {
+  AND?: Prisma.WebhookEventScalarWhereInput | Prisma.WebhookEventScalarWhereInput[]
+  OR?: Prisma.WebhookEventScalarWhereInput[]
+  NOT?: Prisma.WebhookEventScalarWhereInput | Prisma.WebhookEventScalarWhereInput[]
+  id?: Prisma.StringFilter<"WebhookEvent"> | string
+  companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  payload?: Prisma.JsonNullableFilter<"WebhookEvent">
+  processingStatus?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  receivedAt?: Prisma.DateTimeFilter<"WebhookEvent"> | Date | string
+  processedAt?: Prisma.DateTimeNullableFilter<"WebhookEvent"> | Date | string | null
+}
+
+export type WebhookEventCreateManyCompanyInput = {
+  id?: string
+  provider?: string | null
+  eventType?: string | null
+  externalEventId?: string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: string | null
+  errorMessage?: string | null
+  receivedAt: Date | string
+  processedAt?: Date | string | null
+}
+
+export type WebhookEventUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type WebhookEventUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type WebhookEventUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 
 
 export type WebhookEventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   provider?: boolean
   eventType?: boolean
   externalEventId?: boolean
@@ -399,10 +590,12 @@ export type WebhookEventSelect<ExtArgs extends runtime.Types.Extensions.Internal
   errorMessage?: boolean
   receivedAt?: boolean
   processedAt?: boolean
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
 }, ExtArgs["result"]["webhookEvent"]>
 
 export type WebhookEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   provider?: boolean
   eventType?: boolean
   externalEventId?: boolean
@@ -411,10 +604,12 @@ export type WebhookEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   errorMessage?: boolean
   receivedAt?: boolean
   processedAt?: boolean
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
 }, ExtArgs["result"]["webhookEvent"]>
 
 export type WebhookEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   provider?: boolean
   eventType?: boolean
   externalEventId?: boolean
@@ -423,10 +618,12 @@ export type WebhookEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   errorMessage?: boolean
   receivedAt?: boolean
   processedAt?: boolean
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
 }, ExtArgs["result"]["webhookEvent"]>
 
 export type WebhookEventSelectScalar = {
   id?: boolean
+  companyId?: boolean
   provider?: boolean
   eventType?: boolean
   externalEventId?: boolean
@@ -437,13 +634,25 @@ export type WebhookEventSelectScalar = {
   processedAt?: boolean
 }
 
-export type WebhookEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "provider" | "eventType" | "externalEventId" | "payload" | "processingStatus" | "errorMessage" | "receivedAt" | "processedAt", ExtArgs["result"]["webhookEvent"]>
+export type WebhookEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "provider" | "eventType" | "externalEventId" | "payload" | "processingStatus" | "errorMessage" | "receivedAt" | "processedAt", ExtArgs["result"]["webhookEvent"]>
+export type WebhookEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
+}
+export type WebhookEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
+}
+export type WebhookEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
+}
 
 export type $WebhookEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WebhookEvent"
-  objects: {}
+  objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     provider: string | null
     eventType: string | null
     externalEventId: string | null
@@ -846,6 +1055,7 @@ readonly fields: WebhookEventFieldRefs;
  */
 export interface Prisma__WebhookEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.WebhookEvent$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WebhookEvent$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -876,6 +1086,7 @@ export interface Prisma__WebhookEventClient<T, Null = never, ExtArgs extends run
  */
 export interface WebhookEventFieldRefs {
   readonly id: Prisma.FieldRef<"WebhookEvent", 'String'>
+  readonly companyId: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly provider: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly eventType: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly externalEventId: Prisma.FieldRef<"WebhookEvent", 'String'>
@@ -901,6 +1112,10 @@ export type WebhookEventFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  /**
    * Filter, which WebhookEvent to fetch.
    */
   where: Prisma.WebhookEventWhereUniqueInput
@@ -919,6 +1134,10 @@ export type WebhookEventFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  /**
    * Filter, which WebhookEvent to fetch.
    */
   where: Prisma.WebhookEventWhereUniqueInput
@@ -936,6 +1155,10 @@ export type WebhookEventFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the WebhookEvent
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
   /**
    * Filter, which WebhookEvent to fetch.
    */
@@ -985,6 +1208,10 @@ export type WebhookEventFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  /**
    * Filter, which WebhookEvent to fetch.
    */
   where?: Prisma.WebhookEventWhereInput
@@ -1032,6 +1259,10 @@ export type WebhookEventFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the WebhookEvent
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
   /**
    * Filter, which WebhookEvents to fetch.
    */
@@ -1081,6 +1312,10 @@ export type WebhookEventCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  /**
    * The data needed to create a WebhookEvent.
    */
   data: Prisma.XOR<Prisma.WebhookEventCreateInput, Prisma.WebhookEventUncheckedCreateInput>
@@ -1114,6 +1349,10 @@ export type WebhookEventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.WebhookEventCreateManyInput | Prisma.WebhookEventCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1128,6 +1367,10 @@ export type WebhookEventUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the WebhookEvent
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
   /**
    * The data needed to update a WebhookEvent.
    */
@@ -1180,6 +1423,10 @@ export type WebhookEventUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many WebhookEvents to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1194,6 +1441,10 @@ export type WebhookEventUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the WebhookEvent
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
   /**
    * The filter to search for the WebhookEvent to update in case it exists.
    */
@@ -1221,6 +1472,10 @@ export type WebhookEventDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
+  /**
    * Filter which WebhookEvent to delete.
    */
   where: Prisma.WebhookEventWhereUniqueInput
@@ -1241,6 +1496,25 @@ export type WebhookEventDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
+ * WebhookEvent.company
+ */
+export type WebhookEvent$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
+}
+
+/**
  * WebhookEvent without action
  */
 export type WebhookEventDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1252,4 +1526,8 @@ export type WebhookEventDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the WebhookEvent
    */
   omit?: Prisma.WebhookEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookEventInclude<ExtArgs> | null
 }

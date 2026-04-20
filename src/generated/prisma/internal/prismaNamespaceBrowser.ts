@@ -133,6 +133,7 @@ export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[k
 
 export const ContactScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   phone: 'phone',
   whatsappName: 'whatsappName',
   fullName: 'fullName',
@@ -155,6 +156,7 @@ export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeo
 
 export const ContactNoteScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   contactId: 'contactId',
   authorId: 'authorId',
   note: 'note',
@@ -167,6 +169,7 @@ export type ContactNoteScalarFieldEnum = (typeof ContactNoteScalarFieldEnum)[key
 
 export const ConversationScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   contactId: 'contactId',
   channel: 'channel',
   status: 'status',
@@ -189,6 +192,7 @@ export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[k
 
 export const ConversationTagScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   conversationId: 'conversationId',
   tag: 'tag',
   createdAt: 'createdAt'
@@ -199,6 +203,7 @@ export type ConversationTagScalarFieldEnum = (typeof ConversationTagScalarFieldE
 
 export const MessageScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   conversationId: 'conversationId',
   externalMessageId: 'externalMessageId',
   direction: 'direction',
@@ -219,6 +224,7 @@ export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeo
 
 export const AiRunScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   conversationId: 'conversationId',
   messageId: 'messageId',
   inputText: 'inputText',
@@ -240,6 +246,7 @@ export type AiRunScalarFieldEnum = (typeof AiRunScalarFieldEnum)[keyof typeof Ai
 
 export const AuditLogScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   actorUserId: 'actorUserId',
   action: 'action',
   entityType: 'entityType',
@@ -254,6 +261,7 @@ export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typ
 
 export const KbArticleScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   title: 'title',
   body: 'body',
   category: 'category',
@@ -274,6 +282,7 @@ export type KbArticleScalarFieldEnum = (typeof KbArticleScalarFieldEnum)[keyof t
 
 export const KbChunkScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   articleId: 'articleId',
   chunkIndex: 'chunkIndex',
   chunkText: 'chunkText',
@@ -286,6 +295,7 @@ export type KbChunkScalarFieldEnum = (typeof KbChunkScalarFieldEnum)[keyof typeo
 
 export const MessageTemplateScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   name: 'name',
   language: 'language',
   category: 'category',
@@ -301,6 +311,7 @@ export type MessageTemplateScalarFieldEnum = (typeof MessageTemplateScalarFieldE
 
 export const SettingScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   key: 'key',
   value: 'value',
   description: 'description',
@@ -314,6 +325,7 @@ export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeo
 
 export const WebhookEventScalarFieldEnum = {
   id: 'id',
+  companyId: 'companyId',
   provider: 'provider',
   eventType: 'eventType',
   externalEventId: 'externalEventId',

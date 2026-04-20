@@ -1,6 +1,7 @@
 export interface EvidenceItem {
   content: string;
   score?: number;
+  metadata?: Record<string, unknown>;
 }
 
 export class EvidenceContextBuilder {
@@ -8,7 +9,14 @@ export class EvidenceContextBuilder {
     if (!evidences?.length) return '';
 
     return evidences
-      .map((e, i) => `#${i + 1}: ${e.content}`)
+      .map((e, i) => {
+        const sourceId = String(e.metadata?.id ?? `source_${i + 1}`);
+        const title = e.metadata?.articleTitle
+          ? ` (${String(e.metadata.articleTitle)})`
+          : '';
+
+        return `[${sourceId}]${title}\n${e.content}`;
+      })
       .join('\n\n');
   }
 }

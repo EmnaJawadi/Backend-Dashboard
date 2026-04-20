@@ -9,6 +9,7 @@ import {
   GeminiChatOutput,
   GeminiGenerateTextInput,
   GeminiGenerateTextOutput,
+  GeminiUsage,
 } from './gemini.types';
 
 type GoogleGenAIInstance = {
@@ -21,7 +22,14 @@ type GoogleGenAIInstance = {
         maxOutputTokens?: number;
       };
       contents: unknown;
-    }) => Promise<{ text?: string }>;
+    }) => Promise<{
+      text?: string;
+      usageMetadata?: {
+        promptTokenCount?: number;
+        candidatesTokenCount?: number;
+        totalTokenCount?: number;
+      };
+    }>;
   };
 };
 
@@ -83,6 +91,7 @@ export class GeminiService {
       return {
         text: response.text?.trim() || '',
         model,
+        usage: this.extractUsage(response.usageMetadata),
       };
     } catch (error) {
       this.logger.error('Gemini generateText failed', error);
@@ -119,10 +128,29 @@ export class GeminiService {
       return {
         text: response.text?.trim() || '',
         model,
+        usage: this.extractUsage(response.usageMetadata),
       };
     } catch (error) {
       this.logger.error('Gemini chat failed', error);
       throw new InternalServerErrorException('Failed to chat with Gemini');
     }
+  }
+
+  private extractUsage(
+    usageMetadata?: {
+      promptTokenCount?: number;
+      candidatesTokenCount?: number;
+      totalTokenCount?: number;
+    },
+  ): GeminiUsage | undefined {
+    if (!usageMetadata) {
+      return undefined;
+    }
+
+    return {
+      promptTokens: usageMetadata.promptTokenCount ?? null,
+      completionTokens: usageMetadata.candidatesTokenCount ?? null,
+      totalTokens: usageMetadata.totalTokenCount ?? null,
+    };
   }
 }

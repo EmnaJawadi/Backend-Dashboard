@@ -1,15 +1,25 @@
-import { IsObject, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class SendTemplateMessageDto {
   @IsString()
   phoneNumber!: string;
 
+  @IsOptional()
   @IsString()
-  templateName!: string;
+  templateId?: string;
+
+  @IsOptional()
+  @IsString()
+  templateName?: string;
 
   @IsOptional()
   @IsString()
   language?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  parameters?: string[];
 
   @IsOptional()
   @IsObject()
@@ -18,4 +28,8 @@ export class SendTemplateMessageDto {
   @IsOptional()
   @IsString()
   conversationId?: string;
+
+  @IsOptional()
+  @IsString()
+  senderId?: string;
 }

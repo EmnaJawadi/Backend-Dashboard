@@ -36,6 +36,7 @@ export type KbArticleSumAggregateOutputType = {
 
 export type KbArticleMinAggregateOutputType = {
   id: string | null
+  companyId: string | null
   title: string | null
   body: string | null
   category: string | null
@@ -52,6 +53,7 @@ export type KbArticleMinAggregateOutputType = {
 
 export type KbArticleMaxAggregateOutputType = {
   id: string | null
+  companyId: string | null
   title: string | null
   body: string | null
   category: string | null
@@ -68,6 +70,7 @@ export type KbArticleMaxAggregateOutputType = {
 
 export type KbArticleCountAggregateOutputType = {
   id: number
+  companyId: number
   title: number
   body: number
   category: number
@@ -95,6 +98,7 @@ export type KbArticleSumAggregateInputType = {
 
 export type KbArticleMinAggregateInputType = {
   id?: true
+  companyId?: true
   title?: true
   body?: true
   category?: true
@@ -111,6 +115,7 @@ export type KbArticleMinAggregateInputType = {
 
 export type KbArticleMaxAggregateInputType = {
   id?: true
+  companyId?: true
   title?: true
   body?: true
   category?: true
@@ -127,6 +132,7 @@ export type KbArticleMaxAggregateInputType = {
 
 export type KbArticleCountAggregateInputType = {
   id?: true
+  companyId?: true
   title?: true
   body?: true
   category?: true
@@ -231,6 +237,7 @@ export type KbArticleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type KbArticleGroupByOutputType = {
   id: string
+  companyId: string | null
   title: string | null
   body: string | null
   category: string | null
@@ -271,6 +278,7 @@ export type KbArticleWhereInput = {
   OR?: Prisma.KbArticleWhereInput[]
   NOT?: Prisma.KbArticleWhereInput | Prisma.KbArticleWhereInput[]
   id?: Prisma.StringFilter<"KbArticle"> | string
+  companyId?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   title?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   body?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   category?: Prisma.StringNullableFilter<"KbArticle"> | string | null
@@ -284,11 +292,13 @@ export type KbArticleWhereInput = {
   publishedAt?: Prisma.DateTimeNullableFilter<"KbArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   chunks?: Prisma.KbChunkListRelationFilter
 }
 
 export type KbArticleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   body?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -302,6 +312,7 @@ export type KbArticleOrderByWithRelationInput = {
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
   chunks?: Prisma.KbChunkOrderByRelationAggregateInput
 }
 
@@ -310,6 +321,7 @@ export type KbArticleWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.KbArticleWhereInput | Prisma.KbArticleWhereInput[]
   OR?: Prisma.KbArticleWhereInput[]
   NOT?: Prisma.KbArticleWhereInput | Prisma.KbArticleWhereInput[]
+  companyId?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   title?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   body?: Prisma.StringNullableFilter<"KbArticle"> | string | null
   category?: Prisma.StringNullableFilter<"KbArticle"> | string | null
@@ -323,11 +335,13 @@ export type KbArticleWhereUniqueInput = Prisma.AtLeast<{
   publishedAt?: Prisma.DateTimeNullableFilter<"KbArticle"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   chunks?: Prisma.KbChunkListRelationFilter
 }, "id">
 
 export type KbArticleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   body?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -353,6 +367,7 @@ export type KbArticleScalarWhereWithAggregatesInput = {
   OR?: Prisma.KbArticleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.KbArticleScalarWhereWithAggregatesInput | Prisma.KbArticleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"KbArticle"> | string
+  companyId?: Prisma.StringNullableWithAggregatesFilter<"KbArticle"> | string | null
   title?: Prisma.StringNullableWithAggregatesFilter<"KbArticle"> | string | null
   body?: Prisma.StringNullableWithAggregatesFilter<"KbArticle"> | string | null
   category?: Prisma.StringNullableWithAggregatesFilter<"KbArticle"> | string | null
@@ -383,11 +398,13 @@ export type KbArticleCreateInput = {
   publishedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutKbArticlesInput
   chunks?: Prisma.KbChunkCreateNestedManyWithoutArticleInput
 }
 
 export type KbArticleUncheckedCreateInput = {
   id?: string
+  companyId?: string | null
   title?: string | null
   body?: string | null
   category?: string | null
@@ -419,11 +436,13 @@ export type KbArticleUpdateInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutKbArticlesNestedInput
   chunks?: Prisma.KbChunkUpdateManyWithoutArticleNestedInput
 }
 
 export type KbArticleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -442,6 +461,7 @@ export type KbArticleUncheckedUpdateInput = {
 
 export type KbArticleCreateManyInput = {
   id?: string
+  companyId?: string | null
   title?: string | null
   body?: string | null
   category?: string | null
@@ -476,6 +496,7 @@ export type KbArticleUpdateManyMutationInput = {
 
 export type KbArticleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -491,8 +512,19 @@ export type KbArticleUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type KbArticleListRelationFilter = {
+  every?: Prisma.KbArticleWhereInput
+  some?: Prisma.KbArticleWhereInput
+  none?: Prisma.KbArticleWhereInput
+}
+
+export type KbArticleOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type KbArticleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   body?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -514,6 +546,7 @@ export type KbArticleAvgOrderByAggregateInput = {
 
 export type KbArticleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   body?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -530,6 +563,7 @@ export type KbArticleMaxOrderByAggregateInput = {
 
 export type KbArticleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   body?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -553,6 +587,48 @@ export type KbArticleScalarRelationFilter = {
   isNot?: Prisma.KbArticleWhereInput
 }
 
+export type KbArticleCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput> | Prisma.KbArticleCreateWithoutCompanyInput[] | Prisma.KbArticleUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbArticleCreateOrConnectWithoutCompanyInput | Prisma.KbArticleCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.KbArticleCreateManyCompanyInputEnvelope
+  connect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+}
+
+export type KbArticleUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput> | Prisma.KbArticleCreateWithoutCompanyInput[] | Prisma.KbArticleUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbArticleCreateOrConnectWithoutCompanyInput | Prisma.KbArticleCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.KbArticleCreateManyCompanyInputEnvelope
+  connect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+}
+
+export type KbArticleUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput> | Prisma.KbArticleCreateWithoutCompanyInput[] | Prisma.KbArticleUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbArticleCreateOrConnectWithoutCompanyInput | Prisma.KbArticleCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.KbArticleUpsertWithWhereUniqueWithoutCompanyInput | Prisma.KbArticleUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.KbArticleCreateManyCompanyInputEnvelope
+  set?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  disconnect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  delete?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  connect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  update?: Prisma.KbArticleUpdateWithWhereUniqueWithoutCompanyInput | Prisma.KbArticleUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.KbArticleUpdateManyWithWhereWithoutCompanyInput | Prisma.KbArticleUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.KbArticleScalarWhereInput | Prisma.KbArticleScalarWhereInput[]
+}
+
+export type KbArticleUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput> | Prisma.KbArticleCreateWithoutCompanyInput[] | Prisma.KbArticleUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.KbArticleCreateOrConnectWithoutCompanyInput | Prisma.KbArticleCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.KbArticleUpsertWithWhereUniqueWithoutCompanyInput | Prisma.KbArticleUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.KbArticleCreateManyCompanyInputEnvelope
+  set?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  disconnect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  delete?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  connect?: Prisma.KbArticleWhereUniqueInput | Prisma.KbArticleWhereUniqueInput[]
+  update?: Prisma.KbArticleUpdateWithWhereUniqueWithoutCompanyInput | Prisma.KbArticleUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.KbArticleUpdateManyWithWhereWithoutCompanyInput | Prisma.KbArticleUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.KbArticleScalarWhereInput | Prisma.KbArticleScalarWhereInput[]
+}
+
 export type KbArticleCreateNestedOneWithoutChunksInput = {
   create?: Prisma.XOR<Prisma.KbArticleCreateWithoutChunksInput, Prisma.KbArticleUncheckedCreateWithoutChunksInput>
   connectOrCreate?: Prisma.KbArticleCreateOrConnectWithoutChunksInput
@@ -565,6 +641,89 @@ export type KbArticleUpdateOneRequiredWithoutChunksNestedInput = {
   upsert?: Prisma.KbArticleUpsertWithoutChunksInput
   connect?: Prisma.KbArticleWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.KbArticleUpdateToOneWithWhereWithoutChunksInput, Prisma.KbArticleUpdateWithoutChunksInput>, Prisma.KbArticleUncheckedUpdateWithoutChunksInput>
+}
+
+export type KbArticleCreateWithoutCompanyInput = {
+  id?: string
+  title?: string | null
+  body?: string | null
+  category?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: string | null
+  status?: string | null
+  version?: number | null
+  sourceTypes?: string | null
+  sourceUrl?: string | null
+  authorId?: string | null
+  publishedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  chunks?: Prisma.KbChunkCreateNestedManyWithoutArticleInput
+}
+
+export type KbArticleUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  title?: string | null
+  body?: string | null
+  category?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: string | null
+  status?: string | null
+  version?: number | null
+  sourceTypes?: string | null
+  sourceUrl?: string | null
+  authorId?: string | null
+  publishedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  chunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutArticleInput
+}
+
+export type KbArticleCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.KbArticleWhereUniqueInput
+  create: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput>
+}
+
+export type KbArticleCreateManyCompanyInputEnvelope = {
+  data: Prisma.KbArticleCreateManyCompanyInput | Prisma.KbArticleCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type KbArticleUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.KbArticleWhereUniqueInput
+  update: Prisma.XOR<Prisma.KbArticleUpdateWithoutCompanyInput, Prisma.KbArticleUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.KbArticleCreateWithoutCompanyInput, Prisma.KbArticleUncheckedCreateWithoutCompanyInput>
+}
+
+export type KbArticleUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.KbArticleWhereUniqueInput
+  data: Prisma.XOR<Prisma.KbArticleUpdateWithoutCompanyInput, Prisma.KbArticleUncheckedUpdateWithoutCompanyInput>
+}
+
+export type KbArticleUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.KbArticleScalarWhereInput
+  data: Prisma.XOR<Prisma.KbArticleUpdateManyMutationInput, Prisma.KbArticleUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type KbArticleScalarWhereInput = {
+  AND?: Prisma.KbArticleScalarWhereInput | Prisma.KbArticleScalarWhereInput[]
+  OR?: Prisma.KbArticleScalarWhereInput[]
+  NOT?: Prisma.KbArticleScalarWhereInput | Prisma.KbArticleScalarWhereInput[]
+  id?: Prisma.StringFilter<"KbArticle"> | string
+  companyId?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  title?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  body?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  category?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  tags?: Prisma.JsonNullableFilter<"KbArticle">
+  lang?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  status?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  version?: Prisma.IntNullableFilter<"KbArticle"> | number | null
+  sourceTypes?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  sourceUrl?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  authorId?: Prisma.StringNullableFilter<"KbArticle"> | string | null
+  publishedAt?: Prisma.DateTimeNullableFilter<"KbArticle"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"KbArticle"> | Date | string
 }
 
 export type KbArticleCreateWithoutChunksInput = {
@@ -582,10 +741,12 @@ export type KbArticleCreateWithoutChunksInput = {
   publishedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutKbArticlesInput
 }
 
 export type KbArticleUncheckedCreateWithoutChunksInput = {
   id?: string
+  companyId?: string | null
   title?: string | null
   body?: string | null
   category?: string | null
@@ -632,9 +793,81 @@ export type KbArticleUpdateWithoutChunksInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutKbArticlesNestedInput
 }
 
 export type KbArticleUncheckedUpdateWithoutChunksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sourceTypes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type KbArticleCreateManyCompanyInput = {
+  id?: string
+  title?: string | null
+  body?: string | null
+  category?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: string | null
+  status?: string | null
+  version?: number | null
+  sourceTypes?: string | null
+  sourceUrl?: string | null
+  authorId?: string | null
+  publishedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type KbArticleUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sourceTypes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  chunks?: Prisma.KbChunkUpdateManyWithoutArticleNestedInput
+}
+
+export type KbArticleUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lang?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sourceTypes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  chunks?: Prisma.KbChunkUncheckedUpdateManyWithoutArticleNestedInput
+}
+
+export type KbArticleUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -684,6 +917,7 @@ export type KbArticleCountOutputTypeCountChunksArgs<ExtArgs extends runtime.Type
 
 export type KbArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   title?: boolean
   body?: boolean
   category?: boolean
@@ -697,12 +931,14 @@ export type KbArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
   chunks?: boolean | Prisma.KbArticle$chunksArgs<ExtArgs>
   _count?: boolean | Prisma.KbArticleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kbArticle"]>
 
 export type KbArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   title?: boolean
   body?: boolean
   category?: boolean
@@ -716,10 +952,12 @@ export type KbArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
 }, ExtArgs["result"]["kbArticle"]>
 
 export type KbArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  companyId?: boolean
   title?: boolean
   body?: boolean
   category?: boolean
@@ -733,10 +971,12 @@ export type KbArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   publishedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
 }, ExtArgs["result"]["kbArticle"]>
 
 export type KbArticleSelectScalar = {
   id?: boolean
+  companyId?: boolean
   title?: boolean
   body?: boolean
   category?: boolean
@@ -752,21 +992,28 @@ export type KbArticleSelectScalar = {
   updatedAt?: boolean
 }
 
-export type KbArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "body" | "category" | "tags" | "lang" | "status" | "version" | "sourceTypes" | "sourceUrl" | "authorId" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["kbArticle"]>
+export type KbArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "title" | "body" | "category" | "tags" | "lang" | "status" | "version" | "sourceTypes" | "sourceUrl" | "authorId" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["kbArticle"]>
 export type KbArticleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
   chunks?: boolean | Prisma.KbArticle$chunksArgs<ExtArgs>
   _count?: boolean | Prisma.KbArticleCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type KbArticleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type KbArticleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type KbArticleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
+}
+export type KbArticleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.KbArticle$companyArgs<ExtArgs>
+}
 
 export type $KbArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "KbArticle"
   objects: {
+    company: Prisma.$CompanyPayload<ExtArgs> | null
     chunks: Prisma.$KbChunkPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    companyId: string | null
     title: string | null
     body: string | null
     category: string | null
@@ -1174,6 +1421,7 @@ readonly fields: KbArticleFieldRefs;
  */
 export interface Prisma__KbArticleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.KbArticle$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KbArticle$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   chunks<T extends Prisma.KbArticle$chunksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KbArticle$chunksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbChunkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1205,6 +1453,7 @@ export interface Prisma__KbArticleClient<T, Null = never, ExtArgs extends runtim
  */
 export interface KbArticleFieldRefs {
   readonly id: Prisma.FieldRef<"KbArticle", 'String'>
+  readonly companyId: Prisma.FieldRef<"KbArticle", 'String'>
   readonly title: Prisma.FieldRef<"KbArticle", 'String'>
   readonly body: Prisma.FieldRef<"KbArticle", 'String'>
   readonly category: Prisma.FieldRef<"KbArticle", 'String'>
@@ -1472,6 +1721,10 @@ export type KbArticleCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    */
   data: Prisma.KbArticleCreateManyInput | Prisma.KbArticleCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbArticleIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1542,6 +1795,10 @@ export type KbArticleUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many KbArticles to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbArticleIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1608,6 +1865,25 @@ export type KbArticleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many KbArticles to delete.
    */
   limit?: number
+}
+
+/**
+ * KbArticle.company
+ */
+export type KbArticle$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Company
+   */
+  select?: Prisma.CompanySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Company
+   */
+  omit?: Prisma.CompanyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhereInput
 }
 
 /**

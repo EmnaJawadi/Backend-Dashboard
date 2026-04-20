@@ -4,6 +4,15 @@ export interface RetrieverResult {
   metadata?: Record<string, unknown>;
 }
 
+export interface RetrieverOptions {
+  companyId?: string | null;
+  language?: string | null;
+}
+
 export interface Retriever {
-  retrieve(query: string, topK: number): Promise<RetrieverResult[]>;
+  retrieve(
+    query: string,
+    topK: number,
+    options?: RetrieverOptions,
+  ): Promise<RetrieverResult[]>;
 }

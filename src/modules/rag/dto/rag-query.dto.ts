@@ -1,4 +1,20 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsIn,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class RagHistoryItemDto {
+  @IsString()
+  @IsIn(['user', 'assistant', 'system'])
+  role!: 'user' | 'assistant' | 'system';
+
+  @IsString()
+  content!: string;
+}
 
 export class RagQueryDto {
   @IsString()
@@ -6,9 +22,15 @@ export class RagQueryDto {
 
   @IsOptional()
   @IsArray()
-  history?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => RagHistoryItemDto)
+  history?: RagHistoryItemDto[];
 
   @IsOptional()
   @IsString()
   language?: string;
+
+  @IsOptional()
+  @IsString()
+  companyId?: string;
 }

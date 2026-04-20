@@ -1,8 +1,10 @@
 import {
   IsIn,
+  IsBoolean,
   IsNumber,
   IsObject,
   IsOptional,
+  IsArray,
   IsString,
   Min,
 } from 'class-validator';
@@ -18,11 +20,23 @@ export class CreateAiRunDto {
 
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
+  messageId?: string;
+
+  @IsOptional()
+  @IsString()
   prompt?: string;
 
   @IsOptional()
   @IsString()
   response?: string;
+
+  @IsOptional()
+  @IsString()
+  intent?: string;
 
   @IsOptional()
   @IsString()
@@ -44,6 +58,16 @@ export class CreateAiRunDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
+  promptTokens?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  completionTokens?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
   tokensUsed?: number;
 
   @IsOptional()
@@ -59,6 +83,15 @@ export class CreateAiRunDto {
   @IsOptional()
   @IsString()
   blockedReason?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  handoffRequired?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tagsToApply?: string[];
 
   @IsOptional()
   @IsObject()

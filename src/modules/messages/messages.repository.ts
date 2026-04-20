@@ -2,16 +2,31 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { MessageQueryDto } from './dto/message-query.dto';
-import { MessageEntity, MessageStatus, MessageType } from './entities/message.entity';
+import {
+  MessageEntity,
+  MessageStatus,
+  MessageType,
+} from './entities/message.entity';
 
-type MessageWriteData = Partial<MessageEntity>;
+type MessageWriteData = Partial<MessageEntity> & {
+  externalMessageId?: string | null;
+  companyId?: string | null;
+  rawPayload?: Prisma.InputJsonValue;
+  templateName?: string | null;
+};
 
 @Injectable()
 export class MessagesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   private normalizeType(value?: string | null): MessageType {
-    if (value === 'image' || value === 'audio' || value === 'document' || value === 'video') {
+    if (
+      value === 'template' ||
+      value === 'image' ||
+      value === 'audio' ||
+      value === 'document' ||
+      value === 'video'
+    ) {
       return value;
     }
     return 'text';
@@ -30,11 +45,13 @@ export class MessagesRepository {
     senderType: string | null;
     content: string | null;
     messageType: string | null;
+    rawPayload?: Prisma.JsonValue | null;
     deliveryStatus: string | null;
     direction: string | null;
     createdAt: Date;
   }): MessageEntity {
-    const senderType = (row.senderType ?? 'system') as MessageEntity['senderType'];
+    const senderType = (row.senderType ??
+      'system') as MessageEntity['senderType'];
 
     return new MessageEntity({
       id: row.id,
@@ -43,6 +60,7 @@ export class MessagesRepository {
       senderId: null,
       content: row.content ?? '',
       type: this.normalizeType(row.messageType),
+      templateName: this.extractTemplateName(row.rawPayload),
       status: this.normalizeStatus(row.deliveryStatus),
       isFromCustomer: row.direction === 'inbound' || senderType === 'customer',
       createdAt: row.createdAt,
@@ -53,24 +71,35 @@ export class MessagesRepository {
   async create(data: MessageWriteData): Promise<MessageEntity> {
     const now = new Date();
     const senderType = data.senderType ?? 'system';
-    const direction = data.isFromCustomer || senderType === 'customer' ? 'inbound' : 'outbound';
+    const direction =
+      data.isFromCustomer || senderType === 'customer'
+        ? 'inbound'
+        : 'outbound';
 
     const created = await this.prisma.message.create({
       data: {
+        companyId: data.companyId ?? null,
         conversationId: data.conversationId ?? '',
-        externalMessageId: null,
+        externalMessageId: data.externalMessageId ?? null,
         direction,
         senderType,
         content: data.content ?? null,
         messageType: data.type ?? 'text',
         mediaUrl: null,
         mimeType: null,
-        rawPayload: Prisma.JsonNull,
+        rawPayload: this.buildRawPayload(data),
         deliveryStatus: data.status ?? 'sent',
         errorMessage: null,
         createdAt: now,
         messageTimestamp: now,
       },
+    });
+
+    await this.touchConversation({
+      conversationId: created.conversationId,
+      direction,
+      senderType,
+      at: now,
     });
 
     return this.toEntity(created);
@@ -118,7 +147,10 @@ export class MessagesRepository {
     return this.toEntity(row);
   }
 
-  async updateStatus(id: string, status: MessageEntity['status']): Promise<MessageEntity> {
+  async updateStatus(
+    id: string,
+    status: MessageEntity['status'],
+  ): Promise<MessageEntity> {
     const row = await this.prisma.message.update({
       where: { id },
       data: {
@@ -135,5 +167,57 @@ export class MessagesRepository {
     });
 
     return this.toEntity(row);
+  }
+
+  private buildRawPayload(
+    data: MessageWriteData,
+  ): Prisma.InputJsonValue | typeof Prisma.JsonNull {
+    if (!data.templateName) {
+      return data.rawPayload ?? Prisma.JsonNull;
+    }
+
+    return {
+      templateName: data.templateName,
+      rawPayload: data.rawPayload ?? null,
+    };
+  }
+
+  private extractTemplateName(rawPayload?: Prisma.JsonValue | null) {
+    if (
+      !rawPayload ||
+      typeof rawPayload !== 'object' ||
+      Array.isArray(rawPayload)
+    ) {
+      return null;
+    }
+
+    const value = rawPayload['templateName'];
+    return typeof value === 'string' && value.trim() ? value : null;
+  }
+
+  private async touchConversation(params: {
+    conversationId: string;
+    direction: string;
+    senderType: string;
+    at: Date;
+  }) {
+    if (!params.conversationId) {
+      return;
+    }
+
+    await this.prisma.conversation.update({
+      where: { id: params.conversationId },
+      data: {
+        lastMessageAt: params.at,
+        lastCustomerMessageAt:
+          params.direction === 'inbound' ? params.at : undefined,
+        lastBotMessageAt: params.senderType === 'bot' ? params.at : undefined,
+        lastHumanMessageAt:
+          params.senderType === 'agent' ? params.at : undefined,
+        unreadCount:
+          params.direction === 'inbound' ? { increment: 1 } : undefined,
+        updatedAt: params.at,
+      },
+    });
   }
 }

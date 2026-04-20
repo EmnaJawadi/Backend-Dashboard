@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from '../../database/prisma/prisma.service';
+import { PrismaModule } from '../../database/prisma/prisma.module';
 import { RagService } from './rag.service';
 import { PgvectorRetriever } from './retrievers/pgvector.retriever';
 import { RetrievalPolicyService } from './policies/retrieval-policy.service';
 
 @Module({
+  imports: [PrismaModule],
   providers: [
-    PrismaService,
     RagService,
     PgvectorRetriever,
     RetrievalPolicyService,

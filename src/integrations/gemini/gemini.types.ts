@@ -9,6 +9,7 @@ export type GeminiGenerateTextInput = {
 export type GeminiGenerateTextOutput = {
   text: string;
   model: string;
+  usage?: GeminiUsage;
 };
 
 export type GeminiChatMessageRole = 'user' | 'assistant';
@@ -29,4 +30,11 @@ export type GeminiChatInput = {
 export type GeminiChatOutput = {
   text: string;
   model: string;
+  usage?: GeminiUsage;
+};
+
+export type GeminiUsage = {
+  promptTokens: number | null;
+  completionTokens: number | null;
+  totalTokens: number | null;
 };
