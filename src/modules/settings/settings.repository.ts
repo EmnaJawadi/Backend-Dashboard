@@ -1,19 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
-import { SettingEntity } from './entities/setting.entity';
+import { Prisma } from '../../generated/prisma/client';
+import type {
+  CompanySettingsEntity,
+  PlatformSettingsEntity,
+} from './entities/setting.entity';
+
+type CompanySummary = {
+  id: string;
+  name: string;
+  email: string | null;
+};
+
+type SettingRow = {
+  id: string;
+  key: string;
+  value: unknown;
+  updatedAt: Date;
+};
 
 @Injectable()
 export class SettingsRepository {
-  private static readonly SETTINGS_KEY = 'dashboard_settings_v1';
+  private static readonly PLATFORM_SETTINGS_KEY = 'platform_settings_v2';
+  private static readonly LEGACY_SETTINGS_KEY = 'dashboard_settings_v1';
+  private static readonly COMPANY_SETTINGS_KEY_PREFIX = 'company_settings_v2';
 
   constructor(private readonly prisma: PrismaService) {}
 
-  private buildDefaultSettings(): SettingEntity {
-    return new SettingEntity({
-      id: 'default-settings',
+  private companySettingsKey(companyId: string): string {
+    return `${SettingsRepository.COMPANY_SETTINGS_KEY_PREFIX}:${companyId}`;
+  }
+
+  private asRecord(value: unknown): Record<string, unknown> {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      return {};
+    }
+
+    return value as Record<string, unknown>;
+  }
+
+  private parseBoolean(value: unknown, fallback: boolean): boolean {
+    return typeof value === 'boolean' ? value : fallback;
+  }
+
+  private parseNumber(value: unknown, fallback: number): number {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value;
+    }
+
+    return fallback;
+  }
+
+  private parseString(value: unknown, fallback: string): string {
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value;
+    }
+
+    return fallback;
+  }
+
+  private buildDefaultCompanySettings(company: CompanySummary): CompanySettingsEntity {
+    return {
+      id: 'company-settings-default',
+      key: this.companySettingsKey(company.id),
+      companyId: company.id,
       businessHours: {
         enabled: true,
-        timezone: 'Africa/Tunis',
+        timezone: 'Africa/Lagos',
         autoReplyOutsideHours: true,
         outOfHoursMessage:
           'Merci pour votre message. Notre equipe vous repondra des la prochaine ouverture.',
@@ -31,110 +84,530 @@ export class SettingsRepository {
         enabled: true,
         handoffEnabled: true,
         confidenceThreshold: 0.75,
-        handoffThreshold: 0.45,
         escalationDelayMinutes: 5,
         responseTone: 'Professionnel',
         language: 'Francais',
-        systemInstruction:
+        botGuidelines:
           'Reponds de maniere claire, concise et professionnelle. Si la demande est complexe, propose un transfert vers un agent humain.',
-      },
-      whatsappPolicy: {
-        businessPhoneNumber: '+216 70 000 000',
-        displayName: 'Support Brand',
-        webhookUrl: 'https://api.my-platform.com/webhooks/whatsapp',
-        verifyToken: 'support-whatsapp-token',
-        phoneNumberId: '572001245879001',
-        businessAccountId: '104550889210022',
-        notificationsEnabled: true,
-        connectionStatus: 'connected',
-        sessionWindowHours: 24,
-        allowTemplatesOutsideWindow: true,
-        defaultCountryCode: '+216',
-        verifyWebhookSignature: true,
       },
       workflow: {
         enabled: true,
-        primaryTag: 'SupportWhatsApp',
-        defaultAgent: 'Equipe Support',
+        defaultAssignment: 'Equipe Support',
         welcomeMessage:
           'Bonjour. Merci de nous avoir contactes sur WhatsApp. Notre assistant analyse votre demande et vous repond immediatement.',
         preHandoffMessage:
           'Votre demande necessite une verification complementaire. Un agent humain va prendre le relais.',
+        primaryTag: 'SupportWhatsApp',
       },
       general: {
-        companyName: 'My Support Company',
-        supportEmail: 'support@company.com',
+        companyName: company.name,
+        supportEmail: company.email ?? 'support@company.com',
         defaultLanguage: 'Francais',
-        timezone: 'Africa/Tunis',
+        timezone: 'Africa/Lagos',
         emailNotifications: true,
         secureMode: true,
       },
+      whatsappProfile: {
+        businessPhoneNumber: '+234 700 000 0000',
+        displayName: company.name,
+        connectionStatus: 'connected',
+        phoneNumberId: '572001245879001',
+        businessAccountId: '104550889210022',
+      },
+      whatsappTechnicalSettings: {
+        webhookUrl: 'https://api.my-platform.com/webhooks/whatsapp',
+        verifyToken: 'support-whatsapp-token',
+        verifyWebhookSignature: true,
+        notificationsEnabled: true,
+        sessionWindowHours: 24,
+        allowTemplatesOutsideWindow: true,
+        defaultCountryCode: '+234',
+      },
       updatedAt: new Date(),
-    });
+    };
   }
 
-  private toEntity(row: {
-    id: string;
-    value: unknown;
-    updatedAt: Date;
-  }): SettingEntity {
-    const defaults = this.buildDefaultSettings();
-    const value = (row.value ?? {}) as Partial<SettingEntity>;
+  private buildDefaultPlatformSettings(): PlatformSettingsEntity {
+    return {
+      id: 'platform-settings-default',
+      key: SettingsRepository.PLATFORM_SETTINGS_KEY,
+      configuration: {
+        maintenanceMode: false,
+        allowInvitations: true,
+        defaultLanguage: 'fr',
+        platformTimezone: 'Africa/Lagos',
+        supportEmail: 'support@platform.local',
+        companySignupPolicy: 'open',
+        manualCompanyValidation: true,
+      },
+      security: {
+        enforceAdmin2fa: true,
+        adminSessionDurationMinutes: 480,
+        maxLoginAttempts: 5,
+        lockDurationMinutes: 30,
+        allowPasswordReset: true,
+        securityAlertEmail: 'security@platform.local',
+      },
+      aiGlobal: {
+        provider: 'Google Gemini',
+        model: 'gemini-2.5-flash',
+        confidenceThreshold: 0.75,
+        timeoutMs: 45000,
+        maxTokens: 1024,
+        logsEnabled: true,
+        maskSensitiveDataInLogs: true,
+        systemPrompt:
+          'Tu es l assistant WhatsApp global de la plateforme. Priorise la clarte, la securite et l escalade humaine en cas de doute.',
+        humanFallbackEnabled: true,
+      },
+      updatedAt: new Date(),
+    };
+  }
 
-    return new SettingEntity({
+  private normalizeBusinessHoursDays(
+    value: unknown,
+    defaults: CompanySettingsEntity['businessHours']['days'],
+  ): CompanySettingsEntity['businessHours']['days'] {
+    if (!Array.isArray(value)) {
+      return defaults;
+    }
+
+    return value
+      .map((item, index) => {
+        const currentDefault = defaults[index] ?? defaults[0];
+        const row = this.asRecord(item);
+
+        return {
+          day: this.parseString(row.day, currentDefault.day),
+          start: this.parseString(row.start, currentDefault.start),
+          end: this.parseString(row.end, currentDefault.end),
+          active: this.parseBoolean(row.active, currentDefault.active),
+        };
+      })
+      .filter((item) => item.day.length > 0);
+  }
+
+  private toCompanyEntity(
+    row: SettingRow,
+    company: CompanySummary,
+  ): CompanySettingsEntity {
+    const defaults = this.buildDefaultCompanySettings(company);
+    const value = this.asRecord(row.value);
+
+    const businessHoursRaw = this.asRecord(value.businessHours);
+    const aiRaw = this.asRecord(value.aiPolicy);
+    const workflowRaw = this.asRecord(value.workflow);
+    const generalRaw = this.asRecord(value.general);
+    const profileRaw = this.asRecord(value.whatsappProfile);
+    const technicalRaw = this.asRecord(value.whatsappTechnicalSettings);
+
+    // Legacy payload compatibility from dashboard_settings_v1.
+    const legacyWhatsappRaw = this.asRecord(value.whatsappPolicy);
+
+    return {
       ...defaults,
-      ...value,
-      id: typeof value.id === 'string' ? value.id : defaults.id,
+      id: row.id,
+      key: row.key,
+      updatedAt: row.updatedAt,
       businessHours: {
         ...defaults.businessHours,
-        ...(value.businessHours ?? {}),
-        days:
-          value.businessHours?.days?.length
-            ? value.businessHours.days
-            : defaults.businessHours.days,
+        enabled: this.parseBoolean(
+          businessHoursRaw.enabled,
+          defaults.businessHours.enabled,
+        ),
+        timezone: this.parseString(
+          businessHoursRaw.timezone,
+          defaults.businessHours.timezone,
+        ),
+        autoReplyOutsideHours: this.parseBoolean(
+          businessHoursRaw.autoReplyOutsideHours,
+          defaults.businessHours.autoReplyOutsideHours,
+        ),
+        outOfHoursMessage: this.parseString(
+          businessHoursRaw.outOfHoursMessage,
+          defaults.businessHours.outOfHoursMessage,
+        ),
+        days: this.normalizeBusinessHoursDays(
+          businessHoursRaw.days,
+          defaults.businessHours.days,
+        ),
       },
       aiPolicy: {
         ...defaults.aiPolicy,
-        ...(value.aiPolicy ?? {}),
-      },
-      whatsappPolicy: {
-        ...defaults.whatsappPolicy,
-        ...(value.whatsappPolicy ?? {}),
+        enabled: this.parseBoolean(aiRaw.enabled, defaults.aiPolicy.enabled),
+        handoffEnabled: this.parseBoolean(
+          aiRaw.handoffEnabled,
+          defaults.aiPolicy.handoffEnabled,
+        ),
+        confidenceThreshold: this.parseNumber(
+          aiRaw.confidenceThreshold,
+          defaults.aiPolicy.confidenceThreshold,
+        ),
+        escalationDelayMinutes: this.parseNumber(
+          aiRaw.escalationDelayMinutes,
+          defaults.aiPolicy.escalationDelayMinutes,
+        ),
+        responseTone: this.parseString(
+          aiRaw.responseTone,
+          defaults.aiPolicy.responseTone,
+        ),
+        language: this.parseString(aiRaw.language, defaults.aiPolicy.language),
+        botGuidelines: this.parseString(
+          aiRaw.botGuidelines ?? aiRaw.systemInstruction,
+          defaults.aiPolicy.botGuidelines,
+        ),
       },
       workflow: {
         ...defaults.workflow,
-        ...(value.workflow ?? {}),
+        enabled: this.parseBoolean(
+          workflowRaw.enabled,
+          defaults.workflow.enabled,
+        ),
+        defaultAssignment: this.parseString(
+          workflowRaw.defaultAssignment ?? workflowRaw.defaultAgent,
+          defaults.workflow.defaultAssignment,
+        ),
+        welcomeMessage: this.parseString(
+          workflowRaw.welcomeMessage,
+          defaults.workflow.welcomeMessage,
+        ),
+        preHandoffMessage: this.parseString(
+          workflowRaw.preHandoffMessage,
+          defaults.workflow.preHandoffMessage,
+        ),
+        primaryTag: this.parseString(
+          workflowRaw.primaryTag,
+          defaults.workflow.primaryTag,
+        ),
       },
       general: {
         ...defaults.general,
-        ...(value.general ?? {}),
+        companyName: this.parseString(
+          generalRaw.companyName,
+          defaults.general.companyName,
+        ),
+        supportEmail: this.parseString(
+          generalRaw.supportEmail,
+          defaults.general.supportEmail,
+        ),
+        defaultLanguage: this.parseString(
+          generalRaw.defaultLanguage,
+          defaults.general.defaultLanguage,
+        ),
+        timezone: this.parseString(generalRaw.timezone, defaults.general.timezone),
+        emailNotifications: this.parseBoolean(
+          generalRaw.emailNotifications,
+          defaults.general.emailNotifications,
+        ),
+        secureMode: this.parseBoolean(
+          generalRaw.secureMode,
+          defaults.general.secureMode,
+        ),
       },
+      whatsappProfile: {
+        ...defaults.whatsappProfile,
+        businessPhoneNumber: this.parseString(
+          profileRaw.businessPhoneNumber ?? legacyWhatsappRaw.businessPhoneNumber,
+          defaults.whatsappProfile.businessPhoneNumber,
+        ),
+        displayName: this.parseString(
+          profileRaw.displayName ?? legacyWhatsappRaw.displayName,
+          defaults.whatsappProfile.displayName,
+        ),
+        connectionStatus: this.parseString(
+          profileRaw.connectionStatus ?? legacyWhatsappRaw.connectionStatus,
+          defaults.whatsappProfile.connectionStatus,
+        ) as CompanySettingsEntity['whatsappProfile']['connectionStatus'],
+        phoneNumberId: this.parseString(
+          profileRaw.phoneNumberId ?? legacyWhatsappRaw.phoneNumberId,
+          defaults.whatsappProfile.phoneNumberId,
+        ),
+        businessAccountId: this.parseString(
+          profileRaw.businessAccountId ?? legacyWhatsappRaw.businessAccountId,
+          defaults.whatsappProfile.businessAccountId,
+        ),
+      },
+      whatsappTechnicalSettings: {
+        ...defaults.whatsappTechnicalSettings,
+        webhookUrl: this.parseString(
+          technicalRaw.webhookUrl ?? legacyWhatsappRaw.webhookUrl,
+          defaults.whatsappTechnicalSettings.webhookUrl,
+        ),
+        verifyToken: this.parseString(
+          technicalRaw.verifyToken ?? legacyWhatsappRaw.verifyToken,
+          defaults.whatsappTechnicalSettings.verifyToken,
+        ),
+        verifyWebhookSignature: this.parseBoolean(
+          technicalRaw.verifyWebhookSignature ??
+            legacyWhatsappRaw.verifyWebhookSignature,
+          defaults.whatsappTechnicalSettings.verifyWebhookSignature,
+        ),
+        notificationsEnabled: this.parseBoolean(
+          technicalRaw.notificationsEnabled ??
+            legacyWhatsappRaw.notificationsEnabled,
+          defaults.whatsappTechnicalSettings.notificationsEnabled,
+        ),
+        sessionWindowHours: this.parseNumber(
+          technicalRaw.sessionWindowHours ??
+            legacyWhatsappRaw.sessionWindowHours,
+          defaults.whatsappTechnicalSettings.sessionWindowHours,
+        ),
+        allowTemplatesOutsideWindow: this.parseBoolean(
+          technicalRaw.allowTemplatesOutsideWindow ??
+            legacyWhatsappRaw.allowTemplatesOutsideWindow,
+          defaults.whatsappTechnicalSettings.allowTemplatesOutsideWindow,
+        ),
+        defaultCountryCode: this.parseString(
+          technicalRaw.defaultCountryCode ??
+            legacyWhatsappRaw.defaultCountryCode,
+          defaults.whatsappTechnicalSettings.defaultCountryCode,
+        ),
+      },
+    };
+  }
+
+  private toPlatformEntity(row: SettingRow): PlatformSettingsEntity {
+    const defaults = this.buildDefaultPlatformSettings();
+    const value = this.asRecord(row.value);
+    const configuration = this.asRecord(value.configuration);
+    const security = this.asRecord(value.security);
+    const aiGlobal = this.asRecord(value.aiGlobal);
+
+    return {
+      ...defaults,
+      id: row.id,
+      key: row.key,
       updatedAt: row.updatedAt,
+      configuration: {
+        ...defaults.configuration,
+        maintenanceMode: this.parseBoolean(
+          configuration.maintenanceMode,
+          defaults.configuration.maintenanceMode,
+        ),
+        allowInvitations: this.parseBoolean(
+          configuration.allowInvitations,
+          defaults.configuration.allowInvitations,
+        ),
+        defaultLanguage: this.parseString(
+          configuration.defaultLanguage,
+          defaults.configuration.defaultLanguage,
+        ),
+        platformTimezone: this.parseString(
+          configuration.platformTimezone,
+          defaults.configuration.platformTimezone,
+        ),
+        supportEmail: this.parseString(
+          configuration.supportEmail,
+          defaults.configuration.supportEmail,
+        ),
+        companySignupPolicy: this.parseString(
+          configuration.companySignupPolicy,
+          defaults.configuration.companySignupPolicy,
+        ) as PlatformSettingsEntity['configuration']['companySignupPolicy'],
+        manualCompanyValidation: this.parseBoolean(
+          configuration.manualCompanyValidation,
+          defaults.configuration.manualCompanyValidation,
+        ),
+      },
+      security: {
+        ...defaults.security,
+        enforceAdmin2fa: this.parseBoolean(
+          security.enforceAdmin2fa,
+          defaults.security.enforceAdmin2fa,
+        ),
+        adminSessionDurationMinutes: this.parseNumber(
+          security.adminSessionDurationMinutes,
+          defaults.security.adminSessionDurationMinutes,
+        ),
+        maxLoginAttempts: this.parseNumber(
+          security.maxLoginAttempts,
+          defaults.security.maxLoginAttempts,
+        ),
+        lockDurationMinutes: this.parseNumber(
+          security.lockDurationMinutes,
+          defaults.security.lockDurationMinutes,
+        ),
+        allowPasswordReset: this.parseBoolean(
+          security.allowPasswordReset,
+          defaults.security.allowPasswordReset,
+        ),
+        securityAlertEmail: this.parseString(
+          security.securityAlertEmail,
+          defaults.security.securityAlertEmail,
+        ),
+      },
+      aiGlobal: {
+        ...defaults.aiGlobal,
+        provider: 'Google Gemini',
+        model: 'gemini-2.5-flash',
+        confidenceThreshold: this.parseNumber(
+          aiGlobal.confidenceThreshold,
+          defaults.aiGlobal.confidenceThreshold,
+        ),
+        timeoutMs: this.parseNumber(aiGlobal.timeoutMs, defaults.aiGlobal.timeoutMs),
+        maxTokens: this.parseNumber(
+          aiGlobal.maxTokens,
+          defaults.aiGlobal.maxTokens,
+        ),
+        logsEnabled: this.parseBoolean(
+          aiGlobal.logsEnabled,
+          defaults.aiGlobal.logsEnabled,
+        ),
+        maskSensitiveDataInLogs: this.parseBoolean(
+          aiGlobal.maskSensitiveDataInLogs,
+          defaults.aiGlobal.maskSensitiveDataInLogs,
+        ),
+        systemPrompt: this.parseString(
+          aiGlobal.systemPrompt,
+          defaults.aiGlobal.systemPrompt,
+        ),
+        humanFallbackEnabled: this.parseBoolean(
+          aiGlobal.humanFallbackEnabled,
+          defaults.aiGlobal.humanFallbackEnabled,
+        ),
+      },
+    };
+  }
+
+  async findCompanySummary(companyId: string): Promise<CompanySummary | null> {
+    return this.prisma.company.findUnique({
+      where: { id: companyId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
     });
   }
 
-  async get(): Promise<SettingEntity> {
-    const defaults = this.buildDefaultSettings();
-
+  async getPlatformSettings(): Promise<PlatformSettingsEntity> {
+    const defaults = this.buildDefaultPlatformSettings();
     const row = await this.prisma.setting.upsert({
-      where: { key: SettingsRepository.SETTINGS_KEY },
+      where: { key: SettingsRepository.PLATFORM_SETTINGS_KEY },
       create: {
-        key: SettingsRepository.SETTINGS_KEY,
-        description: 'Dashboard settings payload',
-        value: defaults as unknown as object,
+        key: SettingsRepository.PLATFORM_SETTINGS_KEY,
+        description: 'Platform settings payload',
+        value: defaults as unknown as Prisma.InputJsonValue,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       update: {},
     });
 
-    return this.toEntity(row);
+    return this.toPlatformEntity(row);
   }
 
-  async update(partial: Partial<SettingEntity>): Promise<SettingEntity> {
-    const current = await this.get();
+  async updatePlatformSettings(
+    partial: {
+      configuration?: Partial<PlatformSettingsEntity['configuration']>;
+      security?: Partial<PlatformSettingsEntity['security']>;
+      aiGlobal?: Partial<PlatformSettingsEntity['aiGlobal']>;
+    },
+    updatedBy?: string,
+  ): Promise<PlatformSettingsEntity> {
+    const current = await this.getPlatformSettings();
+    const merged: PlatformSettingsEntity = {
+      ...current,
+      ...partial,
+      configuration: {
+        ...current.configuration,
+        ...(partial.configuration ?? {}),
+      },
+      security: {
+        ...current.security,
+        ...(partial.security ?? {}),
+      },
+      aiGlobal: {
+        ...current.aiGlobal,
+        ...(partial.aiGlobal ?? {}),
+        provider: 'Google Gemini',
+        model: 'gemini-2.5-flash',
+      },
+      updatedAt: new Date(),
+    };
 
-    const merged = new SettingEntity({
+    const row = await this.prisma.setting.upsert({
+      where: { key: SettingsRepository.PLATFORM_SETTINGS_KEY },
+      create: {
+        key: SettingsRepository.PLATFORM_SETTINGS_KEY,
+        description: 'Platform settings payload',
+        updatedBy: updatedBy ?? null,
+        value: merged as unknown as Prisma.InputJsonValue,
+        createdAt: new Date(),
+        updatedAt: merged.updatedAt,
+      },
+      update: {
+        value: merged as unknown as Prisma.InputJsonValue,
+        updatedBy: updatedBy ?? null,
+        updatedAt: merged.updatedAt,
+      },
+    });
+
+    return this.toPlatformEntity(row);
+  }
+
+  async getCompanySettings(companyId: string): Promise<CompanySettingsEntity> {
+    const company = await this.findCompanySummary(companyId);
+
+    if (!company) {
+      throw new NotFoundException(`Company with id ${companyId} not found`);
+    }
+
+    const key = this.companySettingsKey(companyId);
+    const existingRow = await this.prisma.setting.findUnique({
+      where: { key },
+    });
+
+    if (existingRow) {
+      return this.toCompanyEntity(existingRow, company);
+    }
+
+    const legacy = await this.prisma.setting.findUnique({
+      where: { key: SettingsRepository.LEGACY_SETTINGS_KEY },
+    });
+
+    const seeded = legacy
+      ? this.toCompanyEntity(
+          {
+            id: legacy.id,
+            key,
+            value: legacy.value,
+            updatedAt: legacy.updatedAt,
+          },
+          company,
+        )
+      : this.buildDefaultCompanySettings(company);
+
+    const created = await this.prisma.setting.create({
+      data: {
+        key,
+        companyId,
+        description: 'Company settings payload',
+        value: seeded as unknown as Prisma.InputJsonValue,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    return this.toCompanyEntity(created, company);
+  }
+
+  async updateCompanySettings(
+    companyId: string,
+    partial: {
+      businessHours?: Partial<CompanySettingsEntity['businessHours']>;
+      aiPolicy?: Partial<CompanySettingsEntity['aiPolicy']>;
+      workflow?: Partial<CompanySettingsEntity['workflow']>;
+      general?: Partial<CompanySettingsEntity['general']>;
+      whatsappProfile?: Partial<CompanySettingsEntity['whatsappProfile']>;
+      whatsappTechnicalSettings?: Partial<
+        CompanySettingsEntity['whatsappTechnicalSettings']
+      >;
+    },
+    updatedBy?: string,
+  ): Promise<CompanySettingsEntity> {
+    const current = await this.getCompanySettings(companyId);
+    const merged: CompanySettingsEntity = {
       ...current,
       ...partial,
       businessHours: {
@@ -145,10 +618,6 @@ export class SettingsRepository {
         ...current.aiPolicy,
         ...(partial.aiPolicy ?? {}),
       },
-      whatsappPolicy: {
-        ...current.whatsappPolicy,
-        ...(partial.whatsappPolicy ?? {}),
-      },
       workflow: {
         ...current.workflow,
         ...(partial.workflow ?? {}),
@@ -157,24 +626,40 @@ export class SettingsRepository {
         ...current.general,
         ...(partial.general ?? {}),
       },
+      whatsappProfile: {
+        ...current.whatsappProfile,
+        ...(partial.whatsappProfile ?? {}),
+      },
+      whatsappTechnicalSettings: {
+        ...current.whatsappTechnicalSettings,
+        ...(partial.whatsappTechnicalSettings ?? {}),
+      },
       updatedAt: new Date(),
-    });
+    };
 
     const row = await this.prisma.setting.upsert({
-      where: { key: SettingsRepository.SETTINGS_KEY },
+      where: { key: this.companySettingsKey(companyId) },
       create: {
-        key: SettingsRepository.SETTINGS_KEY,
-        description: 'Dashboard settings payload',
-        value: merged as unknown as object,
+        key: this.companySettingsKey(companyId),
+        companyId,
+        description: 'Company settings payload',
+        value: merged as unknown as Prisma.InputJsonValue,
+        updatedBy: updatedBy ?? null,
         createdAt: new Date(),
         updatedAt: merged.updatedAt,
       },
       update: {
-        value: merged as unknown as object,
+        value: merged as unknown as Prisma.InputJsonValue,
+        updatedBy: updatedBy ?? null,
         updatedAt: merged.updatedAt,
       },
     });
 
-    return this.toEntity(row);
+    const company = await this.findCompanySummary(companyId);
+    if (!company) {
+      throw new NotFoundException(`Company with id ${companyId} not found`);
+    }
+
+    return this.toCompanyEntity(row, company);
   }
 }
