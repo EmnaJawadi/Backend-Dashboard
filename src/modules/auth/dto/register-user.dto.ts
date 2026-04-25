@@ -31,4 +31,12 @@ export class RegisterUserDto {
   @IsOptional()
   @IsString()
   companyName?: string;
+
+  @IsOptional()
+  @IsString()
+  businessType?: string;
+
+  @IsOptional()
+  @IsString()
+  message?: string;
 }

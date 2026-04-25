@@ -5,9 +5,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { createHash } from 'node:crypto';
 import { UserRole } from '../../common/enums/user-role.enum';
 import type { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import { hashPassword } from '../../common/utils/password.util';
 import {
   CompanyStatus,
   Prisma,
@@ -34,10 +34,6 @@ const PLATFORM_SETTINGS_KEY = 'platform_global_settings_v1';
 @Injectable()
 export class AdminService {
   constructor(private readonly adminRepository: AdminRepository) {}
-
-  private hashPassword(password: string): string {
-    return createHash('sha256').update(password).digest('hex');
-  }
 
   private isSuperAdmin(user: AuthenticatedUser): boolean {
     return user.role === UserRole.SUPER_ADMIN;
@@ -725,7 +721,7 @@ export class AdminService {
       const user = await this.adminRepository.createUser({
         fullName: fullName || null,
         email: createUserDto.email.trim().toLowerCase(),
-        passwordHash: this.hashPassword(createUserDto.password),
+        passwordHash: await hashPassword(createUserDto.password),
         role,
         companyId,
         isActive: true,
@@ -813,7 +809,7 @@ export class AdminService {
       ...(updateUserDto.role !== undefined ? { role: nextRole } : {}),
       ...(updateUserDto.isActive !== undefined ? { isActive: updateUserDto.isActive } : {}),
       ...(updateUserDto.password
-        ? { passwordHash: this.hashPassword(updateUserDto.password) }
+        ? { passwordHash: await hashPassword(updateUserDto.password) }
         : {}),
       ...(nextCompanyId === null
         ? {

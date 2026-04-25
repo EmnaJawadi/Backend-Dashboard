@@ -5,11 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { createHash } from 'node:crypto';
 import type { StringValue } from 'ms';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { JwtPayload } from '../../common/types/jwt-payload.type';
+import { hashPassword, verifyPassword } from '../../common/utils/password.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { CompanyRegistrationStatus, CompanyStatus } from '../../generated/prisma/client';
+import { CompanyRegistrationService } from '../company-registration/company-registration.service';
 import { MailService } from '../mail/mail.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -37,11 +39,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     private readonly jwtService: JwtService,
+    private readonly companyRegistrationService: CompanyRegistrationService,
   ) {}
-
-  private hashPassword(password: string): string {
-    return createHash('sha256').update(password).digest('hex');
-  }
 
   private getAccessSecret(): string {
     return process.env.JWT_ACCESS_SECRET ?? 'dev-access-secret';
@@ -184,6 +183,85 @@ export class AuthService {
     return UserRole.AGENT;
   }
 
+  private getPendingApprovalMessage(): string {
+    return 'Votre compte est en attente d autorisation par l administrateur.';
+  }
+
+  private getRejectedApprovalMessage(): string {
+    return 'Votre demande d inscription a ete refusee. Veuillez contacter l administration.';
+  }
+
+  private async getLatestRegistrationStatus(email: string) {
+    return this.prisma.companyRegistrationRequest.findFirst({
+      where: {
+        businessEmail: {
+          equals: email,
+          mode: 'insensitive',
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        status: true,
+      },
+    });
+  }
+
+  private async assertUserCanLogin(user: {
+    id: string;
+    email: string;
+    role: UserRole;
+    isActive: boolean;
+    companyId: string | null;
+  }) {
+    if (user.role === UserRole.SUPER_ADMIN) {
+      if (!user.isActive) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      return;
+    }
+
+    const latestRegistration = await this.getLatestRegistrationStatus(user.email);
+
+    if (latestRegistration?.status === CompanyRegistrationStatus.REJECTED) {
+      throw new UnauthorizedException(this.getRejectedApprovalMessage());
+    }
+
+    if (!user.isActive) {
+      if (
+        latestRegistration?.status === CompanyRegistrationStatus.PENDING_APPROVAL ||
+        latestRegistration?.status === CompanyRegistrationStatus.NEEDS_MORE_INFO
+      ) {
+        throw new UnauthorizedException(this.getPendingApprovalMessage());
+      }
+
+      throw new UnauthorizedException(
+        'Votre compte est inactif. Veuillez contacter l administration.',
+      );
+    }
+
+    if (!user.companyId) {
+      throw new UnauthorizedException(this.getPendingApprovalMessage());
+    }
+
+    const company = await this.prisma.company.findUnique({
+      where: { id: user.companyId },
+      select: {
+        isActive: true,
+        status: true,
+      },
+    });
+
+    if (!company || !company.isActive || company.status === CompanyStatus.PENDING) {
+      throw new UnauthorizedException(this.getPendingApprovalMessage());
+    }
+
+    if (company.status === CompanyStatus.SUSPENDED) {
+      throw new UnauthorizedException(
+        'L acces a votre entreprise est suspendu. Veuillez contacter l administration.',
+      );
+    }
+  }
+
   private async buildTokens(payload: JwtPayload): Promise<{
     accessToken: string;
     refreshToken: string;
@@ -245,86 +323,103 @@ export class AuthService {
   }
 
   async register(registerUserDto: RegisterUserDto) {
-    const email = registerUserDto.email.trim().toLowerCase();
-    const existing = await this.prisma.user.findUnique({ where: { email } });
-
-    if (existing) {
-      throw new UnauthorizedException('User already exists');
-    }
-
-    const role = this.normalizeRoleFromInput(registerUserDto.role);
-    const companyName = registerUserDto.companyName?.trim();
-    let companyId = registerUserDto.companyId?.trim() ?? null;
-
-    if (role === UserRole.SUPER_ADMIN) {
-      if (companyId || companyName) {
-        throw new BadRequestException(
-          'SUPER_ADMIN accounts cannot be attached to a company',
-        );
-      }
-    } else {
-      if (role === UserRole.COMPANY_ADMIN) {
-        throw new BadRequestException(
-          'Public COMPANY_ADMIN registration is disabled. Submit /public/company-registration and wait for SUPER_ADMIN approval.',
-        );
-      }
-
-      if (!companyId) {
-        throw new BadRequestException(
-          'companyId is required for non-super-admin users',
-        );
-      }
-
-      if (companyId) {
-        const company = await this.prisma.company.findUnique({
-          where: { id: companyId },
-          select: { id: true, isActive: true },
-        });
-
-        if (!company) {
-          throw new BadRequestException('Invalid companyId');
-        }
-
-        if (!company.isActive) {
-          throw new BadRequestException(
-            'This company is not active yet. Wait for SUPER_ADMIN approval.',
-          );
-        }
-      }
-    }
-
     const firstName = registerUserDto.firstName.trim();
     const lastName = registerUserDto.lastName?.trim() || null;
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
+    const role = this.normalizeRoleFromInput(registerUserDto.role);
 
-    const user = await this.prisma.user.create({
-      data: {
-        fullName: fullName || null,
-        email,
-        passwordHash: this.hashPassword(registerUserDto.password),
-        role,
-        companyId: role === UserRole.SUPER_ADMIN ? null : companyId,
-        isActive: true,
+    if (role === UserRole.SUPER_ADMIN) {
+      throw new BadRequestException(
+        'La creation de SUPER_ADMIN par register est interdite. Les SUPER_ADMIN sont crees uniquement par seed interne.',
+      );
+    }
+
+    if (role !== UserRole.COMPANY_ADMIN) {
+      throw new BadRequestException(
+        'Le register public est reserve aux comptes COMPANY_ADMIN.',
+      );
+    }
+
+    const companyName = registerUserDto.companyName?.trim();
+    if (!companyName) {
+      throw new BadRequestException(
+        'companyName is required for COMPANY_ADMIN registration',
+      );
+    }
+
+    const registration = await this.companyRegistrationService.createPublicRequest(
+      {
+        companyName,
+        businessEmail: registerUserDto.email,
+        phoneNumber: registerUserDto.phoneNumber?.trim() || 'N/A',
+        responsibleFullName: fullName || registerUserDto.email.trim(),
+        requestedRole: UserRole.COMPANY_ADMIN,
+        businessType: registerUserDto.businessType?.trim() || 'Non precise',
+        message: registerUserDto.message?.trim(),
+        password: registerUserDto.password,
       },
-    });
+      {
+        requesterIp: null,
+      },
+    );
 
-    return this.buildAuthResponse(user);
+    return {
+      message:
+        'Votre demande d inscription a ete envoyee. Elle sera verifiee par l administration.',
+      requestId: registration.data.id,
+      status: registration.data.status,
+    };
   }
 
   async login(loginDto: LoginDto) {
     const email = loginDto.email.trim().toLowerCase();
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        passwordHash: true,
+        role: true,
+        isActive: true,
+        companyId: true,
+      },
+    });
 
-    if (!user || !user.isActive) {
+    if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const passwordHash = this.hashPassword(loginDto.password);
-    if (user.passwordHash !== passwordHash) {
+    const verification = await verifyPassword(loginDto.password, user.passwordHash);
+    if (!verification.valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return this.buildAuthResponse(user);
+    if (verification.needsRehash) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          passwordHash: await hashPassword(loginDto.password),
+        },
+      });
+    }
+
+    await this.assertUserCanLogin({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      companyId: user.companyId,
+    });
+
+    return this.buildAuthResponse({
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      companyId: user.companyId,
+    });
   }
 
   async refresh(refreshTokenDto: RefreshTokenDto) {
@@ -350,6 +445,14 @@ export class AuthService {
     if (!user || !user.isActive) {
       throw new UnauthorizedException('User not found');
     }
+
+    await this.assertUserCanLogin({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      companyId: user.companyId,
+    });
 
     return this.buildAuthResponse(user);
   }
@@ -425,7 +528,7 @@ export class AuthService {
     await this.prisma.user.update({
       where: { id: user.id },
       data: {
-        passwordHash: this.hashPassword(resetPasswordDto.newPassword),
+        passwordHash: await hashPassword(resetPasswordDto.newPassword),
       },
     });
 
@@ -496,17 +599,25 @@ export class AuthService {
   ) {
     const user = await this.resolveUserFromAuthorization(authorization);
 
-    const currentPasswordHash = this.hashPassword(changePasswordDto.currentPassword);
-    if (currentPasswordHash !== user.passwordHash) {
+    const currentPasswordCheck = await verifyPassword(
+      changePasswordDto.currentPassword,
+      user.passwordHash,
+    );
+    if (!currentPasswordCheck.valid) {
       throw new UnauthorizedException('Current password is incorrect');
     }
 
-    const newPasswordHash = this.hashPassword(changePasswordDto.newPassword);
-    if (newPasswordHash === user.passwordHash) {
+    const isSamePassword = await verifyPassword(
+      changePasswordDto.newPassword,
+      user.passwordHash,
+    );
+    if (isSamePassword.valid) {
       throw new BadRequestException(
         'New password must be different from current password',
       );
     }
+
+    const newPasswordHash = await hashPassword(changePasswordDto.newPassword);
 
     await this.prisma.user.update({
       where: { id: user.id },

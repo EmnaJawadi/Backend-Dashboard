@@ -1,4 +1,11 @@
-import { IsEmail, IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { UserRole } from '../../../generated/prisma/client';
 
 export class CreateCompanyRegistrationRequestDto {
@@ -29,4 +36,9 @@ export class CreateCompanyRegistrationRequestDto {
   @IsString()
   @MaxLength(1200)
   message?: string;
+
+  @IsString()
+  @MinLength(6)
+  @MaxLength(120)
+  password!: string;
 }
