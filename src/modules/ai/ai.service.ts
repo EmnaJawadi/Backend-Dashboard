@@ -237,7 +237,7 @@ export class AiService {
           needsClarification: true,
           confidence: 0.35,
           reason: 'NEEDS_CLARIFICATION',
-          action: windowStatus.templateRequired ? 'template_required' : 'clarify',
+          action: 'clarify',
           sources: [],
           tagsToApply: ['clarification'],
           windowStatus,
@@ -519,12 +519,6 @@ export class AiService {
     blockedReason?: string | null;
     metadata?: Record<string, unknown>;
   }): AiReplyResponseDto {
-    const templateRequired = params.windowStatus.templateRequired;
-    const action =
-      templateRequired && ['reply_ready', 'clarify'].includes(params.action)
-        ? 'template_required'
-        : params.action;
-
     return new AiReplyResponseDto({
       intent: params.intent,
       answer: params.answer,
@@ -533,13 +527,10 @@ export class AiService {
       model: 'gemini-2.5-flash',
       safe: params.safe,
       canSendFreeForm: params.windowStatus.canSendFreeForm,
-      templateRequired,
       handoffRequired: params.handoffRequired,
       needsClarification: params.needsClarification,
       reason:
-        action === 'template_required'
-          ? params.windowStatus.reason
-          : params.reason,
+        params.reason,
       sources: params.sources,
       tagsToApply: params.tagsToApply,
       shouldEscalate: params.handoffRequired,
@@ -547,7 +538,7 @@ export class AiService {
       confidence: params.confidence,
       summary: null,
       blockedReason: params.blockedReason ?? null,
-      action,
+      action: params.action,
       metadata: {
         ...(params.metadata ?? {}),
         window: this.serializeWindow(params.windowStatus),
@@ -600,7 +591,6 @@ export class AiService {
           confidence: params.response.confidence,
           handoffRequired: params.response.handoffRequired,
           needsClarification: params.response.needsClarification,
-          templateRequired: params.response.templateRequired,
           canSendFreeForm: params.response.canSendFreeForm,
           reason: params.response.reason,
           sources: params.response.sources,
@@ -788,7 +778,6 @@ export class AiService {
     needsClarification: boolean;
     windowStatus: ConversationWindowStatus;
   }) {
-    if (params.windowStatus.templateRequired) return 'template_required';
     if (params.handoffRequired) return 'handoff';
     if (params.needsClarification) return 'clarify';
     return 'reply_ready';
@@ -827,7 +816,6 @@ export class AiService {
     return {
       isWithinWindow: windowStatus.isWithinWindow,
       canSendFreeForm: windowStatus.canSendFreeForm,
-      templateRequired: windowStatus.templateRequired,
       reason: windowStatus.reason,
       remainingHours: windowStatus.remainingHours,
       expiresAt: windowStatus.expiresAt?.toISOString() ?? null,

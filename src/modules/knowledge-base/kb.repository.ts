@@ -3,9 +3,10 @@ import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 
 type KbFindParams = {
+  companyId?: string;
   search?: string;
   tag?: string;
-  lang?: string;
+  language?: string;
   status?: string;
   skip?: number;
   take?: number;
@@ -20,7 +21,7 @@ type CreateKbChunkInput = {
 };
 
 type CreateKbArticleInput = Omit<
-  Prisma.KbArticleCreateInput,
+  Prisma.KbArticleUncheckedCreateInput,
   'createdAt' | 'updatedAt'
 >;
 
@@ -115,6 +116,7 @@ export class KbRepository {
 
   private buildWhere(params: KbFindParams): Prisma.KbArticleWhereInput {
     return {
+      ...(params.companyId ? { companyId: params.companyId } : {}),
       ...(params.search
         ? {
             OR: [
@@ -134,8 +136,12 @@ export class KbRepository {
           }
         : {}),
       ...(params.tag ? { tags: { array_contains: [params.tag] } } : {}),
-      ...(params.lang ? { lang: params.lang } : {}),
-      ...(params.status ? { status: params.status } : {}),
+      ...(params.language ? { language: params.language } : {}),
+      ...(params.status
+        ? {
+            status: params.status as any,
+          }
+        : {}),
     };
   }
 }

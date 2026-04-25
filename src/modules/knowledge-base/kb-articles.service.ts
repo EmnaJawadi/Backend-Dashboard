@@ -3,12 +3,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { PrismaService } from '../../database/prisma/prisma.service';
+import {
+  NotificationPriority,
+  NotificationType,
+} from '../../generated/prisma/client';
 import { CreateKbArticleDto } from './dto/create-kb-article.dto';
 import { UpdateKbArticleDto } from './dto/update-kb-article.dto';
 import { PublishKbArticleDto } from './dto/publish-kb-article.dto';
 import { KbArticleQueryDto } from './dto/kb-article-query.dto';
 import { IngestKbFileDto } from './dto/ingest-kb-file.dto';
 import { IngestKbSourceDto } from './dto/ingest-kb-source.dto';
+import { LearnFromHumanResponseDto } from './dto/learn-from-human-response.dto';
 import { KbRepository } from './kb.repository';
 import { KbMapper } from './mappers/kb.mapper';
 import {
@@ -28,7 +34,7 @@ type RawKbArticle = {
   title: string | null;
   body: string | null;
   category?: string | null;
-  lang?: string | null;
+  language?: string | null;
   sourceUrl?: string | null;
   status?: string | null;
   tags?: unknown;
@@ -49,6 +55,7 @@ type RawKbArticle = {
 @Injectable()
 export class KbArticlesService {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly kbRepository: KbRepository,
     private readonly kbMapper: KbMapper,
     private readonly ingestionService: IngestionService,
@@ -58,15 +65,14 @@ export class KbArticlesService {
     const article = await this.kbRepository.createArticle({
       title: createKbArticleDto.title,
       body: createKbArticleDto.content,
-      lang: createKbArticleDto.language ?? null,
+      language: createKbArticleDto.language ?? null,
       sourceUrl: createKbArticleDto.sourceUrl ?? null,
       tags: createKbArticleDto.tags ?? [],
       status: 'draft',
+      source: 'manual',
+      createdBy: null,
       publishedAt: null,
       category: createKbArticleDto.summary ?? null,
-      version: 1,
-      sourceTypes: null,
-      authorId: null,
     });
 
     return this.kbMapper.toArticleEntity(article as RawKbArticle);
@@ -81,7 +87,7 @@ export class KbArticlesService {
       this.kbRepository.findMany({
         search: query.search,
         tag: query.tag,
-        lang: query.language,
+        language: query.language,
         status: query.status,
         skip,
         take: limit,
@@ -90,7 +96,7 @@ export class KbArticlesService {
       this.kbRepository.count({
         search: query.search,
         tag: query.tag,
-        lang: query.language,
+        language: query.language,
         status: query.status,
       }),
     ]);
@@ -124,7 +130,7 @@ export class KbArticlesService {
     const article = await this.kbRepository.updateArticle(id, {
       title: updateKbArticleDto.title,
       body: updateKbArticleDto.content,
-      lang: updateKbArticleDto.language,
+      language: updateKbArticleDto.language,
       sourceUrl: updateKbArticleDto.sourceUrl,
       tags: updateKbArticleDto.tags,
       category: updateKbArticleDto.summary,
@@ -157,6 +163,72 @@ export class KbArticlesService {
     return {
       message: 'Knowledge base article deleted successfully',
     };
+  }
+
+  async learnFromHumanResponse(dto: LearnFromHumanResponseDto) {
+    const customerQuestion = dto.customerQuestion.trim();
+    const humanAnswer = dto.humanAnswer.trim();
+
+    if (!customerQuestion || !humanAnswer) {
+      throw new BadRequestException(
+        'customerQuestion and humanAnswer are required.',
+      );
+    }
+
+    const article = await this.kbRepository.createArticle({
+      companyId: dto.companyId,
+      title: customerQuestion.slice(0, 220),
+      body: `Customer question:\n${customerQuestion}\n\nHuman answer:\n${humanAnswer}`,
+      category: dto.suggestedCategory?.trim() || 'agent-learning',
+      tags: dto.suggestedTags ?? [],
+      language: dto.language ?? 'fr',
+      status: 'draft',
+      source: 'human_agent_response',
+      sourceConversationId: dto.conversationId,
+      sourceContactId: dto.contactId,
+      createdBy: dto.createdBy ?? null,
+      publishedAt: null,
+      sourceUrl: null,
+    });
+
+    await this.prisma.notification.create({
+      data: {
+        companyId: dto.companyId,
+        conversationId: dto.conversationId,
+        contactId: dto.contactId,
+        type: NotificationType.KB_DRAFT_SUGGESTION,
+        title: 'KB draft suggestion created',
+        message: 'A human response was converted to a draft KB article.',
+        priority: NotificationPriority.medium,
+        isRead: false,
+      },
+    });
+
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
+  }
+
+  async findDrafts(companyId?: string) {
+    const items = await this.kbRepository.findMany({
+      status: 'draft',
+      companyId: companyId ?? undefined,
+      skip: 0,
+      take: 200,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return items.map((item: RawKbArticle) =>
+      this.kbMapper.toArticleEntity(item as RawKbArticle),
+    );
+  }
+
+  async reject(id: string) {
+    await this.ensureArticleExists(id);
+
+    const article = await this.kbRepository.updateArticle(id, {
+      status: 'rejected',
+    });
+
+    return this.kbMapper.toArticleEntity(article as RawKbArticle);
   }
 
   async ingest(ingestKbSourceDto: IngestKbSourceDto) {
@@ -277,15 +349,14 @@ export class KbArticlesService {
     const article = await this.kbRepository.createArticle({
       title: ingestionResult.title ?? input.title ?? 'Untitled article',
       body: ingestionResult.content,
-      lang: input.language ?? null,
+      language: input.language ?? null,
       sourceUrl: input.sourceUrl ?? null,
       tags: input.tags ?? [],
       status: input.autoPublish ? 'published' : 'draft',
+      source: 'imported',
+      createdBy: null,
       publishedAt: input.autoPublish ? new Date() : null,
       category: input.summary ?? null,
-      version: 1,
-      sourceTypes: this.normalizeSourceTypeForDatabase(input.sourceType),
-      authorId: null,
     });
 
     if (ingestionResult.chunks.length > 0) {
@@ -307,20 +378,5 @@ export class KbArticlesService {
     }
 
     return this.kbMapper.toArticleEntity(createdArticle as RawKbArticle);
-  }
-
-  private normalizeSourceTypeForDatabase(sourceType: string): string {
-    const normalized = sourceType.toLowerCase();
-
-    if (normalized === 'url' || normalized === 'text' || normalized === 'pdf' || normalized === 'doc') {
-      return normalized;
-    }
-
-    if (normalized === 'ppt') {
-      // Backward-compatible with existing DB check constraint.
-      return 'doc';
-    }
-
-    return 'text';
   }
 }

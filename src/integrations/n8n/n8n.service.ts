@@ -45,6 +45,7 @@ export class N8nService {
       webhookEventId: params.webhookEventId,
       provider: params.normalized.provider,
       eventType: params.normalized.eventType,
+      instanceName: params.normalized.instanceName,
       externalMessageId: params.normalized.externalMessageId,
       conversationExternalId: params.normalized.conversationExternalId,
       contactPhone: params.normalized.contactPhone,
@@ -100,4 +101,3 @@ export class N8nService {
     }
   }
 }
-

@@ -152,7 +152,7 @@ function normalizeMessageType(rawType: unknown): string {
     value === 'buttonsresponsemessage' ||
     value === 'listresponsemessage'
   ) {
-    return 'template';
+    return 'text';
   }
 
   if (value === 'system' || value === 'notification') {
@@ -265,6 +265,11 @@ export function normalizeEvolutionWebhook(
 
   const event = typeof raw.event === 'string' ? raw.event : undefined;
   const rawEventType = detectEventType(event);
+  const instanceName =
+    pickString(raw, ['instance']) ??
+    pickString(data, ['instance']) ??
+    pickString(asRecord(data.instanceData), ['instanceName', 'instance']) ??
+    null;
 
   const externalMessageId =
     pickString(firstMessage, ['key', 'id', 'messageId']) ??
@@ -341,6 +346,7 @@ export function normalizeEvolutionWebhook(
   return new NormalizedWebhookDto({
     eventType,
     provider: 'evolution',
+    instanceName,
     externalMessageId,
     conversationExternalId,
     contactPhone,

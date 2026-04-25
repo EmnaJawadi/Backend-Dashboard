@@ -12,18 +12,19 @@ import { ContactNotesModule } from './modules/contact-notes/contact-notes.module
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { ConversationTagsModule } from './modules/conversation-tags/conversation-tags.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
-import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
+import { CompanyRegistrationModule } from './modules/company-registration/company-registration.module';
+import { CompaniesModule } from './modules/companies/companies.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 import { GeminiModule } from './integrations/gemini/gemini.module';
 import { ConversationsGateway } from './gateways/conversations.gateway';
-import { NotificationsGateway } from './gateways/notifications.gateway';
 
 @Module({
   imports: [
@@ -42,15 +43,17 @@ import { NotificationsGateway } from './gateways/notifications.gateway';
     ContactsModule,
     ConversationTagsModule,
     ConversationsModule,
-    MessageTemplatesModule,
     MessagesModule,
     AnalyticsModule,
     KnowledgeBaseModule,
+    CompanyRegistrationModule,
+    CompaniesModule,
     WebhooksModule,
     SettingsModule,
     UsersModule,
     WhatsappModule,
+    NotificationsModule,
   ],
-  providers: [ConversationsGateway, NotificationsGateway],
+  providers: [ConversationsGateway],
 })
 export class AppModule {}

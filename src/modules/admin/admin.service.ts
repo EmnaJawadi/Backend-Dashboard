@@ -338,7 +338,7 @@ export class AdminService {
         isActive: createCompanyDto.isActive ?? true,
         status: (createCompanyDto.isActive ?? true)
           ? CompanyStatus.ACTIVE
-          : CompanyStatus.INACTIVE,
+          : CompanyStatus.PENDING,
       });
 
       await this.logAuditEvent({
@@ -403,7 +403,7 @@ export class AdminService {
         ...(isActive !== undefined
           ? {
               isActive,
-              status: isActive ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
+              status: isActive ? CompanyStatus.ACTIVE : CompanyStatus.SUSPENDED,
             }
           : {}),
       });
@@ -435,7 +435,7 @@ export class AdminService {
   ) {
     const company = await this.adminRepository.updateCompany(id, {
       isActive: dto.isActive,
-      status: dto.isActive ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
+      status: dto.isActive ? CompanyStatus.ACTIVE : CompanyStatus.SUSPENDED,
     });
 
     await this.logAuditEvent({

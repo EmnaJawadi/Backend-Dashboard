@@ -7,6 +7,7 @@ export type NormalizedWebhookEventType =
 export class NormalizedWebhookDto {
   eventType!: NormalizedWebhookEventType;
   provider!: string;
+  instanceName!: string | null;
   externalMessageId!: string | null;
   conversationExternalId!: string | null;
   contactPhone!: string | null;

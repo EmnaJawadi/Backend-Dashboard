@@ -17,8 +17,18 @@ enum UserRole {
 }
 
 enum CompanyStatus {
+  PENDING
   ACTIVE
-  INACTIVE
+  SUSPENDED
+  TRIAL
+  EXPIRED
+}
+
+enum CompanyRegistrationStatus {
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  NEEDS_MORE_INFO
 }
 
 enum SubscriptionStatus {
@@ -28,19 +38,61 @@ enum SubscriptionStatus {
   CANCELED
 }
 
-model User {
-  id           String   @id @default(uuid())
-  companyId    String?  @map("company_id")
-  fullName     String?  @map("full_name")
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  role         UserRole @default(AGENT)
-  isActive     Boolean  @default(true) @map("is_active")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+enum WhatsappConnectionStatus {
+  DISCONNECTED
+  CONNECTING
+  QR_READY
+  CONNECTED
+  ERROR
+}
 
-  company   Company?   @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  auditLogs AuditLog[] @relation("AuditLogActor")
+enum NotificationPriority {
+  low
+  medium
+  high
+}
+
+enum NotificationType {
+  COMPANY_REGISTRATION_REQUEST
+  AI_LOW_CONFIDENCE
+  HANDOFF_REQUIRED
+  CUSTOMER_REQUEST_HUMAN
+  IMPORTANT_VALIDATION
+  KB_DRAFT_SUGGESTION
+  WHATSAPP_DISCONNECTED
+  WHATSAPP_NOT_CONNECTED
+  CONVERSATION_FOLLOW_UP
+  CONVERSATION_INACTIVE_RISK
+}
+
+enum KbArticleStatus {
+  draft
+  published
+  archived
+  rejected
+}
+
+enum KbArticleSource {
+  manual
+  human_agent_response
+  imported
+}
+
+model User {
+  id                         String                       @id @default(uuid())
+  companyId                  String?                      @map("company_id")
+  fullName                   String?                      @map("full_name")
+  email                      String                       @unique
+  passwordHash               String                       @map("password_hash")
+  role                       UserRole                     @default(AGENT)
+  isActive                   Boolean                      @default(true) @map("is_active")
+  createdAt                  DateTime                     @default(now()) @map("created_at")
+  updatedAt                  DateTime                     @updatedAt @map("updated_at")
+  company                     Company?                     @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  auditLogs                  AuditLog[]                   @relation("AuditLogActor")
+  reviewedRegistrations      CompanyRegistrationRequest[] @relation("RegistrationReviewedBy")
+  createdKbArticles          KbArticle[]                  @relation("KbArticleCreator")
+  readNotifications          Notification[]               @relation("NotificationReadBy")
 
   @@index([companyId])
   @@index([role])
@@ -48,34 +100,81 @@ model User {
 }
 
 model Company {
-  id        String        @id @default(uuid())
-  name      String        @unique
-  legalName String?       @map("legal_name")
-  email     String?
-  phone     String?
-  website   String?
-  address   String?
-  status    CompanyStatus @default(ACTIVE)
-  isActive  Boolean       @default(true) @map("is_active")
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @updatedAt @map("updated_at")
-
-  users            User[]
-  subscriptions    Subscription[]
-  contacts         Contact[]
-  contactNotes     ContactNote[]
-  conversations    Conversation[]
-  conversationTags ConversationTag[]
-  messages         Message[]
-  aiRuns           AiRun[]
-  auditLogs        AuditLog[]
-  kbArticles       KbArticle[]
-  kbChunks         KbChunk[]
-  messageTemplates MessageTemplate[]
-  settings         Setting[]
-  webhookEvents    WebhookEvent[]
+  id                           String                       @id @default(uuid())
+  name                         String                       @unique
+  legalName                    String?                      @map("legal_name")
+  email                        String?                      @unique
+  phone                        String?
+  website                      String?
+  address                      String?
+  status                       CompanyStatus                @default(PENDING)
+  isActive                     Boolean                      @default(false) @map("is_active")
+  createdAt                    DateTime                     @default(now()) @map("created_at")
+  updatedAt                    DateTime                     @updatedAt @map("updated_at")
+  users                        User[]
+  subscriptions                Subscription[]
+  contacts                     Contact[]
+  contactNotes                 ContactNote[]
+  conversations                Conversation[]
+  conversationTags             ConversationTag[]
+  messages                     Message[]
+  aiRuns                       AiRun[]
+  auditLogs                    AuditLog[]
+  kbArticles                   KbArticle[]
+  kbChunks                     KbChunk[]
+  settings                     Setting[]
+  webhookEvents                WebhookEvent[]
+  notifications                Notification[]
+  whatsappInstances            CompanyWhatsappInstance[]
+  approvedRegistrationRequests CompanyRegistrationRequest[] @relation("ApprovedCompanyRegistration")
 
   @@map("companies")
+}
+
+model CompanyRegistrationRequest {
+  id                  String                    @id @default(uuid())
+  companyName         String                    @map("company_name")
+  businessEmail       String                    @map("business_email")
+  phoneNumber         String                    @map("phone_number")
+  responsibleFullName String                    @map("responsible_full_name")
+  requestedRole       UserRole                  @default(COMPANY_ADMIN) @map("requested_role")
+  businessType        String                    @map("business_type")
+  message             String?
+  status              CompanyRegistrationStatus @default(PENDING_APPROVAL)
+  rejectionReason     String?                   @map("rejection_reason")
+  infoRequest         String?                   @map("info_request")
+  reviewedByUserId    String?                   @map("reviewed_by_user_id")
+  approvedCompanyId   String?                   @map("approved_company_id")
+  approvedAt          DateTime?                 @map("approved_at")
+  reviewedAt          DateTime?                 @map("reviewed_at")
+  activationToken     String?                   @unique @map("activation_token")
+  activationExpiresAt DateTime?                 @map("activation_expires_at")
+  createdAt           DateTime                  @default(now()) @map("created_at")
+  updatedAt           DateTime                  @updatedAt @map("updated_at")
+  reviewedByUser      User?                     @relation("RegistrationReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  approvedCompany     Company?                  @relation("ApprovedCompanyRegistration", fields: [approvedCompanyId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([businessEmail])
+  @@index([createdAt])
+  @@map("company_registration_requests")
+}
+
+model CompanyWhatsappInstance {
+  id                    String                   @id @default(uuid())
+  companyId             String                   @map("company_id")
+  evolutionInstanceName String                   @unique @map("evolution_instance_name")
+  whatsappNumber        String?                  @map("whatsapp_number")
+  connectionStatus      WhatsappConnectionStatus @default(DISCONNECTED) @map("connection_status")
+  connectedAt           DateTime?                @map("connected_at")
+  lastSyncAt            DateTime?                @map("last_sync_at")
+  createdAt             DateTime                 @default(now()) @map("created_at")
+  updatedAt             DateTime                 @updatedAt @map("updated_at")
+  company               Company                  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([connectionStatus])
+  @@map("company_whatsapp_instances")
 }
 
 model Subscription {
@@ -88,8 +187,7 @@ model Subscription {
   isActive  Boolean            @default(true) @map("is_active")
   createdAt DateTime           @default(now()) @map("created_at")
   updatedAt DateTime           @updatedAt @map("updated_at")
-
-  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId])
   @@index([status])
@@ -97,29 +195,32 @@ model Subscription {
 }
 
 model Contact {
-  id           String    @id @default(uuid())
-  companyId    String?   @map("company_id")
-  phone        String?
-  whatsappName String?   @map("whatsapp_name")
-  fullName     String?   @map("full_name")
-  email        String?
-  language     String?
-  city         String?
-  country      String?
-  tags         Json?
-  notes        String?
-  segment      String?
-  source       String?
-  status       String?
-  lastSeen     DateTime? @map("last_seen")
-  createdAt    DateTime  @map("created_at")
-  updatedAt    DateTime  @map("updated_at")
-
-  company       Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  notesRel      ContactNote[]
-  conversations Conversation[]
+  id             String         @id @default(uuid())
+  companyId      String?        @map("company_id")
+  phone          String?
+  whatsappName   String?        @map("whatsapp_name")
+  fullName       String?        @map("full_name")
+  email          String?
+  language       String?
+  city           String?
+  country        String?
+  tags           Json?
+  notes          String?
+  segment        String?
+  source         String?
+  status         String?
+  lastSeen       DateTime?      @map("last_seen")
+  createdAt      DateTime       @map("created_at")
+  updatedAt      DateTime       @map("updated_at")
+  company        Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  notesRel       ContactNote[]
+  conversations  Conversation[]
+  notifications  Notification[]
+  sourceArticles KbArticle[]    @relation("KbArticleSourceContact")
+  aiRuns         AiRun[]
 
   @@index([companyId])
+  @@index([phone])
   @@map("contacts")
 }
 
@@ -131,101 +232,121 @@ model ContactNote {
   note      String
   createdAt DateTime @map("created_at")
   updatedAt DateTime @map("updated_at")
-
-  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  contact Contact  @relation(fields: [contactId], references: [id])
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  contact   Contact  @relation(fields: [contactId], references: [id])
 
   @@index([companyId])
   @@map("contact_notes")
 }
 
 model Conversation {
-  id                    String    @id @default(uuid())
-  companyId             String?   @map("company_id")
-  contactId             String    @map("contact_id")
-  channel               String?
-  status                String?
-  priority              String?
-  assignedTo            String?   @map("assigned_to")
-  botPaused             Boolean?  @map("bot_paused")
-  handoffRequired       Boolean?  @map("handoff_required")
-  unreadCount           Int?      @map("unread_count")
-  lastMessageAt         DateTime? @map("last_message_at")
-  lastCustomerMessageAt DateTime? @map("last_customer_message_at")
-  lastBotMessageAt      DateTime? @map("last_bot_message_at")
-  lastHumanMessageAt    DateTime? @map("last_human_message_at")
-  closedAt              DateTime? @map("closed_at")
-  createdAt             DateTime  @map("created_at")
-  updatedAt             DateTime  @map("updated_at")
-
-  company  Company?          @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  contact  Contact           @relation(fields: [contactId], references: [id])
-  tags     ConversationTag[]
-  messages Message[]
+  id                      String            @id @default(uuid())
+  companyId               String?           @map("company_id")
+  contactId               String            @map("contact_id")
+  channel                 String?
+  status                  String?
+  priority                String?
+  assignedTo              String?           @map("assigned_to")
+  botPaused               Boolean?          @map("bot_paused")
+  handoffRequired         Boolean?          @map("handoff_required")
+  unreadCount             Int?              @map("unread_count")
+  lastMessageAt           DateTime?         @map("last_message_at")
+  lastCustomerMessageAt   DateTime?         @map("last_customer_message_at")
+  lastBotMessageAt        DateTime?         @map("last_bot_message_at")
+  lastHumanMessageAt      DateTime?         @map("last_human_message_at")
+  conversationSummary     String?           @map("conversation_summary")
+  customerIntent          String?           @map("customer_intent")
+  requestedProductService String?           @map("requested_product_service")
+  requestedDeliveryDate   String?           @map("requested_delivery_date")
+  deliveryAddress         String?           @map("delivery_address")
+  budget                  String?
+  agreedTerms             String?           @map("agreed_terms")
+  nextAction              String?           @map("next_action")
+  lastAiDecision          String?           @map("last_ai_decision")
+  importantNotes          String?           @map("important_notes")
+  closedAt                DateTime?         @map("closed_at")
+  createdAt               DateTime          @map("created_at")
+  updatedAt               DateTime          @map("updated_at")
+  company                 Company?          @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  contact                 Contact           @relation(fields: [contactId], references: [id])
+  tags                    ConversationTag[]
+  messages                Message[]
+  notifications           Notification[]
+  sourceArticles          KbArticle[]       @relation("KbArticleSourceConversation")
+  aiRuns                  AiRun[]
 
   @@index([companyId])
+  @@index([contactId])
   @@map("conversations")
 }
 
 model ConversationTag {
-  id             String   @id @default(uuid())
-  companyId      String?  @map("company_id")
-  conversationId String   @map("conversation_id")
+  id             String       @id @default(uuid())
+  companyId      String?      @map("company_id")
+  conversationId String       @map("conversation_id")
   tag            String
-  createdAt      DateTime @map("created_at")
-
-  company      Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  conversation Conversation @relation(fields: [conversationId], references: [id])
+  createdAt      DateTime     @map("created_at")
+  company        Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
 
   @@index([companyId])
   @@map("conversation_tags")
 }
 
 model Message {
-  id                String    @id @default(uuid())
-  companyId         String?   @map("company_id")
-  conversationId    String    @map("conversation_id")
-  externalMessageId String?   @map("external_message_id")
+  id                String       @id @default(uuid())
+  companyId         String?      @map("company_id")
+  conversationId    String       @map("conversation_id")
+  externalMessageId String?      @map("external_message_id")
   direction         String?
-  senderType        String?   @map("sender_type")
+  senderType        String?      @map("sender_type")
   content           String?
-  messageType       String?   @map("message_type")
-  mediaUrl          String?   @map("media_url")
-  mimeType          String?   @map("mime_type")
-  rawPayload        Json?     @map("raw_payload")
-  deliveryStatus    String?   @map("delivery_status")
-  errorMessage      String?   @map("error_message")
-  createdAt         DateTime  @map("created_at")
-  messageTimestamp  DateTime? @map("message_timestamp")
-
-  company      Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  conversation Conversation @relation(fields: [conversationId], references: [id])
+  messageType       String?      @map("message_type")
+  mediaUrl          String?      @map("media_url")
+  mimeType          String?      @map("mime_type")
+  rawPayload        Json?        @map("raw_payload")
+  deliveryStatus    String?      @map("delivery_status")
+  errorMessage      String?      @map("error_message")
+  createdAt         DateTime     @map("created_at")
+  messageTimestamp  DateTime?    @map("message_timestamp")
+  company           Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  conversation      Conversation @relation(fields: [conversationId], references: [id])
 
   @@index([companyId])
+  @@index([conversationId])
+  @@index([externalMessageId])
   @@map("messages")
 }
 
 model AiRun {
-  id               String   @id @default(uuid())
-  companyId        String?  @map("company_id")
-  conversationId   String   @map("conversation_id")
-  messageId        String   @map("message_id")
-  inputText        String?  @map("input_text")
-  outputText       String?  @map("output_text")
+  id               String       @id @default(uuid())
+  companyId        String?      @map("company_id")
+  conversationId   String       @map("conversation_id")
+  messageId        String       @map("message_id")
+  contactId        String?      @map("contact_id")
+  inputText        String?      @map("input_text")
+  outputText       String?      @map("output_text")
   intent           String?
+  provider         String?
   model            String?
-  promptTokens     Int?     @map("prompt_tokens")
-  completionTokens Int?     @map("completion_tokens")
-  totalTokens      Int?     @map("total_tokens")
-  latencyMs        Int?     @map("latency_ms")
-  handoffRequired  Boolean? @map("handoff_required")
-  tagsToApply      Json?    @map("tags_to_apply")
-  rawResponse      Json?    @map("raw_response")
-  createdAt        DateTime @map("created_at")
-
-  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  status           String?
+  promptTokens     Int?         @map("prompt_tokens")
+  completionTokens Int?         @map("completion_tokens")
+  totalTokens      Int?         @map("total_tokens")
+  latencyMs        Int?         @map("latency_ms")
+  confidenceScore  Float?       @map("confidence_score")
+  blockedReason    String?      @map("blocked_reason")
+  handoffRequired  Boolean?     @map("handoff_required")
+  tagsToApply      Json?        @map("tags_to_apply")
+  rawResponse      Json?        @map("raw_response")
+  createdAt        DateTime     @map("created_at")
+  company          Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
+  @@index([conversationId])
+  @@index([contactId])
   @@map("ai_runs")
 }
 
@@ -239,9 +360,8 @@ model AuditLog {
   details     Json?
   ipAddress   String?  @map("ip_address")
   createdAt   DateTime @map("created_at")
-
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  actorUser User?    @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  actorUser   User?    @relation("AuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
   @@index([actorUserId])
@@ -250,26 +370,31 @@ model AuditLog {
 }
 
 model KbArticle {
-  id          String    @id @default(uuid())
-  companyId   String?   @map("company_id")
-  title       String?
-  body        String?
-  category    String?
-  tags        Json?
-  lang        String?
-  status      String?
-  version     Int?
-  sourceTypes String?   @map("source_type")
-  sourceUrl   String?   @map("source_url")
-  authorId    String?   @map("author_id")
-  publishedAt DateTime? @map("published_at")
-  createdAt   DateTime  @map("created_at")
-  updatedAt   DateTime  @map("updated_at")
-
-  company Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  chunks  KbChunk[]
+  id                   String          @id @default(uuid())
+  companyId            String?         @map("company_id")
+  title                String?
+  body                 String?
+  category             String?
+  tags                 Json?
+  language             String?         @map("language")
+  status               KbArticleStatus @default(draft)
+  source               KbArticleSource @default(manual)
+  sourceUrl            String?         @map("source_url")
+  sourceConversationId String?         @map("source_conversation_id")
+  sourceContactId      String?         @map("source_contact_id")
+  createdBy            String?         @map("created_by")
+  publishedAt          DateTime?       @map("published_at")
+  createdAt            DateTime        @map("created_at")
+  updatedAt            DateTime        @map("updated_at")
+  company              Company?        @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  chunks               KbChunk[]
+  sourceConversation   Conversation?   @relation("KbArticleSourceConversation", fields: [sourceConversationId], references: [id], onDelete: SetNull)
+  sourceContact        Contact?        @relation("KbArticleSourceContact", fields: [sourceContactId], references: [id], onDelete: SetNull)
+  creator              User?           @relation("KbArticleCreator", fields: [createdBy], references: [id], onDelete: SetNull)
 
   @@index([companyId])
+  @@index([status])
+  @@index([source])
   @@map("kb_articles")
 }
 
@@ -282,30 +407,37 @@ model KbChunk {
   embeddingsVector Unsupported("vector")? @map("embedding_vector")
   metadataJson     Json?                  @map("metadata_json")
   createdAt        DateTime               @map("created_at")
-
-  article KbArticle @relation(fields: [articleId], references: [id])
-  company Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  article          KbArticle              @relation(fields: [articleId], references: [id])
+  company          Company?               @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
   @@map("kb_chunks")
 }
 
-model MessageTemplate {
-  id                 String   @id @default(uuid())
-  companyId          String?  @map("company_id")
-  name               String?
-  language           String?
-  category           String?
-  templateBody       String?  @map("template_body")
-  providerTemplateId String?  @map("provider_template_id")
-  status             String?
-  createdAt          DateTime @map("created_at")
-  updatedAt          DateTime @map("updated_at")
-
-  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+model Notification {
+  id             String               @id @default(uuid())
+  companyId      String?              @map("company_id")
+  conversationId String?              @map("conversation_id")
+  contactId      String?              @map("contact_id")
+  readByUserId   String?              @map("read_by_user_id")
+  type           NotificationType
+  title          String
+  message        String
+  priority       NotificationPriority @default(medium)
+  isRead         Boolean              @default(false) @map("is_read")
+  readAt         DateTime?            @map("read_at")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  company        Company?             @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  conversation   Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  contact        Contact?             @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  readByUser     User?                @relation("NotificationReadBy", fields: [readByUserId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
-  @@map("message_templates")
+  @@index([isRead])
+  @@index([type])
+  @@index([createdAt])
+  @@map("notifications")
 }
 
 model Setting {
@@ -317,8 +449,7 @@ model Setting {
   updatedBy   String?  @map("updated_by")
   createdAt   DateTime @map("created_at")
   updatedAt   DateTime @map("updated_at")
-
-  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
   @@map("settings")
@@ -329,15 +460,16 @@ model WebhookEvent {
   companyId        String?   @map("company_id")
   provider         String?
   eventType        String?   @map("event_type")
+  instanceName     String?   @map("instance_name")
   externalEventId  String?   @map("external_event_id")
   payload          Json?
   processingStatus String?   @map("processing_status")
   errorMessage     String?   @map("error_message")
   receivedAt       DateTime  @map("received_at")
   processedAt      DateTime? @map("processed_at")
-
-  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  company          Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
+  @@index([instanceName])
   @@map("webhook_events")
 }

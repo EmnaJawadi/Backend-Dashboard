@@ -210,16 +210,6 @@ class UpdateCompanyWhatsappTechnicalDto {
   notificationsEnabled?: boolean;
 
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(72)
-  sessionWindowHours?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  allowTemplatesOutsideWindow?: boolean;
-
-  @IsOptional()
   @IsString()
   defaultCountryCode?: string;
 }

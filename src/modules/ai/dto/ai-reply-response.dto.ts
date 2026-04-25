@@ -6,7 +6,6 @@ export class AiReplyResponseDto {
   model = '';
   safe = true;
   canSendFreeForm = false;
-  templateRequired = false;
   handoffRequired = false;
   needsClarification = false;
   reason: string | null = null;

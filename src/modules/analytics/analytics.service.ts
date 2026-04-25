@@ -129,17 +129,17 @@ export class AnalyticsService {
         : '0::float AS "resolutionRate"';
 
     const avgMessagesExpr = messagesCountColumn
-      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(messagesCountColumn)}, 0)), 2), 0)::float AS "averageMessagesPerConversation"`
+      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(messagesCountColumn)}, 0))::numeric, 2), 0)::float AS "averageMessagesPerConversation"`
       : '0::float AS "averageMessagesPerConversation"';
 
     const avgFirstResponseExpr =
       createdAtColumn && firstResponseAtColumn
-        ? `COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (${this.q(firstResponseAtColumn)} - ${this.q(createdAtColumn)})) * 1000), 2), 0)::float AS "averageFirstResponseTimeMs"`
+        ? `COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (${this.q(firstResponseAtColumn)} - ${this.q(createdAtColumn)})) * 1000)::numeric, 2), 0)::float AS "averageFirstResponseTimeMs"`
         : '0::float AS "averageFirstResponseTimeMs"';
 
     const avgResolutionExpr =
       createdAtColumn && resolvedAtColumn
-        ? `COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (${this.q(resolvedAtColumn)} - ${this.q(createdAtColumn)})) * 1000), 2), 0)::float AS "averageResolutionTimeMs"`
+        ? `COALESCE(ROUND(AVG(EXTRACT(EPOCH FROM (${this.q(resolvedAtColumn)} - ${this.q(createdAtColumn)})) * 1000)::numeric, 2), 0)::float AS "averageResolutionTimeMs"`
         : '0::float AS "averageResolutionTimeMs"';
 
     const totalsSql = `
@@ -270,11 +270,11 @@ export class AnalyticsService {
       : '0::float AS "successRate"';
 
     const avgLatencyExpr = latencyColumn
-      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(latencyColumn)}, 0)), 2), 0)::float AS "averageLatencyMs"`
+      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(latencyColumn)}, 0))::numeric, 2), 0)::float AS "averageLatencyMs"`
       : '0::float AS "averageLatencyMs"';
 
     const avgConfidenceExpr = confidenceColumn
-      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(confidenceColumn)}, 0)), 4), 0)::float AS "averageConfidenceScore"`
+      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(confidenceColumn)}, 0))::numeric, 4), 0)::float AS "averageConfidenceScore"`
       : '0::float AS "averageConfidenceScore"';
 
     const totalTokensExpr = tokensColumn
@@ -282,11 +282,11 @@ export class AnalyticsService {
       : '0::int AS "totalTokensUsed"';
 
     const avgTokensExpr = tokensColumn
-      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(tokensColumn)}, 0)), 2), 0)::float AS "averageTokensUsed"`
+      ? `COALESCE(ROUND(AVG(COALESCE(${this.q(tokensColumn)}, 0))::numeric, 2), 0)::float AS "averageTokensUsed"`
       : '0::float AS "averageTokensUsed"';
 
     const totalCostExpr = costColumn
-      ? `COALESCE(ROUND(SUM(COALESCE(${this.q(costColumn)}, 0)), 6), 0)::float AS "totalEstimatedCost"`
+      ? `COALESCE(ROUND(SUM(COALESCE(${this.q(costColumn)}, 0))::numeric, 6), 0)::float AS "totalEstimatedCost"`
       : '0::float AS "totalEstimatedCost"';
 
     const totalsSql = `

@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Company: 'Company',
+  CompanyRegistrationRequest: 'CompanyRegistrationRequest',
+  CompanyWhatsappInstance: 'CompanyWhatsappInstance',
   Subscription: 'Subscription',
   Contact: 'Contact',
   ContactNote: 'ContactNote',
@@ -63,7 +65,7 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   KbArticle: 'KbArticle',
   KbChunk: 'KbChunk',
-  MessageTemplate: 'MessageTemplate',
+  Notification: 'Notification',
   Setting: 'Setting',
   WebhookEvent: 'WebhookEvent'
 } as const
@@ -114,6 +116,46 @@ export const CompanyScalarFieldEnum = {
 } as const
 
 export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const CompanyRegistrationRequestScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  businessEmail: 'businessEmail',
+  phoneNumber: 'phoneNumber',
+  responsibleFullName: 'responsibleFullName',
+  requestedRole: 'requestedRole',
+  businessType: 'businessType',
+  message: 'message',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  infoRequest: 'infoRequest',
+  reviewedByUserId: 'reviewedByUserId',
+  approvedCompanyId: 'approvedCompanyId',
+  approvedAt: 'approvedAt',
+  reviewedAt: 'reviewedAt',
+  activationToken: 'activationToken',
+  activationExpiresAt: 'activationExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyRegistrationRequestScalarFieldEnum = (typeof CompanyRegistrationRequestScalarFieldEnum)[keyof typeof CompanyRegistrationRequestScalarFieldEnum]
+
+
+export const CompanyWhatsappInstanceScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  evolutionInstanceName: 'evolutionInstanceName',
+  whatsappNumber: 'whatsappNumber',
+  connectionStatus: 'connectionStatus',
+  connectedAt: 'connectedAt',
+  lastSyncAt: 'lastSyncAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyWhatsappInstanceScalarFieldEnum = (typeof CompanyWhatsappInstanceScalarFieldEnum)[keyof typeof CompanyWhatsappInstanceScalarFieldEnum]
 
 
 export const SubscriptionScalarFieldEnum = {
@@ -182,6 +224,16 @@ export const ConversationScalarFieldEnum = {
   lastCustomerMessageAt: 'lastCustomerMessageAt',
   lastBotMessageAt: 'lastBotMessageAt',
   lastHumanMessageAt: 'lastHumanMessageAt',
+  conversationSummary: 'conversationSummary',
+  customerIntent: 'customerIntent',
+  requestedProductService: 'requestedProductService',
+  requestedDeliveryDate: 'requestedDeliveryDate',
+  deliveryAddress: 'deliveryAddress',
+  budget: 'budget',
+  agreedTerms: 'agreedTerms',
+  nextAction: 'nextAction',
+  lastAiDecision: 'lastAiDecision',
+  importantNotes: 'importantNotes',
   closedAt: 'closedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -227,14 +279,19 @@ export const AiRunScalarFieldEnum = {
   companyId: 'companyId',
   conversationId: 'conversationId',
   messageId: 'messageId',
+  contactId: 'contactId',
   inputText: 'inputText',
   outputText: 'outputText',
   intent: 'intent',
+  provider: 'provider',
   model: 'model',
+  status: 'status',
   promptTokens: 'promptTokens',
   completionTokens: 'completionTokens',
   totalTokens: 'totalTokens',
   latencyMs: 'latencyMs',
+  confidenceScore: 'confidenceScore',
+  blockedReason: 'blockedReason',
   handoffRequired: 'handoffRequired',
   tagsToApply: 'tagsToApply',
   rawResponse: 'rawResponse',
@@ -266,12 +323,13 @@ export const KbArticleScalarFieldEnum = {
   body: 'body',
   category: 'category',
   tags: 'tags',
-  lang: 'lang',
+  language: 'language',
   status: 'status',
-  version: 'version',
-  sourceTypes: 'sourceTypes',
+  source: 'source',
   sourceUrl: 'sourceUrl',
-  authorId: 'authorId',
+  sourceConversationId: 'sourceConversationId',
+  sourceContactId: 'sourceContactId',
+  createdBy: 'createdBy',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -293,20 +351,23 @@ export const KbChunkScalarFieldEnum = {
 export type KbChunkScalarFieldEnum = (typeof KbChunkScalarFieldEnum)[keyof typeof KbChunkScalarFieldEnum]
 
 
-export const MessageTemplateScalarFieldEnum = {
+export const NotificationScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
-  name: 'name',
-  language: 'language',
-  category: 'category',
-  templateBody: 'templateBody',
-  providerTemplateId: 'providerTemplateId',
-  status: 'status',
+  conversationId: 'conversationId',
+  contactId: 'contactId',
+  readByUserId: 'readByUserId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  priority: 'priority',
+  isRead: 'isRead',
+  readAt: 'readAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type MessageTemplateScalarFieldEnum = (typeof MessageTemplateScalarFieldEnum)[keyof typeof MessageTemplateScalarFieldEnum]
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SettingScalarFieldEnum = {
@@ -328,6 +389,7 @@ export const WebhookEventScalarFieldEnum = {
   companyId: 'companyId',
   provider: 'provider',
   eventType: 'eventType',
+  instanceName: 'instanceName',
   externalEventId: 'externalEventId',
   payload: 'payload',
   processingStatus: 'processingStatus',

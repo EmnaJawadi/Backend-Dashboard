@@ -9,12 +9,28 @@ export class WebhooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createWebhookLog(data: NormalizedWebhookDto) {
+    const companyId = data.instanceName
+      ? (
+          await this.prisma.companyWhatsappInstance.findUnique({
+            where: {
+              evolutionInstanceName: data.instanceName,
+            },
+            select: {
+              companyId: true,
+            },
+          })
+        )?.companyId ?? null
+      : null;
+
     return this.prisma.webhookEvent.create({
       data: {
+        companyId,
         provider: data.provider ?? null,
         eventType: data.eventType ?? null,
+        instanceName: data.instanceName ?? null,
         externalEventId: data.externalMessageId ?? null,
         payload: {
+          instanceName: data.instanceName,
           conversationExternalId: data.conversationExternalId,
           contactPhone: data.contactPhone,
           contactName: data.contactName,

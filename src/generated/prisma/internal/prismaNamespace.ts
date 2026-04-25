@@ -386,6 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Company: 'Company',
+  CompanyRegistrationRequest: 'CompanyRegistrationRequest',
+  CompanyWhatsappInstance: 'CompanyWhatsappInstance',
   Subscription: 'Subscription',
   Contact: 'Contact',
   ContactNote: 'ContactNote',
@@ -396,7 +398,7 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   KbArticle: 'KbArticle',
   KbChunk: 'KbChunk',
-  MessageTemplate: 'MessageTemplate',
+  Notification: 'Notification',
   Setting: 'Setting',
   WebhookEvent: 'WebhookEvent'
 } as const
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "messageTemplate" | "setting" | "webhookEvent"
+    modelProps: "user" | "company" | "companyRegistrationRequest" | "companyWhatsappInstance" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "notification" | "setting" | "webhookEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -563,6 +565,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CompanyCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CompanyCountAggregateOutputType> | number
+        }
+      }
+    }
+    CompanyRegistrationRequest: {
+      payload: Prisma.$CompanyRegistrationRequestPayload<ExtArgs>
+      fields: Prisma.CompanyRegistrationRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CompanyRegistrationRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CompanyRegistrationRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.CompanyRegistrationRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CompanyRegistrationRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        findMany: {
+          args: Prisma.CompanyRegistrationRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>[]
+        }
+        create: {
+          args: Prisma.CompanyRegistrationRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        createMany: {
+          args: Prisma.CompanyRegistrationRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CompanyRegistrationRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.CompanyRegistrationRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        update: {
+          args: Prisma.CompanyRegistrationRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.CompanyRegistrationRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CompanyRegistrationRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CompanyRegistrationRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.CompanyRegistrationRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyRegistrationRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.CompanyRegistrationRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompanyRegistrationRequest>
+        }
+        groupBy: {
+          args: Prisma.CompanyRegistrationRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyRegistrationRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CompanyRegistrationRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyRegistrationRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    CompanyWhatsappInstance: {
+      payload: Prisma.$CompanyWhatsappInstancePayload<ExtArgs>
+      fields: Prisma.CompanyWhatsappInstanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CompanyWhatsappInstanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CompanyWhatsappInstanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        findFirst: {
+          args: Prisma.CompanyWhatsappInstanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CompanyWhatsappInstanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        findMany: {
+          args: Prisma.CompanyWhatsappInstanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>[]
+        }
+        create: {
+          args: Prisma.CompanyWhatsappInstanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        createMany: {
+          args: Prisma.CompanyWhatsappInstanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CompanyWhatsappInstanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>[]
+        }
+        delete: {
+          args: Prisma.CompanyWhatsappInstanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        update: {
+          args: Prisma.CompanyWhatsappInstanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        deleteMany: {
+          args: Prisma.CompanyWhatsappInstanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CompanyWhatsappInstanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CompanyWhatsappInstanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>[]
+        }
+        upsert: {
+          args: Prisma.CompanyWhatsappInstanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyWhatsappInstancePayload>
+        }
+        aggregate: {
+          args: Prisma.CompanyWhatsappInstanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompanyWhatsappInstance>
+        }
+        groupBy: {
+          args: Prisma.CompanyWhatsappInstanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyWhatsappInstanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CompanyWhatsappInstanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyWhatsappInstanceCountAggregateOutputType> | number
         }
       }
     }
@@ -1306,77 +1456,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    MessageTemplate: {
-      payload: Prisma.$MessageTemplatePayload<ExtArgs>
-      fields: Prisma.MessageTemplateFieldRefs
+    Notification: {
+      payload: Prisma.$NotificationPayload<ExtArgs>
+      fields: Prisma.NotificationFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.MessageTemplateFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload> | null
+          args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.MessageTemplateFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         findFirst: {
-          args: Prisma.MessageTemplateFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload> | null
+          args: Prisma.NotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.MessageTemplateFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         findMany: {
-          args: Prisma.MessageTemplateFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>[]
+          args: Prisma.NotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
         }
         create: {
-          args: Prisma.MessageTemplateCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         createMany: {
-          args: Prisma.MessageTemplateCreateManyArgs<ExtArgs>
+          args: Prisma.NotificationCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.MessageTemplateCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>[]
+          args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
         }
         delete: {
-          args: Prisma.MessageTemplateDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         update: {
-          args: Prisma.MessageTemplateUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         deleteMany: {
-          args: Prisma.MessageTemplateDeleteManyArgs<ExtArgs>
+          args: Prisma.NotificationDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.MessageTemplateUpdateManyArgs<ExtArgs>
+          args: Prisma.NotificationUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.MessageTemplateUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>[]
+          args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
         }
         upsert: {
-          args: Prisma.MessageTemplateUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageTemplatePayload>
+          args: Prisma.NotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
         }
         aggregate: {
-          args: Prisma.MessageTemplateAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateMessageTemplate>
+          args: Prisma.NotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotification>
         }
         groupBy: {
-          args: Prisma.MessageTemplateGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.MessageTemplateGroupByOutputType>[]
+          args: Prisma.NotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationGroupByOutputType>[]
         }
         count: {
-          args: Prisma.MessageTemplateCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.MessageTemplateCountAggregateOutputType> | number
+          args: Prisma.NotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationCountAggregateOutputType> | number
         }
       }
     }
@@ -1599,6 +1749,46 @@ export const CompanyScalarFieldEnum = {
 export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
 
 
+export const CompanyRegistrationRequestScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  businessEmail: 'businessEmail',
+  phoneNumber: 'phoneNumber',
+  responsibleFullName: 'responsibleFullName',
+  requestedRole: 'requestedRole',
+  businessType: 'businessType',
+  message: 'message',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  infoRequest: 'infoRequest',
+  reviewedByUserId: 'reviewedByUserId',
+  approvedCompanyId: 'approvedCompanyId',
+  approvedAt: 'approvedAt',
+  reviewedAt: 'reviewedAt',
+  activationToken: 'activationToken',
+  activationExpiresAt: 'activationExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyRegistrationRequestScalarFieldEnum = (typeof CompanyRegistrationRequestScalarFieldEnum)[keyof typeof CompanyRegistrationRequestScalarFieldEnum]
+
+
+export const CompanyWhatsappInstanceScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  evolutionInstanceName: 'evolutionInstanceName',
+  whatsappNumber: 'whatsappNumber',
+  connectionStatus: 'connectionStatus',
+  connectedAt: 'connectedAt',
+  lastSyncAt: 'lastSyncAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyWhatsappInstanceScalarFieldEnum = (typeof CompanyWhatsappInstanceScalarFieldEnum)[keyof typeof CompanyWhatsappInstanceScalarFieldEnum]
+
+
 export const SubscriptionScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
@@ -1665,6 +1855,16 @@ export const ConversationScalarFieldEnum = {
   lastCustomerMessageAt: 'lastCustomerMessageAt',
   lastBotMessageAt: 'lastBotMessageAt',
   lastHumanMessageAt: 'lastHumanMessageAt',
+  conversationSummary: 'conversationSummary',
+  customerIntent: 'customerIntent',
+  requestedProductService: 'requestedProductService',
+  requestedDeliveryDate: 'requestedDeliveryDate',
+  deliveryAddress: 'deliveryAddress',
+  budget: 'budget',
+  agreedTerms: 'agreedTerms',
+  nextAction: 'nextAction',
+  lastAiDecision: 'lastAiDecision',
+  importantNotes: 'importantNotes',
   closedAt: 'closedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1710,14 +1910,19 @@ export const AiRunScalarFieldEnum = {
   companyId: 'companyId',
   conversationId: 'conversationId',
   messageId: 'messageId',
+  contactId: 'contactId',
   inputText: 'inputText',
   outputText: 'outputText',
   intent: 'intent',
+  provider: 'provider',
   model: 'model',
+  status: 'status',
   promptTokens: 'promptTokens',
   completionTokens: 'completionTokens',
   totalTokens: 'totalTokens',
   latencyMs: 'latencyMs',
+  confidenceScore: 'confidenceScore',
+  blockedReason: 'blockedReason',
   handoffRequired: 'handoffRequired',
   tagsToApply: 'tagsToApply',
   rawResponse: 'rawResponse',
@@ -1749,12 +1954,13 @@ export const KbArticleScalarFieldEnum = {
   body: 'body',
   category: 'category',
   tags: 'tags',
-  lang: 'lang',
+  language: 'language',
   status: 'status',
-  version: 'version',
-  sourceTypes: 'sourceTypes',
+  source: 'source',
   sourceUrl: 'sourceUrl',
-  authorId: 'authorId',
+  sourceConversationId: 'sourceConversationId',
+  sourceContactId: 'sourceContactId',
+  createdBy: 'createdBy',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1776,20 +1982,23 @@ export const KbChunkScalarFieldEnum = {
 export type KbChunkScalarFieldEnum = (typeof KbChunkScalarFieldEnum)[keyof typeof KbChunkScalarFieldEnum]
 
 
-export const MessageTemplateScalarFieldEnum = {
+export const NotificationScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
-  name: 'name',
-  language: 'language',
-  category: 'category',
-  templateBody: 'templateBody',
-  providerTemplateId: 'providerTemplateId',
-  status: 'status',
+  conversationId: 'conversationId',
+  contactId: 'contactId',
+  readByUserId: 'readByUserId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  priority: 'priority',
+  isRead: 'isRead',
+  readAt: 'readAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type MessageTemplateScalarFieldEnum = (typeof MessageTemplateScalarFieldEnum)[keyof typeof MessageTemplateScalarFieldEnum]
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SettingScalarFieldEnum = {
@@ -1811,6 +2020,7 @@ export const WebhookEventScalarFieldEnum = {
   companyId: 'companyId',
   provider: 'provider',
   eventType: 'eventType',
+  instanceName: 'instanceName',
   externalEventId: 'externalEventId',
   payload: 'payload',
   processingStatus: 'processingStatus',
@@ -1933,6 +2143,34 @@ export type ListEnumCompanyStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'CompanyRegistrationStatus'
+ */
+export type EnumCompanyRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanyRegistrationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CompanyRegistrationStatus[]'
+ */
+export type ListEnumCompanyRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanyRegistrationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappConnectionStatus'
+ */
+export type EnumWhatsappConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappConnectionStatus[]'
+ */
+export type ListEnumWhatsappConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappConnectionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'SubscriptionStatus'
  */
 export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
@@ -1985,6 +2223,62 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'KbArticleStatus'
+ */
+export type EnumKbArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbArticleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'KbArticleStatus[]'
+ */
+export type ListEnumKbArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbArticleStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'KbArticleSource'
+ */
+export type EnumKbArticleSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbArticleSource'>
+    
+
+
+/**
+ * Reference to a field of type 'KbArticleSource[]'
+ */
+export type ListEnumKbArticleSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbArticleSource[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType'
+ */
+export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType[]'
+ */
+export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationPriority'
+ */
+export type EnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationPriority'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationPriority[]'
+ */
+export type ListEnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationPriority[]'>
     
 
 /**
@@ -2084,6 +2378,8 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   company?: Prisma.CompanyOmit
+  companyRegistrationRequest?: Prisma.CompanyRegistrationRequestOmit
+  companyWhatsappInstance?: Prisma.CompanyWhatsappInstanceOmit
   subscription?: Prisma.SubscriptionOmit
   contact?: Prisma.ContactOmit
   contactNote?: Prisma.ContactNoteOmit
@@ -2094,7 +2390,7 @@ export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   kbArticle?: Prisma.KbArticleOmit
   kbChunk?: Prisma.KbChunkOmit
-  messageTemplate?: Prisma.MessageTemplateOmit
+  notification?: Prisma.NotificationOmit
   setting?: Prisma.SettingOmit
   webhookEvent?: Prisma.WebhookEventOmit
 }

@@ -15,8 +15,8 @@ type RawKbChunk = {
   metadataJson: Prisma.JsonValue | null;
   article: {
     title: string | null;
-    lang: string | null;
-    status: string | null;
+    language: string | null;
+    status: string;
     sourceUrl: string | null;
   };
 };
@@ -49,7 +49,7 @@ export class PgvectorRetriever implements Retriever {
         article: {
           select: {
             title: true,
-            lang: true,
+            language: true,
             status: true,
             sourceUrl: true,
           },
@@ -58,7 +58,7 @@ export class PgvectorRetriever implements Retriever {
     });
 
     return chunks
-      .map((chunk: RawKbChunk) => this.scoreChunk(chunk, tokens, query))
+      .map((chunk) => this.scoreChunk(chunk as RawKbChunk, tokens, query))
       .filter((result) => (result.score ?? 0) > 0)
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, topK);
@@ -69,7 +69,7 @@ export class PgvectorRetriever implements Retriever {
       { chunkText: { not: null } },
       {
         article: {
-          OR: [{ status: 'published' }, { status: null }],
+          status: 'published',
         },
       },
     ];
@@ -77,7 +77,7 @@ export class PgvectorRetriever implements Retriever {
     if (options?.language?.trim()) {
       andFilters.push({
         article: {
-          lang: options.language.trim(),
+          language: options.language.trim(),
         },
       });
     }
@@ -131,7 +131,7 @@ export class PgvectorRetriever implements Retriever {
         articleId: chunk.articleId,
         articleTitle: chunk.article.title,
         chunkIndex: chunk.chunkIndex,
-        language: chunk.article.lang,
+        language: chunk.article.language,
         sourceUrl: chunk.article.sourceUrl,
         metadata: chunk.metadataJson,
         matchedTokens,

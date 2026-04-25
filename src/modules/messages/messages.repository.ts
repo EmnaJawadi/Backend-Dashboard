@@ -12,7 +12,7 @@ type MessageWriteData = Partial<MessageEntity> & {
   externalMessageId?: string | null;
   companyId?: string | null;
   rawPayload?: Prisma.InputJsonValue;
-  templateName?: string | null;
+  occurredAt?: Date;
 };
 
 @Injectable()
@@ -20,22 +20,21 @@ export class MessagesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   private normalizeType(value?: string | null): MessageType {
-    if (
-      value === 'template' ||
-      value === 'image' ||
-      value === 'audio' ||
-      value === 'document' ||
-      value === 'video'
-    ) {
+    if (value === 'image' || value === 'audio' || value === 'document' || value === 'video') {
       return value;
     }
     return 'text';
   }
 
   private normalizeStatus(value?: string | null): MessageStatus {
+    if (value === 'received' || value === 'queued') {
+      return 'delivered';
+    }
+
     if (value === 'delivered' || value === 'read' || value === 'failed') {
       return value;
     }
+
     return 'sent';
   }
 
@@ -60,7 +59,6 @@ export class MessagesRepository {
       senderId: null,
       content: row.content ?? '',
       type: this.normalizeType(row.messageType),
-      templateName: this.extractTemplateName(row.rawPayload),
       status: this.normalizeStatus(row.deliveryStatus),
       isFromCustomer: row.direction === 'inbound' || senderType === 'customer',
       createdAt: row.createdAt,
@@ -69,16 +67,26 @@ export class MessagesRepository {
   }
 
   async create(data: MessageWriteData): Promise<MessageEntity> {
-    const now = new Date();
+    const now = data.occurredAt ?? new Date();
     const senderType = data.senderType ?? 'system';
     const direction =
       data.isFromCustomer || senderType === 'customer'
         ? 'inbound'
         : 'outbound';
 
+    const resolvedCompanyId =
+      data.companyId ??
+      (
+        await this.prisma.conversation.findUnique({
+          where: { id: data.conversationId ?? '' },
+          select: { companyId: true },
+        })
+      )?.companyId ??
+      null;
+
     const created = await this.prisma.message.create({
       data: {
-        companyId: data.companyId ?? null,
+        companyId: resolvedCompanyId,
         conversationId: data.conversationId ?? '',
         externalMessageId: data.externalMessageId ?? null,
         direction,
@@ -172,27 +180,7 @@ export class MessagesRepository {
   private buildRawPayload(
     data: MessageWriteData,
   ): Prisma.InputJsonValue | typeof Prisma.JsonNull {
-    if (!data.templateName) {
-      return data.rawPayload ?? Prisma.JsonNull;
-    }
-
-    return {
-      templateName: data.templateName,
-      rawPayload: data.rawPayload ?? null,
-    };
-  }
-
-  private extractTemplateName(rawPayload?: Prisma.JsonValue | null) {
-    if (
-      !rawPayload ||
-      typeof rawPayload !== 'object' ||
-      Array.isArray(rawPayload)
-    ) {
-      return null;
-    }
-
-    const value = rawPayload['templateName'];
-    return typeof value === 'string' && value.trim() ? value : null;
+    return data.rawPayload ?? Prisma.JsonNull;
   }
 
   private async touchConversation(params: {

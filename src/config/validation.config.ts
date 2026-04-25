@@ -15,6 +15,7 @@ const validationSchema = Joi.object({
   JWT_REFRESH_SECRET: Joi.string().required(),
   JWT_ACCESS_EXPIRES_IN: Joi.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
+  API_KEY: Joi.string().optional().allow('', null),
 
   EVOLUTION_API_URL: Joi.string().uri().optional().allow('', null),
   EVOLUTION_API_KEY: Joi.string().optional().allow('', null),

@@ -11,7 +11,7 @@ import { AiRunsService } from './ai-runs.service';
 import { CreateAiRunDto } from './dto/create-ai-run.dto';
 import { AiRunQueryDto } from './dto/ai-run-query.dto';
 
-@Controller('ai-runs')
+@Controller(['ai-runs', 'api/ai-runs'])
 export class AiRunsController {
   constructor(private readonly aiRunsService: AiRunsService) {}
 

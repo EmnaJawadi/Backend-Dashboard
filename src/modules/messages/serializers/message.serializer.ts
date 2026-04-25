@@ -9,7 +9,6 @@ export class MessageSerializer {
       senderId: message.senderId ?? null,
       content: message.content,
       type: message.type,
-      templateName: message.templateName ?? null,
       status: message.status,
       isFromCustomer: message.isFromCustomer,
       createdAt: message.createdAt,

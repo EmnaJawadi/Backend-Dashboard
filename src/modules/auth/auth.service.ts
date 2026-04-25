@@ -263,45 +263,32 @@ export class AuthService {
         );
       }
     } else {
-      if (!companyId && !companyName) {
+      if (role === UserRole.COMPANY_ADMIN) {
         throw new BadRequestException(
-          'companyId or companyName is required for non-super-admin users',
+          'Public COMPANY_ADMIN registration is disabled. Submit /public/company-registration and wait for SUPER_ADMIN approval.',
         );
       }
 
-      if (!companyId && companyName) {
-        const existingCompany = await this.prisma.company.findFirst({
-          where: {
-            name: {
-              equals: companyName,
-              mode: 'insensitive',
-            },
-          },
-          select: { id: true },
-        });
-
-        if (existingCompany) {
-          companyId = existingCompany.id;
-        } else {
-          const createdCompany = await this.prisma.company.create({
-            data: {
-              name: companyName,
-            },
-            select: { id: true },
-          });
-
-          companyId = createdCompany.id;
-        }
+      if (!companyId) {
+        throw new BadRequestException(
+          'companyId is required for non-super-admin users',
+        );
       }
 
       if (companyId) {
         const company = await this.prisma.company.findUnique({
           where: { id: companyId },
-          select: { id: true },
+          select: { id: true, isActive: true },
         });
 
         if (!company) {
           throw new BadRequestException('Invalid companyId');
+        }
+
+        if (!company.isActive) {
+          throw new BadRequestException(
+            'This company is not active yet. Wait for SUPER_ADMIN approval.',
+          );
         }
       }
     }

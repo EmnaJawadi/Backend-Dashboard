@@ -119,8 +119,6 @@ export class SettingsRepository {
         verifyToken: 'support-whatsapp-token',
         verifyWebhookSignature: true,
         notificationsEnabled: true,
-        sessionWindowHours: 24,
-        allowTemplatesOutsideWindow: true,
         defaultCountryCode: '+234',
       },
       updatedAt: new Date(),
@@ -346,16 +344,6 @@ export class SettingsRepository {
           technicalRaw.notificationsEnabled ??
             legacyWhatsappRaw.notificationsEnabled,
           defaults.whatsappTechnicalSettings.notificationsEnabled,
-        ),
-        sessionWindowHours: this.parseNumber(
-          technicalRaw.sessionWindowHours ??
-            legacyWhatsappRaw.sessionWindowHours,
-          defaults.whatsappTechnicalSettings.sessionWindowHours,
-        ),
-        allowTemplatesOutsideWindow: this.parseBoolean(
-          technicalRaw.allowTemplatesOutsideWindow ??
-            legacyWhatsappRaw.allowTemplatesOutsideWindow,
-          defaults.whatsappTechnicalSettings.allowTemplatesOutsideWindow,
         ),
         defaultCountryCode: this.parseString(
           technicalRaw.defaultCountryCode ??

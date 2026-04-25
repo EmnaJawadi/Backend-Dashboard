@@ -39,10 +39,36 @@ export class InboundMessagesHandler {
     const now = payload.eventAt ?? new Date();
     const phone = this.normalizePhone(payload.contactPhone);
     const names = this.splitName(payload.contactName);
+    const instanceName = payload.instanceName?.trim() ?? null;
+
+    if (!instanceName) {
+      this.logger.warn(
+        'Inbound webhook ignored because instanceName is missing in normalized payload',
+      );
+      return;
+    }
+
+    const companyInstance = await this.prisma.companyWhatsappInstance.findUnique({
+      where: {
+        evolutionInstanceName: instanceName,
+      },
+      select: {
+        companyId: true,
+      },
+    });
+
+    if (!companyInstance?.companyId) {
+      this.logger.warn(
+        `Inbound webhook ignored because no company is linked to instance=${instanceName}`,
+      );
+      return;
+    }
+
+    const companyId = companyInstance.companyId;
 
     const existingContact = phone
       ? await this.prisma.contact.findFirst({
-          where: { phone },
+          where: { companyId, phone },
           orderBy: { updatedAt: 'desc' },
         })
       : null;
@@ -59,6 +85,7 @@ export class InboundMessagesHandler {
         })
       : await this.prisma.contact.create({
           data: {
+            companyId,
             phone,
             whatsappName: payload.contactName ?? names.firstName,
             fullName: payload.contactName ?? names.firstName,
@@ -79,6 +106,7 @@ export class InboundMessagesHandler {
 
     const existingConversation = await this.prisma.conversation.findFirst({
       where: {
+        companyId,
         contactId: contact.id,
         status: { not: 'closed' },
       },
@@ -89,6 +117,7 @@ export class InboundMessagesHandler {
       existingConversation ??
       (await this.prisma.conversation.create({
         data: {
+          companyId,
           contactId: contact.id,
           channel: 'whatsapp',
           status: 'bot_active',
@@ -110,6 +139,7 @@ export class InboundMessagesHandler {
     if (payload.externalMessageId) {
       const duplicated = await this.prisma.message.findFirst({
         where: {
+          companyId,
           externalMessageId: payload.externalMessageId,
           direction: 'inbound',
         },
@@ -125,6 +155,7 @@ export class InboundMessagesHandler {
 
     await this.prisma.message.create({
       data: {
+        companyId,
         conversationId: conversation.id,
         externalMessageId: payload.externalMessageId,
         direction: 'inbound',

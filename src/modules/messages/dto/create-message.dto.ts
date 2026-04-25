@@ -10,7 +10,6 @@ export class CreateMessageDto {
   senderId?: string | null;
   content!: string;
   type?: MessageType;
-  templateName?: string | null;
   status?: MessageStatus;
   isFromCustomer?: boolean;
 }

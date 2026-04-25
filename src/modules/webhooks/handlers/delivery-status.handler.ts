@@ -14,9 +14,19 @@ export class DeliveryStatusHandler {
       return;
     }
 
+    const companyId = payload.instanceName
+      ? (
+          await this.prisma.companyWhatsappInstance.findUnique({
+            where: { evolutionInstanceName: payload.instanceName },
+            select: { companyId: true },
+          })
+        )?.companyId ?? null
+      : null;
+
     const message = await this.prisma.message.findFirst({
       where: {
         externalMessageId: payload.externalMessageId,
+        ...(companyId ? { companyId } : {}),
       },
       orderBy: { createdAt: 'desc' },
     });

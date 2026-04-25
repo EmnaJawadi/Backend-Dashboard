@@ -4,6 +4,7 @@ export enum KbArticleStatus {
   DRAFT = 'draft',
   PUBLISHED = 'published',
   ARCHIVED = 'archived',
+  REJECTED = 'rejected',
 }
 
 export class KbArticleEntity {

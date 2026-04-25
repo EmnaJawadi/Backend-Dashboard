@@ -28,6 +28,16 @@ export type User = Prisma.UserModel
  */
 export type Company = Prisma.CompanyModel
 /**
+ * Model CompanyRegistrationRequest
+ * 
+ */
+export type CompanyRegistrationRequest = Prisma.CompanyRegistrationRequestModel
+/**
+ * Model CompanyWhatsappInstance
+ * 
+ */
+export type CompanyWhatsappInstance = Prisma.CompanyWhatsappInstanceModel
+/**
  * Model Subscription
  * 
  */
@@ -78,10 +88,10 @@ export type KbArticle = Prisma.KbArticleModel
  */
 export type KbChunk = Prisma.KbChunkModel
 /**
- * Model MessageTemplate
+ * Model Notification
  * 
  */
-export type MessageTemplate = Prisma.MessageTemplateModel
+export type Notification = Prisma.NotificationModel
 /**
  * Model Setting
  * 

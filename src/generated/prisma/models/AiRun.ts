@@ -31,6 +31,7 @@ export type AiRunAvgAggregateOutputType = {
   completionTokens: number | null
   totalTokens: number | null
   latencyMs: number | null
+  confidenceScore: number | null
 }
 
 export type AiRunSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type AiRunSumAggregateOutputType = {
   completionTokens: number | null
   totalTokens: number | null
   latencyMs: number | null
+  confidenceScore: number | null
 }
 
 export type AiRunMinAggregateOutputType = {
@@ -45,14 +47,19 @@ export type AiRunMinAggregateOutputType = {
   companyId: string | null
   conversationId: string | null
   messageId: string | null
+  contactId: string | null
   inputText: string | null
   outputText: string | null
   intent: string | null
+  provider: string | null
   model: string | null
+  status: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
   latencyMs: number | null
+  confidenceScore: number | null
+  blockedReason: string | null
   handoffRequired: boolean | null
   createdAt: Date | null
 }
@@ -62,14 +69,19 @@ export type AiRunMaxAggregateOutputType = {
   companyId: string | null
   conversationId: string | null
   messageId: string | null
+  contactId: string | null
   inputText: string | null
   outputText: string | null
   intent: string | null
+  provider: string | null
   model: string | null
+  status: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
   latencyMs: number | null
+  confidenceScore: number | null
+  blockedReason: string | null
   handoffRequired: boolean | null
   createdAt: Date | null
 }
@@ -79,14 +91,19 @@ export type AiRunCountAggregateOutputType = {
   companyId: number
   conversationId: number
   messageId: number
+  contactId: number
   inputText: number
   outputText: number
   intent: number
+  provider: number
   model: number
+  status: number
   promptTokens: number
   completionTokens: number
   totalTokens: number
   latencyMs: number
+  confidenceScore: number
+  blockedReason: number
   handoffRequired: number
   tagsToApply: number
   rawResponse: number
@@ -100,6 +117,7 @@ export type AiRunAvgAggregateInputType = {
   completionTokens?: true
   totalTokens?: true
   latencyMs?: true
+  confidenceScore?: true
 }
 
 export type AiRunSumAggregateInputType = {
@@ -107,6 +125,7 @@ export type AiRunSumAggregateInputType = {
   completionTokens?: true
   totalTokens?: true
   latencyMs?: true
+  confidenceScore?: true
 }
 
 export type AiRunMinAggregateInputType = {
@@ -114,14 +133,19 @@ export type AiRunMinAggregateInputType = {
   companyId?: true
   conversationId?: true
   messageId?: true
+  contactId?: true
   inputText?: true
   outputText?: true
   intent?: true
+  provider?: true
   model?: true
+  status?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
   latencyMs?: true
+  confidenceScore?: true
+  blockedReason?: true
   handoffRequired?: true
   createdAt?: true
 }
@@ -131,14 +155,19 @@ export type AiRunMaxAggregateInputType = {
   companyId?: true
   conversationId?: true
   messageId?: true
+  contactId?: true
   inputText?: true
   outputText?: true
   intent?: true
+  provider?: true
   model?: true
+  status?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
   latencyMs?: true
+  confidenceScore?: true
+  blockedReason?: true
   handoffRequired?: true
   createdAt?: true
 }
@@ -148,14 +177,19 @@ export type AiRunCountAggregateInputType = {
   companyId?: true
   conversationId?: true
   messageId?: true
+  contactId?: true
   inputText?: true
   outputText?: true
   intent?: true
+  provider?: true
   model?: true
+  status?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
   latencyMs?: true
+  confidenceScore?: true
+  blockedReason?: true
   handoffRequired?: true
   tagsToApply?: true
   rawResponse?: true
@@ -254,14 +288,19 @@ export type AiRunGroupByOutputType = {
   companyId: string | null
   conversationId: string
   messageId: string
+  contactId: string | null
   inputText: string | null
   outputText: string | null
   intent: string | null
+  provider: string | null
   model: string | null
+  status: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
   latencyMs: number | null
+  confidenceScore: number | null
+  blockedReason: string | null
   handoffRequired: boolean | null
   tagsToApply: runtime.JsonValue | null
   rawResponse: runtime.JsonValue | null
@@ -296,19 +335,26 @@ export type AiRunWhereInput = {
   companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringFilter<"AiRun"> | string
   messageId?: Prisma.StringFilter<"AiRun"> | string
+  contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   latencyMs?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  confidenceScore?: Prisma.FloatNullableFilter<"AiRun"> | number | null
+  blockedReason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   handoffRequired?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
   tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableFilter<"AiRun">
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
+  conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
+  contact?: Prisma.XOR<Prisma.ContactNullableScalarRelationFilter, Prisma.ContactWhereInput> | null
 }
 
 export type AiRunOrderByWithRelationInput = {
@@ -316,19 +362,26 @@ export type AiRunOrderByWithRelationInput = {
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
+  contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   totalTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   latencyMs?: Prisma.SortOrderInput | Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  blockedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   handoffRequired?: Prisma.SortOrderInput | Prisma.SortOrder
   tagsToApply?: Prisma.SortOrderInput | Prisma.SortOrder
   rawResponse?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
+  conversation?: Prisma.ConversationOrderByWithRelationInput
+  contact?: Prisma.ContactOrderByWithRelationInput
 }
 
 export type AiRunWhereUniqueInput = Prisma.AtLeast<{
@@ -339,19 +392,26 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringFilter<"AiRun"> | string
   messageId?: Prisma.StringFilter<"AiRun"> | string
+  contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   latencyMs?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  confidenceScore?: Prisma.FloatNullableFilter<"AiRun"> | number | null
+  blockedReason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   handoffRequired?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
   tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableFilter<"AiRun">
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
+  conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
+  contact?: Prisma.XOR<Prisma.ContactNullableScalarRelationFilter, Prisma.ContactWhereInput> | null
 }, "id">
 
 export type AiRunOrderByWithAggregationInput = {
@@ -359,14 +419,19 @@ export type AiRunOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
+  contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   totalTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   latencyMs?: Prisma.SortOrderInput | Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  blockedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   handoffRequired?: Prisma.SortOrderInput | Prisma.SortOrder
   tagsToApply?: Prisma.SortOrderInput | Prisma.SortOrder
   rawResponse?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -386,14 +451,19 @@ export type AiRunScalarWhereWithAggregatesInput = {
   companyId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
   messageId?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
+  contactId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  provider?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  status?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
   latencyMs?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
+  confidenceScore?: Prisma.FloatNullableWithAggregatesFilter<"AiRun"> | number | null
+  blockedReason?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   handoffRequired?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
   tagsToApply?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
@@ -402,21 +472,26 @@ export type AiRunScalarWhereWithAggregatesInput = {
 
 export type AiRunCreateInput = {
   id?: string
-  conversationId: string
   messageId: string
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
+  conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
+  contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateInput = {
@@ -424,14 +499,19 @@ export type AiRunUncheckedCreateInput = {
   companyId?: string | null
   conversationId: string
   messageId: string
+  contactId?: string | null
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -440,21 +520,26 @@ export type AiRunUncheckedCreateInput = {
 
 export type AiRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
+  contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateInput = {
@@ -462,14 +547,19 @@ export type AiRunUncheckedUpdateInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -481,14 +571,19 @@ export type AiRunCreateManyInput = {
   companyId?: string | null
   conversationId: string
   messageId: string
+  contactId?: string | null
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -497,16 +592,19 @@ export type AiRunCreateManyInput = {
 
 export type AiRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -518,14 +616,19 @@ export type AiRunUncheckedUpdateManyInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -547,14 +650,19 @@ export type AiRunCountOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
+  contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
   latencyMs?: Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrder
+  blockedReason?: Prisma.SortOrder
   handoffRequired?: Prisma.SortOrder
   tagsToApply?: Prisma.SortOrder
   rawResponse?: Prisma.SortOrder
@@ -566,6 +674,7 @@ export type AiRunAvgOrderByAggregateInput = {
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
   latencyMs?: Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrder
 }
 
 export type AiRunMaxOrderByAggregateInput = {
@@ -573,14 +682,19 @@ export type AiRunMaxOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
+  contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
   latencyMs?: Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrder
+  blockedReason?: Prisma.SortOrder
   handoffRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -590,14 +704,19 @@ export type AiRunMinOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   conversationId?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
+  contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
   latencyMs?: Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrder
+  blockedReason?: Prisma.SortOrder
   handoffRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -607,6 +726,7 @@ export type AiRunSumOrderByAggregateInput = {
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
   latencyMs?: Prisma.SortOrder
+  confidenceScore?: Prisma.SortOrder
 }
 
 export type AiRunCreateNestedManyWithoutCompanyInput = {
@@ -651,36 +771,138 @@ export type AiRunUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
 }
 
+export type AiRunCreateNestedManyWithoutContactInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput> | Prisma.AiRunCreateWithoutContactInput[] | Prisma.AiRunUncheckedCreateWithoutContactInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutContactInput | Prisma.AiRunCreateOrConnectWithoutContactInput[]
+  createMany?: Prisma.AiRunCreateManyContactInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUncheckedCreateNestedManyWithoutContactInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput> | Prisma.AiRunCreateWithoutContactInput[] | Prisma.AiRunUncheckedCreateWithoutContactInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutContactInput | Prisma.AiRunCreateOrConnectWithoutContactInput[]
+  createMany?: Prisma.AiRunCreateManyContactInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUpdateManyWithoutContactNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput> | Prisma.AiRunCreateWithoutContactInput[] | Prisma.AiRunUncheckedCreateWithoutContactInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutContactInput | Prisma.AiRunCreateOrConnectWithoutContactInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutContactInput | Prisma.AiRunUpsertWithWhereUniqueWithoutContactInput[]
+  createMany?: Prisma.AiRunCreateManyContactInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutContactInput | Prisma.AiRunUpdateWithWhereUniqueWithoutContactInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutContactInput | Prisma.AiRunUpdateManyWithWhereWithoutContactInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunUncheckedUpdateManyWithoutContactNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput> | Prisma.AiRunCreateWithoutContactInput[] | Prisma.AiRunUncheckedCreateWithoutContactInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutContactInput | Prisma.AiRunCreateOrConnectWithoutContactInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutContactInput | Prisma.AiRunUpsertWithWhereUniqueWithoutContactInput[]
+  createMany?: Prisma.AiRunCreateManyContactInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutContactInput | Prisma.AiRunUpdateWithWhereUniqueWithoutContactInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutContactInput | Prisma.AiRunUpdateManyWithWhereWithoutContactInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunCreateNestedManyWithoutConversationInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput> | Prisma.AiRunCreateWithoutConversationInput[] | Prisma.AiRunUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutConversationInput | Prisma.AiRunCreateOrConnectWithoutConversationInput[]
+  createMany?: Prisma.AiRunCreateManyConversationInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUncheckedCreateNestedManyWithoutConversationInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput> | Prisma.AiRunCreateWithoutConversationInput[] | Prisma.AiRunUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutConversationInput | Prisma.AiRunCreateOrConnectWithoutConversationInput[]
+  createMany?: Prisma.AiRunCreateManyConversationInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUpdateManyWithoutConversationNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput> | Prisma.AiRunCreateWithoutConversationInput[] | Prisma.AiRunUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutConversationInput | Prisma.AiRunCreateOrConnectWithoutConversationInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutConversationInput | Prisma.AiRunUpsertWithWhereUniqueWithoutConversationInput[]
+  createMany?: Prisma.AiRunCreateManyConversationInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutConversationInput | Prisma.AiRunUpdateWithWhereUniqueWithoutConversationInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutConversationInput | Prisma.AiRunUpdateManyWithWhereWithoutConversationInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunUncheckedUpdateManyWithoutConversationNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput> | Prisma.AiRunCreateWithoutConversationInput[] | Prisma.AiRunUncheckedCreateWithoutConversationInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutConversationInput | Prisma.AiRunCreateOrConnectWithoutConversationInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutConversationInput | Prisma.AiRunUpsertWithWhereUniqueWithoutConversationInput[]
+  createMany?: Prisma.AiRunCreateManyConversationInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutConversationInput | Prisma.AiRunUpdateWithWhereUniqueWithoutConversationInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutConversationInput | Prisma.AiRunUpdateManyWithWhereWithoutConversationInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type AiRunCreateWithoutCompanyInput = {
   id?: string
-  conversationId: string
   messageId: string
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt: Date | string
+  conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
+  contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateWithoutCompanyInput = {
   id?: string
   conversationId: string
   messageId: string
+  contactId?: string | null
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -721,32 +943,186 @@ export type AiRunScalarWhereInput = {
   companyId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   conversationId?: Prisma.StringFilter<"AiRun"> | string
   messageId?: Prisma.StringFilter<"AiRun"> | string
+  contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   latencyMs?: Prisma.IntNullableFilter<"AiRun"> | number | null
+  confidenceScore?: Prisma.FloatNullableFilter<"AiRun"> | number | null
+  blockedReason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   handoffRequired?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
   tagsToApply?: Prisma.JsonNullableFilter<"AiRun">
   rawResponse?: Prisma.JsonNullableFilter<"AiRun">
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
 }
 
-export type AiRunCreateManyCompanyInput = {
+export type AiRunCreateWithoutContactInput = {
   id?: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
+  conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
+}
+
+export type AiRunUncheckedCreateWithoutContactInput = {
+  id?: string
+  companyId?: string | null
   conversationId: string
   messageId: string
   inputText?: string | null
   outputText?: string | null
   intent?: string | null
+  provider?: string | null
   model?: string | null
+  status?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
   latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunCreateOrConnectWithoutContactInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput>
+}
+
+export type AiRunCreateManyContactInputEnvelope = {
+  data: Prisma.AiRunCreateManyContactInput | Prisma.AiRunCreateManyContactInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiRunUpsertWithWhereUniqueWithoutContactInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiRunUpdateWithoutContactInput, Prisma.AiRunUncheckedUpdateWithoutContactInput>
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutContactInput, Prisma.AiRunUncheckedCreateWithoutContactInput>
+}
+
+export type AiRunUpdateWithWhereUniqueWithoutContactInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiRunUpdateWithoutContactInput, Prisma.AiRunUncheckedUpdateWithoutContactInput>
+}
+
+export type AiRunUpdateManyWithWhereWithoutContactInput = {
+  where: Prisma.AiRunScalarWhereInput
+  data: Prisma.XOR<Prisma.AiRunUpdateManyMutationInput, Prisma.AiRunUncheckedUpdateManyWithoutContactInput>
+}
+
+export type AiRunCreateWithoutConversationInput = {
+  id?: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
+  contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
+}
+
+export type AiRunUncheckedCreateWithoutConversationInput = {
+  id?: string
+  companyId?: string | null
+  messageId: string
+  contactId?: string | null
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunCreateOrConnectWithoutConversationInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput>
+}
+
+export type AiRunCreateManyConversationInputEnvelope = {
+  data: Prisma.AiRunCreateManyConversationInput | Prisma.AiRunCreateManyConversationInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiRunUpsertWithWhereUniqueWithoutConversationInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiRunUpdateWithoutConversationInput, Prisma.AiRunUncheckedUpdateWithoutConversationInput>
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutConversationInput, Prisma.AiRunUncheckedCreateWithoutConversationInput>
+}
+
+export type AiRunUpdateWithWhereUniqueWithoutConversationInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiRunUpdateWithoutConversationInput, Prisma.AiRunUncheckedUpdateWithoutConversationInput>
+}
+
+export type AiRunUpdateManyWithWhereWithoutConversationInput = {
+  where: Prisma.AiRunScalarWhereInput
+  data: Prisma.XOR<Prisma.AiRunUpdateManyMutationInput, Prisma.AiRunUncheckedUpdateManyWithoutConversationInput>
+}
+
+export type AiRunCreateManyCompanyInput = {
+  id?: string
+  conversationId: string
+  messageId: string
+  contactId?: string | null
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
   handoffRequired?: boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -755,34 +1131,44 @@ export type AiRunCreateManyCompanyInput = {
 
 export type AiRunUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
+  contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -793,14 +1179,203 @@ export type AiRunUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunCreateManyContactInput = {
+  id?: string
+  companyId?: string | null
+  conversationId: string
+  messageId: string
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunUpdateWithoutContactInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
+}
+
+export type AiRunUncheckedUpdateWithoutContactInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunUncheckedUpdateManyWithoutContactInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunCreateManyConversationInput = {
+  id?: string
+  companyId?: string | null
+  messageId: string
+  contactId?: string | null
+  inputText?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunUpdateWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
+  contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
+}
+
+export type AiRunUncheckedUpdateWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunUncheckedUpdateManyWithoutConversationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -814,19 +1389,26 @@ export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
+  contactId?: boolean
   inputText?: boolean
   outputText?: boolean
   intent?: boolean
+  provider?: boolean
   model?: boolean
+  status?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
   latencyMs?: boolean
+  confidenceScore?: boolean
+  blockedReason?: boolean
   handoffRequired?: boolean
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -834,19 +1416,26 @@ export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
+  contactId?: boolean
   inputText?: boolean
   outputText?: boolean
   intent?: boolean
+  provider?: boolean
   model?: boolean
+  status?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
   latencyMs?: boolean
+  confidenceScore?: boolean
+  blockedReason?: boolean
   handoffRequired?: boolean
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -854,19 +1443,26 @@ export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
+  contactId?: boolean
   inputText?: boolean
   outputText?: boolean
   intent?: boolean
+  provider?: boolean
   model?: boolean
+  status?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
   latencyMs?: boolean
+  confidenceScore?: boolean
+  blockedReason?: boolean
   handoffRequired?: boolean
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectScalar = {
@@ -874,49 +1470,67 @@ export type AiRunSelectScalar = {
   companyId?: boolean
   conversationId?: boolean
   messageId?: boolean
+  contactId?: boolean
   inputText?: boolean
   outputText?: boolean
   intent?: boolean
+  provider?: boolean
   model?: boolean
+  status?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
   latencyMs?: boolean
+  confidenceScore?: boolean
+  blockedReason?: boolean
   handoffRequired?: boolean
   tagsToApply?: boolean
   rawResponse?: boolean
   createdAt?: boolean
 }
 
-export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "inputText" | "outputText" | "intent" | "model" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
+export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "contactId" | "inputText" | "outputText" | "intent" | "provider" | "model" | "status" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "confidenceScore" | "blockedReason" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
 export type AiRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }
 export type AiRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }
 export type AiRunIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
+  conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
 }
 
 export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AiRun"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs> | null
+    conversation: Prisma.$ConversationPayload<ExtArgs>
+    contact: Prisma.$ContactPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     companyId: string | null
     conversationId: string
     messageId: string
+    contactId: string | null
     inputText: string | null
     outputText: string | null
     intent: string | null
+    provider: string | null
     model: string | null
+    status: string | null
     promptTokens: number | null
     completionTokens: number | null
     totalTokens: number | null
     latencyMs: number | null
+    confidenceScore: number | null
+    blockedReason: string | null
     handoffRequired: boolean | null
     tagsToApply: runtime.JsonValue | null
     rawResponse: runtime.JsonValue | null
@@ -1316,6 +1930,8 @@ readonly fields: AiRunFieldRefs;
 export interface Prisma__AiRunClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.AiRun$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  conversation<T extends Prisma.ConversationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConversationClient<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  contact<T extends Prisma.AiRun$contactArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$contactArgs<ExtArgs>>): Prisma.Prisma__ContactClient<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1349,14 +1965,19 @@ export interface AiRunFieldRefs {
   readonly companyId: Prisma.FieldRef<"AiRun", 'String'>
   readonly conversationId: Prisma.FieldRef<"AiRun", 'String'>
   readonly messageId: Prisma.FieldRef<"AiRun", 'String'>
+  readonly contactId: Prisma.FieldRef<"AiRun", 'String'>
   readonly inputText: Prisma.FieldRef<"AiRun", 'String'>
   readonly outputText: Prisma.FieldRef<"AiRun", 'String'>
   readonly intent: Prisma.FieldRef<"AiRun", 'String'>
+  readonly provider: Prisma.FieldRef<"AiRun", 'String'>
   readonly model: Prisma.FieldRef<"AiRun", 'String'>
+  readonly status: Prisma.FieldRef<"AiRun", 'String'>
   readonly promptTokens: Prisma.FieldRef<"AiRun", 'Int'>
   readonly completionTokens: Prisma.FieldRef<"AiRun", 'Int'>
   readonly totalTokens: Prisma.FieldRef<"AiRun", 'Int'>
   readonly latencyMs: Prisma.FieldRef<"AiRun", 'Int'>
+  readonly confidenceScore: Prisma.FieldRef<"AiRun", 'Float'>
+  readonly blockedReason: Prisma.FieldRef<"AiRun", 'String'>
   readonly handoffRequired: Prisma.FieldRef<"AiRun", 'Boolean'>
   readonly tagsToApply: Prisma.FieldRef<"AiRun", 'Json'>
   readonly rawResponse: Prisma.FieldRef<"AiRun", 'Json'>
@@ -1778,6 +2399,25 @@ export type AiRun$companyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.CompanyInclude<ExtArgs> | null
   where?: Prisma.CompanyWhereInput
+}
+
+/**
+ * AiRun.contact
+ */
+export type AiRun$contactArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contact
+   */
+  select?: Prisma.ContactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contact
+   */
+  omit?: Prisma.ContactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContactInclude<ExtArgs> | null
+  where?: Prisma.ContactWhereInput
 }
 
 /**

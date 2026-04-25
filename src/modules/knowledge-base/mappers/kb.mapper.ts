@@ -10,7 +10,7 @@ type RawKbArticle = {
   title: string | null;
   body: string | null;
   category?: string | null;
-  lang?: string | null;
+  language?: string | null;
   sourceUrl?: string | null;
   status?: string | null;
   tags?: unknown;
@@ -39,7 +39,7 @@ export class KbMapper {
       slug: null,
       summary: data.category ?? null,
       content: data.body ?? '',
-      language: data.lang ?? null,
+      language: data.language ?? null,
       sourceUrl: data.sourceUrl ?? null,
       status: this.toArticleStatus(data.status),
       tags: this.toStringArray(data.tags),
@@ -121,6 +121,8 @@ export class KbMapper {
         return KbArticleStatus.PUBLISHED;
       case KbArticleStatus.ARCHIVED:
         return KbArticleStatus.ARCHIVED;
+      case KbArticleStatus.REJECTED:
+        return KbArticleStatus.REJECTED;
       case KbArticleStatus.DRAFT:
       default:
         return KbArticleStatus.DRAFT;

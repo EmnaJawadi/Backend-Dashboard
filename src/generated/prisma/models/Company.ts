@@ -241,9 +241,11 @@ export type CompanyWhereInput = {
   auditLogs?: Prisma.AuditLogListRelationFilter
   kbArticles?: Prisma.KbArticleListRelationFilter
   kbChunks?: Prisma.KbChunkListRelationFilter
-  messageTemplates?: Prisma.MessageTemplateListRelationFilter
   settings?: Prisma.SettingListRelationFilter
   webhookEvents?: Prisma.WebhookEventListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceListRelationFilter
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestListRelationFilter
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -269,19 +271,21 @@ export type CompanyOrderByWithRelationInput = {
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   kbArticles?: Prisma.KbArticleOrderByRelationAggregateInput
   kbChunks?: Prisma.KbChunkOrderByRelationAggregateInput
-  messageTemplates?: Prisma.MessageTemplateOrderByRelationAggregateInput
   settings?: Prisma.SettingOrderByRelationAggregateInput
   webhookEvents?: Prisma.WebhookEventOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceOrderByRelationAggregateInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestOrderByRelationAggregateInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   name?: string
+  email?: string
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   legalName?: Prisma.StringNullableFilter<"Company"> | string | null
-  email?: Prisma.StringNullableFilter<"Company"> | string | null
   phone?: Prisma.StringNullableFilter<"Company"> | string | null
   website?: Prisma.StringNullableFilter<"Company"> | string | null
   address?: Prisma.StringNullableFilter<"Company"> | string | null
@@ -300,10 +304,12 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   auditLogs?: Prisma.AuditLogListRelationFilter
   kbArticles?: Prisma.KbArticleListRelationFilter
   kbChunks?: Prisma.KbChunkListRelationFilter
-  messageTemplates?: Prisma.MessageTemplateListRelationFilter
   settings?: Prisma.SettingListRelationFilter
   webhookEvents?: Prisma.WebhookEventListRelationFilter
-}, "id" | "name">
+  notifications?: Prisma.NotificationListRelationFilter
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceListRelationFilter
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestListRelationFilter
+}, "id" | "name" | "email">
 
 export type CompanyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -362,9 +368,11 @@ export type CompanyCreateInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -390,9 +398,11 @@ export type CompanyUncheckedCreateInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -418,9 +428,11 @@ export type CompanyUpdateInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -446,9 +458,11 @@ export type CompanyUncheckedUpdateInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -563,6 +577,36 @@ export type CompanyUpdateOneWithoutUsersNestedInput = {
 
 export type EnumCompanyStatusFieldUpdateOperationsInput = {
   set?: $Enums.CompanyStatus
+}
+
+export type CompanyCreateNestedOneWithoutApprovedRegistrationRequestsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutApprovedRegistrationRequestsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutApprovedRegistrationRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutApprovedRegistrationRequestsInput
+  upsert?: Prisma.CompanyUpsertWithoutApprovedRegistrationRequestsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUpdateWithoutApprovedRegistrationRequestsInput>, Prisma.CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput>
+}
+
+export type CompanyCreateNestedOneWithoutWhatsappInstancesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedCreateWithoutWhatsappInstancesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWhatsappInstancesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutWhatsappInstancesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedCreateWithoutWhatsappInstancesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWhatsappInstancesInput
+  upsert?: Prisma.CompanyUpsertWithoutWhatsappInstancesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutWhatsappInstancesInput, Prisma.CompanyUpdateWithoutWhatsappInstancesInput>, Prisma.CompanyUncheckedUpdateWithoutWhatsappInstancesInput>
 }
 
 export type CompanyCreateNestedOneWithoutSubscriptionsInput = {
@@ -723,20 +767,20 @@ export type CompanyUpdateOneWithoutKbChunksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutKbChunksInput, Prisma.CompanyUpdateWithoutKbChunksInput>, Prisma.CompanyUncheckedUpdateWithoutKbChunksInput>
 }
 
-export type CompanyCreateNestedOneWithoutMessageTemplatesInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessageTemplatesInput
+export type CompanyCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutNotificationsInput, Prisma.CompanyUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutNotificationsInput
   connect?: Prisma.CompanyWhereUniqueInput
 }
 
-export type CompanyUpdateOneWithoutMessageTemplatesNestedInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutMessageTemplatesInput
-  upsert?: Prisma.CompanyUpsertWithoutMessageTemplatesInput
+export type CompanyUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutNotificationsInput, Prisma.CompanyUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.CompanyUpsertWithoutNotificationsInput
   disconnect?: Prisma.CompanyWhereInput | boolean
   delete?: Prisma.CompanyWhereInput | boolean
   connect?: Prisma.CompanyWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutMessageTemplatesInput, Prisma.CompanyUpdateWithoutMessageTemplatesInput>, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutNotificationsInput, Prisma.CompanyUpdateWithoutNotificationsInput>, Prisma.CompanyUncheckedUpdateWithoutNotificationsInput>
 }
 
 export type CompanyCreateNestedOneWithoutSettingsInput = {
@@ -793,9 +837,11 @@ export type CompanyCreateWithoutUsersInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -820,9 +866,11 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -863,9 +911,11 @@ export type CompanyUpdateWithoutUsersInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -890,9 +940,275 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
+}
+
+export type CompanyCreateWithoutApprovedRegistrationRequestsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutApprovedRegistrationRequestsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput>
+}
+
+export type CompanyUpsertWithoutApprovedRegistrationRequestsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutApprovedRegistrationRequestsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutApprovedRegistrationRequestsInput, Prisma.CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput>
+}
+
+export type CompanyUpdateWithoutApprovedRegistrationRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutWhatsappInstancesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutWhatsappInstancesInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutWhatsappInstancesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedCreateWithoutWhatsappInstancesInput>
+}
+
+export type CompanyUpsertWithoutWhatsappInstancesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedUpdateWithoutWhatsappInstancesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedCreateWithoutWhatsappInstancesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutWhatsappInstancesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutWhatsappInstancesInput, Prisma.CompanyUncheckedUpdateWithoutWhatsappInstancesInput>
+}
+
+export type CompanyUpdateWithoutWhatsappInstancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutWhatsappInstancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSubscriptionsInput = {
@@ -917,9 +1233,11 @@ export type CompanyCreateWithoutSubscriptionsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
@@ -944,9 +1262,11 @@ export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSubscriptionsInput = {
@@ -987,9 +1307,11 @@ export type CompanyUpdateWithoutSubscriptionsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
@@ -1014,9 +1336,11 @@ export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutContactsInput = {
@@ -1041,9 +1365,11 @@ export type CompanyCreateWithoutContactsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutContactsInput = {
@@ -1068,9 +1394,11 @@ export type CompanyUncheckedCreateWithoutContactsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutContactsInput = {
@@ -1111,9 +1439,11 @@ export type CompanyUpdateWithoutContactsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutContactsInput = {
@@ -1138,9 +1468,11 @@ export type CompanyUncheckedUpdateWithoutContactsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutContactNotesInput = {
@@ -1165,9 +1497,11 @@ export type CompanyCreateWithoutContactNotesInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutContactNotesInput = {
@@ -1192,9 +1526,11 @@ export type CompanyUncheckedCreateWithoutContactNotesInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutContactNotesInput = {
@@ -1235,9 +1571,11 @@ export type CompanyUpdateWithoutContactNotesInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutContactNotesInput = {
@@ -1262,9 +1600,11 @@ export type CompanyUncheckedUpdateWithoutContactNotesInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutConversationsInput = {
@@ -1289,9 +1629,11 @@ export type CompanyCreateWithoutConversationsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutConversationsInput = {
@@ -1316,9 +1658,11 @@ export type CompanyUncheckedCreateWithoutConversationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutConversationsInput = {
@@ -1359,9 +1703,11 @@ export type CompanyUpdateWithoutConversationsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutConversationsInput = {
@@ -1386,9 +1732,11 @@ export type CompanyUncheckedUpdateWithoutConversationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutConversationTagsInput = {
@@ -1413,9 +1761,11 @@ export type CompanyCreateWithoutConversationTagsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutConversationTagsInput = {
@@ -1440,9 +1790,11 @@ export type CompanyUncheckedCreateWithoutConversationTagsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutConversationTagsInput = {
@@ -1483,9 +1835,11 @@ export type CompanyUpdateWithoutConversationTagsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutConversationTagsInput = {
@@ -1510,9 +1864,11 @@ export type CompanyUncheckedUpdateWithoutConversationTagsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutMessagesInput = {
@@ -1537,9 +1893,11 @@ export type CompanyCreateWithoutMessagesInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutMessagesInput = {
@@ -1564,9 +1922,11 @@ export type CompanyUncheckedCreateWithoutMessagesInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutMessagesInput = {
@@ -1607,9 +1967,11 @@ export type CompanyUpdateWithoutMessagesInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutMessagesInput = {
@@ -1634,9 +1996,11 @@ export type CompanyUncheckedUpdateWithoutMessagesInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAiRunsInput = {
@@ -1661,9 +2025,11 @@ export type CompanyCreateWithoutAiRunsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAiRunsInput = {
@@ -1688,9 +2054,11 @@ export type CompanyUncheckedCreateWithoutAiRunsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAiRunsInput = {
@@ -1731,9 +2099,11 @@ export type CompanyUpdateWithoutAiRunsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAiRunsInput = {
@@ -1758,9 +2128,11 @@ export type CompanyUncheckedUpdateWithoutAiRunsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAuditLogsInput = {
@@ -1785,9 +2157,11 @@ export type CompanyCreateWithoutAuditLogsInput = {
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAuditLogsInput = {
@@ -1812,9 +2186,11 @@ export type CompanyUncheckedCreateWithoutAuditLogsInput = {
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAuditLogsInput = {
@@ -1855,9 +2231,11 @@ export type CompanyUpdateWithoutAuditLogsInput = {
   aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
@@ -1882,9 +2260,11 @@ export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutKbArticlesInput = {
@@ -1909,9 +2289,11 @@ export type CompanyCreateWithoutKbArticlesInput = {
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutKbArticlesInput = {
@@ -1936,9 +2318,11 @@ export type CompanyUncheckedCreateWithoutKbArticlesInput = {
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutKbArticlesInput = {
@@ -1979,9 +2363,11 @@ export type CompanyUpdateWithoutKbArticlesInput = {
   aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutKbArticlesInput = {
@@ -2006,9 +2392,11 @@ export type CompanyUncheckedUpdateWithoutKbArticlesInput = {
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutKbChunksInput = {
@@ -2033,9 +2421,11 @@ export type CompanyCreateWithoutKbChunksInput = {
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutKbChunksInput = {
@@ -2060,9 +2450,11 @@ export type CompanyUncheckedCreateWithoutKbChunksInput = {
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutKbChunksInput = {
@@ -2103,9 +2495,11 @@ export type CompanyUpdateWithoutKbChunksInput = {
   aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutKbChunksInput = {
@@ -2130,12 +2524,14 @@ export type CompanyUncheckedUpdateWithoutKbChunksInput = {
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
-export type CompanyCreateWithoutMessageTemplatesInput = {
+export type CompanyCreateWithoutNotificationsInput = {
   id?: string
   name: string
   legalName?: string | null
@@ -2160,9 +2556,11 @@ export type CompanyCreateWithoutMessageTemplatesInput = {
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
-export type CompanyUncheckedCreateWithoutMessageTemplatesInput = {
+export type CompanyUncheckedCreateWithoutNotificationsInput = {
   id?: string
   name: string
   legalName?: string | null
@@ -2187,25 +2585,27 @@ export type CompanyUncheckedCreateWithoutMessageTemplatesInput = {
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
-export type CompanyCreateOrConnectWithoutMessageTemplatesInput = {
+export type CompanyCreateOrConnectWithoutNotificationsInput = {
   where: Prisma.CompanyWhereUniqueInput
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutNotificationsInput, Prisma.CompanyUncheckedCreateWithoutNotificationsInput>
 }
 
-export type CompanyUpsertWithoutMessageTemplatesInput = {
-  update: Prisma.XOR<Prisma.CompanyUpdateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedCreateWithoutMessageTemplatesInput>
+export type CompanyUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutNotificationsInput, Prisma.CompanyUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutNotificationsInput, Prisma.CompanyUncheckedCreateWithoutNotificationsInput>
   where?: Prisma.CompanyWhereInput
 }
 
-export type CompanyUpdateToOneWithWhereWithoutMessageTemplatesInput = {
+export type CompanyUpdateToOneWithWhereWithoutNotificationsInput = {
   where?: Prisma.CompanyWhereInput
-  data: Prisma.XOR<Prisma.CompanyUpdateWithoutMessageTemplatesInput, Prisma.CompanyUncheckedUpdateWithoutMessageTemplatesInput>
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutNotificationsInput, Prisma.CompanyUncheckedUpdateWithoutNotificationsInput>
 }
 
-export type CompanyUpdateWithoutMessageTemplatesInput = {
+export type CompanyUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2230,9 +2630,11 @@ export type CompanyUpdateWithoutMessageTemplatesInput = {
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
-export type CompanyUncheckedUpdateWithoutMessageTemplatesInput = {
+export type CompanyUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2257,6 +2659,8 @@ export type CompanyUncheckedUpdateWithoutMessageTemplatesInput = {
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSettingsInput = {
@@ -2282,8 +2686,10 @@ export type CompanyCreateWithoutSettingsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSettingsInput = {
@@ -2309,8 +2715,10 @@ export type CompanyUncheckedCreateWithoutSettingsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSettingsInput = {
@@ -2352,8 +2760,10 @@ export type CompanyUpdateWithoutSettingsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSettingsInput = {
@@ -2379,8 +2789,10 @@ export type CompanyUncheckedUpdateWithoutSettingsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyCreateWithoutWebhookEventsInput = {
@@ -2406,8 +2818,10 @@ export type CompanyCreateWithoutWebhookEventsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutWebhookEventsInput = {
@@ -2433,8 +2847,10 @@ export type CompanyUncheckedCreateWithoutWebhookEventsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
   kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedCreateNestedManyWithoutCompanyInput
   settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutWebhookEventsInput = {
@@ -2476,8 +2892,10 @@ export type CompanyUpdateWithoutWebhookEventsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutWebhookEventsInput = {
@@ -2503,8 +2921,10 @@ export type CompanyUncheckedUpdateWithoutWebhookEventsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
   kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
-  messageTemplates?: Prisma.MessageTemplateUncheckedUpdateManyWithoutCompanyNestedInput
   settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
 }
 
 
@@ -2524,9 +2944,11 @@ export type CompanyCountOutputType = {
   auditLogs: number
   kbArticles: number
   kbChunks: number
-  messageTemplates: number
   settings: number
   webhookEvents: number
+  notifications: number
+  whatsappInstances: number
+  approvedRegistrationRequests: number
 }
 
 export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2541,9 +2963,11 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   auditLogs?: boolean | CompanyCountOutputTypeCountAuditLogsArgs
   kbArticles?: boolean | CompanyCountOutputTypeCountKbArticlesArgs
   kbChunks?: boolean | CompanyCountOutputTypeCountKbChunksArgs
-  messageTemplates?: boolean | CompanyCountOutputTypeCountMessageTemplatesArgs
   settings?: boolean | CompanyCountOutputTypeCountSettingsArgs
   webhookEvents?: boolean | CompanyCountOutputTypeCountWebhookEventsArgs
+  notifications?: boolean | CompanyCountOutputTypeCountNotificationsArgs
+  whatsappInstances?: boolean | CompanyCountOutputTypeCountWhatsappInstancesArgs
+  approvedRegistrationRequests?: boolean | CompanyCountOutputTypeCountApprovedRegistrationRequestsArgs
 }
 
 /**
@@ -2636,13 +3060,6 @@ export type CompanyCountOutputTypeCountKbChunksArgs<ExtArgs extends runtime.Type
 /**
  * CompanyCountOutputType without action
  */
-export type CompanyCountOutputTypeCountMessageTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MessageTemplateWhereInput
-}
-
-/**
- * CompanyCountOutputType without action
- */
 export type CompanyCountOutputTypeCountSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SettingWhereInput
 }
@@ -2652,6 +3069,27 @@ export type CompanyCountOutputTypeCountSettingsArgs<ExtArgs extends runtime.Type
  */
 export type CompanyCountOutputTypeCountWebhookEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WebhookEventWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountWhatsappInstancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CompanyWhatsappInstanceWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountApprovedRegistrationRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CompanyRegistrationRequestWhereInput
 }
 
 
@@ -2678,9 +3116,11 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
   kbArticles?: boolean | Prisma.Company$kbArticlesArgs<ExtArgs>
   kbChunks?: boolean | Prisma.Company$kbChunksArgs<ExtArgs>
-  messageTemplates?: boolean | Prisma.Company$messageTemplatesArgs<ExtArgs>
   settings?: boolean | Prisma.Company$settingsArgs<ExtArgs>
   webhookEvents?: boolean | Prisma.Company$webhookEventsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Company$notificationsArgs<ExtArgs>
+  whatsappInstances?: boolean | Prisma.Company$whatsappInstancesArgs<ExtArgs>
+  approvedRegistrationRequests?: boolean | Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
@@ -2739,9 +3179,11 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
   kbArticles?: boolean | Prisma.Company$kbArticlesArgs<ExtArgs>
   kbChunks?: boolean | Prisma.Company$kbChunksArgs<ExtArgs>
-  messageTemplates?: boolean | Prisma.Company$messageTemplatesArgs<ExtArgs>
   settings?: boolean | Prisma.Company$settingsArgs<ExtArgs>
   webhookEvents?: boolean | Prisma.Company$webhookEventsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Company$notificationsArgs<ExtArgs>
+  whatsappInstances?: boolean | Prisma.Company$whatsappInstancesArgs<ExtArgs>
+  approvedRegistrationRequests?: boolean | Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2761,9 +3203,11 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     kbArticles: Prisma.$KbArticlePayload<ExtArgs>[]
     kbChunks: Prisma.$KbChunkPayload<ExtArgs>[]
-    messageTemplates: Prisma.$MessageTemplatePayload<ExtArgs>[]
     settings: Prisma.$SettingPayload<ExtArgs>[]
     webhookEvents: Prisma.$WebhookEventPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    whatsappInstances: Prisma.$CompanyWhatsappInstancePayload<ExtArgs>[]
+    approvedRegistrationRequests: Prisma.$CompanyRegistrationRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3182,9 +3626,11 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   auditLogs<T extends Prisma.Company$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   kbArticles<T extends Prisma.Company$kbArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$kbArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   kbChunks<T extends Prisma.Company$kbChunksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$kbChunksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbChunkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  messageTemplates<T extends Prisma.Company$messageTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$messageTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   settings<T extends Prisma.Company$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$settingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   webhookEvents<T extends Prisma.Company$webhookEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$webhookEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Company$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappInstances<T extends Prisma.Company$whatsappInstancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$whatsappInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyWhatsappInstancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedRegistrationRequests<T extends Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyRegistrationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3882,30 +4328,6 @@ export type Company$kbChunksArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Company.messageTemplates
- */
-export type Company$messageTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MessageTemplate
-   */
-  select?: Prisma.MessageTemplateSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MessageTemplate
-   */
-  omit?: Prisma.MessageTemplateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MessageTemplateInclude<ExtArgs> | null
-  where?: Prisma.MessageTemplateWhereInput
-  orderBy?: Prisma.MessageTemplateOrderByWithRelationInput | Prisma.MessageTemplateOrderByWithRelationInput[]
-  cursor?: Prisma.MessageTemplateWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MessageTemplateScalarFieldEnum | Prisma.MessageTemplateScalarFieldEnum[]
-}
-
-/**
  * Company.settings
  */
 export type Company$settingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3951,6 +4373,78 @@ export type Company$webhookEventsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.WebhookEventScalarFieldEnum | Prisma.WebhookEventScalarFieldEnum[]
+}
+
+/**
+ * Company.notifications
+ */
+export type Company$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Company.whatsappInstances
+ */
+export type Company$whatsappInstancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompanyWhatsappInstance
+   */
+  select?: Prisma.CompanyWhatsappInstanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CompanyWhatsappInstance
+   */
+  omit?: Prisma.CompanyWhatsappInstanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyWhatsappInstanceInclude<ExtArgs> | null
+  where?: Prisma.CompanyWhatsappInstanceWhereInput
+  orderBy?: Prisma.CompanyWhatsappInstanceOrderByWithRelationInput | Prisma.CompanyWhatsappInstanceOrderByWithRelationInput[]
+  cursor?: Prisma.CompanyWhatsappInstanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CompanyWhatsappInstanceScalarFieldEnum | Prisma.CompanyWhatsappInstanceScalarFieldEnum[]
+}
+
+/**
+ * Company.approvedRegistrationRequests
+ */
+export type Company$approvedRegistrationRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompanyRegistrationRequest
+   */
+  select?: Prisma.CompanyRegistrationRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CompanyRegistrationRequest
+   */
+  omit?: Prisma.CompanyRegistrationRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyRegistrationRequestInclude<ExtArgs> | null
+  where?: Prisma.CompanyRegistrationRequestWhereInput
+  orderBy?: Prisma.CompanyRegistrationRequestOrderByWithRelationInput | Prisma.CompanyRegistrationRequestOrderByWithRelationInput[]
+  cursor?: Prisma.CompanyRegistrationRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CompanyRegistrationRequestScalarFieldEnum | Prisma.CompanyRegistrationRequestScalarFieldEnum[]
 }
 
 /**

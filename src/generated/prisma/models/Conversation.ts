@@ -49,6 +49,16 @@ export type ConversationMinAggregateOutputType = {
   lastCustomerMessageAt: Date | null
   lastBotMessageAt: Date | null
   lastHumanMessageAt: Date | null
+  conversationSummary: string | null
+  customerIntent: string | null
+  requestedProductService: string | null
+  requestedDeliveryDate: string | null
+  deliveryAddress: string | null
+  budget: string | null
+  agreedTerms: string | null
+  nextAction: string | null
+  lastAiDecision: string | null
+  importantNotes: string | null
   closedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,6 +79,16 @@ export type ConversationMaxAggregateOutputType = {
   lastCustomerMessageAt: Date | null
   lastBotMessageAt: Date | null
   lastHumanMessageAt: Date | null
+  conversationSummary: string | null
+  customerIntent: string | null
+  requestedProductService: string | null
+  requestedDeliveryDate: string | null
+  deliveryAddress: string | null
+  budget: string | null
+  agreedTerms: string | null
+  nextAction: string | null
+  lastAiDecision: string | null
+  importantNotes: string | null
   closedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -89,6 +109,16 @@ export type ConversationCountAggregateOutputType = {
   lastCustomerMessageAt: number
   lastBotMessageAt: number
   lastHumanMessageAt: number
+  conversationSummary: number
+  customerIntent: number
+  requestedProductService: number
+  requestedDeliveryDate: number
+  deliveryAddress: number
+  budget: number
+  agreedTerms: number
+  nextAction: number
+  lastAiDecision: number
+  importantNotes: number
   closedAt: number
   createdAt: number
   updatedAt: number
@@ -119,6 +149,16 @@ export type ConversationMinAggregateInputType = {
   lastCustomerMessageAt?: true
   lastBotMessageAt?: true
   lastHumanMessageAt?: true
+  conversationSummary?: true
+  customerIntent?: true
+  requestedProductService?: true
+  requestedDeliveryDate?: true
+  deliveryAddress?: true
+  budget?: true
+  agreedTerms?: true
+  nextAction?: true
+  lastAiDecision?: true
+  importantNotes?: true
   closedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -139,6 +179,16 @@ export type ConversationMaxAggregateInputType = {
   lastCustomerMessageAt?: true
   lastBotMessageAt?: true
   lastHumanMessageAt?: true
+  conversationSummary?: true
+  customerIntent?: true
+  requestedProductService?: true
+  requestedDeliveryDate?: true
+  deliveryAddress?: true
+  budget?: true
+  agreedTerms?: true
+  nextAction?: true
+  lastAiDecision?: true
+  importantNotes?: true
   closedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -159,6 +209,16 @@ export type ConversationCountAggregateInputType = {
   lastCustomerMessageAt?: true
   lastBotMessageAt?: true
   lastHumanMessageAt?: true
+  conversationSummary?: true
+  customerIntent?: true
+  requestedProductService?: true
+  requestedDeliveryDate?: true
+  deliveryAddress?: true
+  budget?: true
+  agreedTerms?: true
+  nextAction?: true
+  lastAiDecision?: true
+  importantNotes?: true
   closedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -266,6 +326,16 @@ export type ConversationGroupByOutputType = {
   lastCustomerMessageAt: Date | null
   lastBotMessageAt: Date | null
   lastHumanMessageAt: Date | null
+  conversationSummary: string | null
+  customerIntent: string | null
+  requestedProductService: string | null
+  requestedDeliveryDate: string | null
+  deliveryAddress: string | null
+  budget: string | null
+  agreedTerms: string | null
+  nextAction: string | null
+  lastAiDecision: string | null
+  importantNotes: string | null
   closedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -309,6 +379,16 @@ export type ConversationWhereInput = {
   lastCustomerMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastBotMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastHumanMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  conversationSummary?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  customerIntent?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedProductService?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedDeliveryDate?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  deliveryAddress?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  budget?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  agreedTerms?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  nextAction?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  lastAiDecision?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  importantNotes?: Prisma.StringNullableFilter<"Conversation"> | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
@@ -316,6 +396,9 @@ export type ConversationWhereInput = {
   contact?: Prisma.XOR<Prisma.ContactScalarRelationFilter, Prisma.ContactWhereInput>
   tags?: Prisma.ConversationTagListRelationFilter
   messages?: Prisma.MessageListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  sourceArticles?: Prisma.KbArticleListRelationFilter
+  aiRuns?: Prisma.AiRunListRelationFilter
 }
 
 export type ConversationOrderByWithRelationInput = {
@@ -333,6 +416,16 @@ export type ConversationOrderByWithRelationInput = {
   lastCustomerMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastBotMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHumanMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestedProductService?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestedDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  budget?: Prisma.SortOrderInput | Prisma.SortOrder
+  agreedTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextAction?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastAiDecision?: Prisma.SortOrderInput | Prisma.SortOrder
+  importantNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -340,6 +433,9 @@ export type ConversationOrderByWithRelationInput = {
   contact?: Prisma.ContactOrderByWithRelationInput
   tags?: Prisma.ConversationTagOrderByRelationAggregateInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  sourceArticles?: Prisma.KbArticleOrderByRelationAggregateInput
+  aiRuns?: Prisma.AiRunOrderByRelationAggregateInput
 }
 
 export type ConversationWhereUniqueInput = Prisma.AtLeast<{
@@ -360,6 +456,16 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   lastCustomerMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastBotMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastHumanMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  conversationSummary?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  customerIntent?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedProductService?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedDeliveryDate?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  deliveryAddress?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  budget?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  agreedTerms?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  nextAction?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  lastAiDecision?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  importantNotes?: Prisma.StringNullableFilter<"Conversation"> | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
@@ -367,6 +473,9 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   contact?: Prisma.XOR<Prisma.ContactScalarRelationFilter, Prisma.ContactWhereInput>
   tags?: Prisma.ConversationTagListRelationFilter
   messages?: Prisma.MessageListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  sourceArticles?: Prisma.KbArticleListRelationFilter
+  aiRuns?: Prisma.AiRunListRelationFilter
 }, "id">
 
 export type ConversationOrderByWithAggregationInput = {
@@ -384,6 +493,16 @@ export type ConversationOrderByWithAggregationInput = {
   lastCustomerMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastBotMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHumanMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestedProductService?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestedDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  budget?: Prisma.SortOrderInput | Prisma.SortOrder
+  agreedTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextAction?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastAiDecision?: Prisma.SortOrderInput | Prisma.SortOrder
+  importantNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -412,6 +531,16 @@ export type ConversationScalarWhereWithAggregatesInput = {
   lastCustomerMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
   lastBotMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
   lastHumanMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
+  conversationSummary?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  customerIntent?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  requestedProductService?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  requestedDeliveryDate?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  deliveryAddress?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  budget?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  agreedTerms?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  nextAction?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  lastAiDecision?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  importantNotes?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   closedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
@@ -430,6 +559,16 @@ export type ConversationCreateInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
@@ -437,6 +576,9 @@ export type ConversationCreateInput = {
   contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateInput = {
@@ -454,11 +596,24 @@ export type ConversationUncheckedCreateInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUpdateInput = {
@@ -474,6 +629,16 @@ export type ConversationUpdateInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -481,6 +646,9 @@ export type ConversationUpdateInput = {
   contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateInput = {
@@ -498,11 +666,24 @@ export type ConversationUncheckedUpdateInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationCreateManyInput = {
@@ -520,6 +701,16 @@ export type ConversationCreateManyInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
@@ -538,6 +729,16 @@ export type ConversationUpdateManyMutationInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -558,6 +759,16 @@ export type ConversationUncheckedUpdateManyInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -588,6 +799,16 @@ export type ConversationCountOrderByAggregateInput = {
   lastCustomerMessageAt?: Prisma.SortOrder
   lastBotMessageAt?: Prisma.SortOrder
   lastHumanMessageAt?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  customerIntent?: Prisma.SortOrder
+  requestedProductService?: Prisma.SortOrder
+  requestedDeliveryDate?: Prisma.SortOrder
+  deliveryAddress?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  agreedTerms?: Prisma.SortOrder
+  nextAction?: Prisma.SortOrder
+  lastAiDecision?: Prisma.SortOrder
+  importantNotes?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -612,6 +833,16 @@ export type ConversationMaxOrderByAggregateInput = {
   lastCustomerMessageAt?: Prisma.SortOrder
   lastBotMessageAt?: Prisma.SortOrder
   lastHumanMessageAt?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  customerIntent?: Prisma.SortOrder
+  requestedProductService?: Prisma.SortOrder
+  requestedDeliveryDate?: Prisma.SortOrder
+  deliveryAddress?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  agreedTerms?: Prisma.SortOrder
+  nextAction?: Prisma.SortOrder
+  lastAiDecision?: Prisma.SortOrder
+  importantNotes?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -632,6 +863,16 @@ export type ConversationMinOrderByAggregateInput = {
   lastCustomerMessageAt?: Prisma.SortOrder
   lastBotMessageAt?: Prisma.SortOrder
   lastHumanMessageAt?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  customerIntent?: Prisma.SortOrder
+  requestedProductService?: Prisma.SortOrder
+  requestedDeliveryDate?: Prisma.SortOrder
+  deliveryAddress?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  agreedTerms?: Prisma.SortOrder
+  nextAction?: Prisma.SortOrder
+  lastAiDecision?: Prisma.SortOrder
+  importantNotes?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -644,6 +885,11 @@ export type ConversationSumOrderByAggregateInput = {
 export type ConversationScalarRelationFilter = {
   is?: Prisma.ConversationWhereInput
   isNot?: Prisma.ConversationWhereInput
+}
+
+export type ConversationNullableScalarRelationFilter = {
+  is?: Prisma.ConversationWhereInput | null
+  isNot?: Prisma.ConversationWhereInput | null
 }
 
 export type ConversationCreateNestedManyWithoutCompanyInput = {
@@ -770,6 +1016,52 @@ export type ConversationUpdateOneRequiredWithoutMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutMessagesInput, Prisma.ConversationUpdateWithoutMessagesInput>, Prisma.ConversationUncheckedUpdateWithoutMessagesInput>
 }
 
+export type ConversationCreateNestedOneWithoutAiRunsInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutAiRunsInput, Prisma.ConversationUncheckedCreateWithoutAiRunsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutAiRunsInput
+  connect?: Prisma.ConversationWhereUniqueInput
+}
+
+export type ConversationUpdateOneRequiredWithoutAiRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutAiRunsInput, Prisma.ConversationUncheckedCreateWithoutAiRunsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutAiRunsInput
+  upsert?: Prisma.ConversationUpsertWithoutAiRunsInput
+  connect?: Prisma.ConversationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutAiRunsInput, Prisma.ConversationUpdateWithoutAiRunsInput>, Prisma.ConversationUncheckedUpdateWithoutAiRunsInput>
+}
+
+export type ConversationCreateNestedOneWithoutSourceArticlesInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutSourceArticlesInput, Prisma.ConversationUncheckedCreateWithoutSourceArticlesInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutSourceArticlesInput
+  connect?: Prisma.ConversationWhereUniqueInput
+}
+
+export type ConversationUpdateOneWithoutSourceArticlesNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutSourceArticlesInput, Prisma.ConversationUncheckedCreateWithoutSourceArticlesInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutSourceArticlesInput
+  upsert?: Prisma.ConversationUpsertWithoutSourceArticlesInput
+  disconnect?: Prisma.ConversationWhereInput | boolean
+  delete?: Prisma.ConversationWhereInput | boolean
+  connect?: Prisma.ConversationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutSourceArticlesInput, Prisma.ConversationUpdateWithoutSourceArticlesInput>, Prisma.ConversationUncheckedUpdateWithoutSourceArticlesInput>
+}
+
+export type ConversationCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutNotificationsInput, Prisma.ConversationUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.ConversationWhereUniqueInput
+}
+
+export type ConversationUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutNotificationsInput, Prisma.ConversationUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.ConversationUpsertWithoutNotificationsInput
+  disconnect?: Prisma.ConversationWhereInput | boolean
+  delete?: Prisma.ConversationWhereInput | boolean
+  connect?: Prisma.ConversationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutNotificationsInput, Prisma.ConversationUpdateWithoutNotificationsInput>, Prisma.ConversationUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type ConversationCreateWithoutCompanyInput = {
   id?: string
   channel?: string | null
@@ -783,12 +1075,25 @@ export type ConversationCreateWithoutCompanyInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutCompanyInput = {
@@ -805,11 +1110,24 @@ export type ConversationUncheckedCreateWithoutCompanyInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationCreateOrConnectWithoutCompanyInput = {
@@ -856,6 +1174,16 @@ export type ConversationScalarWhereInput = {
   lastCustomerMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastBotMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   lastHumanMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  conversationSummary?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  customerIntent?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedProductService?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  requestedDeliveryDate?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  deliveryAddress?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  budget?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  agreedTerms?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  nextAction?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  lastAiDecision?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  importantNotes?: Prisma.StringNullableFilter<"Conversation"> | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
@@ -874,12 +1202,25 @@ export type ConversationCreateWithoutContactInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutContactInput = {
@@ -896,11 +1237,24 @@ export type ConversationUncheckedCreateWithoutContactInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationCreateOrConnectWithoutContactInput = {
@@ -942,12 +1296,25 @@ export type ConversationCreateWithoutTagsInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
   contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutTagsInput = {
@@ -965,10 +1332,23 @@ export type ConversationUncheckedCreateWithoutTagsInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationCreateOrConnectWithoutTagsInput = {
@@ -1000,12 +1380,25 @@ export type ConversationUpdateWithoutTagsInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
   contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutTagsInput = {
@@ -1023,10 +1416,23 @@ export type ConversationUncheckedUpdateWithoutTagsInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationCreateWithoutMessagesInput = {
@@ -1042,12 +1448,25 @@ export type ConversationCreateWithoutMessagesInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
   contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutMessagesInput = {
@@ -1065,10 +1484,23 @@ export type ConversationUncheckedCreateWithoutMessagesInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationCreateOrConnectWithoutMessagesInput = {
@@ -1100,12 +1532,25 @@ export type ConversationUpdateWithoutMessagesInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
   contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutMessagesInput = {
@@ -1123,10 +1568,479 @@ export type ConversationUncheckedUpdateWithoutMessagesInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationCreateWithoutAiRunsInput = {
+  id?: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
+  contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
+  tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+}
+
+export type ConversationUncheckedCreateWithoutAiRunsInput = {
+  id?: string
+  companyId?: string | null
+  contactId: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+}
+
+export type ConversationCreateOrConnectWithoutAiRunsInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutAiRunsInput, Prisma.ConversationUncheckedCreateWithoutAiRunsInput>
+}
+
+export type ConversationUpsertWithoutAiRunsInput = {
+  update: Prisma.XOR<Prisma.ConversationUpdateWithoutAiRunsInput, Prisma.ConversationUncheckedUpdateWithoutAiRunsInput>
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutAiRunsInput, Prisma.ConversationUncheckedCreateWithoutAiRunsInput>
+  where?: Prisma.ConversationWhereInput
+}
+
+export type ConversationUpdateToOneWithWhereWithoutAiRunsInput = {
+  where?: Prisma.ConversationWhereInput
+  data: Prisma.XOR<Prisma.ConversationUpdateWithoutAiRunsInput, Prisma.ConversationUncheckedUpdateWithoutAiRunsInput>
+}
+
+export type ConversationUpdateWithoutAiRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
+  contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
+  tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateWithoutAiRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+}
+
+export type ConversationCreateWithoutSourceArticlesInput = {
+  id?: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
+  contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
+  tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationUncheckedCreateWithoutSourceArticlesInput = {
+  id?: string
+  companyId?: string | null
+  contactId: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationCreateOrConnectWithoutSourceArticlesInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutSourceArticlesInput, Prisma.ConversationUncheckedCreateWithoutSourceArticlesInput>
+}
+
+export type ConversationUpsertWithoutSourceArticlesInput = {
+  update: Prisma.XOR<Prisma.ConversationUpdateWithoutSourceArticlesInput, Prisma.ConversationUncheckedUpdateWithoutSourceArticlesInput>
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutSourceArticlesInput, Prisma.ConversationUncheckedCreateWithoutSourceArticlesInput>
+  where?: Prisma.ConversationWhereInput
+}
+
+export type ConversationUpdateToOneWithWhereWithoutSourceArticlesInput = {
+  where?: Prisma.ConversationWhereInput
+  data: Prisma.XOR<Prisma.ConversationUpdateWithoutSourceArticlesInput, Prisma.ConversationUncheckedUpdateWithoutSourceArticlesInput>
+}
+
+export type ConversationUpdateWithoutSourceArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
+  contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
+  tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateWithoutSourceArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationCreateWithoutNotificationsInput = {
+  id?: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
+  contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
+  tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  companyId?: string | null
+  contactId: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutNotificationsInput, Prisma.ConversationUncheckedCreateWithoutNotificationsInput>
+}
+
+export type ConversationUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.ConversationUpdateWithoutNotificationsInput, Prisma.ConversationUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutNotificationsInput, Prisma.ConversationUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.ConversationWhereInput
+}
+
+export type ConversationUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.ConversationWhereInput
+  data: Prisma.XOR<Prisma.ConversationUpdateWithoutNotificationsInput, Prisma.ConversationUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type ConversationUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
+  contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
+  tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationCreateManyCompanyInput = {
@@ -1143,6 +2057,16 @@ export type ConversationCreateManyCompanyInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
@@ -1161,12 +2085,25 @@ export type ConversationUpdateWithoutCompanyInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutCompanyInput = {
@@ -1183,11 +2120,24 @@ export type ConversationUncheckedUpdateWithoutCompanyInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateManyWithoutCompanyInput = {
@@ -1204,6 +2154,16 @@ export type ConversationUncheckedUpdateManyWithoutCompanyInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1223,6 +2183,16 @@ export type ConversationCreateManyContactInput = {
   lastCustomerMessageAt?: Date | string | null
   lastBotMessageAt?: Date | string | null
   lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
   closedAt?: Date | string | null
   createdAt: Date | string
   updatedAt: Date | string
@@ -1241,12 +2211,25 @@ export type ConversationUpdateWithoutContactInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutContactInput = {
@@ -1263,11 +2246,24 @@ export type ConversationUncheckedUpdateWithoutContactInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateManyWithoutContactInput = {
@@ -1284,6 +2280,16 @@ export type ConversationUncheckedUpdateManyWithoutContactInput = {
   lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1297,11 +2303,17 @@ export type ConversationUncheckedUpdateManyWithoutContactInput = {
 export type ConversationCountOutputType = {
   tags: number
   messages: number
+  notifications: number
+  sourceArticles: number
+  aiRuns: number
 }
 
 export type ConversationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tags?: boolean | ConversationCountOutputTypeCountTagsArgs
   messages?: boolean | ConversationCountOutputTypeCountMessagesArgs
+  notifications?: boolean | ConversationCountOutputTypeCountNotificationsArgs
+  sourceArticles?: boolean | ConversationCountOutputTypeCountSourceArticlesArgs
+  aiRuns?: boolean | ConversationCountOutputTypeCountAiRunsArgs
 }
 
 /**
@@ -1328,6 +2340,27 @@ export type ConversationCountOutputTypeCountMessagesArgs<ExtArgs extends runtime
   where?: Prisma.MessageWhereInput
 }
 
+/**
+ * ConversationCountOutputType without action
+ */
+export type ConversationCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * ConversationCountOutputType without action
+ */
+export type ConversationCountOutputTypeCountSourceArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbArticleWhereInput
+}
+
+/**
+ * ConversationCountOutputType without action
+ */
+export type ConversationCountOutputTypeCountAiRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiRunWhereInput
+}
+
 
 export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1344,6 +2377,16 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   lastCustomerMessageAt?: boolean
   lastBotMessageAt?: boolean
   lastHumanMessageAt?: boolean
+  conversationSummary?: boolean
+  customerIntent?: boolean
+  requestedProductService?: boolean
+  requestedDeliveryDate?: boolean
+  deliveryAddress?: boolean
+  budget?: boolean
+  agreedTerms?: boolean
+  nextAction?: boolean
+  lastAiDecision?: boolean
+  importantNotes?: boolean
   closedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1351,6 +2394,9 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.Conversation$tagsArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
+  notifications?: boolean | Prisma.Conversation$notificationsArgs<ExtArgs>
+  sourceArticles?: boolean | Prisma.Conversation$sourceArticlesArgs<ExtArgs>
+  aiRuns?: boolean | Prisma.Conversation$aiRunsArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
@@ -1369,6 +2415,16 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   lastCustomerMessageAt?: boolean
   lastBotMessageAt?: boolean
   lastHumanMessageAt?: boolean
+  conversationSummary?: boolean
+  customerIntent?: boolean
+  requestedProductService?: boolean
+  requestedDeliveryDate?: boolean
+  deliveryAddress?: boolean
+  budget?: boolean
+  agreedTerms?: boolean
+  nextAction?: boolean
+  lastAiDecision?: boolean
+  importantNotes?: boolean
   closedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1391,6 +2447,16 @@ export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   lastCustomerMessageAt?: boolean
   lastBotMessageAt?: boolean
   lastHumanMessageAt?: boolean
+  conversationSummary?: boolean
+  customerIntent?: boolean
+  requestedProductService?: boolean
+  requestedDeliveryDate?: boolean
+  deliveryAddress?: boolean
+  budget?: boolean
+  agreedTerms?: boolean
+  nextAction?: boolean
+  lastAiDecision?: boolean
+  importantNotes?: boolean
   closedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1413,17 +2479,30 @@ export type ConversationSelectScalar = {
   lastCustomerMessageAt?: boolean
   lastBotMessageAt?: boolean
   lastHumanMessageAt?: boolean
+  conversationSummary?: boolean
+  customerIntent?: boolean
+  requestedProductService?: boolean
+  requestedDeliveryDate?: boolean
+  deliveryAddress?: boolean
+  budget?: boolean
+  agreedTerms?: boolean
+  nextAction?: boolean
+  lastAiDecision?: boolean
+  importantNotes?: boolean
   closedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "contactId" | "channel" | "status" | "priority" | "assignedTo" | "botPaused" | "handoffRequired" | "unreadCount" | "lastMessageAt" | "lastCustomerMessageAt" | "lastBotMessageAt" | "lastHumanMessageAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "contactId" | "channel" | "status" | "priority" | "assignedTo" | "botPaused" | "handoffRequired" | "unreadCount" | "lastMessageAt" | "lastCustomerMessageAt" | "lastBotMessageAt" | "lastHumanMessageAt" | "conversationSummary" | "customerIntent" | "requestedProductService" | "requestedDeliveryDate" | "deliveryAddress" | "budget" | "agreedTerms" | "nextAction" | "lastAiDecision" | "importantNotes" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
 export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.Conversation$companyArgs<ExtArgs>
   contact?: boolean | Prisma.ContactDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.Conversation$tagsArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
+  notifications?: boolean | Prisma.Conversation$notificationsArgs<ExtArgs>
+  sourceArticles?: boolean | Prisma.Conversation$sourceArticlesArgs<ExtArgs>
+  aiRuns?: boolean | Prisma.Conversation$aiRunsArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConversationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1442,6 +2521,9 @@ export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     contact: Prisma.$ContactPayload<ExtArgs>
     tags: Prisma.$ConversationTagPayload<ExtArgs>[]
     messages: Prisma.$MessagePayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    sourceArticles: Prisma.$KbArticlePayload<ExtArgs>[]
+    aiRuns: Prisma.$AiRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1458,6 +2540,16 @@ export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     lastCustomerMessageAt: Date | null
     lastBotMessageAt: Date | null
     lastHumanMessageAt: Date | null
+    conversationSummary: string | null
+    customerIntent: string | null
+    requestedProductService: string | null
+    requestedDeliveryDate: string | null
+    deliveryAddress: string | null
+    budget: string | null
+    agreedTerms: string | null
+    nextAction: string | null
+    lastAiDecision: string | null
+    importantNotes: string | null
     closedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1859,6 +2951,9 @@ export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends run
   contact<T extends Prisma.ContactDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContactDefaultArgs<ExtArgs>>): Prisma.Prisma__ContactClient<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tags<T extends Prisma.Conversation$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.Conversation$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Conversation$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sourceArticles<T extends Prisma.Conversation$sourceArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$sourceArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiRuns<T extends Prisma.Conversation$aiRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$aiRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1902,6 +2997,16 @@ export interface ConversationFieldRefs {
   readonly lastCustomerMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly lastBotMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly lastHumanMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
+  readonly conversationSummary: Prisma.FieldRef<"Conversation", 'String'>
+  readonly customerIntent: Prisma.FieldRef<"Conversation", 'String'>
+  readonly requestedProductService: Prisma.FieldRef<"Conversation", 'String'>
+  readonly requestedDeliveryDate: Prisma.FieldRef<"Conversation", 'String'>
+  readonly deliveryAddress: Prisma.FieldRef<"Conversation", 'String'>
+  readonly budget: Prisma.FieldRef<"Conversation", 'String'>
+  readonly agreedTerms: Prisma.FieldRef<"Conversation", 'String'>
+  readonly nextAction: Prisma.FieldRef<"Conversation", 'String'>
+  readonly lastAiDecision: Prisma.FieldRef<"Conversation", 'String'>
+  readonly importantNotes: Prisma.FieldRef<"Conversation", 'String'>
   readonly closedAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Conversation", 'DateTime'>
@@ -2370,6 +3475,78 @@ export type Conversation$messagesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * Conversation.notifications
+ */
+export type Conversation$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Conversation.sourceArticles
+ */
+export type Conversation$sourceArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbArticle
+   */
+  select?: Prisma.KbArticleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbArticle
+   */
+  omit?: Prisma.KbArticleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbArticleInclude<ExtArgs> | null
+  where?: Prisma.KbArticleWhereInput
+  orderBy?: Prisma.KbArticleOrderByWithRelationInput | Prisma.KbArticleOrderByWithRelationInput[]
+  cursor?: Prisma.KbArticleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbArticleScalarFieldEnum | Prisma.KbArticleScalarFieldEnum[]
+}
+
+/**
+ * Conversation.aiRuns
+ */
+export type Conversation$aiRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiRun
+   */
+  select?: Prisma.AiRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiRun
+   */
+  omit?: Prisma.AiRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiRunInclude<ExtArgs> | null
+  where?: Prisma.AiRunWhereInput
+  orderBy?: Prisma.AiRunOrderByWithRelationInput | Prisma.AiRunOrderByWithRelationInput[]
+  cursor?: Prisma.AiRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiRunScalarFieldEnum | Prisma.AiRunScalarFieldEnum[]
 }
 
 /**

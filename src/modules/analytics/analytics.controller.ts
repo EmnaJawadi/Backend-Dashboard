@@ -3,7 +3,7 @@ import { AnalyticsService } from './analytics.service';
 import { ConversationsAnalyticsQuery } from './queries/conversations-analytics.query';
 import { AiRunsAnalyticsQuery } from './queries/ai-runs-analytics.query';
 
-@Controller('analytics')
+@Controller(['analytics', 'api/analytics'])
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 

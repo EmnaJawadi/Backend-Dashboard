@@ -26,9 +26,19 @@ export class ConversationEventsHandler {
       ? payload.contactPhone.replace(/@s\.whatsapp\.net$/i, '').replace(/[^0-9+]/g, '')
       : null;
 
+    const companyId = payload.instanceName
+      ? (
+          await this.prisma.companyWhatsappInstance.findUnique({
+            where: { evolutionInstanceName: payload.instanceName },
+            select: { companyId: true },
+          })
+        )?.companyId ?? null
+      : null;
+
     const contact = phone
       ? await this.prisma.contact.findFirst({
           where: {
+            ...(companyId ? { companyId } : {}),
             OR: [{ phone }, { phone: phone.startsWith('+') ? phone : `+${phone}` }],
           },
           orderBy: { updatedAt: 'desc' },
@@ -37,7 +47,10 @@ export class ConversationEventsHandler {
 
     const conversation = contact
       ? await this.prisma.conversation.findFirst({
-          where: { contactId: contact.id },
+          where: {
+            contactId: contact.id,
+            ...(companyId ? { companyId } : {}),
+          },
           orderBy: { updatedAt: 'desc' },
         })
       : null;

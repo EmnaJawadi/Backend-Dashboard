@@ -216,6 +216,9 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestListRelationFilter
+  createdKbArticles?: Prisma.KbArticleListRelationFilter
+  readNotifications?: Prisma.NotificationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -230,6 +233,9 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestOrderByRelationAggregateInput
+  createdKbArticles?: Prisma.KbArticleOrderByRelationAggregateInput
+  readNotifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +253,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestListRelationFilter
+  createdKbArticles?: Prisma.KbArticleListRelationFilter
+  readNotifications?: Prisma.NotificationListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -290,6 +299,9 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -303,6 +315,9 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserUpdateInput = {
@@ -316,6 +331,9 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -329,6 +347,9 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -479,6 +500,22 @@ export type UserUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserCreateNestedOneWithoutReviewedRegistrationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedRegistrationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutReviewedRegistrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedRegistrationsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedRegistrationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput, Prisma.UserUpdateWithoutReviewedRegistrationsInput>, Prisma.UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+}
+
 export type UserCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
@@ -495,6 +532,38 @@ export type UserUpdateOneWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedKbArticlesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedCreateWithoutCreatedKbArticlesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedKbArticlesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedKbArticlesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedCreateWithoutCreatedKbArticlesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedKbArticlesInput
+  upsert?: Prisma.UserUpsertWithoutCreatedKbArticlesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedKbArticlesInput, Prisma.UserUpdateWithoutCreatedKbArticlesInput>, Prisma.UserUncheckedUpdateWithoutCreatedKbArticlesInput>
+}
+
+export type UserCreateNestedOneWithoutReadNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReadNotificationsInput, Prisma.UserUncheckedCreateWithoutReadNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReadNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutReadNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReadNotificationsInput, Prisma.UserUncheckedCreateWithoutReadNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReadNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutReadNotificationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReadNotificationsInput, Prisma.UserUpdateWithoutReadNotificationsInput>, Prisma.UserUncheckedUpdateWithoutReadNotificationsInput>
+}
+
 export type UserCreateWithoutCompanyInput = {
   id?: string
   fullName?: string | null
@@ -505,6 +574,9 @@ export type UserCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserUncheckedCreateWithoutCompanyInput = {
@@ -517,6 +589,9 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserCreateOrConnectWithoutCompanyInput = {
@@ -560,6 +635,82 @@ export type UserScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
+export type UserCreateWithoutReviewedRegistrationsInput = {
+  id?: string
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
+  id?: string
+  companyId?: string | null
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedRegistrationsInput>
+}
+
+export type UserUpsertWithoutReviewedRegistrationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedRegistrationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedRegistrationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedRegistrationsInput, Prisma.UserUncheckedUpdateWithoutReviewedRegistrationsInput>
+}
+
+export type UserUpdateWithoutReviewedRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+}
+
 export type UserCreateWithoutAuditLogsInput = {
   id?: string
   fullName?: string | null
@@ -570,6 +721,9 @@ export type UserCreateWithoutAuditLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -582,6 +736,9 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -610,6 +767,9 @@ export type UserUpdateWithoutAuditLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -622,6 +782,161 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+}
+
+export type UserCreateWithoutCreatedKbArticlesInput = {
+  id?: string
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedKbArticlesInput = {
+  id?: string
+  companyId?: string | null
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedKbArticlesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedCreateWithoutCreatedKbArticlesInput>
+}
+
+export type UserUpsertWithoutCreatedKbArticlesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedUpdateWithoutCreatedKbArticlesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedCreateWithoutCreatedKbArticlesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedKbArticlesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedKbArticlesInput, Prisma.UserUncheckedUpdateWithoutCreatedKbArticlesInput>
+}
+
+export type UserUpdateWithoutCreatedKbArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedKbArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+}
+
+export type UserCreateWithoutReadNotificationsInput = {
+  id?: string
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutReadNotificationsInput = {
+  id?: string
+  companyId?: string | null
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutReadNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReadNotificationsInput, Prisma.UserUncheckedCreateWithoutReadNotificationsInput>
+}
+
+export type UserUpsertWithoutReadNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReadNotificationsInput, Prisma.UserUncheckedUpdateWithoutReadNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReadNotificationsInput, Prisma.UserUncheckedCreateWithoutReadNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReadNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReadNotificationsInput, Prisma.UserUncheckedUpdateWithoutReadNotificationsInput>
+}
+
+export type UserUpdateWithoutReadNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReadNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyCompanyInput = {
@@ -645,6 +960,9 @@ export type UserUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -657,6 +975,9 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -677,10 +998,16 @@ export type UserUncheckedUpdateManyWithoutCompanyInput = {
 
 export type UserCountOutputType = {
   auditLogs: number
+  reviewedRegistrations: number
+  createdKbArticles: number
+  readNotifications: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+  reviewedRegistrations?: boolean | UserCountOutputTypeCountReviewedRegistrationsArgs
+  createdKbArticles?: boolean | UserCountOutputTypeCountCreatedKbArticlesArgs
+  readNotifications?: boolean | UserCountOutputTypeCountReadNotificationsArgs
 }
 
 /**
@@ -700,6 +1027,27 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CompanyRegistrationRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedKbArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbArticleWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReadNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -713,6 +1061,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  reviewedRegistrations?: boolean | Prisma.User$reviewedRegistrationsArgs<ExtArgs>
+  createdKbArticles?: boolean | Prisma.User$createdKbArticlesArgs<ExtArgs>
+  readNotifications?: boolean | Prisma.User$readNotificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -758,6 +1109,9 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  reviewedRegistrations?: boolean | Prisma.User$reviewedRegistrationsArgs<ExtArgs>
+  createdKbArticles?: boolean | Prisma.User$createdKbArticlesArgs<ExtArgs>
+  readNotifications?: boolean | Prisma.User$readNotificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -772,6 +1126,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs> | null
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    reviewedRegistrations: Prisma.$CompanyRegistrationRequestPayload<ExtArgs>[]
+    createdKbArticles: Prisma.$KbArticlePayload<ExtArgs>[]
+    readNotifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1179,6 +1536,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.User$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedRegistrations<T extends Prisma.User$reviewedRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyRegistrationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdKbArticles<T extends Prisma.User$createdKbArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdKbArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  readNotifications<T extends Prisma.User$readNotificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$readNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1658,6 +2018,78 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedRegistrations
+ */
+export type User$reviewedRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompanyRegistrationRequest
+   */
+  select?: Prisma.CompanyRegistrationRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CompanyRegistrationRequest
+   */
+  omit?: Prisma.CompanyRegistrationRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyRegistrationRequestInclude<ExtArgs> | null
+  where?: Prisma.CompanyRegistrationRequestWhereInput
+  orderBy?: Prisma.CompanyRegistrationRequestOrderByWithRelationInput | Prisma.CompanyRegistrationRequestOrderByWithRelationInput[]
+  cursor?: Prisma.CompanyRegistrationRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CompanyRegistrationRequestScalarFieldEnum | Prisma.CompanyRegistrationRequestScalarFieldEnum[]
+}
+
+/**
+ * User.createdKbArticles
+ */
+export type User$createdKbArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbArticle
+   */
+  select?: Prisma.KbArticleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbArticle
+   */
+  omit?: Prisma.KbArticleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbArticleInclude<ExtArgs> | null
+  where?: Prisma.KbArticleWhereInput
+  orderBy?: Prisma.KbArticleOrderByWithRelationInput | Prisma.KbArticleOrderByWithRelationInput[]
+  cursor?: Prisma.KbArticleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbArticleScalarFieldEnum | Prisma.KbArticleScalarFieldEnum[]
+}
+
+/**
+ * User.readNotifications
+ */
+export type User$readNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

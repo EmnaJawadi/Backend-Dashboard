@@ -28,6 +28,7 @@ export class WebhooksService {
     message: string;
     eventType: string;
     normalized: {
+      instanceName: string | null;
       contactPhone: string | null;
       contactName: string | null;
       messageText: string | null;
@@ -36,6 +37,7 @@ export class WebhooksService {
       eventAt: Date;
       conversationExternalId: string | null;
       externalMessageId: string | null;
+      messageId: string | null;
     };
   }> {
     const normalized: NormalizedWebhookDto = normalizeEvolutionWebhook(payload);
@@ -60,6 +62,7 @@ export class WebhooksService {
       message: 'Webhook processed successfully',
       eventType: normalized.eventType,
       normalized: {
+        instanceName: normalized.instanceName,
         contactPhone: normalized.contactPhone,
         contactName: normalized.contactName,
         messageText: normalized.messageText,
@@ -68,6 +71,7 @@ export class WebhooksService {
         eventAt: normalized.eventAt,
         conversationExternalId: normalized.conversationExternalId,
         externalMessageId: normalized.externalMessageId,
+        messageId: normalized.externalMessageId,
       },
     };
   }

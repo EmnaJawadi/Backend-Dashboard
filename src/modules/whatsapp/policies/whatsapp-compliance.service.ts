@@ -25,14 +25,4 @@ export class WhatsappComplianceService {
 
     return trimmed;
   }
-
-  validateTemplateName(templateName: string) {
-    const trimmed = templateName.trim();
-
-    if (!trimmed) {
-      throw new BadRequestException('Template name cannot be empty');
-    }
-
-    return trimmed;
-  }
 }

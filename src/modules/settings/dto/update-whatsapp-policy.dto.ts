@@ -1,10 +1,8 @@
 import {
   IsBoolean,
   IsIn,
-  IsInt,
   IsOptional,
   IsString,
-  Min,
 } from 'class-validator';
 
 export class UpdateWhatsappPolicyDto {
@@ -39,15 +37,6 @@ export class UpdateWhatsappPolicyDto {
   @IsOptional()
   @IsIn(['connected', 'disconnected'])
   connectionStatus?: 'connected' | 'disconnected';
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  sessionWindowHours?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  allowTemplatesOutsideWindow?: boolean;
 
   @IsOptional()
   @IsString()

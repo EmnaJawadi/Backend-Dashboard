@@ -1,37 +1,4 @@
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsIn,
-  IsISO8601,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-
-export class WhatsappReplyTemplateDto {
-  @IsOptional()
-  @IsString()
-  templateId?: string;
-
-  @IsOptional()
-  @IsString()
-  templateName?: string;
-
-  @IsOptional()
-  @IsString()
-  language?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  parameters?: string[];
-
-  @IsOptional()
-  @IsObject()
-  variables?: Record<string, string>;
-}
+import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
 
 export class ReplyWhatsappDto {
   @IsOptional()
@@ -42,39 +9,8 @@ export class ReplyWhatsappDto {
   @IsString()
   phoneNumber?: string;
 
-  @IsOptional()
   @IsString()
-  message?: string;
-
-  @IsOptional()
-  @IsISO8601()
-  lastCustomerMessageAt?: string;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => WhatsappReplyTemplateDto)
-  template?: WhatsappReplyTemplateDto;
-
-  @IsOptional()
-  @IsString()
-  templateId?: string;
-
-  @IsOptional()
-  @IsString()
-  templateName?: string;
-
-  @IsOptional()
-  @IsString()
-  language?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  parameters?: string[];
-
-  @IsOptional()
-  @IsObject()
-  variables?: Record<string, string>;
+  message!: string;
 
   @IsOptional()
   @IsBoolean()
@@ -83,6 +19,10 @@ export class ReplyWhatsappDto {
   @IsOptional()
   @IsString()
   senderId?: string;
+
+  @IsOptional()
+  @IsString()
+  instanceName?: string;
 
   @IsOptional()
   @IsIn(['bot', 'agent', 'system'])

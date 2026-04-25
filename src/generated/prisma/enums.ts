@@ -20,11 +20,24 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
 export const CompanyStatus = {
+  PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE'
+  SUSPENDED: 'SUSPENDED',
+  TRIAL: 'TRIAL',
+  EXPIRED: 'EXPIRED'
 } as const
 
 export type CompanyStatus = (typeof CompanyStatus)[keyof typeof CompanyStatus]
+
+
+export const CompanyRegistrationStatus = {
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  NEEDS_MORE_INFO: 'NEEDS_MORE_INFO'
+} as const
+
+export type CompanyRegistrationStatus = (typeof CompanyRegistrationStatus)[keyof typeof CompanyRegistrationStatus]
 
 
 export const SubscriptionStatus = {
@@ -35,3 +48,58 @@ export const SubscriptionStatus = {
 } as const
 
 export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const WhatsappConnectionStatus = {
+  DISCONNECTED: 'DISCONNECTED',
+  CONNECTING: 'CONNECTING',
+  QR_READY: 'QR_READY',
+  CONNECTED: 'CONNECTED',
+  ERROR: 'ERROR'
+} as const
+
+export type WhatsappConnectionStatus = (typeof WhatsappConnectionStatus)[keyof typeof WhatsappConnectionStatus]
+
+
+export const NotificationPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high'
+} as const
+
+export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
+
+
+export const NotificationType = {
+  COMPANY_REGISTRATION_REQUEST: 'COMPANY_REGISTRATION_REQUEST',
+  AI_LOW_CONFIDENCE: 'AI_LOW_CONFIDENCE',
+  HANDOFF_REQUIRED: 'HANDOFF_REQUIRED',
+  CUSTOMER_REQUEST_HUMAN: 'CUSTOMER_REQUEST_HUMAN',
+  IMPORTANT_VALIDATION: 'IMPORTANT_VALIDATION',
+  KB_DRAFT_SUGGESTION: 'KB_DRAFT_SUGGESTION',
+  WHATSAPP_DISCONNECTED: 'WHATSAPP_DISCONNECTED',
+  WHATSAPP_NOT_CONNECTED: 'WHATSAPP_NOT_CONNECTED',
+  CONVERSATION_FOLLOW_UP: 'CONVERSATION_FOLLOW_UP',
+  CONVERSATION_INACTIVE_RISK: 'CONVERSATION_INACTIVE_RISK'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const KbArticleStatus = {
+  draft: 'draft',
+  published: 'published',
+  archived: 'archived',
+  rejected: 'rejected'
+} as const
+
+export type KbArticleStatus = (typeof KbArticleStatus)[keyof typeof KbArticleStatus]
+
+
+export const KbArticleSource = {
+  manual: 'manual',
+  human_agent_response: 'human_agent_response',
+  imported: 'imported'
+} as const
+
+export type KbArticleSource = (typeof KbArticleSource)[keyof typeof KbArticleSource]

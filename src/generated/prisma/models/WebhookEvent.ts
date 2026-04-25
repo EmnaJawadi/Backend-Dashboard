@@ -29,6 +29,7 @@ export type WebhookEventMinAggregateOutputType = {
   companyId: string | null
   provider: string | null
   eventType: string | null
+  instanceName: string | null
   externalEventId: string | null
   processingStatus: string | null
   errorMessage: string | null
@@ -41,6 +42,7 @@ export type WebhookEventMaxAggregateOutputType = {
   companyId: string | null
   provider: string | null
   eventType: string | null
+  instanceName: string | null
   externalEventId: string | null
   processingStatus: string | null
   errorMessage: string | null
@@ -53,6 +55,7 @@ export type WebhookEventCountAggregateOutputType = {
   companyId: number
   provider: number
   eventType: number
+  instanceName: number
   externalEventId: number
   payload: number
   processingStatus: number
@@ -68,6 +71,7 @@ export type WebhookEventMinAggregateInputType = {
   companyId?: true
   provider?: true
   eventType?: true
+  instanceName?: true
   externalEventId?: true
   processingStatus?: true
   errorMessage?: true
@@ -80,6 +84,7 @@ export type WebhookEventMaxAggregateInputType = {
   companyId?: true
   provider?: true
   eventType?: true
+  instanceName?: true
   externalEventId?: true
   processingStatus?: true
   errorMessage?: true
@@ -92,6 +97,7 @@ export type WebhookEventCountAggregateInputType = {
   companyId?: true
   provider?: true
   eventType?: true
+  instanceName?: true
   externalEventId?: true
   payload?: true
   processingStatus?: true
@@ -178,6 +184,7 @@ export type WebhookEventGroupByOutputType = {
   companyId: string | null
   provider: string | null
   eventType: string | null
+  instanceName: string | null
   externalEventId: string | null
   payload: runtime.JsonValue | null
   processingStatus: string | null
@@ -212,6 +219,7 @@ export type WebhookEventWhereInput = {
   companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  instanceName?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   payload?: Prisma.JsonNullableFilter<"WebhookEvent">
   processingStatus?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
@@ -226,6 +234,7 @@ export type WebhookEventOrderByWithRelationInput = {
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrderInput | Prisma.SortOrder
+  instanceName?: Prisma.SortOrderInput | Prisma.SortOrder
   externalEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrderInput | Prisma.SortOrder
   processingStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -243,6 +252,7 @@ export type WebhookEventWhereUniqueInput = Prisma.AtLeast<{
   companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  instanceName?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   payload?: Prisma.JsonNullableFilter<"WebhookEvent">
   processingStatus?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
@@ -257,6 +267,7 @@ export type WebhookEventOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   eventType?: Prisma.SortOrderInput | Prisma.SortOrder
+  instanceName?: Prisma.SortOrderInput | Prisma.SortOrder
   externalEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrderInput | Prisma.SortOrder
   processingStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -276,6 +287,7 @@ export type WebhookEventScalarWhereWithAggregatesInput = {
   companyId?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
+  instanceName?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
   payload?: Prisma.JsonNullableWithAggregatesFilter<"WebhookEvent">
   processingStatus?: Prisma.StringNullableWithAggregatesFilter<"WebhookEvent"> | string | null
@@ -288,6 +300,7 @@ export type WebhookEventCreateInput = {
   id?: string
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -302,6 +315,7 @@ export type WebhookEventUncheckedCreateInput = {
   companyId?: string | null
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -314,6 +328,7 @@ export type WebhookEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -328,6 +343,7 @@ export type WebhookEventUncheckedUpdateInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -341,6 +357,7 @@ export type WebhookEventCreateManyInput = {
   companyId?: string | null
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -353,6 +370,7 @@ export type WebhookEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -366,6 +384,7 @@ export type WebhookEventUncheckedUpdateManyInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -389,6 +408,7 @@ export type WebhookEventCountOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
+  instanceName?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   processingStatus?: Prisma.SortOrder
@@ -402,6 +422,7 @@ export type WebhookEventMaxOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
+  instanceName?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
   processingStatus?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -414,6 +435,7 @@ export type WebhookEventMinOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
+  instanceName?: Prisma.SortOrder
   externalEventId?: Prisma.SortOrder
   processingStatus?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -467,6 +489,7 @@ export type WebhookEventCreateWithoutCompanyInput = {
   id?: string
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -479,6 +502,7 @@ export type WebhookEventUncheckedCreateWithoutCompanyInput = {
   id?: string
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -521,6 +545,7 @@ export type WebhookEventScalarWhereInput = {
   companyId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   provider?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   eventType?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
+  instanceName?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   externalEventId?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
   payload?: Prisma.JsonNullableFilter<"WebhookEvent">
   processingStatus?: Prisma.StringNullableFilter<"WebhookEvent"> | string | null
@@ -533,6 +558,7 @@ export type WebhookEventCreateManyCompanyInput = {
   id?: string
   provider?: string | null
   eventType?: string | null
+  instanceName?: string | null
   externalEventId?: string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: string | null
@@ -545,6 +571,7 @@ export type WebhookEventUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -557,6 +584,7 @@ export type WebhookEventUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -569,6 +597,7 @@ export type WebhookEventUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instanceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   externalEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   processingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -584,6 +613,7 @@ export type WebhookEventSelect<ExtArgs extends runtime.Types.Extensions.Internal
   companyId?: boolean
   provider?: boolean
   eventType?: boolean
+  instanceName?: boolean
   externalEventId?: boolean
   payload?: boolean
   processingStatus?: boolean
@@ -598,6 +628,7 @@ export type WebhookEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   companyId?: boolean
   provider?: boolean
   eventType?: boolean
+  instanceName?: boolean
   externalEventId?: boolean
   payload?: boolean
   processingStatus?: boolean
@@ -612,6 +643,7 @@ export type WebhookEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   companyId?: boolean
   provider?: boolean
   eventType?: boolean
+  instanceName?: boolean
   externalEventId?: boolean
   payload?: boolean
   processingStatus?: boolean
@@ -626,6 +658,7 @@ export type WebhookEventSelectScalar = {
   companyId?: boolean
   provider?: boolean
   eventType?: boolean
+  instanceName?: boolean
   externalEventId?: boolean
   payload?: boolean
   processingStatus?: boolean
@@ -634,7 +667,7 @@ export type WebhookEventSelectScalar = {
   processedAt?: boolean
 }
 
-export type WebhookEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "provider" | "eventType" | "externalEventId" | "payload" | "processingStatus" | "errorMessage" | "receivedAt" | "processedAt", ExtArgs["result"]["webhookEvent"]>
+export type WebhookEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "provider" | "eventType" | "instanceName" | "externalEventId" | "payload" | "processingStatus" | "errorMessage" | "receivedAt" | "processedAt", ExtArgs["result"]["webhookEvent"]>
 export type WebhookEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.WebhookEvent$companyArgs<ExtArgs>
 }
@@ -655,6 +688,7 @@ export type $WebhookEventPayload<ExtArgs extends runtime.Types.Extensions.Intern
     companyId: string | null
     provider: string | null
     eventType: string | null
+    instanceName: string | null
     externalEventId: string | null
     payload: runtime.JsonValue | null
     processingStatus: string | null
@@ -1089,6 +1123,7 @@ export interface WebhookEventFieldRefs {
   readonly companyId: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly provider: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly eventType: Prisma.FieldRef<"WebhookEvent", 'String'>
+  readonly instanceName: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly externalEventId: Prisma.FieldRef<"WebhookEvent", 'String'>
   readonly payload: Prisma.FieldRef<"WebhookEvent", 'Json'>
   readonly processingStatus: Prisma.FieldRef<"WebhookEvent", 'String'>
