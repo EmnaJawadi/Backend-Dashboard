@@ -11,10 +11,17 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-
+#seeds
+prisma/seed.js
 # OS
 .DS_Store
-
+# env
+.env
+.env.example
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 # Tests
 /coverage
 /.nyc_output
