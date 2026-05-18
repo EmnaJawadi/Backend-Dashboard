@@ -19,6 +19,15 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const UserApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type UserApprovalStatus = (typeof UserApprovalStatus)[keyof typeof UserApprovalStatus]
+
+
 export const CompanyStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
@@ -38,6 +47,15 @@ export const CompanyRegistrationStatus = {
 } as const
 
 export type CompanyRegistrationStatus = (typeof CompanyRegistrationStatus)[keyof typeof CompanyRegistrationStatus]
+
+
+export const AgentRegistrationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type AgentRegistrationStatus = (typeof AgentRegistrationStatus)[keyof typeof AgentRegistrationStatus]
 
 
 export const SubscriptionStatus = {
@@ -72,6 +90,7 @@ export type NotificationPriority = (typeof NotificationPriority)[keyof typeof No
 
 export const NotificationType = {
   COMPANY_REGISTRATION_REQUEST: 'COMPANY_REGISTRATION_REQUEST',
+  AGENT_REGISTRATION_REQUEST: 'AGENT_REGISTRATION_REQUEST',
   AI_LOW_CONFIDENCE: 'AI_LOW_CONFIDENCE',
   HANDOFF_REQUIRED: 'HANDOFF_REQUIRED',
   CUSTOMER_REQUEST_HUMAN: 'CUSTOMER_REQUEST_HUMAN',
@@ -103,3 +122,12 @@ export const KbArticleSource = {
 } as const
 
 export type KbArticleSource = (typeof KbArticleSource)[keyof typeof KbArticleSource]
+
+
+export const KbSuggestionStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
+} as const
+
+export type KbSuggestionStatus = (typeof KbSuggestionStatus)[keyof typeof KbSuggestionStatus]

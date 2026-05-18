@@ -20,6 +20,6 @@ export class SendWhatsappMessageDto {
   instanceName?: string;
 
   @IsOptional()
-  @IsIn(['agent', 'bot', 'system'])
-  senderType?: 'agent' | 'bot' | 'system';
+  @IsIn(['human', 'human_agent', 'agent', 'bot', 'system'])
+  senderType?: 'human' | 'human_agent' | 'agent' | 'bot' | 'system';
 }

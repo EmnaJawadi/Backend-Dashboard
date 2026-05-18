@@ -5,10 +5,19 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "free:port": "node scripts/free-port.js 3001",
+    "prestart": "node scripts/free-port.js 3001",
     "start": "nest start",
+    "prestart:dev": "node scripts/free-port.js 3001",
     "start:dev": "nest start --watch",
+    "prestart:debug": "node scripts/free-port.js 3001",
     "start:debug": "nest start --debug --watch",
+    "prestart:prod": "node scripts/free-port.js 3001",
     "start:prod": "node dist/src/main.js",
+    "test": "npm run build && node test/flavonation-ai-rag.examples.js && node test/product-image-knowledge.examples.js && node test/company-settings-security.examples.js",
+    "test:settings-security": "npm run build && node test/company-settings-security.examples.js",
+    "test:product-images": "npm run build && node test/product-image-knowledge.examples.js",
+    "test:examples": "npm run build && ts-node test/whatsapp-24h-window.examples.ts && node test/flavonation-ai-rag.examples.js",
     "prisma:seed": "npm run build && node prisma/seed.js"
   },
   "prisma": {

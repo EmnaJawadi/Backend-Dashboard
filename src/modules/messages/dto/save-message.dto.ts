@@ -28,11 +28,39 @@ export class SaveMessageDto {
 
   @IsOptional()
   @IsString()
+  caption?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mediaUrl?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mediaId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mimeType?: string | null;
+
+  @IsOptional()
+  @IsString()
   phoneNumber?: string;
 
   @IsOptional()
   @IsString()
   contactName?: string;
+
+  @IsOptional()
+  @IsString()
+  instance?: string;
+
+  @IsOptional()
+  @IsString()
+  instanceName?: string;
+
+  @IsOptional()
+  @IsString()
+  rawRemoteJid?: string;
 
   @IsOptional()
   @IsString()
@@ -43,11 +71,11 @@ export class SaveMessageDto {
   messageId?: string;
 
   @IsOptional()
-  @IsIn(['text', 'image', 'audio', 'document', 'video'])
+  @IsIn(['text', 'image', 'audio', 'document', 'video', 'button', 'list', 'unknown'])
   type?: MessageType;
 
   @IsOptional()
-  @IsIn(['customer', 'agent', 'bot', 'system'])
+  @IsIn(['customer', 'human', 'human_agent', 'agent', 'bot', 'system'])
   senderType?: MessageSenderType;
 
   @IsOptional()

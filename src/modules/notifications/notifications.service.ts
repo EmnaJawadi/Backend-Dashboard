@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import {
   NotificationPriority,
@@ -24,9 +24,10 @@ export class NotificationsService {
     dto: CreateNotificationDto,
     actor?: AuthenticatedUser,
   ) {
+    const companyId = await this.resolveNotificationCompanyId(dto, actor);
     const created = await this.prisma.notification.create({
       data: {
-        companyId: dto.companyId ?? null,
+        companyId,
         conversationId: dto.conversationId ?? null,
         contactId: dto.contactId ?? null,
         readByUserId: null,
@@ -68,10 +69,17 @@ export class NotificationsService {
 
     const actorCompanyScope =
       actor && actor.role !== UserRole.SUPER_ADMIN ? actor.companyId : undefined;
+    if (
+      actorCompanyScope &&
+      query.companyId &&
+      query.companyId !== actorCompanyScope
+    ) {
+      throw new NotFoundException('Notifications not found');
+    }
 
     const where: Prisma.NotificationWhereInput = {
       ...(actorCompanyScope ? { companyId: actorCompanyScope } : {}),
-      ...(query.companyId ? { companyId: query.companyId } : {}),
+      ...(!actorCompanyScope && query.companyId ? { companyId: query.companyId } : {}),
       ...(query.conversationId ? { conversationId: query.conversationId } : {}),
       ...(query.contactId ? { contactId: query.contactId } : {}),
       ...(query.type ? { type: query.type } : {}),
@@ -135,16 +143,68 @@ export class NotificationsService {
     return updated;
   }
 
+  async markAllAsRead(query: QueryNotificationsDto, actor?: AuthenticatedUser) {
+    const actorCompanyScope =
+      actor && actor.role !== UserRole.SUPER_ADMIN ? actor.companyId : undefined;
+    if (
+      actorCompanyScope &&
+      query.companyId &&
+      query.companyId !== actorCompanyScope
+    ) {
+      throw new NotFoundException('Notifications not found');
+    }
+    const now = new Date();
+    const where: Prisma.NotificationWhereInput = {
+      isRead: false,
+      ...(actorCompanyScope ? { companyId: actorCompanyScope } : {}),
+      ...(!actorCompanyScope && query.companyId ? { companyId: query.companyId } : {}),
+      ...(query.conversationId ? { conversationId: query.conversationId } : {}),
+      ...(query.contactId ? { contactId: query.contactId } : {}),
+      ...(query.type ? { type: query.type } : {}),
+    };
+
+    const result = await this.prisma.notification.updateMany({
+      where,
+      data: {
+        isRead: true,
+        readAt: now,
+        readByUserId: actor?.sub ?? null,
+      },
+    });
+
+    this.notificationsGateway.emitSystemNotification({
+      event: 'notifications_read_all',
+      count: result.count,
+      type: query.type ?? null,
+    });
+
+    return {
+      success: true,
+      count: result.count,
+    };
+  }
+
   async notifyAgentAssigned(payload: NotifyAgentAssignedDto) {
+    const companyId =
+      payload.companyId ??
+      (await this.resolveCompanyFromConversation(payload.conversationId));
+    const contextLines = [
+      payload.reason ?? 'Une conversation WhatsApp necessite une intervention interne.',
+      payload.phoneNumber ? `Telephone: ${payload.phoneNumber}` : null,
+      payload.contactName ? `Contact: ${payload.contactName}` : null,
+      payload.messageType ? `Type: ${payload.messageType}` : null,
+      payload.mediaType ? `Media: ${payload.mediaType}` : null,
+      payload.intent ? `Intent: ${payload.intent}` : null,
+      payload.messageText ? `Message: ${payload.messageText}` : null,
+    ].filter((line): line is string => Boolean(line));
+
     return this.create({
-      companyId: null,
+      companyId,
       conversationId: payload.conversationId ?? null,
-      contactId: null,
+      contactId: payload.contactId ?? null,
       type: NotificationType.HANDOFF_REQUIRED,
       title: 'Conversation requires human handoff',
-      message:
-        payload.reason ??
-        'A conversation has been assigned to a human agent or bot is paused.',
+      message: contextLines.join('\n'),
       priority: NotificationPriority.high,
       isRead: false,
     });
@@ -152,8 +212,11 @@ export class NotificationsService {
 
   async notifyAdmin(payload: NotifyAdminDto) {
     const type = this.resolveLegacyType(payload.type);
+    const companyId = await this.resolveCompanyFromConversation(
+      payload.conversationId,
+    );
     return this.create({
-      companyId: null,
+      companyId,
       conversationId: payload.conversationId ?? null,
       contactId: null,
       type,
@@ -190,5 +253,46 @@ export class NotificationsService {
     }
 
     return NotificationType.IMPORTANT_VALIDATION;
+  }
+
+  private async resolveNotificationCompanyId(
+    dto: CreateNotificationDto,
+    actor?: AuthenticatedUser,
+  ) {
+    const linkedCompanyId = await this.resolveCompanyFromConversation(
+      dto.conversationId,
+    );
+    const requestedCompanyId = dto.companyId ?? linkedCompanyId ?? null;
+
+    if (!actor) {
+      return requestedCompanyId;
+    }
+
+    if (actor.role === UserRole.SUPER_ADMIN) {
+      return requestedCompanyId;
+    }
+
+    if (!actor.companyId) {
+      throw new ForbiddenException('User is not linked to a company');
+    }
+
+    if (requestedCompanyId && requestedCompanyId !== actor.companyId) {
+      throw new NotFoundException('Notification target not found');
+    }
+
+    return actor.companyId;
+  }
+
+  private async resolveCompanyFromConversation(conversationId?: string | null) {
+    if (!conversationId) {
+      return null;
+    }
+
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      select: { companyId: true },
+    });
+
+    return conversation?.companyId ?? null;
   }
 }

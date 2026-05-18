@@ -1,8 +1,11 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import { resolveCompanyScope } from '../../common/utils/company-scope.util';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { AssignConversationDto } from './dto/assign-conversation.dto';
@@ -22,6 +25,7 @@ import {
 
 type ConversationAutomationState = {
   id: string;
+  companyId: string | null;
   contactId: string;
   assignedTo: string | null;
   status: string | null;
@@ -33,6 +37,8 @@ type ConversationAutomationState = {
 
 @Injectable()
 export class ConversationsService {
+  private readonly logger = new Logger(ConversationsService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   private toEntity(data: {
@@ -176,7 +182,6 @@ export class ConversationsService {
   ): boolean {
     return (
       conversation.botPaused === true ||
-      conversation.handoffRequired === true ||
       conversation.status === 'human_assigned' ||
       Boolean(conversation.assignedTo)
     );
@@ -186,6 +191,11 @@ export class ConversationsService {
     if (!incoming) return false;
     if (!existing) return true;
     return existing.trim().toLowerCase() !== incoming.trim().toLowerCase();
+  }
+
+  private normalizeNullableString(value?: string | null): string | null {
+    const normalized = value?.trim();
+    return normalized ? normalized : null;
   }
 
   private toWhatsappWorkflowResponse(
@@ -204,6 +214,7 @@ export class ConversationsService {
       companyId: conversation.companyId ?? null,
       contactId: conversation.contactId,
       botPaused: this.shouldPauseBotForConversation(conversation),
+      handoffRequired: conversation.handoffRequired ?? false,
       assignedTo: conversation.assignedTo ?? null,
       status: this.normalizeStatus(conversation.status),
       ignored: options?.ignored ?? false,
@@ -217,6 +228,7 @@ export class ConversationsService {
       where: { id: conversationId },
       select: {
         id: true,
+        companyId: true,
         contactId: true,
         assignedTo: true,
         status: true,
@@ -261,6 +273,7 @@ export class ConversationsService {
             conversation: {
               select: {
                 id: true,
+                companyId: true,
                 contactId: true,
                 assignedTo: true,
                 status: true,
@@ -321,11 +334,16 @@ export class ConversationsService {
     });
 
     if (duplicateCheck.isDuplicate && duplicateCheck.conversation) {
-      return this.toWhatsappWorkflowResponse(duplicateCheck.conversation, {
+      const response = this.toWhatsappWorkflowResponse(duplicateCheck.conversation, {
         ignored: true,
         duplicate: true,
         reason: 'DUPLICATE_INBOUND_MESSAGE',
       });
+      this.logger.log(
+        `get-or-create duplicate: companyId=${response.companyId ?? 'null'} contactId=${response.contactId} conversationId=${response.conversationId}`,
+      );
+
+      return response;
     }
 
     const workflowState = await this.prisma.$transaction(async (tx) => {
@@ -392,6 +410,7 @@ export class ConversationsService {
         orderBy: { updatedAt: 'desc' },
         select: {
           id: true,
+          companyId: true,
           contactId: true,
           assignedTo: true,
           status: true,
@@ -421,6 +440,7 @@ export class ConversationsService {
           },
           select: {
             id: true,
+            companyId: true,
             contactId: true,
             assignedTo: true,
             status: true,
@@ -448,6 +468,7 @@ export class ConversationsService {
           },
           select: {
             id: true,
+            companyId: true,
             contactId: true,
             assignedTo: true,
             status: true,
@@ -465,24 +486,52 @@ export class ConversationsService {
       };
     });
 
-    return this.toWhatsappWorkflowResponse(workflowState.conversation, {
+    const response = this.toWhatsappWorkflowResponse(workflowState.conversation, {
       ignored: false,
       duplicate: false,
       reason: null,
     });
+    this.logger.log(
+      `get-or-create resolved: companyId=${response.companyId ?? 'null'} contactId=${response.contactId} conversationId=${response.conversationId}`,
+    );
+
+    return response;
   }
 
   async create(
     createConversationDto: CreateConversationDto,
+    actor?: AuthenticatedUser,
   ): Promise<ConversationEntity> {
     const now = new Date();
+    const companyId = resolveCompanyScope(actor);
     const status = this.normalizeStatus(createConversationDto.status);
     const shouldPauseBot =
       status === 'human_assigned' || createConversationDto.botActive === false;
+    const contact = await this.prisma.contact.findFirst({
+      where: {
+        id: createConversationDto.contactId,
+        ...(companyId ? { companyId } : {}),
+      },
+      select: {
+        id: true,
+        companyId: true,
+      },
+    });
+
+    if (!contact) {
+      throw new NotFoundException(
+        `Contact with id ${createConversationDto.contactId} not found`,
+      );
+    }
+
+    const resolvedCompanyId = contact.companyId ?? companyId ?? null;
 
     if (createConversationDto.contactName || createConversationDto.phoneNumber) {
-      await this.prisma.contact.update({
-        where: { id: createConversationDto.contactId },
+      await this.prisma.contact.updateMany({
+        where: {
+          id: createConversationDto.contactId,
+          ...(resolvedCompanyId ? { companyId: resolvedCompanyId } : {}),
+        },
         data: {
           fullName: createConversationDto.contactName ?? undefined,
           whatsappName: createConversationDto.contactName ?? undefined,
@@ -494,6 +543,7 @@ export class ConversationsService {
 
     const created = await this.prisma.conversation.create({
       data: {
+        companyId: resolvedCompanyId,
         contactId: createConversationDto.contactId,
         channel: 'whatsapp',
         status,
@@ -510,6 +560,7 @@ export class ConversationsService {
           ? {
               create: [
                 {
+                  companyId: resolvedCompanyId,
                   direction: 'inbound',
                   senderType: 'customer',
                   content: createConversationDto.lastMessage,
@@ -535,10 +586,15 @@ export class ConversationsService {
     return this.toEntity(created);
   }
 
-  async findAll(query: ConversationQueryDto) {
+  async findAll(query: ConversationQueryDto, actor?: AuthenticatedUser) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
+    const companyId = resolveCompanyScope(actor);
     const andFilters: Prisma.ConversationWhereInput[] = [];
+
+    if (companyId) {
+      andFilters.push({ companyId });
+    }
 
     if (query.search?.trim()) {
       const search = query.search.trim();
@@ -605,9 +661,13 @@ export class ConversationsService {
     };
   }
 
-  async findOne(id: string) {
-    const conversation = await this.prisma.conversation.findUnique({
-      where: { id },
+  async findOne(id: string, actor?: AuthenticatedUser) {
+    const companyId = resolveCompanyScope(actor);
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
       include: {
         contact: true,
         tags: true,
@@ -677,13 +737,32 @@ export class ConversationsService {
     };
   }
 
-  async update(id: string, updateConversationDto: UpdateConversationDto) {
-    const existing = await this.findOne(id);
+  async update(
+    id: string,
+    updateConversationDto: UpdateConversationDto,
+    actor?: AuthenticatedUser,
+  ) {
+    const companyId = resolveCompanyScope(actor);
+    const existing = await this.findOne(id, actor);
+    const scopedConversation = await this.prisma.conversation.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
+      select: {
+        companyId: true,
+      },
+    });
     const now = new Date();
 
     if (updateConversationDto.contactName || updateConversationDto.phoneNumber) {
-      await this.prisma.contact.update({
-        where: { id: existing.participant.contactId },
+      await this.prisma.contact.updateMany({
+        where: {
+          id: existing.participant.contactId,
+          ...(scopedConversation?.companyId
+            ? { companyId: scopedConversation.companyId }
+            : {}),
+        },
         data: {
           fullName: updateConversationDto.contactName ?? undefined,
           whatsappName: updateConversationDto.contactName ?? undefined,
@@ -717,8 +796,9 @@ export class ConversationsService {
       await this.prisma.message.create({
         data: {
           conversationId: id,
+          companyId: scopedConversation?.companyId ?? companyId ?? null,
           direction: 'outbound',
-          senderType: 'agent',
+          senderType: 'human_agent',
           content: updateConversationDto.lastMessage.trim(),
           messageType: 'text',
           deliveryStatus: 'sent',
@@ -737,14 +817,15 @@ export class ConversationsService {
       });
     }
 
-    return this.findOne(id);
+    return this.findOne(id, actor);
   }
 
   async updateStatus(
     id: string,
     updateConversationStatusDto: UpdateConversationStatusDto,
+    actor?: AuthenticatedUser,
   ) {
-    await this.findOne(id);
+    await this.findOne(id, actor);
     const status = this.normalizeStatus(updateConversationStatusDto.status);
 
     await this.prisma.conversation.update({
@@ -768,11 +849,15 @@ export class ConversationsService {
       },
     });
 
-    return this.findOne(id);
+    return this.findOne(id, actor);
   }
 
-  async assign(id: string, assignConversationDto: AssignConversationDto) {
-    await this.findOne(id);
+  async assign(
+    id: string,
+    assignConversationDto: AssignConversationDto,
+    actor?: AuthenticatedUser,
+  ) {
+    await this.findOne(id, actor);
 
     await this.prisma.conversation.update({
       where: { id },
@@ -785,11 +870,15 @@ export class ConversationsService {
       },
     });
 
-    return this.findOne(id);
+    return this.findOne(id, actor);
   }
 
-  async handoff(id: string, handoffConversationDto: HandoffConversationDto) {
-    await this.findOne(id);
+  async handoff(
+    id: string,
+    handoffConversationDto: HandoffConversationDto,
+    actor?: AuthenticatedUser,
+  ) {
+    await this.findOne(id, actor);
 
     await this.prisma.conversation.update({
       where: { id },
@@ -802,7 +891,7 @@ export class ConversationsService {
       },
     });
 
-    return this.findOne(id);
+    return this.findOne(id, actor);
   }
 
   async handoffForWorkflow(workflowHandoffDto: WorkflowHandoffDto) {
@@ -816,9 +905,9 @@ export class ConversationsService {
       where: { id: conversation.id },
       data: handoffRequired
         ? {
-            assignedTo: workflowHandoffDto.assignedTo ?? conversation.assignedTo ?? null,
-            status: 'human_assigned',
-            botPaused: true,
+            assignedTo: workflowHandoffDto.assignedTo ?? null,
+            status: 'waiting_customer',
+            botPaused: false,
             handoffRequired: true,
             updatedAt: now,
           }
@@ -831,6 +920,7 @@ export class ConversationsService {
           },
       select: {
         id: true,
+        companyId: true,
         contactId: true,
         assignedTo: true,
         status: true,
@@ -850,8 +940,12 @@ export class ConversationsService {
     };
   }
 
-  async reactivateBot(id: string, reactivateBotDto: ReactivateBotDto) {
-    await this.findOne(id);
+  async reactivateBot(
+    id: string,
+    reactivateBotDto: ReactivateBotDto,
+    actor?: AuthenticatedUser,
+  ) {
+    await this.findOne(id, actor);
     const botActive = reactivateBotDto.botActive !== false;
 
     await this.prisma.conversation.update({
@@ -865,11 +959,11 @@ export class ConversationsService {
       },
     });
 
-    return this.findOne(id);
+    return this.findOne(id, actor);
   }
 
-  async remove(id: string) {
-    const existing = await this.findOne(id);
+  async remove(id: string, actor?: AuthenticatedUser) {
+    const existing = await this.findOne(id, actor);
 
     await this.prisma.$transaction([
       this.prisma.message.deleteMany({ where: { conversationId: id } }),
@@ -880,9 +974,13 @@ export class ConversationsService {
     return existing;
   }
 
-  async findContext(id: string) {
-    const conversation = await this.prisma.conversation.findUnique({
-      where: { id },
+  async findContext(id: string, actor?: AuthenticatedUser) {
+    const companyId = resolveCompanyScope(actor);
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
       include: {
         contact: {
           select: {
@@ -951,8 +1049,12 @@ export class ConversationsService {
     };
   }
 
-  async updateContext(id: string, dto: UpdateConversationContextDto) {
-    await this.findConversationStateOrThrow(id);
+  async updateContext(
+    id: string,
+    dto: UpdateConversationContextDto,
+    actor?: AuthenticatedUser,
+  ) {
+    await this.findOne(id, actor);
 
     const updated = await this.prisma.conversation.update({
       where: { id },
@@ -1004,16 +1106,31 @@ export class ConversationsService {
   }
 
   private async resolveCompanyIdForWhatsapp(dto: GetOrCreateConversationDto) {
-    if (dto.companyId?.trim()) {
-      return dto.companyId.trim();
+    const requestedCompanyId = this.normalizeNullableString(dto.companyId);
+    if (requestedCompanyId) {
+      const company = await this.prisma.company.findUnique({
+        where: { id: requestedCompanyId },
+        select: { id: true },
+      });
+
+      if (company?.id) {
+        return company.id;
+      }
+
+      this.logger.warn(
+        `get-or-create ignored invalid companyId=${requestedCompanyId}`,
+      );
     }
 
-    if (!dto.instance?.trim()) {
+    const instanceName = this.normalizeNullableString(
+      dto.instance ?? dto.instanceName,
+    );
+    if (!instanceName) {
       return null;
     }
 
     const mapping = await this.prisma.companyWhatsappInstance.findUnique({
-      where: { evolutionInstanceName: dto.instance.trim() },
+      where: { evolutionInstanceName: instanceName },
       select: { companyId: true },
     });
 

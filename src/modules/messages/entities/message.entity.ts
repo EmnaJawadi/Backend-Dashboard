@@ -1,10 +1,19 @@
-export type MessageSenderType = 'customer' | 'agent' | 'bot' | 'system';
+export type MessageSenderType =
+  | 'customer'
+  | 'human'
+  | 'human_agent'
+  | 'agent'
+  | 'bot'
+  | 'system';
 export type MessageType =
   | 'text'
   | 'image'
   | 'audio'
   | 'document'
-  | 'video';
+  | 'video'
+  | 'button'
+  | 'list'
+  | 'unknown';
 export type MessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
 export class MessageEntity {

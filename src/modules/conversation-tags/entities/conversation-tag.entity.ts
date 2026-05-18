@@ -1,5 +1,6 @@
 export class ConversationTagEntity {
   id!: string;
+  companyId?: string | null;
   conversationId!: string;
   label!: string;
   color?: string | null;

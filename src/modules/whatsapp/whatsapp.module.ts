@@ -4,12 +4,18 @@ import { EvolutionApiClient } from '../../integrations/whatsapp/evolution-api.cl
 import { WhatsappProviderService } from '../../integrations/whatsapp/whatsapp-provider.interface';
 import { ConversationWindowService } from './policies/conversation-window.service';
 import { WhatsappComplianceService } from './policies/whatsapp-compliance.service';
+import { CompanyWhatsappController } from './company-whatsapp.controller';
 import { WhatsappController } from './whatsapp.controller';
+import { WhatsappWorkflowController } from './whatsapp-workflow.controller';
 import { WhatsappService } from './whatsapp.service';
 
 @Module({
   imports: [PrismaModule],
-  controllers: [WhatsappController],
+  controllers: [
+    WhatsappController,
+    WhatsappWorkflowController,
+    CompanyWhatsappController,
+  ],
   providers: [
     EvolutionApiClient,
     WhatsappProviderService,

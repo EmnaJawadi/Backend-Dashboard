@@ -387,13 +387,17 @@ export const ModelName = {
   User: 'User',
   Company: 'Company',
   CompanyRegistrationRequest: 'CompanyRegistrationRequest',
+  AgentRegistrationRequest: 'AgentRegistrationRequest',
   CompanyWhatsappInstance: 'CompanyWhatsappInstance',
+  Product: 'Product',
+  ProductImage: 'ProductImage',
   Subscription: 'Subscription',
   Contact: 'Contact',
   ContactNote: 'ContactNote',
   Conversation: 'Conversation',
   ConversationTag: 'ConversationTag',
   Message: 'Message',
+  KbSuggestion: 'KbSuggestion',
   AiRun: 'AiRun',
   AuditLog: 'AuditLog',
   KbArticle: 'KbArticle',
@@ -416,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "companyRegistrationRequest" | "companyWhatsappInstance" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "notification" | "setting" | "webhookEvent"
+    modelProps: "user" | "company" | "companyRegistrationRequest" | "agentRegistrationRequest" | "companyWhatsappInstance" | "product" | "productImage" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "kbSuggestion" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "notification" | "setting" | "webhookEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -642,6 +646,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AgentRegistrationRequest: {
+      payload: Prisma.$AgentRegistrationRequestPayload<ExtArgs>
+      fields: Prisma.AgentRegistrationRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgentRegistrationRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgentRegistrationRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.AgentRegistrationRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgentRegistrationRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        findMany: {
+          args: Prisma.AgentRegistrationRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>[]
+        }
+        create: {
+          args: Prisma.AgentRegistrationRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        createMany: {
+          args: Prisma.AgentRegistrationRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgentRegistrationRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.AgentRegistrationRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        update: {
+          args: Prisma.AgentRegistrationRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgentRegistrationRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgentRegistrationRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgentRegistrationRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgentRegistrationRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentRegistrationRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.AgentRegistrationRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentRegistrationRequest>
+        }
+        groupBy: {
+          args: Prisma.AgentRegistrationRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentRegistrationRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgentRegistrationRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentRegistrationRequestCountAggregateOutputType> | number
+        }
+      }
+    }
     CompanyWhatsappInstance: {
       payload: Prisma.$CompanyWhatsappInstancePayload<ExtArgs>
       fields: Prisma.CompanyWhatsappInstanceFieldRefs
@@ -713,6 +791,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CompanyWhatsappInstanceCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CompanyWhatsappInstanceCountAggregateOutputType> | number
+        }
+      }
+    }
+    Product: {
+      payload: Prisma.$ProductPayload<ExtArgs>
+      fields: Prisma.ProductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        findFirst: {
+          args: Prisma.ProductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        findMany: {
+          args: Prisma.ProductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>[]
+        }
+        create: {
+          args: Prisma.ProductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        createMany: {
+          args: Prisma.ProductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProductCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>[]
+        }
+        delete: {
+          args: Prisma.ProductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        update: {
+          args: Prisma.ProductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProductUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductPayload>
+        }
+        aggregate: {
+          args: Prisma.ProductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProduct>
+        }
+        groupBy: {
+          args: Prisma.ProductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProductImage: {
+      payload: Prisma.$ProductImagePayload<ExtArgs>
+      fields: Prisma.ProductImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        findFirst: {
+          args: Prisma.ProductImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        findMany: {
+          args: Prisma.ProductImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>[]
+        }
+        create: {
+          args: Prisma.ProductImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        createMany: {
+          args: Prisma.ProductImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProductImageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>[]
+        }
+        delete: {
+          args: Prisma.ProductImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        update: {
+          args: Prisma.ProductImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProductImageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProductImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductImagePayload>
+        }
+        aggregate: {
+          args: Prisma.ProductImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductImage>
+        }
+        groupBy: {
+          args: Prisma.ProductImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductImageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductImageCountAggregateOutputType> | number
         }
       }
     }
@@ -1157,6 +1383,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MessageCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    KbSuggestion: {
+      payload: Prisma.$KbSuggestionPayload<ExtArgs>
+      fields: Prisma.KbSuggestionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.KbSuggestionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.KbSuggestionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        findFirst: {
+          args: Prisma.KbSuggestionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.KbSuggestionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        findMany: {
+          args: Prisma.KbSuggestionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>[]
+        }
+        create: {
+          args: Prisma.KbSuggestionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        createMany: {
+          args: Prisma.KbSuggestionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.KbSuggestionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>[]
+        }
+        delete: {
+          args: Prisma.KbSuggestionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        update: {
+          args: Prisma.KbSuggestionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        deleteMany: {
+          args: Prisma.KbSuggestionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.KbSuggestionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.KbSuggestionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>[]
+        }
+        upsert: {
+          args: Prisma.KbSuggestionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KbSuggestionPayload>
+        }
+        aggregate: {
+          args: Prisma.KbSuggestionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateKbSuggestion>
+        }
+        groupBy: {
+          args: Prisma.KbSuggestionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KbSuggestionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.KbSuggestionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KbSuggestionCountAggregateOutputType> | number
         }
       }
     }
@@ -1725,6 +2025,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   isActive: 'isActive',
+  approvalStatus: 'approvalStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1740,6 +2041,7 @@ export const CompanyScalarFieldEnum = {
   phone: 'phone',
   website: 'website',
   address: 'address',
+  emailNotificationsEnabled: 'emailNotificationsEnabled',
   status: 'status',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -1774,12 +2076,38 @@ export const CompanyRegistrationRequestScalarFieldEnum = {
 export type CompanyRegistrationRequestScalarFieldEnum = (typeof CompanyRegistrationRequestScalarFieldEnum)[keyof typeof CompanyRegistrationRequestScalarFieldEnum]
 
 
+export const AgentRegistrationRequestScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  reviewedByUserId: 'reviewedByUserId',
+  approvedUserId: 'approvedUserId',
+  approvedAt: 'approvedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentRegistrationRequestScalarFieldEnum = (typeof AgentRegistrationRequestScalarFieldEnum)[keyof typeof AgentRegistrationRequestScalarFieldEnum]
+
+
 export const CompanyWhatsappInstanceScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
   evolutionInstanceName: 'evolutionInstanceName',
   whatsappNumber: 'whatsappNumber',
+  displayName: 'displayName',
+  phoneNumberId: 'phoneNumberId',
+  businessAccountId: 'businessAccountId',
+  apiBaseUrl: 'apiBaseUrl',
+  apiKey: 'apiKey',
   connectionStatus: 'connectionStatus',
+  lastConnectionError: 'lastConnectionError',
   connectedAt: 'connectedAt',
   lastSyncAt: 'lastSyncAt',
   createdAt: 'createdAt',
@@ -1787,6 +2115,39 @@ export const CompanyWhatsappInstanceScalarFieldEnum = {
 } as const
 
 export type CompanyWhatsappInstanceScalarFieldEnum = (typeof CompanyWhatsappInstanceScalarFieldEnum)[keyof typeof CompanyWhatsappInstanceScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  price: 'price',
+  currency: 'currency',
+  isAvailable: 'isAvailable',
+  status: 'status',
+  keywords: 'keywords',
+  variants: 'variants',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductImageScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  imageUrl: 'imageUrl',
+  altText: 'altText',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[keyof typeof ProductImageScalarFieldEnum]
 
 
 export const SubscriptionScalarFieldEnum = {
@@ -1893,6 +2254,8 @@ export const MessageScalarFieldEnum = {
   senderType: 'senderType',
   content: 'content',
   messageType: 'messageType',
+  caption: 'caption',
+  mediaId: 'mediaId',
   mediaUrl: 'mediaUrl',
   mimeType: 'mimeType',
   rawPayload: 'rawPayload',
@@ -1905,6 +2268,24 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+export const KbSuggestionScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  conversationId: 'conversationId',
+  customerMessageId: 'customerMessageId',
+  humanAnswerMessageId: 'humanAnswerMessageId',
+  question: 'question',
+  answer: 'answer',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  reviewedAt: 'reviewedAt'
+} as const
+
+export type KbSuggestionScalarFieldEnum = (typeof KbSuggestionScalarFieldEnum)[keyof typeof KbSuggestionScalarFieldEnum]
+
+
 export const AiRunScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
@@ -1912,11 +2293,16 @@ export const AiRunScalarFieldEnum = {
   messageId: 'messageId',
   contactId: 'contactId',
   inputText: 'inputText',
+  inputType: 'inputType',
   outputText: 'outputText',
   intent: 'intent',
   provider: 'provider',
   model: 'model',
   status: 'status',
+  reason: 'reason',
+  shouldSendMessage: 'shouldSendMessage',
+  imageAnalysisResult: 'imageAnalysisResult',
+  matchedProductId: 'matchedProductId',
   promptTokens: 'promptTokens',
   completionTokens: 'completionTokens',
   totalTokens: 'totalTokens',
@@ -2115,6 +2501,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'UserApprovalStatus'
+ */
+export type EnumUserApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserApprovalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'UserApprovalStatus[]'
+ */
+export type ListEnumUserApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserApprovalStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -2157,6 +2557,20 @@ export type ListEnumCompanyRegistrationStatusFieldRefInput<$PrismaModel> = Field
 
 
 /**
+ * Reference to a field of type 'AgentRegistrationStatus'
+ */
+export type EnumAgentRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgentRegistrationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AgentRegistrationStatus[]'
+ */
+export type ListEnumAgentRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AgentRegistrationStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'WhatsappConnectionStatus'
  */
 export type EnumWhatsappConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappConnectionStatus'>
@@ -2171,16 +2585,16 @@ export type ListEnumWhatsappConnectionStatusFieldRefInput<$PrismaModel> = FieldR
 
 
 /**
- * Reference to a field of type 'SubscriptionStatus'
+ * Reference to a field of type 'Float'
  */
-export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
 /**
- * Reference to a field of type 'SubscriptionStatus[]'
+ * Reference to a field of type 'Float[]'
  */
-export type ListEnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus[]'>
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -2199,6 +2613,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'SubscriptionStatus'
+ */
+export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'SubscriptionStatus[]'
+ */
+export type ListEnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2213,16 +2641,16 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'Float'
+ * Reference to a field of type 'KbSuggestionStatus'
  */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+export type EnumKbSuggestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbSuggestionStatus'>
     
 
 
 /**
- * Reference to a field of type 'Float[]'
+ * Reference to a field of type 'KbSuggestionStatus[]'
  */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+export type ListEnumKbSuggestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KbSuggestionStatus[]'>
     
 
 
@@ -2379,13 +2807,17 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   company?: Prisma.CompanyOmit
   companyRegistrationRequest?: Prisma.CompanyRegistrationRequestOmit
+  agentRegistrationRequest?: Prisma.AgentRegistrationRequestOmit
   companyWhatsappInstance?: Prisma.CompanyWhatsappInstanceOmit
+  product?: Prisma.ProductOmit
+  productImage?: Prisma.ProductImageOmit
   subscription?: Prisma.SubscriptionOmit
   contact?: Prisma.ContactOmit
   contactNote?: Prisma.ContactNoteOmit
   conversation?: Prisma.ConversationOmit
   conversationTag?: Prisma.ConversationTagOmit
   message?: Prisma.MessageOmit
+  kbSuggestion?: Prisma.KbSuggestionOmit
   aiRun?: Prisma.AiRunOmit
   auditLog?: Prisma.AuditLogOmit
   kbArticle?: Prisma.KbArticleOmit

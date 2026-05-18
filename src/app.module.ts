@@ -15,6 +15,7 @@ import { ConversationsModule } from './modules/conversations/conversations.modul
 import { MessagesModule } from './modules/messages/messages.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
+import { AgentRegistrationModule } from './modules/agent-registration/agent-registration.module';
 import { CompanyRegistrationModule } from './modules/company-registration/company-registration.module';
 import { CompaniesModule } from './modules/companies/companies.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
@@ -22,13 +23,19 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { HealthModule } from './modules/health/health.module';
+import { ProductsModule } from './modules/products/products.module';
 
 import { GeminiModule } from './integrations/gemini/gemini.module';
 import { ConversationsGateway } from './gateways/conversations.gateway';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      expandVariables: true,
+    }),
     PrismaModule,
     GeminiModule,
 
@@ -46,6 +53,7 @@ import { ConversationsGateway } from './gateways/conversations.gateway';
     MessagesModule,
     AnalyticsModule,
     KnowledgeBaseModule,
+    AgentRegistrationModule,
     CompanyRegistrationModule,
     CompaniesModule,
     WebhooksModule,
@@ -53,6 +61,8 @@ import { ConversationsGateway } from './gateways/conversations.gateway';
     UsersModule,
     WhatsappModule,
     NotificationsModule,
+    ProductsModule,
+    HealthModule,
   ],
   providers: [ConversationsGateway],
 })

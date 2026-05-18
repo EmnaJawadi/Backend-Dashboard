@@ -28,6 +28,7 @@ export interface CompanyAiPolicy {
 
 export interface CompanyWorkflowPolicy {
   enabled: boolean;
+  defaultAssigneeId: string | null;
   defaultAssignment: string;
   welcomeMessage: string;
   preHandoffMessage: string;
@@ -35,10 +36,16 @@ export interface CompanyWorkflowPolicy {
 }
 
 export interface CompanyGeneralSettings {
+  officialName: string;
   companyName: string;
+  displayName: string;
   supportEmail: string;
+  supportPhone: string;
+  city: string;
+  country: string;
   defaultLanguage: string;
   timezone: string;
+  emailNotificationsEnabled: boolean;
   emailNotifications: boolean;
   secureMode: boolean;
 }
@@ -119,7 +126,8 @@ export interface PlatformIntegrationHealth {
     | 'redis'
     | 'n8n'
     | 'smtp'
-    | 'whatsapp_meta'
+    | 'evolution_api'
+    | 'gemini_ai'
     | 'file_storage'
     | 'queue_jobs';
   label: string;

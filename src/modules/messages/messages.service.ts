@@ -1,7 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import { resolveCompanyScope } from '../../common/utils/company-scope.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { Prisma } from '../../generated/prisma/client';
 import { ConversationsService } from '../conversations/conversations.service';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { InboundMessageDto } from './dto/inbound-message.dto';
 import { MessageQueryDto } from './dto/message-query.dto';
@@ -18,6 +21,7 @@ export class MessagesService {
     private readonly messagesRepository: MessagesRepository,
     private readonly prisma: PrismaService,
     private readonly conversationsService: ConversationsService,
+    private readonly whatsappService: WhatsappService,
   ) {}
 
   private parseEventDate(value?: string | number | null): Date {
@@ -82,19 +86,36 @@ export class MessagesService {
       return 'customer';
     }
 
-    return senderType ?? 'bot';
+    const normalized = senderType ?? 'bot';
+    return normalized === 'agent' || normalized === 'human'
+      ? 'human_agent'
+      : normalized;
   }
 
   private resolveMessageType(type?: MessageType): MessageType {
     return type ?? 'text';
   }
 
+  private isTextLikeMessage(type?: MessageType): boolean {
+    return (
+      !type ||
+      type === 'text' ||
+      type === 'button' ||
+      type === 'list' ||
+      type === 'unknown'
+    );
+  }
+
   private async resolveConversationId(saveMessageDto: SaveMessageDto) {
     const providedConversationId = saveMessageDto.conversationId?.trim();
 
     if (providedConversationId && providedConversationId.toLowerCase() !== 'null') {
-      const conversation = await this.prisma.conversation.findUnique({
-        where: { id: providedConversationId },
+      const resolvedCompanyId = await this.resolveWorkflowCompanyId(saveMessageDto);
+      const conversation = await this.prisma.conversation.findFirst({
+        where: {
+          id: providedConversationId,
+          ...(resolvedCompanyId ? { companyId: resolvedCompanyId } : {}),
+        },
         select: { id: true, companyId: true },
       });
 
@@ -127,6 +148,8 @@ export class MessagesService {
         messageId: saveMessageDto.messageId,
         eventAt: saveMessageDto.eventAt,
         companyId: saveMessageDto.companyId,
+        instance: saveMessageDto.instance ?? saveMessageDto.instanceName,
+        rawRemoteJid: saveMessageDto.rawRemoteJid,
       });
 
     return {
@@ -139,9 +162,134 @@ export class MessagesService {
     return JSON.parse(JSON.stringify(value ?? null)) as Prisma.InputJsonValue;
   }
 
-  async create(createMessageDto: CreateMessageDto) {
+  private async resolveWorkflowCompanyId(saveMessageDto: SaveMessageDto) {
+    const instanceName = (
+      saveMessageDto.instanceName ??
+      saveMessageDto.instance ??
+      ''
+    ).trim();
+
+    if (instanceName) {
+      const instance = await this.prisma.companyWhatsappInstance.findUnique({
+        where: { evolutionInstanceName: instanceName },
+        select: { companyId: true },
+      });
+
+      if (instance?.companyId) {
+        return instance.companyId;
+      }
+    }
+
+    const companyId = saveMessageDto.companyId?.trim();
+    if (!companyId) {
+      return null;
+    }
+
+    const company = await this.prisma.company.findUnique({
+      where: { id: companyId },
+      select: { id: true },
+    });
+
+    return company?.id ?? null;
+  }
+
+  private isHumanSenderType(senderType: MessageSenderType) {
+    return (
+      senderType === 'human' ||
+      senderType === 'human_agent' ||
+      senderType === 'agent'
+    );
+  }
+
+  private async assertConversationInScope(
+    conversationId: string,
+    companyId?: string,
+  ) {
+    if (!companyId) {
+      return;
+    }
+
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        id: conversationId,
+        companyId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!conversation) {
+      throw new BadRequestException('Conversation not found for this company');
+    }
+  }
+
+  private async createKbSuggestionFromHumanReply(params: {
+    conversationId: string;
+    companyId: string | null;
+    humanAnswerMessageId: string;
+    humanAnswer: string;
+    occurredAt: Date;
+  }) {
+    if (!params.humanAnswer.trim()) {
+      return null;
+    }
+
+    const existingSuggestion = await this.prisma.kbSuggestion.findFirst({
+      where: {
+        humanAnswerMessageId: params.humanAnswerMessageId,
+      },
+      select: { id: true },
+    });
+
+    if (existingSuggestion) {
+      return existingSuggestion;
+    }
+
+    const customerMessage = await this.prisma.message.findFirst({
+      where: {
+        conversationId: params.conversationId,
+        direction: 'inbound',
+        content: { not: null },
+        createdAt: { lte: params.occurredAt },
+      },
+      orderBy: [{ messageTimestamp: 'desc' }, { createdAt: 'desc' }],
+      select: {
+        id: true,
+        content: true,
+      },
+    });
+
+    const question = customerMessage?.content?.trim() ?? '';
+    if (!customerMessage || !question) {
+      return null;
+    }
+
+    return this.prisma.kbSuggestion.create({
+      data: {
+        companyId: params.companyId,
+        conversationId: params.conversationId,
+        customerMessageId: customerMessage.id,
+        humanAnswerMessageId: params.humanAnswerMessageId,
+        question,
+        answer: params.humanAnswer.trim(),
+        status: 'pending',
+        reviewedBy: null,
+        createdBy: null,
+        createdAt: new Date(),
+        reviewedAt: null,
+      },
+      select: { id: true },
+    });
+  }
+
+  async create(createMessageDto: CreateMessageDto, actor?: AuthenticatedUser) {
+    const companyId = resolveCompanyScope(actor);
+    await this.assertConversationInScope(createMessageDto.conversationId, companyId);
+
     const message = await this.messagesRepository.create({
       conversationId: createMessageDto.conversationId,
+      companyId,
       senderType: createMessageDto.senderType,
       senderId: createMessageDto.senderId ?? null,
       content: createMessageDto.content,
@@ -155,13 +303,14 @@ export class MessagesService {
 
   async save(saveMessageDto: SaveMessageDto) {
     const content = saveMessageDto.content?.trim() ?? '';
+    const messageType = this.resolveMessageType(saveMessageDto.type);
 
-    if (!content) {
+    if (!content && this.isTextLikeMessage(messageType)) {
       return {
         saved: false,
         ignored: true,
         duplicate: false,
-        reason: 'EMPTY_CONTENT',
+        reason: 'EMPTY_TEXT_MESSAGE',
         conversationId: saveMessageDto.conversationId ?? null,
         messageId: null,
       };
@@ -170,9 +319,16 @@ export class MessagesService {
     const externalMessageId = saveMessageDto.messageId?.trim() ?? null;
     const occurredAt = this.parseEventDate(saveMessageDto.eventAt);
 
+    const requestedCompanyId = await this.resolveWorkflowCompanyId(saveMessageDto);
+    const resolved = await this.resolveConversationId(saveMessageDto);
+    const scopedCompanyId = resolved.companyId ?? requestedCompanyId ?? null;
+
     if (externalMessageId) {
       const existingByExternalId = await this.prisma.message.findFirst({
-        where: { externalMessageId },
+        where: {
+          externalMessageId,
+          ...(scopedCompanyId ? { companyId: scopedCompanyId } : {}),
+        },
         orderBy: { createdAt: 'desc' },
       });
 
@@ -189,7 +345,6 @@ export class MessagesService {
       }
     }
 
-    const resolved = await this.resolveConversationId(saveMessageDto);
     const conversationId = resolved.conversationId;
     const direction = saveMessageDto.direction;
 
@@ -201,7 +356,7 @@ export class MessagesService {
     }
     const signatureWindowStart = new Date(occurredAt.getTime() - 90 * 1000);
 
-    const nearDuplicate = externalMessageId
+    const nearDuplicate = externalMessageId || !content
       ? null
       : await this.prisma.message.findFirst({
           where: {
@@ -230,11 +385,15 @@ export class MessagesService {
 
     const saved = await this.messagesRepository.create({
       conversationId,
-      companyId: saveMessageDto.companyId ?? resolved.companyId ?? null,
+      companyId: scopedCompanyId,
       externalMessageId,
       senderType,
       content,
-      type: this.resolveMessageType(saveMessageDto.type),
+      caption: saveMessageDto.caption ?? null,
+      mediaUrl: saveMessageDto.mediaUrl ?? null,
+      mediaId: saveMessageDto.mediaId ?? null,
+      mimeType: saveMessageDto.mimeType ?? null,
+      type: messageType,
       status,
       isFromCustomer: direction === 'inbound',
       rawPayload: saveMessageDto.rawPayload
@@ -242,6 +401,16 @@ export class MessagesService {
         : undefined,
       occurredAt,
     });
+    const kbSuggestion =
+      direction === 'outbound' && this.isHumanSenderType(senderType)
+        ? await this.createKbSuggestionFromHumanReply({
+            conversationId,
+            companyId: scopedCompanyId,
+            humanAnswerMessageId: saved.id,
+            humanAnswer: content,
+            occurredAt,
+          })
+        : null;
 
     return {
       saved: true,
@@ -251,6 +420,7 @@ export class MessagesService {
       ...MessageSerializer.serialize(saved),
       direction,
       externalMessageId,
+      kbSuggestionId: kbSuggestion?.id ?? null,
     };
   }
 
@@ -268,22 +438,42 @@ export class MessagesService {
     return MessageSerializer.serialize(message);
   }
 
-  async sendMessage(sendMessageDto: SendMessageDto) {
-    const message = await this.messagesRepository.create({
-      conversationId: sendMessageDto.conversationId,
-      senderType: 'agent',
-      senderId: sendMessageDto.senderId ?? null,
-      content: sendMessageDto.content,
-      type: sendMessageDto.type ?? 'text',
-      status: 'sent',
-      isFromCustomer: false,
-    });
+  async sendMessage(
+    sendMessageDto: SendMessageDto,
+    actor?: AuthenticatedUser,
+  ) {
+    const companyId = resolveCompanyScope(actor);
+    await this.assertConversationInScope(sendMessageDto.conversationId, companyId);
 
-    return MessageSerializer.serialize(message);
+    const result = await this.whatsappService.reply({
+      conversationId: sendMessageDto.conversationId,
+      message: sendMessageDto.content,
+      automated: false,
+      senderId: sendMessageDto.senderId ?? actor?.sub ?? undefined,
+      senderType: 'agent',
+    }, actor);
+
+    if (!result.storedMessageId) {
+      return result;
+    }
+
+    const storedMessage = await this.messagesRepository.findById(
+      result.storedMessageId,
+      companyId,
+    );
+
+    return {
+      ...MessageSerializer.serialize(storedMessage),
+      whatsapp: result,
+      kbSuggestionId: result.kbSuggestionId ?? null,
+    };
   }
 
-  async findAll(query: MessageQueryDto) {
-    const result = await this.messagesRepository.findAll(query);
+  async findAll(query: MessageQueryDto, actor?: AuthenticatedUser) {
+    const result = await this.messagesRepository.findAll(
+      query,
+      resolveCompanyScope(actor),
+    );
 
     return {
       data: MessageSerializer.serializeMany(result.data),
@@ -291,22 +481,33 @@ export class MessagesService {
     };
   }
 
-  async findOne(id: string) {
-    const message = await this.messagesRepository.findById(id);
+  async findOne(id: string, actor?: AuthenticatedUser) {
+    const message = await this.messagesRepository.findById(
+      id,
+      resolveCompanyScope(actor),
+    );
     return MessageSerializer.serialize(message);
   }
 
-  async updateStatus(id: string, updateMessageStatusDto: UpdateMessageStatusDto) {
+  async updateStatus(
+    id: string,
+    updateMessageStatusDto: UpdateMessageStatusDto,
+    actor?: AuthenticatedUser,
+  ) {
     const message = await this.messagesRepository.updateStatus(
       id,
       updateMessageStatusDto.status,
+      resolveCompanyScope(actor),
     );
 
     return MessageSerializer.serialize(message);
   }
 
-  async remove(id: string) {
-    const message = await this.messagesRepository.remove(id);
+  async remove(id: string, actor?: AuthenticatedUser) {
+    const message = await this.messagesRepository.remove(
+      id,
+      resolveCompanyScope(actor),
+    );
     return MessageSerializer.serialize(message);
   }
 
@@ -330,7 +531,7 @@ export class MessagesService {
     return this.save({
       ...payload,
       direction: 'outbound',
-      senderType: 'agent',
+      senderType: 'human_agent',
     });
   }
 }

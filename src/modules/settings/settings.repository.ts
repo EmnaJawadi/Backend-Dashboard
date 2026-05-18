@@ -10,6 +10,8 @@ type CompanySummary = {
   id: string;
   name: string;
   email: string | null;
+  phone: string | null;
+  emailNotificationsEnabled: boolean;
 };
 
 type SettingRow = {
@@ -85,34 +87,41 @@ export class SettingsRepository {
         handoffEnabled: true,
         confidenceThreshold: 0.75,
         escalationDelayMinutes: 5,
-        responseTone: 'Professionnel',
-        language: 'Francais',
+        responseTone: 'professional',
+        language: 'fr',
         botGuidelines:
-          'Reponds de maniere claire, concise et professionnelle. Si la demande est complexe, propose un transfert vers un agent humain.',
+          "Reponds de maniere claire, concise et professionnelle. Si la demande necessite une verification complementaire, informer le client que l'equipe traitera sa demande rapidement, sans annoncer explicitement un transfert technique.",
       },
       workflow: {
         enabled: true,
-        defaultAssignment: 'Equipe Support',
+        defaultAssigneeId: null,
+        defaultAssignment: '',
         welcomeMessage:
           'Bonjour. Merci de nous avoir contactes sur WhatsApp. Notre assistant analyse votre demande et vous repond immediatement.',
         preHandoffMessage:
-          'Votre demande necessite une verification complementaire. Un agent humain va prendre le relais.',
+          "Nous avons bien recu votre demande. Elle necessite une verification complementaire et notre equipe vous repondra des que possible.",
         primaryTag: 'SupportWhatsApp',
       },
       general: {
+        officialName: company.name,
         companyName: company.name,
-        supportEmail: company.email ?? 'support@company.com',
-        defaultLanguage: 'Francais',
+        displayName: company.name,
+        supportEmail: company.email ?? '',
+        supportPhone: company.phone ?? '',
+        city: '',
+        country: '',
+        defaultLanguage: 'fr',
         timezone: 'Africa/Lagos',
-        emailNotifications: true,
+        emailNotificationsEnabled: company.emailNotificationsEnabled,
+        emailNotifications: company.emailNotificationsEnabled,
         secureMode: true,
       },
       whatsappProfile: {
-        businessPhoneNumber: '+234 700 000 0000',
+        businessPhoneNumber: '',
         displayName: company.name,
-        connectionStatus: 'connected',
-        phoneNumberId: '572001245879001',
-        businessAccountId: '104550889210022',
+        connectionStatus: 'disconnected',
+        phoneNumberId: '',
+        businessAccountId: '',
       },
       whatsappTechnicalSettings: {
         webhookUrl: 'https://api.my-platform.com/webhooks/whatsapp',
@@ -265,6 +274,11 @@ export class SettingsRepository {
           workflowRaw.defaultAssignment ?? workflowRaw.defaultAgent,
           defaults.workflow.defaultAssignment,
         ),
+        defaultAssigneeId:
+          this.parseString(
+            workflowRaw.defaultAssigneeId,
+            defaults.workflow.defaultAssigneeId ?? '',
+          ) || null,
         welcomeMessage: this.parseString(
           workflowRaw.welcomeMessage,
           defaults.workflow.welcomeMessage,
@@ -280,22 +294,43 @@ export class SettingsRepository {
       },
       general: {
         ...defaults.general,
+        officialName: this.parseString(
+          generalRaw.officialName ?? generalRaw.companyName,
+          company.name,
+        ),
         companyName: this.parseString(
-          generalRaw.companyName,
-          defaults.general.companyName,
+          generalRaw.officialName ?? generalRaw.companyName,
+          company.name,
+        ),
+        displayName: this.parseString(
+          generalRaw.displayName,
+          defaults.general.displayName,
         ),
         supportEmail: this.parseString(
           generalRaw.supportEmail,
           defaults.general.supportEmail,
+        ),
+        supportPhone: this.parseString(
+          generalRaw.supportPhone,
+          defaults.general.supportPhone,
+        ),
+        city: this.parseString(generalRaw.city, defaults.general.city),
+        country: this.parseString(
+          generalRaw.country,
+          defaults.general.country,
         ),
         defaultLanguage: this.parseString(
           generalRaw.defaultLanguage,
           defaults.general.defaultLanguage,
         ),
         timezone: this.parseString(generalRaw.timezone, defaults.general.timezone),
+        emailNotificationsEnabled: this.parseBoolean(
+          generalRaw.emailNotificationsEnabled ?? generalRaw.emailNotifications,
+          company.emailNotificationsEnabled,
+        ),
         emailNotifications: this.parseBoolean(
-          generalRaw.emailNotifications,
-          defaults.general.emailNotifications,
+          generalRaw.emailNotificationsEnabled ?? generalRaw.emailNotifications,
+          company.emailNotificationsEnabled,
         ),
         secureMode: this.parseBoolean(
           generalRaw.secureMode,
@@ -464,6 +499,8 @@ export class SettingsRepository {
         id: true,
         name: true,
         email: true,
+        phone: true,
+        emailNotificationsEnabled: true,
       },
     });
   }
@@ -642,6 +679,24 @@ export class SettingsRepository {
         updatedAt: merged.updatedAt,
       },
     });
+
+    const officialName =
+      partial.general?.officialName?.trim() || partial.general?.companyName?.trim();
+    if (officialName) {
+      await this.prisma.company.update({
+        where: { id: companyId },
+        data: { name: officialName },
+      });
+    }
+
+    const emailNotificationsEnabled =
+      partial.general?.emailNotificationsEnabled ?? partial.general?.emailNotifications;
+    if (emailNotificationsEnabled !== undefined) {
+      await this.prisma.company.update({
+        where: { id: companyId },
+        data: { emailNotificationsEnabled },
+      });
+    }
 
     const company = await this.findCompanySummary(companyId);
     if (!company) {

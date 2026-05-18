@@ -1,88 +1,125 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { AddConversationTagDto } from './dto/add-conversation-tag.dto';
 import { ConversationTagEntity } from './entities/conversation-tag.entity';
 
 @Injectable()
 export class ConversationTagsRepository {
-  private readonly tags: ConversationTagEntity[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  add(data: AddConversationTagDto): ConversationTagEntity {
+  private toEntity(row: {
+    id: string;
+    companyId: string | null;
+    conversationId: string;
+    tag: string;
+    createdAt: Date;
+  }) {
+    return new ConversationTagEntity({
+      id: row.id,
+      companyId: row.companyId,
+      conversationId: row.conversationId,
+      label: row.tag,
+      color: null,
+      createdAt: row.createdAt,
+      updatedAt: row.createdAt,
+    });
+  }
+
+  async add(
+    data: AddConversationTagDto & { companyId?: string | null },
+  ): Promise<ConversationTagEntity> {
     const now = new Date();
 
-    const existing = this.tags.find(
-      (tag) =>
-        tag.conversationId === data.conversationId &&
-        tag.label.toLowerCase() === data.label.toLowerCase(),
-    );
-
-    if (existing) {
-      return existing;
-    }
-
-    const tag = new ConversationTagEntity({
-      id: randomUUID(),
-      conversationId: data.conversationId,
-      label: data.label.trim(),
-      color: data.color ?? null,
-      createdAt: now,
-      updatedAt: now,
+    const existing = await this.prisma.conversationTag.findFirst({
+      where: {
+        conversationId: data.conversationId,
+        tag: data.label.trim(),
+        ...(data.companyId ? { companyId: data.companyId } : {}),
+      },
     });
 
-    this.tags.push(tag);
-    return tag;
+    if (existing) {
+      return this.toEntity(existing);
+    }
+
+    const tag = await this.prisma.conversationTag.create({
+      data: {
+        companyId: data.companyId ?? null,
+        conversationId: data.conversationId,
+        tag: data.label.trim(),
+        createdAt: now,
+      },
+    });
+
+    return this.toEntity(tag);
   }
 
-  findAll(conversationId?: string): ConversationTagEntity[] {
-    const data = conversationId
-      ? this.tags.filter((tag) => tag.conversationId === conversationId)
-      : [...this.tags];
+  async findAll(
+    conversationId?: string,
+    companyId?: string,
+  ): Promise<ConversationTagEntity[]> {
+    const data = await this.prisma.conversationTag.findMany({
+      where: {
+        ...(conversationId ? { conversationId } : {}),
+        ...(companyId ? { companyId } : {}),
+      },
+      orderBy: { tag: 'asc' },
+    });
 
-    return data.sort((a, b) => a.label.localeCompare(b.label));
+    return data.map((item) => this.toEntity(item));
   }
 
-  findOne(id: string): ConversationTagEntity {
-    const tag = this.tags.find((item) => item.id === id);
+  async findOne(
+    id: string,
+    companyId?: string,
+  ): Promise<ConversationTagEntity> {
+    const tag = await this.prisma.conversationTag.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
+    });
 
     if (!tag) {
       throw new NotFoundException(`Conversation tag with id ${id} not found`);
     }
 
-    return tag;
+    return this.toEntity(tag);
   }
 
-  removeByConversationAndLabel(
+  async removeByConversationAndLabel(
     conversationId: string,
     label: string,
-  ): ConversationTagEntity {
-    const index = this.tags.findIndex(
-      (tag) =>
-        tag.conversationId === conversationId &&
-        tag.label.toLowerCase() === label.toLowerCase(),
-    );
+    companyId?: string,
+  ): Promise<ConversationTagEntity> {
+    const tag = await this.prisma.conversationTag.findFirst({
+      where: {
+        conversationId,
+        tag: label.trim(),
+        ...(companyId ? { companyId } : {}),
+      },
+    });
 
-    if (index === -1) {
+    if (!tag) {
       throw new NotFoundException(
         `Conversation tag "${label}" not found for conversation ${conversationId}`,
       );
     }
 
-    const deleted = this.tags[index];
-    this.tags.splice(index, 1);
+    const deleted = await this.prisma.conversationTag.delete({
+      where: { id: tag.id },
+    });
 
-    return deleted;
+    return this.toEntity(deleted);
   }
 
-  removeById(id: string): ConversationTagEntity {
-    const index = this.tags.findIndex((item) => item.id === id);
+  async removeById(
+    id: string,
+    companyId?: string,
+  ): Promise<ConversationTagEntity> {
+    await this.findOne(id, companyId);
+    const deleted = await this.prisma.conversationTag.delete({ where: { id } });
 
-    if (index === -1) {
-      throw new NotFoundException(`Conversation tag with id ${id} not found`);
-    }
-
-    const deleted = this.tags[index];
-    this.tags.splice(index, 1);
-
-    return deleted;
+    return this.toEntity(deleted);
   }
 }

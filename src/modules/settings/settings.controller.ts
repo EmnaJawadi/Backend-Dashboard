@@ -52,7 +52,7 @@ export class SettingsController {
   }
 
   @Get('company')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN)
   getCompanySettings(
     @CurrentUser() actor: AuthenticatedUser,
     @Query('companyId') companyId?: string,
@@ -61,7 +61,7 @@ export class SettingsController {
   }
 
   @Patch('company')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN)
   updateCompanySettings(
     @CurrentUser() actor: AuthenticatedUser,
     @Body() dto: UpdateCompanySettingsDto,
@@ -90,7 +90,7 @@ export class SettingsController {
 
   // Legacy compatibility for existing frontend integration.
   @Get()
-  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN)
   getLegacyCompanySettings(
     @CurrentUser() actor: AuthenticatedUser,
     @Query('companyId') companyId?: string,
@@ -99,7 +99,7 @@ export class SettingsController {
   }
 
   @Patch()
-  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN)
   updateLegacyCompanySettings(
     @CurrentUser() actor: AuthenticatedUser,
     @Body() dto: UpdateCompanySettingsDto,

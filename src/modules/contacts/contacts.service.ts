@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { resolveCompanyScope } from '../../common/utils/company-scope.util';
+import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import { ContactQueryDto } from './dto/contact-query.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -13,8 +15,11 @@ export class ContactsService {
     private readonly n8nService: N8nService,
   ) {}
 
-  create(createContactDto: CreateContactDto) {
+  create(createContactDto: CreateContactDto, actor?: AuthenticatedUser) {
+    const companyId = resolveCompanyScope(actor);
+
     return this.contactsRepository.create({
+      companyId,
       firstName: createContactDto.firstName,
       lastName: createContactDto.lastName ?? null,
       phoneNumber: createContactDto.phoneNumber,
@@ -26,15 +31,21 @@ export class ContactsService {
     });
   }
 
-  findAll(query: ContactQueryDto) {
-    return this.contactsRepository.findAll(query);
+  findAll(query: ContactQueryDto, actor?: AuthenticatedUser) {
+    return this.contactsRepository.findAll(query, resolveCompanyScope(actor));
   }
 
-  findOne(id: string) {
-    return this.contactsRepository.findById(id);
+  findOne(id: string, actor?: AuthenticatedUser) {
+    return this.contactsRepository.findById(id, resolveCompanyScope(actor));
   }
 
-  update(id: string, updateContactDto: UpdateContactDto) {
+  update(
+    id: string,
+    updateContactDto: UpdateContactDto,
+    actor?: AuthenticatedUser,
+  ) {
+    const companyId = resolveCompanyScope(actor);
+
     return this.contactsRepository.update(id, {
       firstName: updateContactDto.firstName,
       lastName: updateContactDto.lastName,
@@ -44,11 +55,14 @@ export class ContactsService {
       notes: updateContactDto.notes,
       tags: updateContactDto.tags,
       isBlocked: updateContactDto.isBlocked,
-    });
+    }, companyId);
   }
 
-  upsert(upsertContactDto: UpsertContactDto) {
+  upsert(upsertContactDto: UpsertContactDto, actor?: AuthenticatedUser) {
+    const companyId = resolveCompanyScope(actor);
+
     return this.contactsRepository.upsert({
+      companyId,
       firstName: upsertContactDto.firstName,
       lastName: upsertContactDto.lastName ?? null,
       phoneNumber: upsertContactDto.phoneNumber,
@@ -59,8 +73,11 @@ export class ContactsService {
     });
   }
 
-  async remove(id: string) {
-    const deleted = await this.contactsRepository.remove(id);
+  async remove(id: string, actor?: AuthenticatedUser) {
+    const deleted = await this.contactsRepository.remove(
+      id,
+      resolveCompanyScope(actor),
+    );
     await this.n8nService.notifyContactDeleted(deleted);
     return deleted;
   }

@@ -9,14 +9,17 @@ export class KbChunksService {
     private readonly kbMapper: KbMapper,
   ) {}
 
-  async findByArticleId(articleId: string) {
-    const article = await this.kbRepository.findById(articleId);
+  async findByArticleId(articleId: string, companyId?: string) {
+    const article = await this.kbRepository.findById(articleId, companyId);
 
     if (!article) {
       throw new NotFoundException('Knowledge base article not found');
     }
 
-    const chunks = await this.kbRepository.findChunksByArticleId(articleId);
+    const chunks = await this.kbRepository.findChunksByArticleId(
+      articleId,
+      companyId,
+    );
     return chunks.map((chunk: any) => this.kbMapper.toChunkEntity(chunk));
   }
 }

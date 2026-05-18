@@ -25,6 +25,6 @@ export class ReplyWhatsappDto {
   instanceName?: string;
 
   @IsOptional()
-  @IsIn(['bot', 'agent', 'system'])
-  senderType?: 'bot' | 'agent' | 'system';
+  @IsIn(['bot', 'human', 'human_agent', 'agent', 'system'])
+  senderType?: 'bot' | 'human' | 'human_agent' | 'agent' | 'system';
 }

@@ -225,6 +225,8 @@ function detectEventType(event?: string): NormalizedWebhookEventType {
   if (
     value.includes('message.upsert') ||
     value.includes('messages.upsert') ||
+    value.includes('message_upsert') ||
+    value.includes('messages_upsert') ||
     value.includes('message_received') ||
     value.includes('inbound')
   ) {
@@ -295,6 +297,10 @@ export function normalizeEvolutionWebhook(
   const contactName =
     pickString(data, ['pushName', 'name', 'senderName']) ??
     (typeof raw.pushName === 'string' ? raw.pushName : null);
+  const firstMessagePayload = asRecord(firstMessage.message);
+  const dataMessage = asRecord(data.message);
+  const firstImageMessage = asRecord(firstMessagePayload.imageMessage);
+  const dataImageMessage = asRecord(dataMessage.imageMessage);
 
   const messageText =
     pickMessageText(firstMessage) ??
@@ -303,14 +309,40 @@ export function normalizeEvolutionWebhook(
     extractNestedMessageText(data) ??
     null;
 
-  const dataMessage = asRecord(data.message);
   const rawMessageType =
     pickString(firstMessage, ['type', 'messageType']) ??
     pickString(data, ['type', 'messageType']) ??
-    (Object.keys(asRecord(firstMessage.message))[0] ?? null) ??
+    (Object.keys(firstMessagePayload)[0] ?? null) ??
     (Object.keys(dataMessage)[0] ?? null) ??
     'text';
   const messageType = normalizeMessageType(rawMessageType);
+  const caption =
+    messageType === 'image'
+      ? pickString(firstImageMessage, ['caption']) ??
+        pickString(dataImageMessage, ['caption']) ??
+        messageText
+      : null;
+  const mediaUrl =
+    messageType === 'image'
+      ? pickString(data, ['mediaUrl', 'media_url', 'url']) ??
+        pickString(firstMessage, ['mediaUrl', 'media_url', 'url']) ??
+        pickString(firstImageMessage, ['url', 'media', 'directPath']) ??
+        pickString(dataImageMessage, ['url', 'media', 'directPath'])
+      : null;
+  const mediaId =
+    messageType === 'image'
+      ? pickString(data, ['mediaId', 'media_id']) ??
+        pickString(firstMessage, ['mediaId', 'media_id']) ??
+        pickString(firstImageMessage, ['mediaKey', 'fileSha256']) ??
+        pickString(dataImageMessage, ['mediaKey', 'fileSha256'])
+      : null;
+  const mimeType =
+    messageType === 'image'
+      ? pickString(firstImageMessage, ['mimetype', 'mimeType']) ??
+        pickString(dataImageMessage, ['mimetype', 'mimeType']) ??
+        pickString(data, ['mimetype', 'mimeType']) ??
+        'image/jpeg'
+      : null;
 
   const rawDeliveryStatus =
     pickValue(data, ['status', 'ack', 'deliveryStatus']) ??
@@ -353,6 +385,10 @@ export function normalizeEvolutionWebhook(
     contactName,
     messageText,
     messageType,
+    caption,
+    mediaUrl,
+    mediaId,
+    mimeType,
     deliveryStatus,
     direction,
     eventAt: parsedDate,

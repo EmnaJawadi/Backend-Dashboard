@@ -29,7 +29,13 @@ export type CompanyWhatsappInstanceMinAggregateOutputType = {
   companyId: string | null
   evolutionInstanceName: string | null
   whatsappNumber: string | null
+  displayName: string | null
+  phoneNumberId: string | null
+  businessAccountId: string | null
+  apiBaseUrl: string | null
+  apiKey: string | null
   connectionStatus: $Enums.WhatsappConnectionStatus | null
+  lastConnectionError: string | null
   connectedAt: Date | null
   lastSyncAt: Date | null
   createdAt: Date | null
@@ -41,7 +47,13 @@ export type CompanyWhatsappInstanceMaxAggregateOutputType = {
   companyId: string | null
   evolutionInstanceName: string | null
   whatsappNumber: string | null
+  displayName: string | null
+  phoneNumberId: string | null
+  businessAccountId: string | null
+  apiBaseUrl: string | null
+  apiKey: string | null
   connectionStatus: $Enums.WhatsappConnectionStatus | null
+  lastConnectionError: string | null
   connectedAt: Date | null
   lastSyncAt: Date | null
   createdAt: Date | null
@@ -53,7 +65,13 @@ export type CompanyWhatsappInstanceCountAggregateOutputType = {
   companyId: number
   evolutionInstanceName: number
   whatsappNumber: number
+  displayName: number
+  phoneNumberId: number
+  businessAccountId: number
+  apiBaseUrl: number
+  apiKey: number
   connectionStatus: number
+  lastConnectionError: number
   connectedAt: number
   lastSyncAt: number
   createdAt: number
@@ -67,7 +85,13 @@ export type CompanyWhatsappInstanceMinAggregateInputType = {
   companyId?: true
   evolutionInstanceName?: true
   whatsappNumber?: true
+  displayName?: true
+  phoneNumberId?: true
+  businessAccountId?: true
+  apiBaseUrl?: true
+  apiKey?: true
   connectionStatus?: true
+  lastConnectionError?: true
   connectedAt?: true
   lastSyncAt?: true
   createdAt?: true
@@ -79,7 +103,13 @@ export type CompanyWhatsappInstanceMaxAggregateInputType = {
   companyId?: true
   evolutionInstanceName?: true
   whatsappNumber?: true
+  displayName?: true
+  phoneNumberId?: true
+  businessAccountId?: true
+  apiBaseUrl?: true
+  apiKey?: true
   connectionStatus?: true
+  lastConnectionError?: true
   connectedAt?: true
   lastSyncAt?: true
   createdAt?: true
@@ -91,7 +121,13 @@ export type CompanyWhatsappInstanceCountAggregateInputType = {
   companyId?: true
   evolutionInstanceName?: true
   whatsappNumber?: true
+  displayName?: true
+  phoneNumberId?: true
+  businessAccountId?: true
+  apiBaseUrl?: true
+  apiKey?: true
   connectionStatus?: true
+  lastConnectionError?: true
   connectedAt?: true
   lastSyncAt?: true
   createdAt?: true
@@ -176,7 +212,13 @@ export type CompanyWhatsappInstanceGroupByOutputType = {
   companyId: string
   evolutionInstanceName: string
   whatsappNumber: string | null
+  displayName: string | null
+  phoneNumberId: string | null
+  businessAccountId: string | null
+  apiBaseUrl: string | null
+  apiKey: string | null
   connectionStatus: $Enums.WhatsappConnectionStatus
+  lastConnectionError: string | null
   connectedAt: Date | null
   lastSyncAt: Date | null
   createdAt: Date
@@ -209,7 +251,13 @@ export type CompanyWhatsappInstanceWhereInput = {
   companyId?: Prisma.StringFilter<"CompanyWhatsappInstance"> | string
   evolutionInstanceName?: Prisma.StringFilter<"CompanyWhatsappInstance"> | string
   whatsappNumber?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  displayName?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  phoneNumberId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  businessAccountId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiBaseUrl?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiKey?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFilter<"CompanyWhatsappInstance"> | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectedAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   lastSyncAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CompanyWhatsappInstance"> | Date | string
@@ -222,7 +270,13 @@ export type CompanyWhatsappInstanceOrderByWithRelationInput = {
   companyId?: Prisma.SortOrder
   evolutionInstanceName?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  phoneNumberId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  apiBaseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  apiKey?: Prisma.SortOrderInput | Prisma.SortOrder
   connectionStatus?: Prisma.SortOrder
+  lastConnectionError?: Prisma.SortOrderInput | Prisma.SortOrder
   connectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSyncAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -238,7 +292,13 @@ export type CompanyWhatsappInstanceWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CompanyWhatsappInstanceWhereInput | Prisma.CompanyWhatsappInstanceWhereInput[]
   companyId?: Prisma.StringFilter<"CompanyWhatsappInstance"> | string
   whatsappNumber?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  displayName?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  phoneNumberId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  businessAccountId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiBaseUrl?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiKey?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFilter<"CompanyWhatsappInstance"> | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectedAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   lastSyncAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CompanyWhatsappInstance"> | Date | string
@@ -251,7 +311,13 @@ export type CompanyWhatsappInstanceOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrder
   evolutionInstanceName?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  phoneNumberId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  apiBaseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  apiKey?: Prisma.SortOrderInput | Prisma.SortOrder
   connectionStatus?: Prisma.SortOrder
+  lastConnectionError?: Prisma.SortOrderInput | Prisma.SortOrder
   connectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSyncAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -269,7 +335,13 @@ export type CompanyWhatsappInstanceScalarWhereWithAggregatesInput = {
   companyId?: Prisma.StringWithAggregatesFilter<"CompanyWhatsappInstance"> | string
   evolutionInstanceName?: Prisma.StringWithAggregatesFilter<"CompanyWhatsappInstance"> | string
   whatsappNumber?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
+  displayName?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
+  phoneNumberId?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
+  businessAccountId?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
+  apiBaseUrl?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
+  apiKey?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusWithAggregatesFilter<"CompanyWhatsappInstance"> | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.StringNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | string | null
   connectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | Date | string | null
   lastSyncAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CompanyWhatsappInstance"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CompanyWhatsappInstance"> | Date | string
@@ -280,7 +352,13 @@ export type CompanyWhatsappInstanceCreateInput = {
   id?: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -293,7 +371,13 @@ export type CompanyWhatsappInstanceUncheckedCreateInput = {
   companyId: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -304,7 +388,13 @@ export type CompanyWhatsappInstanceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -317,7 +407,13 @@ export type CompanyWhatsappInstanceUncheckedUpdateInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -329,7 +425,13 @@ export type CompanyWhatsappInstanceCreateManyInput = {
   companyId: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -340,7 +442,13 @@ export type CompanyWhatsappInstanceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -352,7 +460,13 @@ export type CompanyWhatsappInstanceUncheckedUpdateManyInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -374,7 +488,13 @@ export type CompanyWhatsappInstanceCountOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   evolutionInstanceName?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  phoneNumberId?: Prisma.SortOrder
+  businessAccountId?: Prisma.SortOrder
+  apiBaseUrl?: Prisma.SortOrder
+  apiKey?: Prisma.SortOrder
   connectionStatus?: Prisma.SortOrder
+  lastConnectionError?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
   lastSyncAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -386,7 +506,13 @@ export type CompanyWhatsappInstanceMaxOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   evolutionInstanceName?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  phoneNumberId?: Prisma.SortOrder
+  businessAccountId?: Prisma.SortOrder
+  apiBaseUrl?: Prisma.SortOrder
+  apiKey?: Prisma.SortOrder
   connectionStatus?: Prisma.SortOrder
+  lastConnectionError?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
   lastSyncAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -398,7 +524,13 @@ export type CompanyWhatsappInstanceMinOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   evolutionInstanceName?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  phoneNumberId?: Prisma.SortOrder
+  businessAccountId?: Prisma.SortOrder
+  apiBaseUrl?: Prisma.SortOrder
+  apiKey?: Prisma.SortOrder
   connectionStatus?: Prisma.SortOrder
+  lastConnectionError?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
   lastSyncAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -455,7 +587,13 @@ export type CompanyWhatsappInstanceCreateWithoutCompanyInput = {
   id?: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -466,7 +604,13 @@ export type CompanyWhatsappInstanceUncheckedCreateWithoutCompanyInput = {
   id?: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -507,7 +651,13 @@ export type CompanyWhatsappInstanceScalarWhereInput = {
   companyId?: Prisma.StringFilter<"CompanyWhatsappInstance"> | string
   evolutionInstanceName?: Prisma.StringFilter<"CompanyWhatsappInstance"> | string
   whatsappNumber?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  displayName?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  phoneNumberId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  businessAccountId?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiBaseUrl?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
+  apiKey?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFilter<"CompanyWhatsappInstance"> | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.StringNullableFilter<"CompanyWhatsappInstance"> | string | null
   connectedAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   lastSyncAt?: Prisma.DateTimeNullableFilter<"CompanyWhatsappInstance"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CompanyWhatsappInstance"> | Date | string
@@ -518,7 +668,13 @@ export type CompanyWhatsappInstanceCreateManyCompanyInput = {
   id?: string
   evolutionInstanceName: string
   whatsappNumber?: string | null
+  displayName?: string | null
+  phoneNumberId?: string | null
+  businessAccountId?: string | null
+  apiBaseUrl?: string | null
+  apiKey?: string | null
   connectionStatus?: $Enums.WhatsappConnectionStatus
+  lastConnectionError?: string | null
   connectedAt?: Date | string | null
   lastSyncAt?: Date | string | null
   createdAt?: Date | string
@@ -529,7 +685,13 @@ export type CompanyWhatsappInstanceUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -540,7 +702,13 @@ export type CompanyWhatsappInstanceUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -551,7 +719,13 @@ export type CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   evolutionInstanceName?: Prisma.StringFieldUpdateOperationsInput | string
   whatsappNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiBaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apiKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectionStatus?: Prisma.EnumWhatsappConnectionStatusFieldUpdateOperationsInput | $Enums.WhatsappConnectionStatus
+  lastConnectionError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -565,7 +739,13 @@ export type CompanyWhatsappInstanceSelect<ExtArgs extends runtime.Types.Extensio
   companyId?: boolean
   evolutionInstanceName?: boolean
   whatsappNumber?: boolean
+  displayName?: boolean
+  phoneNumberId?: boolean
+  businessAccountId?: boolean
+  apiBaseUrl?: boolean
+  apiKey?: boolean
   connectionStatus?: boolean
+  lastConnectionError?: boolean
   connectedAt?: boolean
   lastSyncAt?: boolean
   createdAt?: boolean
@@ -578,7 +758,13 @@ export type CompanyWhatsappInstanceSelectCreateManyAndReturn<ExtArgs extends run
   companyId?: boolean
   evolutionInstanceName?: boolean
   whatsappNumber?: boolean
+  displayName?: boolean
+  phoneNumberId?: boolean
+  businessAccountId?: boolean
+  apiBaseUrl?: boolean
+  apiKey?: boolean
   connectionStatus?: boolean
+  lastConnectionError?: boolean
   connectedAt?: boolean
   lastSyncAt?: boolean
   createdAt?: boolean
@@ -591,7 +777,13 @@ export type CompanyWhatsappInstanceSelectUpdateManyAndReturn<ExtArgs extends run
   companyId?: boolean
   evolutionInstanceName?: boolean
   whatsappNumber?: boolean
+  displayName?: boolean
+  phoneNumberId?: boolean
+  businessAccountId?: boolean
+  apiBaseUrl?: boolean
+  apiKey?: boolean
   connectionStatus?: boolean
+  lastConnectionError?: boolean
   connectedAt?: boolean
   lastSyncAt?: boolean
   createdAt?: boolean
@@ -604,14 +796,20 @@ export type CompanyWhatsappInstanceSelectScalar = {
   companyId?: boolean
   evolutionInstanceName?: boolean
   whatsappNumber?: boolean
+  displayName?: boolean
+  phoneNumberId?: boolean
+  businessAccountId?: boolean
+  apiBaseUrl?: boolean
+  apiKey?: boolean
   connectionStatus?: boolean
+  lastConnectionError?: boolean
   connectedAt?: boolean
   lastSyncAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyWhatsappInstanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "evolutionInstanceName" | "whatsappNumber" | "connectionStatus" | "connectedAt" | "lastSyncAt" | "createdAt" | "updatedAt", ExtArgs["result"]["companyWhatsappInstance"]>
+export type CompanyWhatsappInstanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "evolutionInstanceName" | "whatsappNumber" | "displayName" | "phoneNumberId" | "businessAccountId" | "apiBaseUrl" | "apiKey" | "connectionStatus" | "lastConnectionError" | "connectedAt" | "lastSyncAt" | "createdAt" | "updatedAt", ExtArgs["result"]["companyWhatsappInstance"]>
 export type CompanyWhatsappInstanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
@@ -632,7 +830,13 @@ export type $CompanyWhatsappInstancePayload<ExtArgs extends runtime.Types.Extens
     companyId: string
     evolutionInstanceName: string
     whatsappNumber: string | null
+    displayName: string | null
+    phoneNumberId: string | null
+    businessAccountId: string | null
+    apiBaseUrl: string | null
+    apiKey: string | null
     connectionStatus: $Enums.WhatsappConnectionStatus
+    lastConnectionError: string | null
     connectedAt: Date | null
     lastSyncAt: Date | null
     createdAt: Date
@@ -1065,7 +1269,13 @@ export interface CompanyWhatsappInstanceFieldRefs {
   readonly companyId: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
   readonly evolutionInstanceName: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
   readonly whatsappNumber: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
+  readonly displayName: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
+  readonly phoneNumberId: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
+  readonly businessAccountId: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
+  readonly apiBaseUrl: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
+  readonly apiKey: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
   readonly connectionStatus: Prisma.FieldRef<"CompanyWhatsappInstance", 'WhatsappConnectionStatus'>
+  readonly lastConnectionError: Prisma.FieldRef<"CompanyWhatsappInstance", 'String'>
   readonly connectedAt: Prisma.FieldRef<"CompanyWhatsappInstance", 'DateTime'>
   readonly lastSyncAt: Prisma.FieldRef<"CompanyWhatsappInstance", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"CompanyWhatsappInstance", 'DateTime'>

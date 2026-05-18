@@ -1,5 +1,6 @@
 export class ContactNoteEntity {
   id!: string;
+  companyId?: string | null;
   contactId!: string;
   content!: string;
   authorId?: string | null;

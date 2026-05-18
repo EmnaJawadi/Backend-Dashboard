@@ -398,6 +398,7 @@ export type ConversationWhereInput = {
   messages?: Prisma.MessageListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   sourceArticles?: Prisma.KbArticleListRelationFilter
+  kbSuggestions?: Prisma.KbSuggestionListRelationFilter
   aiRuns?: Prisma.AiRunListRelationFilter
 }
 
@@ -435,6 +436,7 @@ export type ConversationOrderByWithRelationInput = {
   messages?: Prisma.MessageOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   sourceArticles?: Prisma.KbArticleOrderByRelationAggregateInput
+  kbSuggestions?: Prisma.KbSuggestionOrderByRelationAggregateInput
   aiRuns?: Prisma.AiRunOrderByRelationAggregateInput
 }
 
@@ -475,6 +477,7 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   messages?: Prisma.MessageListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   sourceArticles?: Prisma.KbArticleListRelationFilter
+  kbSuggestions?: Prisma.KbSuggestionListRelationFilter
   aiRuns?: Prisma.AiRunListRelationFilter
 }, "id">
 
@@ -578,6 +581,7 @@ export type ConversationCreateInput = {
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -613,6 +617,7 @@ export type ConversationUncheckedCreateInput = {
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -648,6 +653,7 @@ export type ConversationUpdateInput = {
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -683,6 +689,7 @@ export type ConversationUncheckedUpdateInput = {
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -1016,6 +1023,20 @@ export type ConversationUpdateOneRequiredWithoutMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutMessagesInput, Prisma.ConversationUpdateWithoutMessagesInput>, Prisma.ConversationUncheckedUpdateWithoutMessagesInput>
 }
 
+export type ConversationCreateNestedOneWithoutKbSuggestionsInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedCreateWithoutKbSuggestionsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutKbSuggestionsInput
+  connect?: Prisma.ConversationWhereUniqueInput
+}
+
+export type ConversationUpdateOneRequiredWithoutKbSuggestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationCreateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedCreateWithoutKbSuggestionsInput>
+  connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutKbSuggestionsInput
+  upsert?: Prisma.ConversationUpsertWithoutKbSuggestionsInput
+  connect?: Prisma.ConversationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationUpdateToOneWithWhereWithoutKbSuggestionsInput, Prisma.ConversationUpdateWithoutKbSuggestionsInput>, Prisma.ConversationUncheckedUpdateWithoutKbSuggestionsInput>
+}
+
 export type ConversationCreateNestedOneWithoutAiRunsInput = {
   create?: Prisma.XOR<Prisma.ConversationCreateWithoutAiRunsInput, Prisma.ConversationUncheckedCreateWithoutAiRunsInput>
   connectOrCreate?: Prisma.ConversationCreateOrConnectWithoutAiRunsInput
@@ -1093,6 +1114,7 @@ export type ConversationCreateWithoutCompanyInput = {
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1127,6 +1149,7 @@ export type ConversationUncheckedCreateWithoutCompanyInput = {
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -1220,6 +1243,7 @@ export type ConversationCreateWithoutContactInput = {
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1254,6 +1278,7 @@ export type ConversationUncheckedCreateWithoutContactInput = {
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -1314,6 +1339,7 @@ export type ConversationCreateWithoutTagsInput = {
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1348,6 +1374,7 @@ export type ConversationUncheckedCreateWithoutTagsInput = {
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -1398,6 +1425,7 @@ export type ConversationUpdateWithoutTagsInput = {
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -1432,6 +1460,7 @@ export type ConversationUncheckedUpdateWithoutTagsInput = {
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -1466,6 +1495,7 @@ export type ConversationCreateWithoutMessagesInput = {
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1500,6 +1530,7 @@ export type ConversationUncheckedCreateWithoutMessagesInput = {
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -1550,6 +1581,7 @@ export type ConversationUpdateWithoutMessagesInput = {
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -1582,6 +1614,163 @@ export type ConversationUncheckedUpdateWithoutMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationCreateWithoutKbSuggestionsInput = {
+  id?: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutConversationsInput
+  contact: Prisma.ContactCreateNestedOneWithoutConversationsInput
+  tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationUncheckedCreateWithoutKbSuggestionsInput = {
+  id?: string
+  companyId?: string | null
+  contactId: string
+  channel?: string | null
+  status?: string | null
+  priority?: string | null
+  assignedTo?: string | null
+  botPaused?: boolean | null
+  handoffRequired?: boolean | null
+  unreadCount?: number | null
+  lastMessageAt?: Date | string | null
+  lastCustomerMessageAt?: Date | string | null
+  lastBotMessageAt?: Date | string | null
+  lastHumanMessageAt?: Date | string | null
+  conversationSummary?: string | null
+  customerIntent?: string | null
+  requestedProductService?: string | null
+  requestedDeliveryDate?: string | null
+  deliveryAddress?: string | null
+  budget?: string | null
+  agreedTerms?: string | null
+  nextAction?: string | null
+  lastAiDecision?: string | null
+  importantNotes?: string | null
+  closedAt?: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
+}
+
+export type ConversationCreateOrConnectWithoutKbSuggestionsInput = {
+  where: Prisma.ConversationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedCreateWithoutKbSuggestionsInput>
+}
+
+export type ConversationUpsertWithoutKbSuggestionsInput = {
+  update: Prisma.XOR<Prisma.ConversationUpdateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedUpdateWithoutKbSuggestionsInput>
+  create: Prisma.XOR<Prisma.ConversationCreateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedCreateWithoutKbSuggestionsInput>
+  where?: Prisma.ConversationWhereInput
+}
+
+export type ConversationUpdateToOneWithWhereWithoutKbSuggestionsInput = {
+  where?: Prisma.ConversationWhereInput
+  data: Prisma.XOR<Prisma.ConversationUpdateWithoutKbSuggestionsInput, Prisma.ConversationUncheckedUpdateWithoutKbSuggestionsInput>
+}
+
+export type ConversationUpdateWithoutKbSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutConversationsNestedInput
+  contact?: Prisma.ContactUpdateOneRequiredWithoutConversationsNestedInput
+  tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
+}
+
+export type ConversationUncheckedUpdateWithoutKbSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  botPaused?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  unreadCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCustomerMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBotMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHumanMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedProductService?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedDeliveryDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agreedTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextAction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastAiDecision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  importantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
@@ -1619,6 +1808,7 @@ export type ConversationCreateWithoutAiRunsInput = {
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutAiRunsInput = {
@@ -1653,6 +1843,7 @@ export type ConversationUncheckedCreateWithoutAiRunsInput = {
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationCreateOrConnectWithoutAiRunsInput = {
@@ -1703,6 +1894,7 @@ export type ConversationUpdateWithoutAiRunsInput = {
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutAiRunsInput = {
@@ -1737,6 +1929,7 @@ export type ConversationUncheckedUpdateWithoutAiRunsInput = {
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationCreateWithoutSourceArticlesInput = {
@@ -1770,6 +1963,7 @@ export type ConversationCreateWithoutSourceArticlesInput = {
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1804,6 +1998,7 @@ export type ConversationUncheckedCreateWithoutSourceArticlesInput = {
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -1854,6 +2049,7 @@ export type ConversationUpdateWithoutSourceArticlesInput = {
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -1888,6 +2084,7 @@ export type ConversationUncheckedUpdateWithoutSourceArticlesInput = {
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -1922,6 +2119,7 @@ export type ConversationCreateWithoutNotificationsInput = {
   tags?: Prisma.ConversationTagCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunCreateNestedManyWithoutConversationInput
 }
 
@@ -1956,6 +2154,7 @@ export type ConversationUncheckedCreateWithoutNotificationsInput = {
   tags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutConversationInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
   sourceArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutSourceConversationInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutConversationInput
   aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -2006,6 +2205,7 @@ export type ConversationUpdateWithoutNotificationsInput = {
   tags?: Prisma.ConversationTagUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -2040,6 +2240,7 @@ export type ConversationUncheckedUpdateWithoutNotificationsInput = {
   tags?: Prisma.ConversationTagUncheckedUpdateManyWithoutConversationNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -2103,6 +2304,7 @@ export type ConversationUpdateWithoutCompanyInput = {
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -2137,6 +2339,7 @@ export type ConversationUncheckedUpdateWithoutCompanyInput = {
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -2229,6 +2432,7 @@ export type ConversationUpdateWithoutContactInput = {
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUpdateManyWithoutConversationNestedInput
 }
 
@@ -2263,6 +2467,7 @@ export type ConversationUncheckedUpdateWithoutContactInput = {
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutConversationNestedInput
   sourceArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutSourceConversationNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutConversationNestedInput
   aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -2305,6 +2510,7 @@ export type ConversationCountOutputType = {
   messages: number
   notifications: number
   sourceArticles: number
+  kbSuggestions: number
   aiRuns: number
 }
 
@@ -2313,6 +2519,7 @@ export type ConversationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   messages?: boolean | ConversationCountOutputTypeCountMessagesArgs
   notifications?: boolean | ConversationCountOutputTypeCountNotificationsArgs
   sourceArticles?: boolean | ConversationCountOutputTypeCountSourceArticlesArgs
+  kbSuggestions?: boolean | ConversationCountOutputTypeCountKbSuggestionsArgs
   aiRuns?: boolean | ConversationCountOutputTypeCountAiRunsArgs
 }
 
@@ -2357,6 +2564,13 @@ export type ConversationCountOutputTypeCountSourceArticlesArgs<ExtArgs extends r
 /**
  * ConversationCountOutputType without action
  */
+export type ConversationCountOutputTypeCountKbSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbSuggestionWhereInput
+}
+
+/**
+ * ConversationCountOutputType without action
+ */
 export type ConversationCountOutputTypeCountAiRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AiRunWhereInput
 }
@@ -2396,6 +2610,7 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
   notifications?: boolean | Prisma.Conversation$notificationsArgs<ExtArgs>
   sourceArticles?: boolean | Prisma.Conversation$sourceArticlesArgs<ExtArgs>
+  kbSuggestions?: boolean | Prisma.Conversation$kbSuggestionsArgs<ExtArgs>
   aiRuns?: boolean | Prisma.Conversation$aiRunsArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
@@ -2502,6 +2717,7 @@ export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
   notifications?: boolean | Prisma.Conversation$notificationsArgs<ExtArgs>
   sourceArticles?: boolean | Prisma.Conversation$sourceArticlesArgs<ExtArgs>
+  kbSuggestions?: boolean | Prisma.Conversation$kbSuggestionsArgs<ExtArgs>
   aiRuns?: boolean | Prisma.Conversation$aiRunsArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -2523,6 +2739,7 @@ export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     messages: Prisma.$MessagePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     sourceArticles: Prisma.$KbArticlePayload<ExtArgs>[]
+    kbSuggestions: Prisma.$KbSuggestionPayload<ExtArgs>[]
     aiRuns: Prisma.$AiRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2953,6 +3170,7 @@ export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends run
   messages<T extends Prisma.Conversation$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Conversation$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sourceArticles<T extends Prisma.Conversation$sourceArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$sourceArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  kbSuggestions<T extends Prisma.Conversation$kbSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$kbSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiRuns<T extends Prisma.Conversation$aiRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$aiRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3523,6 +3741,30 @@ export type Conversation$sourceArticlesArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.KbArticleScalarFieldEnum | Prisma.KbArticleScalarFieldEnum[]
+}
+
+/**
+ * Conversation.kbSuggestions
+ */
+export type Conversation$kbSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbSuggestion
+   */
+  select?: Prisma.KbSuggestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbSuggestion
+   */
+  omit?: Prisma.KbSuggestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbSuggestionInclude<ExtArgs> | null
+  where?: Prisma.KbSuggestionWhereInput
+  orderBy?: Prisma.KbSuggestionOrderByWithRelationInput | Prisma.KbSuggestionOrderByWithRelationInput[]
+  cursor?: Prisma.KbSuggestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbSuggestionScalarFieldEnum | Prisma.KbSuggestionScalarFieldEnum[]
 }
 
 /**

@@ -1,4 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import { resolveCompanyScope } from '../../common/utils/company-scope.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { AiMetricsDto, AnalyticsTimelinePointDto } from './dto/ai-metrics.dto';
 import { AnalyticsOverviewDto } from './dto/analytics-overview.dto';
@@ -19,12 +21,15 @@ type NumericRow = Record<string, unknown>;
 export class AnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getOverview(query: ConversationsAnalyticsQuery): Promise<AnalyticsOverviewDto> {
+  async getOverview(
+    query: ConversationsAnalyticsQuery,
+    actor?: AuthenticatedUser,
+  ): Promise<AnalyticsOverviewDto> {
     const normalized = this.normalizeQuery(query);
 
     const [conversations, aiRuns] = await Promise.all([
-      this.getConversationMetrics(normalized),
-      this.getAiRunsMetrics(normalized),
+      this.getConversationMetrics(normalized, actor),
+      this.getAiRunsMetrics(normalized, actor),
     ]);
 
     return new AnalyticsOverviewDto({
@@ -41,8 +46,10 @@ export class AnalyticsService {
 
   async getConversationMetrics(
     query: ConversationsAnalyticsQuery,
+    actor?: AuthenticatedUser,
   ): Promise<ConversationMetricsDto> {
     const normalized = this.normalizeQuery(query);
+    const companyId = resolveCompanyScope(actor);
     const meta = await this.getTableMeta([
       'Conversation',
       'conversation',
@@ -90,6 +97,8 @@ export class AnalyticsService {
       createdAtColumn,
       normalized.startDate,
       normalized.endDate,
+      meta.columns,
+      companyId,
     );
 
     const totalConversationsExpr = 'COUNT(*)::int AS "totalConversations"';
@@ -164,6 +173,8 @@ export class AnalyticsService {
       normalized.groupBy,
       normalized.startDate,
       normalized.endDate,
+      meta.columns,
+      companyId,
     );
 
     return new ConversationMetricsDto({
@@ -178,8 +189,12 @@ export class AnalyticsService {
     });
   }
 
-  async getAiRunsMetrics(query: AiRunsAnalyticsQuery): Promise<AiMetricsDto> {
+  async getAiRunsMetrics(
+    query: AiRunsAnalyticsQuery,
+    actor?: AuthenticatedUser,
+  ): Promise<AiMetricsDto> {
     const normalized = this.normalizeQuery(query);
+    const companyId = resolveCompanyScope(actor);
     const meta = await this.getTableMeta([
       'AiRun',
       'aiRun',
@@ -242,6 +257,8 @@ export class AnalyticsService {
       createdAtColumn,
       normalized.startDate,
       normalized.endDate,
+      meta.columns,
+      companyId,
     );
 
     const totalRunsExpr = 'COUNT(*)::int AS "totalRuns"';
@@ -313,6 +330,8 @@ export class AnalyticsService {
       normalized.groupBy,
       normalized.startDate,
       normalized.endDate,
+      meta.columns,
+      companyId,
     );
 
     return new AiMetricsDto({
@@ -350,12 +369,20 @@ export class AnalyticsService {
     groupBy: AnalyticsGroupBy,
     startDate?: string,
     endDate?: string,
+    columns?: Set<string>,
+    companyId?: string,
   ): Promise<AnalyticsTimelinePointDto[]> {
     if (!createdAtColumn) {
       return [];
     }
 
-    const whereClause = this.buildDateWhereClause(createdAtColumn, startDate, endDate);
+    const whereClause = this.buildDateWhereClause(
+      createdAtColumn,
+      startDate,
+      endDate,
+      columns,
+      companyId,
+    );
 
     const sql = `
       SELECT
@@ -417,19 +444,26 @@ export class AnalyticsService {
     dateColumn: string | null,
     startDate?: string,
     endDate?: string,
+    columns?: Set<string>,
+    companyId?: string,
   ): string {
-    if (!dateColumn) {
-      return '';
-    }
-
     const conditions: string[] = [];
 
-    if (startDate) {
+    if (dateColumn && startDate) {
       conditions.push(`${this.q(dateColumn)} >= '${this.escapeLiteral(startDate)}'::timestamptz`);
     }
 
-    if (endDate) {
+    if (dateColumn && endDate) {
       conditions.push(`${this.q(dateColumn)} <= '${this.escapeLiteral(endDate)}'::timestamptz`);
+    }
+
+    const companyColumn = this.pickFirstExisting(columns ?? new Set(), [
+      'companyId',
+      'company_id',
+    ]);
+
+    if (companyId && companyColumn) {
+      conditions.push(`${this.q(companyColumn)} = '${this.escapeLiteral(companyId)}'`);
     }
 
     if (!conditions.length) {

@@ -83,5 +83,5 @@ export class IngestKbFileDto {
   @IsOptional()
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
-  autoPublish?: boolean = false;
+  autoPublish?: boolean = true;
 }

@@ -19,6 +19,10 @@ export class GetOrCreateConversationDto {
 
   @IsOptional()
   @IsString()
+  instanceName?: string;
+
+  @IsOptional()
+  @IsString()
   companyId?: string;
 
   @IsOptional()

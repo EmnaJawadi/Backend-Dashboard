@@ -8,6 +8,7 @@ import { randomBytes } from 'node:crypto';
 import { hashPassword } from '../../common/utils/password.util';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { NotificationsGateway } from '../../gateways/notifications.gateway';
 import {
   CompanyRegistrationStatus,
   CompanyStatus,
@@ -33,7 +34,10 @@ export class CompanyRegistrationService {
   private readonly rateLimitMaxAttempts = 5;
   private readonly registrationAttempts = new Map<string, RegistrationAttemptWindow[]>();
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsGateway: NotificationsGateway,
+  ) {}
 
   private normalizeEmail(value: string): string {
     return value.trim().toLowerCase();
@@ -311,6 +315,19 @@ export class CompanyRegistrationService {
         request,
         notification,
       };
+    });
+
+    this.notificationsGateway.emitSystemNotification({
+      event: 'company_registration_request_created',
+      notification: result.notification,
+      request: {
+        id: result.request.id,
+        companyName: result.request.companyName,
+        businessEmail: result.request.businessEmail,
+        responsibleFullName: result.request.responsibleFullName,
+        status: result.request.status,
+        createdAt: result.request.createdAt,
+      },
     });
 
     return {

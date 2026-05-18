@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsBoolean,
+  IsObject,
   IsIn,
   IsISO8601,
   IsOptional,
@@ -19,8 +20,13 @@ export class AiReplyContextItemDto {
 }
 
 export class AiReplyRequestDto {
+  @IsOptional()
   @IsString()
-  message!: string;
+  message?: string;
+
+  @IsOptional()
+  @IsString()
+  messageText?: string;
 
   @IsOptional()
   @IsString()
@@ -44,6 +50,22 @@ export class AiReplyRequestDto {
 
   @IsOptional()
   @IsString()
+  phoneNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  instanceName?: string;
+
+  @IsOptional()
+  @IsString()
+  instance?: string;
+
+  @IsOptional()
+  @IsString()
+  rawRemoteJid?: string;
+
+  @IsOptional()
+  @IsString()
   channel?: string;
 
   @IsOptional()
@@ -53,6 +75,38 @@ export class AiReplyRequestDto {
   @IsOptional()
   @IsString()
   messageType?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  hasMedia?: boolean;
+
+  @IsOptional()
+  @IsString()
+  mediaType?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mediaUrl?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mediaId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  caption?: string | null;
+
+  @IsOptional()
+  @IsString()
+  mimeType?: string | null;
+
+  @IsOptional()
+  @IsBoolean()
+  fromMe?: boolean;
+
+  @IsOptional()
+  @IsObject()
+  rawPayload?: Record<string, unknown>;
 
   @IsOptional()
   @IsISO8601()

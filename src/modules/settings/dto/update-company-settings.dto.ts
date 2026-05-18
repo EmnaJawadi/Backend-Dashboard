@@ -8,10 +8,20 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
   Max,
+  MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
+
+export const COMPANY_LANGUAGE_VALUES = ['fr', 'en', 'ar'] as const;
+export const COMPANY_RESPONSE_TONE_VALUES = [
+  'professional',
+  'friendly',
+  'formal',
+  'concise',
+] as const;
 
 class UpdateCompanyBusinessHoursDayDto {
   @IsOptional()
@@ -38,6 +48,7 @@ class UpdateCompanyBusinessHoursDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(100)
   timezone?: string;
 
   @IsOptional()
@@ -46,6 +57,7 @@ class UpdateCompanyBusinessHoursDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(500)
   outOfHoursMessage?: string;
 
   @IsOptional()
@@ -72,14 +84,17 @@ class UpdateCompanyAiPolicyDto {
 
   @IsOptional()
   @IsString()
+  @IsIn(COMPANY_RESPONSE_TONE_VALUES)
   responseTone?: string;
 
   @IsOptional()
   @IsString()
+  @IsIn(COMPANY_LANGUAGE_VALUES)
   language?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(1200)
   botGuidelines?: string;
 }
 
@@ -90,33 +105,74 @@ class UpdateCompanyWorkflowDto {
 
   @IsOptional()
   @IsString()
+  @IsUUID()
+  defaultAssigneeId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
   defaultAssignment?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(500)
   welcomeMessage?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(500)
   preHandoffMessage?: string;
 }
 
 class UpdateCompanyGeneralDto {
   @IsOptional()
   @IsString()
+  @MaxLength(120)
+  officialName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
   companyName?: string;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  displayName?: string;
+
+  @IsOptional()
   @IsEmail()
+  @MaxLength(160)
   supportEmail?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(40)
+  supportPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_LANGUAGE_VALUES)
   defaultLanguage?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(100)
   timezone?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotificationsEnabled?: boolean;
 
   @IsOptional()
   @IsBoolean()
@@ -237,4 +293,105 @@ export class UpdateCompanyAdminSettingsDto {
   @ValidateNested()
   @Type(() => UpdateCompanyWhatsappTechnicalDto)
   whatsappTechnicalSettings?: UpdateCompanyWhatsappTechnicalDto;
+}
+
+export class UpdateCompanyPreferencesDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  officialName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  displayName?: string;
+
+  @IsOptional()
+  @IsEmail()
+  @MaxLength(160)
+  supportEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  supportPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_LANGUAGE_VALUES)
+  defaultLanguage?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  timezone?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotificationsEnabled?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotifications?: boolean;
+}
+
+export class UpdateCompanyAiSettingsDto {
+  @IsOptional()
+  @IsBoolean()
+  enabled?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  handoffEnabled?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(1440)
+  escalationDelayMinutes?: number;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_RESPONSE_TONE_VALUES)
+  responseTone?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_LANGUAGE_VALUES)
+  language?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1200)
+  botGuidelines?: string;
+}
+
+export class UpdateCompanyWorkflowSettingsDto {
+  @IsOptional()
+  @IsBoolean()
+  enabled?: boolean;
+
+  @IsOptional()
+  @IsUUID()
+  defaultAssigneeId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  welcomeMessage?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  verificationMessage?: string;
 }

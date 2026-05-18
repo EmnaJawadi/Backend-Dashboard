@@ -61,9 +61,12 @@ export class KbRepository {
     });
   }
 
-  findById(id: string) {
-    return this.prisma.kbArticle.findUnique({
-      where: { id },
+  findById(id: string, companyId?: string) {
+    return this.prisma.kbArticle.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
       include: {
         chunks: {
           orderBy: { chunkIndex: 'asc' },
@@ -91,13 +94,18 @@ export class KbRepository {
     });
   }
 
-  async createChunks(articleId: string, chunks: CreateKbChunkInput[]) {
+  async createChunks(
+    articleId: string,
+    chunks: CreateKbChunkInput[],
+    companyId?: string | null,
+  ) {
     if (chunks.length === 0) {
       return;
     }
 
     await this.prisma.kbChunk.createMany({
       data: chunks.map((chunk) => ({
+        companyId: companyId ?? null,
         articleId,
         chunkIndex: chunk.chunkIndex,
         chunkText: chunk.content,
@@ -107,9 +115,12 @@ export class KbRepository {
     });
   }
 
-  findChunksByArticleId(articleId: string) {
+  findChunksByArticleId(articleId: string, companyId?: string) {
     return this.prisma.kbChunk.findMany({
-      where: { articleId },
+      where: {
+        articleId,
+        ...(companyId ? { companyId } : {}),
+      },
       orderBy: { chunkIndex: 'asc' },
     });
   }

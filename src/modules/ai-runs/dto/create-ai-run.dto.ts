@@ -32,6 +32,10 @@ export class CreateAiRunDto {
 
   @IsOptional()
   @IsString()
+  inputType?: string;
+
+  @IsOptional()
+  @IsString()
   response?: string;
 
   @IsOptional()
@@ -83,6 +87,22 @@ export class CreateAiRunDto {
   @IsOptional()
   @IsString()
   blockedReason?: string;
+
+  @IsOptional()
+  @IsString()
+  reason?: string;
+
+  @IsOptional()
+  @IsString()
+  matchedProductId?: string | null;
+
+  @IsOptional()
+  @IsObject()
+  imageAnalysisResult?: Record<string, unknown>;
+
+  @IsOptional()
+  @IsBoolean()
+  shouldSendMessage?: boolean;
 
   @IsOptional()
   @IsBoolean()

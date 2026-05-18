@@ -4,6 +4,10 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { ContactQueryDto } from './dto/contact-query.dto';
 import { ContactEntity } from './entities/contact.entity';
 
+type ContactWriteData = Partial<ContactEntity> & {
+  companyId?: string | null;
+};
+
 function splitName(fullName: string | null | undefined): {
   firstName: string;
   lastName: string | null;
@@ -64,7 +68,7 @@ export class ContactsRepository {
     });
   }
 
-  async create(data: Partial<ContactEntity>): Promise<ContactEntity> {
+  async create(data: ContactWriteData): Promise<ContactEntity> {
     const firstName = data.firstName?.trim() ?? '';
     const lastName = data.lastName?.trim() ?? null;
     const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
@@ -73,6 +77,7 @@ export class ContactsRepository {
     try {
       created = await this.prisma.contact.create({
         data: {
+          companyId: data.companyId ?? null,
           phone: data.phoneNumber?.trim() ?? null,
           whatsappName: fullName || null,
           fullName: fullName || null,
@@ -98,11 +103,15 @@ export class ContactsRepository {
     return this.toEntity(created);
   }
 
-  async findAll(query: ContactQueryDto) {
+  async findAll(query: ContactQueryDto, companyId?: string) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
     const andFilters: Prisma.ContactWhereInput[] = [];
+
+    if (companyId) {
+      andFilters.push({ companyId });
+    }
 
     if (query.search?.trim()) {
       const search = query.search.trim();
@@ -151,8 +160,13 @@ export class ContactsRepository {
     };
   }
 
-  async findById(id: string): Promise<ContactEntity> {
-    const contact = await this.prisma.contact.findUnique({ where: { id } });
+  async findById(id: string, companyId?: string): Promise<ContactEntity> {
+    const contact = await this.prisma.contact.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
+    });
 
     if (!contact) {
       throw new NotFoundException(`Contact with id ${id} not found`);
@@ -161,17 +175,27 @@ export class ContactsRepository {
     return this.toEntity(contact);
   }
 
-  async findByPhoneNumber(phoneNumber: string): Promise<ContactEntity | null> {
+  async findByPhoneNumber(
+    phoneNumber: string,
+    companyId?: string | null,
+  ): Promise<ContactEntity | null> {
     const contact = await this.prisma.contact.findFirst({
-      where: { phone: phoneNumber },
+      where: {
+        phone: phoneNumber,
+        ...(companyId ? { companyId } : {}),
+      },
       orderBy: { updatedAt: 'desc' },
     });
 
     return contact ? this.toEntity(contact) : null;
   }
 
-  async update(id: string, data: Partial<ContactEntity>): Promise<ContactEntity> {
-    const existing = await this.findById(id);
+  async update(
+    id: string,
+    data: ContactWriteData,
+    companyId?: string,
+  ): Promise<ContactEntity> {
+    const existing = await this.findById(id, companyId);
     const existingNames = splitName(existing.fullName);
 
     const firstName =
@@ -215,26 +239,31 @@ export class ContactsRepository {
     return this.toEntity(updated);
   }
 
-  async upsert(data: Partial<ContactEntity>): Promise<ContactEntity> {
+  async upsert(data: ContactWriteData): Promise<ContactEntity> {
     const phoneNumber = data.phoneNumber?.trim() ?? '';
 
     if (!phoneNumber) {
       return this.create(data);
     }
 
-    const existing = await this.findByPhoneNumber(phoneNumber);
+    const existing = await this.findByPhoneNumber(phoneNumber, data.companyId);
 
     if (existing) {
-      return this.update(existing.id, data);
+      return this.update(existing.id, data, data.companyId ?? undefined);
     }
 
     return this.create(data);
   }
 
-  async remove(id: string): Promise<ContactEntity> {
+  async remove(id: string, companyId?: string): Promise<ContactEntity> {
     try {
       const deleted = await this.prisma.$transaction(async (tx) => {
-        const existing = await tx.contact.findUnique({ where: { id } });
+        const existing = await tx.contact.findFirst({
+          where: {
+            id,
+            ...(companyId ? { companyId } : {}),
+          },
+        });
 
         if (!existing) {
           throw new NotFoundException(`Contact with id ${id} not found`);

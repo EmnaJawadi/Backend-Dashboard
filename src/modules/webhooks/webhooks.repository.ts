@@ -36,6 +36,10 @@ export class WebhooksRepository {
           contactName: data.contactName,
           messageText: data.messageText,
           messageType: data.messageType,
+          caption: data.caption,
+          mediaUrl: data.mediaUrl,
+          mediaId: data.mediaId,
+          mimeType: data.mimeType,
           deliveryStatus: data.deliveryStatus,
           direction: data.direction,
           eventAt: data.eventAt,
@@ -71,12 +75,13 @@ export class WebhooksRepository {
     });
   }
 
-  async findMany(query: WebhookQueryDto) {
+  async findMany(query: WebhookQueryDto, companyId?: string) {
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
     const skip = (page - 1) * limit;
 
     const where = {
+      ...(companyId ? { companyId } : {}),
       ...(query.provider ? { provider: query.provider } : {}),
       ...(query.eventType ? { eventType: query.eventType } : {}),
       ...(query.contactPhone

@@ -33,6 +33,8 @@ export type MessageMinAggregateOutputType = {
   senderType: string | null
   content: string | null
   messageType: string | null
+  caption: string | null
+  mediaId: string | null
   mediaUrl: string | null
   mimeType: string | null
   deliveryStatus: string | null
@@ -50,6 +52,8 @@ export type MessageMaxAggregateOutputType = {
   senderType: string | null
   content: string | null
   messageType: string | null
+  caption: string | null
+  mediaId: string | null
   mediaUrl: string | null
   mimeType: string | null
   deliveryStatus: string | null
@@ -67,6 +71,8 @@ export type MessageCountAggregateOutputType = {
   senderType: number
   content: number
   messageType: number
+  caption: number
+  mediaId: number
   mediaUrl: number
   mimeType: number
   rawPayload: number
@@ -87,6 +93,8 @@ export type MessageMinAggregateInputType = {
   senderType?: true
   content?: true
   messageType?: true
+  caption?: true
+  mediaId?: true
   mediaUrl?: true
   mimeType?: true
   deliveryStatus?: true
@@ -104,6 +112,8 @@ export type MessageMaxAggregateInputType = {
   senderType?: true
   content?: true
   messageType?: true
+  caption?: true
+  mediaId?: true
   mediaUrl?: true
   mimeType?: true
   deliveryStatus?: true
@@ -121,6 +131,8 @@ export type MessageCountAggregateInputType = {
   senderType?: true
   content?: true
   messageType?: true
+  caption?: true
+  mediaId?: true
   mediaUrl?: true
   mimeType?: true
   rawPayload?: true
@@ -212,6 +224,8 @@ export type MessageGroupByOutputType = {
   senderType: string | null
   content: string | null
   messageType: string | null
+  caption: string | null
+  mediaId: string | null
   mediaUrl: string | null
   mimeType: string | null
   rawPayload: runtime.JsonValue | null
@@ -251,6 +265,8 @@ export type MessageWhereInput = {
   senderType?: Prisma.StringNullableFilter<"Message"> | string | null
   content?: Prisma.StringNullableFilter<"Message"> | string | null
   messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  caption?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaId?: Prisma.StringNullableFilter<"Message"> | string | null
   mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
   rawPayload?: Prisma.JsonNullableFilter<"Message">
@@ -260,6 +276,8 @@ export type MessageWhereInput = {
   messageTimestamp?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
+  customerSuggestions?: Prisma.KbSuggestionListRelationFilter
+  humanAnswerSuggestions?: Prisma.KbSuggestionListRelationFilter
 }
 
 export type MessageOrderByWithRelationInput = {
@@ -271,6 +289,8 @@ export type MessageOrderByWithRelationInput = {
   senderType?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
   messageType?: Prisma.SortOrderInput | Prisma.SortOrder
+  caption?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaId?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   rawPayload?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +300,8 @@ export type MessageOrderByWithRelationInput = {
   messageTimestamp?: Prisma.SortOrderInput | Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   conversation?: Prisma.ConversationOrderByWithRelationInput
+  customerSuggestions?: Prisma.KbSuggestionOrderByRelationAggregateInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionOrderByRelationAggregateInput
 }
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
@@ -294,6 +316,8 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   senderType?: Prisma.StringNullableFilter<"Message"> | string | null
   content?: Prisma.StringNullableFilter<"Message"> | string | null
   messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  caption?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaId?: Prisma.StringNullableFilter<"Message"> | string | null
   mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
   rawPayload?: Prisma.JsonNullableFilter<"Message">
@@ -303,6 +327,8 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   messageTimestamp?: Prisma.DateTimeNullableFilter<"Message"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
+  customerSuggestions?: Prisma.KbSuggestionListRelationFilter
+  humanAnswerSuggestions?: Prisma.KbSuggestionListRelationFilter
 }, "id">
 
 export type MessageOrderByWithAggregationInput = {
@@ -314,6 +340,8 @@ export type MessageOrderByWithAggregationInput = {
   senderType?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
   messageType?: Prisma.SortOrderInput | Prisma.SortOrder
+  caption?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaId?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   rawPayload?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -338,6 +366,8 @@ export type MessageScalarWhereWithAggregatesInput = {
   senderType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   content?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   messageType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  caption?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
+  mediaId?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   mediaUrl?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"Message"> | string | null
   rawPayload?: Prisma.JsonNullableWithAggregatesFilter<"Message">
@@ -354,6 +384,8 @@ export type MessageCreateInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -363,6 +395,8 @@ export type MessageCreateInput = {
   messageTimestamp?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutMessagesInput
   conversation: Prisma.ConversationCreateNestedOneWithoutMessagesInput
+  customerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageUncheckedCreateInput = {
@@ -374,6 +408,8 @@ export type MessageUncheckedCreateInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -381,6 +417,8 @@ export type MessageUncheckedCreateInput = {
   errorMessage?: string | null
   createdAt: Date | string
   messageTimestamp?: Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageUpdateInput = {
@@ -390,6 +428,8 @@ export type MessageUpdateInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -399,6 +439,8 @@ export type MessageUpdateInput = {
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutMessagesNestedInput
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutMessagesNestedInput
+  customerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageUncheckedUpdateInput = {
@@ -410,6 +452,8 @@ export type MessageUncheckedUpdateInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -417,6 +461,8 @@ export type MessageUncheckedUpdateInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageCreateManyInput = {
@@ -428,6 +474,8 @@ export type MessageCreateManyInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -444,6 +492,8 @@ export type MessageUpdateManyMutationInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -462,6 +512,8 @@ export type MessageUncheckedUpdateManyInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -490,6 +542,8 @@ export type MessageCountOrderByAggregateInput = {
   senderType?: Prisma.SortOrder
   content?: Prisma.SortOrder
   messageType?: Prisma.SortOrder
+  caption?: Prisma.SortOrder
+  mediaId?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   rawPayload?: Prisma.SortOrder
@@ -508,6 +562,8 @@ export type MessageMaxOrderByAggregateInput = {
   senderType?: Prisma.SortOrder
   content?: Prisma.SortOrder
   messageType?: Prisma.SortOrder
+  caption?: Prisma.SortOrder
+  mediaId?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   deliveryStatus?: Prisma.SortOrder
@@ -525,12 +581,19 @@ export type MessageMinOrderByAggregateInput = {
   senderType?: Prisma.SortOrder
   content?: Prisma.SortOrder
   messageType?: Prisma.SortOrder
+  caption?: Prisma.SortOrder
+  mediaId?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   deliveryStatus?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   messageTimestamp?: Prisma.SortOrder
+}
+
+export type MessageScalarRelationFilter = {
+  is?: Prisma.MessageWhereInput
+  isNot?: Prisma.MessageWhereInput
 }
 
 export type MessageCreateNestedManyWithoutCompanyInput = {
@@ -617,6 +680,34 @@ export type MessageUncheckedUpdateManyWithoutConversationNestedInput = {
   deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
+export type MessageCreateNestedOneWithoutCustomerSuggestionsInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutCustomerSuggestionsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutCustomerSuggestionsInput
+  connect?: Prisma.MessageWhereUniqueInput
+}
+
+export type MessageCreateNestedOneWithoutHumanAnswerSuggestionsInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutHumanAnswerSuggestionsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutHumanAnswerSuggestionsInput
+  connect?: Prisma.MessageWhereUniqueInput
+}
+
+export type MessageUpdateOneRequiredWithoutCustomerSuggestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutCustomerSuggestionsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutCustomerSuggestionsInput
+  upsert?: Prisma.MessageUpsertWithoutCustomerSuggestionsInput
+  connect?: Prisma.MessageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MessageUpdateToOneWithWhereWithoutCustomerSuggestionsInput, Prisma.MessageUpdateWithoutCustomerSuggestionsInput>, Prisma.MessageUncheckedUpdateWithoutCustomerSuggestionsInput>
+}
+
+export type MessageUpdateOneRequiredWithoutHumanAnswerSuggestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutHumanAnswerSuggestionsInput>
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutHumanAnswerSuggestionsInput
+  upsert?: Prisma.MessageUpsertWithoutHumanAnswerSuggestionsInput
+  connect?: Prisma.MessageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MessageUpdateToOneWithWhereWithoutHumanAnswerSuggestionsInput, Prisma.MessageUpdateWithoutHumanAnswerSuggestionsInput>, Prisma.MessageUncheckedUpdateWithoutHumanAnswerSuggestionsInput>
+}
+
 export type MessageCreateWithoutCompanyInput = {
   id?: string
   externalMessageId?: string | null
@@ -624,6 +715,8 @@ export type MessageCreateWithoutCompanyInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -632,6 +725,8 @@ export type MessageCreateWithoutCompanyInput = {
   createdAt: Date | string
   messageTimestamp?: Date | string | null
   conversation: Prisma.ConversationCreateNestedOneWithoutMessagesInput
+  customerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageUncheckedCreateWithoutCompanyInput = {
@@ -642,6 +737,8 @@ export type MessageUncheckedCreateWithoutCompanyInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -649,6 +746,8 @@ export type MessageUncheckedCreateWithoutCompanyInput = {
   errorMessage?: string | null
   createdAt: Date | string
   messageTimestamp?: Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageCreateOrConnectWithoutCompanyInput = {
@@ -689,6 +788,8 @@ export type MessageScalarWhereInput = {
   senderType?: Prisma.StringNullableFilter<"Message"> | string | null
   content?: Prisma.StringNullableFilter<"Message"> | string | null
   messageType?: Prisma.StringNullableFilter<"Message"> | string | null
+  caption?: Prisma.StringNullableFilter<"Message"> | string | null
+  mediaId?: Prisma.StringNullableFilter<"Message"> | string | null
   mediaUrl?: Prisma.StringNullableFilter<"Message"> | string | null
   mimeType?: Prisma.StringNullableFilter<"Message"> | string | null
   rawPayload?: Prisma.JsonNullableFilter<"Message">
@@ -705,6 +806,8 @@ export type MessageCreateWithoutConversationInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -713,6 +816,8 @@ export type MessageCreateWithoutConversationInput = {
   createdAt: Date | string
   messageTimestamp?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutMessagesInput
+  customerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageUncheckedCreateWithoutConversationInput = {
@@ -723,6 +828,8 @@ export type MessageUncheckedCreateWithoutConversationInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -730,6 +837,8 @@ export type MessageUncheckedCreateWithoutConversationInput = {
   errorMessage?: string | null
   createdAt: Date | string
   messageTimestamp?: Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCustomerMessageInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutHumanAnswerMessageInput
 }
 
 export type MessageCreateOrConnectWithoutConversationInput = {
@@ -758,6 +867,206 @@ export type MessageUpdateManyWithWhereWithoutConversationInput = {
   data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutConversationInput>
 }
 
+export type MessageCreateWithoutCustomerSuggestionsInput = {
+  id?: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+  company?: Prisma.CompanyCreateNestedOneWithoutMessagesInput
+  conversation: Prisma.ConversationCreateNestedOneWithoutMessagesInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutHumanAnswerMessageInput
+}
+
+export type MessageUncheckedCreateWithoutCustomerSuggestionsInput = {
+  id?: string
+  companyId?: string | null
+  conversationId: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutHumanAnswerMessageInput
+}
+
+export type MessageCreateOrConnectWithoutCustomerSuggestionsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutCustomerSuggestionsInput>
+}
+
+export type MessageCreateWithoutHumanAnswerSuggestionsInput = {
+  id?: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+  company?: Prisma.CompanyCreateNestedOneWithoutMessagesInput
+  conversation: Prisma.ConversationCreateNestedOneWithoutMessagesInput
+  customerSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCustomerMessageInput
+}
+
+export type MessageUncheckedCreateWithoutHumanAnswerSuggestionsInput = {
+  id?: string
+  companyId?: string | null
+  conversationId: string
+  externalMessageId?: string | null
+  direction?: string | null
+  senderType?: string | null
+  content?: string | null
+  messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
+  mediaUrl?: string | null
+  mimeType?: string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: string | null
+  errorMessage?: string | null
+  createdAt: Date | string
+  messageTimestamp?: Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCustomerMessageInput
+}
+
+export type MessageCreateOrConnectWithoutHumanAnswerSuggestionsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutHumanAnswerSuggestionsInput>
+}
+
+export type MessageUpsertWithoutCustomerSuggestionsInput = {
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedUpdateWithoutCustomerSuggestionsInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutCustomerSuggestionsInput>
+  where?: Prisma.MessageWhereInput
+}
+
+export type MessageUpdateToOneWithWhereWithoutCustomerSuggestionsInput = {
+  where?: Prisma.MessageWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutCustomerSuggestionsInput, Prisma.MessageUncheckedUpdateWithoutCustomerSuggestionsInput>
+}
+
+export type MessageUpdateWithoutCustomerSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  company?: Prisma.CompanyUpdateOneWithoutMessagesNestedInput
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutMessagesNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutHumanAnswerMessageNestedInput
+}
+
+export type MessageUncheckedUpdateWithoutCustomerSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutHumanAnswerMessageNestedInput
+}
+
+export type MessageUpsertWithoutHumanAnswerSuggestionsInput = {
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedUpdateWithoutHumanAnswerSuggestionsInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedCreateWithoutHumanAnswerSuggestionsInput>
+  where?: Prisma.MessageWhereInput
+}
+
+export type MessageUpdateToOneWithWhereWithoutHumanAnswerSuggestionsInput = {
+  where?: Prisma.MessageWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutHumanAnswerSuggestionsInput, Prisma.MessageUncheckedUpdateWithoutHumanAnswerSuggestionsInput>
+}
+
+export type MessageUpdateWithoutHumanAnswerSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  company?: Prisma.CompanyUpdateOneWithoutMessagesNestedInput
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutMessagesNestedInput
+  customerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCustomerMessageNestedInput
+}
+
+export type MessageUncheckedUpdateWithoutHumanAnswerSuggestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  externalMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  direction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  deliveryStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCustomerMessageNestedInput
+}
+
 export type MessageCreateManyCompanyInput = {
   id?: string
   conversationId: string
@@ -766,6 +1075,8 @@ export type MessageCreateManyCompanyInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -782,6 +1093,8 @@ export type MessageUpdateWithoutCompanyInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -790,6 +1103,8 @@ export type MessageUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutMessagesNestedInput
+  customerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutCompanyInput = {
@@ -800,6 +1115,8 @@ export type MessageUncheckedUpdateWithoutCompanyInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -807,6 +1124,8 @@ export type MessageUncheckedUpdateWithoutCompanyInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutCompanyInput = {
@@ -817,6 +1136,8 @@ export type MessageUncheckedUpdateManyWithoutCompanyInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -834,6 +1155,8 @@ export type MessageCreateManyConversationInput = {
   senderType?: string | null
   content?: string | null
   messageType?: string | null
+  caption?: string | null
+  mediaId?: string | null
   mediaUrl?: string | null
   mimeType?: string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -850,6 +1173,8 @@ export type MessageUpdateWithoutConversationInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -858,6 +1183,8 @@ export type MessageUpdateWithoutConversationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutMessagesNestedInput
+  customerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutConversationInput = {
@@ -868,6 +1195,8 @@ export type MessageUncheckedUpdateWithoutConversationInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -875,6 +1204,8 @@ export type MessageUncheckedUpdateWithoutConversationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCustomerMessageNestedInput
+  humanAnswerSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutHumanAnswerMessageNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutConversationInput = {
@@ -885,6 +1216,8 @@ export type MessageUncheckedUpdateManyWithoutConversationInput = {
   senderType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawPayload?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -894,6 +1227,44 @@ export type MessageUncheckedUpdateManyWithoutConversationInput = {
   messageTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+
+/**
+ * Count Type MessageCountOutputType
+ */
+
+export type MessageCountOutputType = {
+  customerSuggestions: number
+  humanAnswerSuggestions: number
+}
+
+export type MessageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerSuggestions?: boolean | MessageCountOutputTypeCountCustomerSuggestionsArgs
+  humanAnswerSuggestions?: boolean | MessageCountOutputTypeCountHumanAnswerSuggestionsArgs
+}
+
+/**
+ * MessageCountOutputType without action
+ */
+export type MessageCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MessageCountOutputType
+   */
+  select?: Prisma.MessageCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MessageCountOutputType without action
+ */
+export type MessageCountOutputTypeCountCustomerSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbSuggestionWhereInput
+}
+
+/**
+ * MessageCountOutputType without action
+ */
+export type MessageCountOutputTypeCountHumanAnswerSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KbSuggestionWhereInput
+}
 
 
 export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -905,6 +1276,8 @@ export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   senderType?: boolean
   content?: boolean
   messageType?: boolean
+  caption?: boolean
+  mediaId?: boolean
   mediaUrl?: boolean
   mimeType?: boolean
   rawPayload?: boolean
@@ -914,6 +1287,9 @@ export type MessageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   messageTimestamp?: boolean
   company?: boolean | Prisma.Message$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  customerSuggestions?: boolean | Prisma.Message$customerSuggestionsArgs<ExtArgs>
+  humanAnswerSuggestions?: boolean | Prisma.Message$humanAnswerSuggestionsArgs<ExtArgs>
+  _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["message"]>
 
 export type MessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -925,6 +1301,8 @@ export type MessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   senderType?: boolean
   content?: boolean
   messageType?: boolean
+  caption?: boolean
+  mediaId?: boolean
   mediaUrl?: boolean
   mimeType?: boolean
   rawPayload?: boolean
@@ -945,6 +1323,8 @@ export type MessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   senderType?: boolean
   content?: boolean
   messageType?: boolean
+  caption?: boolean
+  mediaId?: boolean
   mediaUrl?: boolean
   mimeType?: boolean
   rawPayload?: boolean
@@ -965,6 +1345,8 @@ export type MessageSelectScalar = {
   senderType?: boolean
   content?: boolean
   messageType?: boolean
+  caption?: boolean
+  mediaId?: boolean
   mediaUrl?: boolean
   mimeType?: boolean
   rawPayload?: boolean
@@ -974,10 +1356,13 @@ export type MessageSelectScalar = {
   messageTimestamp?: boolean
 }
 
-export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "externalMessageId" | "direction" | "senderType" | "content" | "messageType" | "mediaUrl" | "mimeType" | "rawPayload" | "deliveryStatus" | "errorMessage" | "createdAt" | "messageTimestamp", ExtArgs["result"]["message"]>
+export type MessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "externalMessageId" | "direction" | "senderType" | "content" | "messageType" | "caption" | "mediaId" | "mediaUrl" | "mimeType" | "rawPayload" | "deliveryStatus" | "errorMessage" | "createdAt" | "messageTimestamp", ExtArgs["result"]["message"]>
 export type MessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.Message$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
+  customerSuggestions?: boolean | Prisma.Message$customerSuggestionsArgs<ExtArgs>
+  humanAnswerSuggestions?: boolean | Prisma.Message$humanAnswerSuggestionsArgs<ExtArgs>
+  _count?: boolean | Prisma.MessageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.Message$companyArgs<ExtArgs>
@@ -993,6 +1378,8 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs> | null
     conversation: Prisma.$ConversationPayload<ExtArgs>
+    customerSuggestions: Prisma.$KbSuggestionPayload<ExtArgs>[]
+    humanAnswerSuggestions: Prisma.$KbSuggestionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1003,6 +1390,8 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     senderType: string | null
     content: string | null
     messageType: string | null
+    caption: string | null
+    mediaId: string | null
     mediaUrl: string | null
     mimeType: string | null
     rawPayload: runtime.JsonValue | null
@@ -1406,6 +1795,8 @@ export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.Message$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   conversation<T extends Prisma.ConversationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConversationClient<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  customerSuggestions<T extends Prisma.Message$customerSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$customerSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  humanAnswerSuggestions<T extends Prisma.Message$humanAnswerSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$humanAnswerSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1443,6 +1834,8 @@ export interface MessageFieldRefs {
   readonly senderType: Prisma.FieldRef<"Message", 'String'>
   readonly content: Prisma.FieldRef<"Message", 'String'>
   readonly messageType: Prisma.FieldRef<"Message", 'String'>
+  readonly caption: Prisma.FieldRef<"Message", 'String'>
+  readonly mediaId: Prisma.FieldRef<"Message", 'String'>
   readonly mediaUrl: Prisma.FieldRef<"Message", 'String'>
   readonly mimeType: Prisma.FieldRef<"Message", 'String'>
   readonly rawPayload: Prisma.FieldRef<"Message", 'Json'>
@@ -1867,6 +2260,54 @@ export type Message$companyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.CompanyInclude<ExtArgs> | null
   where?: Prisma.CompanyWhereInput
+}
+
+/**
+ * Message.customerSuggestions
+ */
+export type Message$customerSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbSuggestion
+   */
+  select?: Prisma.KbSuggestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbSuggestion
+   */
+  omit?: Prisma.KbSuggestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbSuggestionInclude<ExtArgs> | null
+  where?: Prisma.KbSuggestionWhereInput
+  orderBy?: Prisma.KbSuggestionOrderByWithRelationInput | Prisma.KbSuggestionOrderByWithRelationInput[]
+  cursor?: Prisma.KbSuggestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbSuggestionScalarFieldEnum | Prisma.KbSuggestionScalarFieldEnum[]
+}
+
+/**
+ * Message.humanAnswerSuggestions
+ */
+export type Message$humanAnswerSuggestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KbSuggestion
+   */
+  select?: Prisma.KbSuggestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KbSuggestion
+   */
+  omit?: Prisma.KbSuggestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KbSuggestionInclude<ExtArgs> | null
+  where?: Prisma.KbSuggestionWhereInput
+  orderBy?: Prisma.KbSuggestionOrderByWithRelationInput | Prisma.KbSuggestionOrderByWithRelationInput[]
+  cursor?: Prisma.KbSuggestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KbSuggestionScalarFieldEnum | Prisma.KbSuggestionScalarFieldEnum[]
 }
 
 /**

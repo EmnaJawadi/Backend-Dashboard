@@ -2,6 +2,8 @@ export type WhatsappSendTextMessageInput = {
   to: string;
   text: string;
   instanceName?: string;
+  apiBaseUrl?: string | null;
+  apiKey?: string | null;
 };
 
 export type WhatsappSendMediaMessageInput = {
@@ -10,6 +12,8 @@ export type WhatsappSendMediaMessageInput = {
   fileName?: string;
   caption?: string;
   instanceName?: string;
+  apiBaseUrl?: string | null;
+  apiKey?: string | null;
 };
 
 export type WhatsappSendMessageResult = {

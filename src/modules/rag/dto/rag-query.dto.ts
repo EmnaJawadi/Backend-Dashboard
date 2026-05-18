@@ -33,4 +33,13 @@ export class RagQueryDto {
   @IsOptional()
   @IsString()
   companyId?: string;
+
+  @IsOptional()
+  @IsString()
+  intent?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  allowedCategories?: string[];
 }

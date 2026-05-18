@@ -404,6 +404,10 @@ export class AdminService {
           : {}),
       });
 
+      if (isActive === true) {
+        await this.adminRepository.activateCompanyAdmins(company.id);
+      }
+
       await this.logAuditEvent({
         actor,
         action: 'UPDATE_COMPANY',
@@ -433,6 +437,10 @@ export class AdminService {
       isActive: dto.isActive,
       status: dto.isActive ? CompanyStatus.ACTIVE : CompanyStatus.SUSPENDED,
     });
+
+    if (dto.isActive) {
+      await this.adminRepository.activateCompanyAdmins(company.id);
+    }
 
     await this.logAuditEvent({
       actor,

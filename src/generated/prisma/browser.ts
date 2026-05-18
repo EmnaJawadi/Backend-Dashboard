@@ -33,10 +33,25 @@ export type Company = Prisma.CompanyModel
  */
 export type CompanyRegistrationRequest = Prisma.CompanyRegistrationRequestModel
 /**
+ * Model AgentRegistrationRequest
+ * 
+ */
+export type AgentRegistrationRequest = Prisma.AgentRegistrationRequestModel
+/**
  * Model CompanyWhatsappInstance
  * 
  */
 export type CompanyWhatsappInstance = Prisma.CompanyWhatsappInstanceModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model ProductImage
+ * 
+ */
+export type ProductImage = Prisma.ProductImageModel
 /**
  * Model Subscription
  * 
@@ -67,6 +82,11 @@ export type ConversationTag = Prisma.ConversationTagModel
  * 
  */
 export type Message = Prisma.MessageModel
+/**
+ * Model KbSuggestion
+ * 
+ */
+export type KbSuggestion = Prisma.KbSuggestionModel
 /**
  * Model AiRun
  * 

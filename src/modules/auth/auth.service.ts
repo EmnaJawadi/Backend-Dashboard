@@ -10,7 +10,12 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { JwtPayload } from '../../common/types/jwt-payload.type';
 import { hashPassword, verifyPassword } from '../../common/utils/password.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
-import { CompanyRegistrationStatus, CompanyStatus } from '../../generated/prisma/client';
+import {
+  AgentRegistrationStatus,
+  CompanyRegistrationStatus,
+  CompanyStatus,
+  UserApprovalStatus,
+} from '../../generated/prisma/client';
 import { CompanyRegistrationService } from '../company-registration/company-registration.service';
 import { MailService } from '../mail/mail.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -206,11 +211,27 @@ export class AuthService {
     });
   }
 
+  private async getLatestAgentRegistrationStatus(email: string) {
+    return this.prisma.agentRegistrationRequest.findFirst({
+      where: {
+        email: {
+          equals: email,
+          mode: 'insensitive',
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        status: true,
+      },
+    });
+  }
+
   private async assertUserCanLogin(user: {
     id: string;
     email: string;
     role: UserRole;
     isActive: boolean;
+    approvalStatus?: UserApprovalStatus | null;
     companyId: string | null;
   }) {
     if (user.role === UserRole.SUPER_ADMIN) {
@@ -221,12 +242,32 @@ export class AuthService {
     }
 
     const latestRegistration = await this.getLatestRegistrationStatus(user.email);
+    const latestAgentRegistration =
+      user.role === UserRole.AGENT
+        ? await this.getLatestAgentRegistrationStatus(user.email)
+        : null;
+
+    if (user.approvalStatus === UserApprovalStatus.REJECTED) {
+      throw new UnauthorizedException(this.getRejectedApprovalMessage());
+    }
+
+    if (user.approvalStatus === UserApprovalStatus.PENDING) {
+      throw new UnauthorizedException(this.getPendingApprovalMessage());
+    }
 
     if (latestRegistration?.status === CompanyRegistrationStatus.REJECTED) {
       throw new UnauthorizedException(this.getRejectedApprovalMessage());
     }
 
+    if (latestAgentRegistration?.status === AgentRegistrationStatus.REJECTED) {
+      throw new UnauthorizedException(this.getRejectedApprovalMessage());
+    }
+
     if (!user.isActive) {
+      if (latestAgentRegistration?.status === AgentRegistrationStatus.PENDING) {
+        throw new UnauthorizedException(this.getPendingApprovalMessage());
+      }
+
       if (
         latestRegistration?.status === CompanyRegistrationStatus.PENDING_APPROVAL ||
         latestRegistration?.status === CompanyRegistrationStatus.NEEDS_MORE_INFO
@@ -251,14 +292,14 @@ export class AuthService {
       },
     });
 
-    if (!company || !company.isActive || company.status === CompanyStatus.PENDING) {
-      throw new UnauthorizedException(this.getPendingApprovalMessage());
-    }
-
-    if (company.status === CompanyStatus.SUSPENDED) {
+    if (company?.status === CompanyStatus.SUSPENDED) {
       throw new UnauthorizedException(
         'L acces a votre entreprise est suspendu. Veuillez contacter l administration.',
       );
+    }
+
+    if (!company || !company.isActive || company.status === CompanyStatus.PENDING) {
+      throw new UnauthorizedException(this.getPendingApprovalMessage());
     }
   }
 
@@ -382,11 +423,23 @@ export class AuthService {
         passwordHash: true,
         role: true,
         isActive: true,
+        approvalStatus: true,
         companyId: true,
       },
     });
 
     if (!user) {
+      const latestAgentRegistration =
+        await this.getLatestAgentRegistrationStatus(email);
+
+      if (latestAgentRegistration?.status === AgentRegistrationStatus.PENDING) {
+        throw new UnauthorizedException(this.getPendingApprovalMessage());
+      }
+
+      if (latestAgentRegistration?.status === AgentRegistrationStatus.REJECTED) {
+        throw new UnauthorizedException(this.getRejectedApprovalMessage());
+      }
+
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -409,6 +462,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       isActive: user.isActive,
+      approvalStatus: user.approvalStatus,
       companyId: user.companyId,
     });
 
@@ -451,6 +505,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       isActive: user.isActive,
+      approvalStatus: user.approvalStatus,
       companyId: user.companyId,
     });
 

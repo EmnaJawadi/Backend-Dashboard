@@ -11,6 +11,7 @@ import {
 import { Public } from '../../common/decorators/public.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotifyAdminDto } from './dto/notify-admin.dto';
@@ -41,6 +42,14 @@ export class NotificationsController {
     return this.notificationsService.findAll(query, actor);
   }
 
+  @Patch('read-all')
+  markAllAsRead(
+    @Query() query: QueryNotificationsDto,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.notificationsService.markAllAsRead(query, actor);
+  }
+
   @Patch(':id/read')
   markAsRead(
     @Param('id') id: string,
@@ -51,12 +60,14 @@ export class NotificationsController {
 
   @Post('agent-assigned')
   @Public()
+  @UseGuards(ApiKeyGuard)
   notifyAgentAssigned(@Body() payload: NotifyAgentAssignedDto) {
     return this.notificationsService.notifyAgentAssigned(payload);
   }
 
   @Post('admin')
   @Public()
+  @UseGuards(ApiKeyGuard)
   notifyAdmin(@Body() payload: NotifyAdminDto) {
     return this.notificationsService.notifyAdmin(payload);
   }

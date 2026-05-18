@@ -13,6 +13,10 @@ type MessageWriteData = Partial<MessageEntity> & {
   companyId?: string | null;
   rawPayload?: Prisma.InputJsonValue;
   occurredAt?: Date;
+  caption?: string | null;
+  mediaUrl?: string | null;
+  mediaId?: string | null;
+  mimeType?: string | null;
 };
 
 @Injectable()
@@ -20,7 +24,15 @@ export class MessagesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   private normalizeType(value?: string | null): MessageType {
-    if (value === 'image' || value === 'audio' || value === 'document' || value === 'video') {
+    if (
+      value === 'image' ||
+      value === 'audio' ||
+      value === 'document' ||
+      value === 'video' ||
+      value === 'button' ||
+      value === 'list' ||
+      value === 'unknown'
+    ) {
       return value;
     }
     return 'text';
@@ -93,8 +105,10 @@ export class MessagesRepository {
         senderType,
         content: data.content ?? null,
         messageType: data.type ?? 'text',
-        mediaUrl: null,
-        mimeType: null,
+        caption: data.caption ?? null,
+        mediaId: data.mediaId ?? null,
+        mediaUrl: data.mediaUrl ?? null,
+        mimeType: data.mimeType ?? null,
         rawPayload: this.buildRawPayload(data),
         deliveryStatus: data.status ?? 'sent',
         errorMessage: null,
@@ -113,12 +127,13 @@ export class MessagesRepository {
     return this.toEntity(created);
   }
 
-  async findAll(query: MessageQueryDto) {
+  async findAll(query: MessageQueryDto, companyId?: string) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 20);
 
     const where = {
       ...(query.conversationId ? { conversationId: query.conversationId } : {}),
+      ...(companyId ? { companyId } : {}),
       ...(query.senderType ? { senderType: query.senderType } : {}),
       ...(query.type ? { messageType: query.type } : {}),
       ...(query.status ? { deliveryStatus: query.status } : {}),
@@ -145,8 +160,13 @@ export class MessagesRepository {
     };
   }
 
-  async findById(id: string): Promise<MessageEntity> {
-    const row = await this.prisma.message.findUnique({ where: { id } });
+  async findById(id: string, companyId?: string): Promise<MessageEntity> {
+    const row = await this.prisma.message.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
+    });
 
     if (!row) {
       throw new NotFoundException(`Message with id ${id} not found`);
@@ -158,7 +178,10 @@ export class MessagesRepository {
   async updateStatus(
     id: string,
     status: MessageEntity['status'],
+    companyId?: string,
   ): Promise<MessageEntity> {
+    await this.findById(id, companyId);
+
     const row = await this.prisma.message.update({
       where: { id },
       data: {
@@ -169,7 +192,9 @@ export class MessagesRepository {
     return this.toEntity(row);
   }
 
-  async remove(id: string): Promise<MessageEntity> {
+  async remove(id: string, companyId?: string): Promise<MessageEntity> {
+    await this.findById(id, companyId);
+
     const row = await this.prisma.message.delete({
       where: { id },
     });
@@ -201,7 +226,11 @@ export class MessagesRepository {
           params.direction === 'inbound' ? params.at : undefined,
         lastBotMessageAt: params.senderType === 'bot' ? params.at : undefined,
         lastHumanMessageAt:
-          params.senderType === 'agent' ? params.at : undefined,
+          params.senderType === 'human' ||
+          params.senderType === 'agent' ||
+          params.senderType === 'human_agent'
+            ? params.at
+            : undefined,
         unreadCount:
           params.direction === 'inbound' ? { increment: 1 } : undefined,
         updatedAt: params.at,

@@ -7,8 +7,17 @@ export class LearnFromHumanResponseDto {
   @IsString()
   conversationId!: string;
 
+  @IsOptional()
   @IsString()
-  contactId!: string;
+  contactId?: string;
+
+  @IsOptional()
+  @IsString()
+  customerMessageId?: string;
+
+  @IsOptional()
+  @IsString()
+  humanAnswerMessageId?: string;
 
   @IsOptional()
   @IsString()

@@ -6,6 +6,17 @@ export type GeminiGenerateTextInput = {
   maxOutputTokens?: number;
 };
 
+export type GeminiImageUnderstandingInput = {
+  prompt: string;
+  mimeType: string;
+  data?: string;
+  mediaUrl?: string;
+  systemInstruction?: string;
+  model?: string;
+  temperature?: number;
+  maxOutputTokens?: number;
+};
+
 export type GeminiGenerateTextOutput = {
   text: string;
   model: string;

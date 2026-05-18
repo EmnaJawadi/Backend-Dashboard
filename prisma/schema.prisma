@@ -16,6 +16,12 @@ enum UserRole {
   EMPLOYEE
 }
 
+enum UserApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum CompanyStatus {
   PENDING
   ACTIVE
@@ -29,6 +35,12 @@ enum CompanyRegistrationStatus {
   APPROVED
   REJECTED
   NEEDS_MORE_INFO
+}
+
+enum AgentRegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum SubscriptionStatus {
@@ -54,6 +66,7 @@ enum NotificationPriority {
 
 enum NotificationType {
   COMPANY_REGISTRATION_REQUEST
+  AGENT_REGISTRATION_REQUEST
   AI_LOW_CONFIDENCE
   HANDOFF_REQUIRED
   CUSTOMER_REQUEST_HUMAN
@@ -78,6 +91,12 @@ enum KbArticleSource {
   imported
 }
 
+enum KbSuggestionStatus {
+  pending
+  approved
+  rejected
+}
+
 model User {
   id                         String                       @id @default(uuid())
   companyId                  String?                      @map("company_id")
@@ -86,12 +105,18 @@ model User {
   passwordHash               String                       @map("password_hash")
   role                       UserRole                     @default(AGENT)
   isActive                   Boolean                      @default(true) @map("is_active")
+  approvalStatus             UserApprovalStatus           @default(APPROVED) @map("approval_status")
   createdAt                  DateTime                     @default(now()) @map("created_at")
   updatedAt                  DateTime                     @updatedAt @map("updated_at")
   company                     Company?                     @relation(fields: [companyId], references: [id], onDelete: SetNull)
   auditLogs                  AuditLog[]                   @relation("AuditLogActor")
   reviewedRegistrations      CompanyRegistrationRequest[] @relation("RegistrationReviewedBy")
+  reviewedAgentRegistrations AgentRegistrationRequest[]   @relation("AgentRegistrationReviewedBy")
+  approvedAgentRegistration  AgentRegistrationRequest?    @relation("AgentRegistrationApprovedUser")
+  agentRegistrationRequests  AgentRegistrationRequest[]   @relation("AgentRegistrationUser")
   createdKbArticles          KbArticle[]                  @relation("KbArticleCreator")
+  createdKbSuggestions       KbSuggestion[]               @relation("KbSuggestionCreatedBy")
+  reviewedKbSuggestions      KbSuggestion[]               @relation("KbSuggestionReviewedBy")
   readNotifications          Notification[]               @relation("NotificationReadBy")
 
   @@index([companyId])
@@ -107,6 +132,7 @@ model Company {
   phone                        String?
   website                      String?
   address                      String?
+  emailNotificationsEnabled    Boolean                      @default(false) @map("email_notifications_enabled")
   status                       CompanyStatus                @default(PENDING)
   isActive                     Boolean                      @default(false) @map("is_active")
   createdAt                    DateTime                     @default(now()) @map("created_at")
@@ -122,11 +148,14 @@ model Company {
   auditLogs                    AuditLog[]
   kbArticles                   KbArticle[]
   kbChunks                     KbChunk[]
+  kbSuggestions                KbSuggestion[]
   settings                     Setting[]
   webhookEvents                WebhookEvent[]
   notifications                Notification[]
   whatsappInstances            CompanyWhatsappInstance[]
+  products                     Product[]
   approvedRegistrationRequests CompanyRegistrationRequest[] @relation("ApprovedCompanyRegistration")
+  agentRegistrationRequests    AgentRegistrationRequest[]
 
   @@map("companies")
 }
@@ -160,12 +189,46 @@ model CompanyRegistrationRequest {
   @@map("company_registration_requests")
 }
 
+model AgentRegistrationRequest {
+  id               String                  @id @default(uuid())
+  companyId        String                  @map("company_id")
+  userId           String?                 @map("user_id")
+  fullName         String                  @map("full_name")
+  email            String
+  passwordHash     String                  @map("password_hash")
+  status           AgentRegistrationStatus @default(PENDING)
+  rejectionReason  String?                 @map("rejection_reason")
+  reviewedByUserId String?                 @map("reviewed_by_user_id")
+  approvedUserId   String?                 @unique @map("approved_user_id")
+  approvedAt       DateTime?               @map("approved_at")
+  reviewedAt       DateTime?               @map("reviewed_at")
+  createdAt        DateTime                @default(now()) @map("created_at")
+  updatedAt        DateTime                @updatedAt @map("updated_at")
+  company          Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user             User?                   @relation("AgentRegistrationUser", fields: [userId], references: [id], onDelete: SetNull)
+  reviewedByUser   User?                   @relation("AgentRegistrationReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  approvedUser     User?                   @relation("AgentRegistrationApprovedUser", fields: [approvedUserId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([userId])
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("agent_registration_requests")
+}
+
 model CompanyWhatsappInstance {
   id                    String                   @id @default(uuid())
   companyId             String                   @map("company_id")
   evolutionInstanceName String                   @unique @map("evolution_instance_name")
   whatsappNumber        String?                  @map("whatsapp_number")
+  displayName           String?                  @map("display_name")
+  phoneNumberId         String?                  @map("phone_number_id")
+  businessAccountId     String?                  @map("business_account_id")
+  apiBaseUrl            String?                  @map("api_base_url")
+  apiKey                String?                  @map("api_key")
   connectionStatus      WhatsappConnectionStatus @default(DISCONNECTED) @map("connection_status")
+  lastConnectionError   String?                  @map("last_connection_error")
   connectedAt           DateTime?                @map("connected_at")
   lastSyncAt            DateTime?                @map("last_sync_at")
   createdAt             DateTime                 @default(now()) @map("created_at")
@@ -175,6 +238,44 @@ model CompanyWhatsappInstance {
   @@index([companyId])
   @@index([connectionStatus])
   @@map("company_whatsapp_instances")
+}
+
+model Product {
+  id          String         @id @default(uuid())
+  companyId   String         @map("company_id")
+  name        String
+  description String?
+  category    String?
+  price       Float?
+  currency    String         @default("TND")
+  isAvailable Boolean        @default(true) @map("is_available")
+  status      String         @default("ACTIVE")
+  keywords    String[]       @default([])
+  variants    Json?
+  metadata    Json?
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  images      ProductImage[]
+  aiRuns      AiRun[]        @relation("AiRunMatchedProduct")
+
+  @@index([companyId])
+  @@index([companyId, status])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  imageUrl  String   @map("image_url")
+  altText   String?  @map("alt_text")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
 }
 
 model Subscription {
@@ -273,6 +374,7 @@ model Conversation {
   messages                Message[]
   notifications           Notification[]
   sourceArticles          KbArticle[]       @relation("KbArticleSourceConversation")
+  kbSuggestions           KbSuggestion[]
   aiRuns                  AiRun[]
 
   @@index([companyId])
@@ -302,6 +404,8 @@ model Message {
   senderType        String?      @map("sender_type")
   content           String?
   messageType       String?      @map("message_type")
+  caption           String?
+  mediaId           String?      @map("media_id")
   mediaUrl          String?      @map("media_url")
   mimeType          String?      @map("mime_type")
   rawPayload        Json?        @map("raw_payload")
@@ -311,11 +415,41 @@ model Message {
   messageTimestamp  DateTime?    @map("message_timestamp")
   company           Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
   conversation      Conversation @relation(fields: [conversationId], references: [id])
+  customerSuggestions KbSuggestion[] @relation("KbSuggestionCustomerMessage")
+  humanAnswerSuggestions KbSuggestion[] @relation("KbSuggestionHumanAnswerMessage")
 
   @@index([companyId])
   @@index([conversationId])
   @@index([externalMessageId])
   @@map("messages")
+}
+
+model KbSuggestion {
+  id                   String           @id @default(uuid())
+  companyId            String?          @map("company_id")
+  conversationId       String           @map("conversation_id")
+  customerMessageId    String           @map("customer_message_id")
+  humanAnswerMessageId String           @map("human_answer_message_id")
+  question             String
+  answer               String
+  status               KbSuggestionStatus @default(pending)
+  reviewedBy           String?          @map("reviewed_by")
+  createdBy            String?          @map("created_by")
+  createdAt            DateTime         @default(now()) @map("created_at")
+  reviewedAt           DateTime?        @map("reviewed_at")
+  company              Company?         @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  conversation         Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  customerMessage      Message          @relation("KbSuggestionCustomerMessage", fields: [customerMessageId], references: [id], onDelete: Cascade)
+  humanAnswerMessage   Message          @relation("KbSuggestionHumanAnswerMessage", fields: [humanAnswerMessageId], references: [id], onDelete: Cascade)
+  createdByUser        User?            @relation("KbSuggestionCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
+  reviewedByUser       User?            @relation("KbSuggestionReviewedBy", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([conversationId])
+  @@index([status])
+  @@index([customerMessageId])
+  @@index([humanAnswerMessageId])
+  @@map("kb_suggestions")
 }
 
 model AiRun {
@@ -325,11 +459,16 @@ model AiRun {
   messageId        String       @map("message_id")
   contactId        String?      @map("contact_id")
   inputText        String?      @map("input_text")
+  inputType        String?      @map("input_type")
   outputText       String?      @map("output_text")
   intent           String?
   provider         String?
   model            String?
   status           String?
+  reason           String?
+  shouldSendMessage Boolean?    @map("should_send_message")
+  imageAnalysisResult Json?     @map("image_analysis_result")
+  matchedProductId String?      @map("matched_product_id")
   promptTokens     Int?         @map("prompt_tokens")
   completionTokens Int?         @map("completion_tokens")
   totalTokens      Int?         @map("total_tokens")
@@ -343,10 +482,12 @@ model AiRun {
   company          Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
   conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   contact          Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  matchedProduct   Product?     @relation("AiRunMatchedProduct", fields: [matchedProductId], references: [id], onDelete: SetNull)
 
   @@index([companyId])
   @@index([conversationId])
   @@index([contactId])
+  @@index([matchedProductId])
   @@map("ai_runs")
 }
 

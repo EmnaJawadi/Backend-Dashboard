@@ -4,9 +4,10 @@ import { RagController } from './rag.controller';
 import { RagService } from './rag.service';
 import { PgvectorRetriever } from './retrievers/pgvector.retriever';
 import { RetrievalPolicyService } from './policies/retrieval-policy.service';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, ProductsModule],
   controllers: [RagController],
   providers: [
     RagService,

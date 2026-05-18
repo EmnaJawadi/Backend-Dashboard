@@ -17,6 +17,8 @@ export class WhatsappProviderService {
       to: input.to,
       text: input.text,
       instanceName: input.instanceName,
+      baseUrl: input.apiBaseUrl,
+      apiKey: input.apiKey,
     });
 
     return {
@@ -36,6 +38,8 @@ export class WhatsappProviderService {
       fileName: input.fileName,
       caption: input.caption,
       instanceName: input.instanceName,
+      baseUrl: input.apiBaseUrl,
+      apiKey: input.apiKey,
     });
 
     return {

@@ -54,13 +54,17 @@ export const ModelName = {
   User: 'User',
   Company: 'Company',
   CompanyRegistrationRequest: 'CompanyRegistrationRequest',
+  AgentRegistrationRequest: 'AgentRegistrationRequest',
   CompanyWhatsappInstance: 'CompanyWhatsappInstance',
+  Product: 'Product',
+  ProductImage: 'ProductImage',
   Subscription: 'Subscription',
   Contact: 'Contact',
   ContactNote: 'ContactNote',
   Conversation: 'Conversation',
   ConversationTag: 'ConversationTag',
   Message: 'Message',
+  KbSuggestion: 'KbSuggestion',
   AiRun: 'AiRun',
   AuditLog: 'AuditLog',
   KbArticle: 'KbArticle',
@@ -94,6 +98,7 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   isActive: 'isActive',
+  approvalStatus: 'approvalStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -109,6 +114,7 @@ export const CompanyScalarFieldEnum = {
   phone: 'phone',
   website: 'website',
   address: 'address',
+  emailNotificationsEnabled: 'emailNotificationsEnabled',
   status: 'status',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -143,12 +149,38 @@ export const CompanyRegistrationRequestScalarFieldEnum = {
 export type CompanyRegistrationRequestScalarFieldEnum = (typeof CompanyRegistrationRequestScalarFieldEnum)[keyof typeof CompanyRegistrationRequestScalarFieldEnum]
 
 
+export const AgentRegistrationRequestScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  reviewedByUserId: 'reviewedByUserId',
+  approvedUserId: 'approvedUserId',
+  approvedAt: 'approvedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentRegistrationRequestScalarFieldEnum = (typeof AgentRegistrationRequestScalarFieldEnum)[keyof typeof AgentRegistrationRequestScalarFieldEnum]
+
+
 export const CompanyWhatsappInstanceScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
   evolutionInstanceName: 'evolutionInstanceName',
   whatsappNumber: 'whatsappNumber',
+  displayName: 'displayName',
+  phoneNumberId: 'phoneNumberId',
+  businessAccountId: 'businessAccountId',
+  apiBaseUrl: 'apiBaseUrl',
+  apiKey: 'apiKey',
   connectionStatus: 'connectionStatus',
+  lastConnectionError: 'lastConnectionError',
   connectedAt: 'connectedAt',
   lastSyncAt: 'lastSyncAt',
   createdAt: 'createdAt',
@@ -156,6 +188,39 @@ export const CompanyWhatsappInstanceScalarFieldEnum = {
 } as const
 
 export type CompanyWhatsappInstanceScalarFieldEnum = (typeof CompanyWhatsappInstanceScalarFieldEnum)[keyof typeof CompanyWhatsappInstanceScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  price: 'price',
+  currency: 'currency',
+  isAvailable: 'isAvailable',
+  status: 'status',
+  keywords: 'keywords',
+  variants: 'variants',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductImageScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  imageUrl: 'imageUrl',
+  altText: 'altText',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[keyof typeof ProductImageScalarFieldEnum]
 
 
 export const SubscriptionScalarFieldEnum = {
@@ -262,6 +327,8 @@ export const MessageScalarFieldEnum = {
   senderType: 'senderType',
   content: 'content',
   messageType: 'messageType',
+  caption: 'caption',
+  mediaId: 'mediaId',
   mediaUrl: 'mediaUrl',
   mimeType: 'mimeType',
   rawPayload: 'rawPayload',
@@ -274,6 +341,24 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+export const KbSuggestionScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  conversationId: 'conversationId',
+  customerMessageId: 'customerMessageId',
+  humanAnswerMessageId: 'humanAnswerMessageId',
+  question: 'question',
+  answer: 'answer',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  reviewedAt: 'reviewedAt'
+} as const
+
+export type KbSuggestionScalarFieldEnum = (typeof KbSuggestionScalarFieldEnum)[keyof typeof KbSuggestionScalarFieldEnum]
+
+
 export const AiRunScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
@@ -281,11 +366,16 @@ export const AiRunScalarFieldEnum = {
   messageId: 'messageId',
   contactId: 'contactId',
   inputText: 'inputText',
+  inputType: 'inputType',
   outputText: 'outputText',
   intent: 'intent',
   provider: 'provider',
   model: 'model',
   status: 'status',
+  reason: 'reason',
+  shouldSendMessage: 'shouldSendMessage',
+  imageAnalysisResult: 'imageAnalysisResult',
+  matchedProductId: 'matchedProductId',
   promptTokens: 'promptTokens',
   completionTokens: 'completionTokens',
   totalTokens: 'totalTokens',

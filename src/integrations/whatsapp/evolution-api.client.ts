@@ -1,5 +1,20 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 
+export class EvolutionApiRequestError extends Error {
+  constructor(
+    message: string,
+    readonly statusCode: number | null,
+    readonly responseBody: Record<string, unknown> | null,
+  ) {
+    super(message);
+  }
+}
+
+type EvolutionRequestOptions = {
+  baseUrl?: string | null;
+  apiKey?: string | null;
+};
+
 @Injectable()
 export class EvolutionApiClient {
   private readonly logger = new Logger(EvolutionApiClient.name);
@@ -20,6 +35,8 @@ export class EvolutionApiClient {
     to: string;
     text: string;
     instanceName?: string;
+    baseUrl?: string | null;
+    apiKey?: string | null;
   }): Promise<Record<string, unknown>> {
     return this.postToInstance(
       '/message/sendText',
@@ -28,6 +45,10 @@ export class EvolutionApiClient {
         text: params.text,
       },
       params.instanceName,
+      {
+        baseUrl: params.baseUrl,
+        apiKey: params.apiKey,
+      },
     );
   }
 
@@ -37,6 +58,8 @@ export class EvolutionApiClient {
     fileName?: string;
     caption?: string;
     instanceName?: string;
+    baseUrl?: string | null;
+    apiKey?: string | null;
   }): Promise<Record<string, unknown>> {
     return this.postToInstance(
       '/message/sendMedia',
@@ -49,10 +72,17 @@ export class EvolutionApiClient {
         caption: params.caption ?? '',
       },
       params.instanceName,
+      {
+        baseUrl: params.baseUrl,
+        apiKey: params.apiKey,
+      },
     );
   }
 
-  async createOrEnsureInstance(instanceName: string) {
+  async createOrEnsureInstance(
+    instanceName: string,
+    options?: EvolutionRequestOptions,
+  ) {
     const payloads = [
       {
         instanceName,
@@ -70,7 +100,7 @@ export class EvolutionApiClient {
 
     for (const payload of payloads) {
       try {
-        return await this.request('POST', '/instance/create', payload);
+        return await this.request('POST', '/instance/create', payload, options);
       } catch (error) {
         lastError = error;
       }
@@ -81,35 +111,101 @@ export class EvolutionApiClient {
     );
   }
 
-  async connectInstance(instanceName: string) {
+  async connectInstance(instanceName: string, options?: EvolutionRequestOptions) {
     try {
-      return await this.request('GET', `/instance/connect/${instanceName}`);
+      return await this.request(
+        'GET',
+        `/instance/connect/${instanceName}`,
+        undefined,
+        options,
+      );
     } catch {
-      return this.request('POST', `/instance/connect/${instanceName}`);
+      return this.request(
+        'POST',
+        `/instance/connect/${instanceName}`,
+        undefined,
+        options,
+      );
     }
   }
 
-  async getConnectionState(instanceName: string) {
+  async getQrCode(instanceName: string, options?: EvolutionRequestOptions) {
+    const candidates = [
+      `/instance/connect/${instanceName}`,
+      `/instance/qrcode/${instanceName}`,
+      `/instance/qr/${instanceName}`,
+    ];
+
+    let lastError: unknown = null;
+
+    for (const path of candidates) {
+      try {
+        return await this.request('GET', path, undefined, options);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw (
+      lastError ?? new InternalServerErrorException('Failed to fetch Evolution QR code')
+    );
+  }
+
+  async getConnectionState(
+    instanceName: string,
+    options?: EvolutionRequestOptions,
+  ) {
     try {
-      return await this.request('GET', `/instance/connectionState/${instanceName}`);
+      return await this.request(
+        'GET',
+        `/instance/connectionState/${instanceName}`,
+        undefined,
+        options,
+      );
     } catch {
-      return this.request('GET', `/instance/connection-state/${instanceName}`);
+      return this.request(
+        'GET',
+        `/instance/connection-state/${instanceName}`,
+        undefined,
+        options,
+      );
     }
   }
 
-  async disconnectInstance(instanceName: string) {
+  async disconnectInstance(
+    instanceName: string,
+    options?: EvolutionRequestOptions,
+  ) {
     try {
-      return await this.request('DELETE', `/instance/logout/${instanceName}`);
+      return await this.request(
+        'DELETE',
+        `/instance/logout/${instanceName}`,
+        undefined,
+        options,
+      );
     } catch {
       try {
-        return await this.request('POST', `/instance/logout/${instanceName}`);
+        return await this.request(
+          'POST',
+          `/instance/logout/${instanceName}`,
+          undefined,
+          options,
+        );
       } catch {
-        return this.request('POST', `/instance/disconnect/${instanceName}`);
+        return this.request(
+          'POST',
+          `/instance/disconnect/${instanceName}`,
+          undefined,
+          options,
+        );
       }
     }
   }
 
-  async fetchConnectedNumber(instanceName: string) {
+  async fetchConnectedNumber(
+    instanceName: string,
+    options?: EvolutionRequestOptions,
+  ) {
     const candidates = [
       `/instance/fetchInstances`,
       `/chat/whatsappNumbers/${instanceName}`,
@@ -119,7 +215,7 @@ export class EvolutionApiClient {
 
     for (const path of candidates) {
       try {
-        const payload = await this.request('GET', path);
+        const payload = await this.request('GET', path, undefined, options);
         const number = this.extractPhoneNumber(payload, instanceName);
         if (number) {
           return {
@@ -206,31 +302,43 @@ export class EvolutionApiClient {
     path: string,
     body: Record<string, unknown>,
     instanceName?: string,
+    options?: EvolutionRequestOptions,
   ): Promise<Record<string, unknown>> {
     const resolvedInstance = instanceName ?? this.instance;
     if (!resolvedInstance) {
       throw new InternalServerErrorException('Evolution instance is not configured');
     }
 
-    return this.request('POST', `${path}/${resolvedInstance}`, body);
+    return this.request('POST', `${path}/${resolvedInstance}`, body, options);
   }
 
   private async request(
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     path: string,
     body?: Record<string, unknown>,
+    options?: EvolutionRequestOptions,
   ): Promise<Record<string, unknown>> {
-    if (!this.baseUrl) {
+    const baseUrl = (options?.baseUrl?.trim() || this.baseUrl).replace(/\/+$/, '');
+    const apiKey = options?.apiKey?.trim() || this.apiKey;
+
+    if (!baseUrl) {
       throw new InternalServerErrorException('EVOLUTION_API_URL is missing');
     }
 
-    const url = `${this.baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
+    if (!apiKey) {
+      throw new InternalServerErrorException('EVOLUTION_API_KEY is missing');
+    }
+
+    const url = `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
 
     try {
+      this.logger.log(
+        `Evolution API request: method=${method} path=${path} apiKeyConfigured=${Boolean(apiKey)}`,
+      );
       const response = await fetch(url, {
         method,
         headers: {
-          apikey: this.apiKey,
+          apikey: apiKey,
           ...(body ? { 'Content-Type': 'application/json' } : {}),
         },
         ...(body ? { body: JSON.stringify(body) } : {}),
@@ -243,16 +351,24 @@ export class EvolutionApiClient {
 
       if (!response.ok) {
         this.logger.warn(
-          `Evolution API ${method} ${path} failed ${response.status}: ${JSON.stringify(responseBody)}`,
+          `Evolution API ${method} ${path} failed ${response.status}`,
         );
-        throw new InternalServerErrorException(
+        throw new EvolutionApiRequestError(
           `Evolution API request failed (${response.status})`,
+          response.status,
+          responseBody,
         );
       }
 
+      this.logger.log(
+        `Evolution API response: method=${method} path=${path} status=${response.status}`,
+      );
       return responseBody;
     } catch (error) {
-      if (error instanceof InternalServerErrorException) {
+      if (
+        error instanceof InternalServerErrorException ||
+        error instanceof EvolutionApiRequestError
+      ) {
         throw error;
       }
 

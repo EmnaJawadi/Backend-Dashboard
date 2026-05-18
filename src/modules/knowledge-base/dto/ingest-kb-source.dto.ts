@@ -78,7 +78,7 @@ export class IngestKbSourceDto {
 
   @IsOptional()
   @IsBoolean()
-  autoPublish?: boolean = false;
+  autoPublish?: boolean = true;
 
   @IsOptional()
   @IsObject()

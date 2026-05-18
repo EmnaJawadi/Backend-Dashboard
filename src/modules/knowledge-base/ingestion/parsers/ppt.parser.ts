@@ -24,40 +24,50 @@ export class PptParser {
       );
     }
 
-    const zip = await JSZip.loadAsync(buffer);
-    const slidePaths = Object.keys(zip.files)
-      .filter((path) =>
-        /^ppt[\\/]+slides[\\/]+slide\d+\.xml$/i.test(path),
-      )
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    try {
+      const zip = await JSZip.loadAsync(buffer);
+      const slidePaths = Object.keys(zip.files)
+        .filter((path) =>
+          /^ppt[\\/]+slides[\\/]+slide\d+\.xml$/i.test(path),
+        )
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-    if (slidePaths.length === 0) {
-      throw new BadRequestException(
-        `Unable to parse PowerPoint file: ${filename ?? 'unknown file'}`,
-      );
-    }
-
-    const slidesText: string[] = [];
-
-    for (const path of slidePaths) {
-      const xml = await zip.files[path].async('string');
-      const texts = Array.from(xml.matchAll(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g))
-        .map((match) => decodeXmlEntities(match[1]).trim())
-        .filter(Boolean);
-
-      if (texts.length > 0) {
-        slidesText.push(texts.join(' '));
+      if (slidePaths.length === 0) {
+        throw new BadRequestException(
+          `Unable to parse PowerPoint file: ${filename ?? 'unknown file'}`,
+        );
       }
-    }
 
-    const content = slidesText.join('\n\n').replace(/\s+/g, ' ').trim();
+      const slidesText: string[] = [];
 
-    if (!content) {
+      for (const path of slidePaths) {
+        const xml = await zip.files[path].async('string');
+        const texts = Array.from(xml.matchAll(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g))
+          .map((match) => decodeXmlEntities(match[1]).trim())
+          .filter(Boolean);
+
+        if (texts.length > 0) {
+          slidesText.push(texts.join(' '));
+        }
+      }
+
+      const content = slidesText.join('\n\n').replace(/\s+/g, ' ').trim();
+
+      if (!content) {
+        throw new BadRequestException(
+          `Unable to parse PowerPoint file: ${filename ?? 'unknown file'}`,
+        );
+      }
+
+      return content;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       throw new BadRequestException(
         `Unable to parse PowerPoint file: ${filename ?? 'unknown file'}`,
       );
     }
-
-    return content;
   }
 }

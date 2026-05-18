@@ -14,6 +14,10 @@ export class NormalizedWebhookDto {
   contactName!: string | null;
   messageText!: string | null;
   messageType!: string | null;
+  caption!: string | null;
+  mediaUrl!: string | null;
+  mediaId!: string | null;
+  mimeType!: string | null;
   deliveryStatus!: string | null;
   direction!: 'inbound' | 'outbound' | 'system' | null;
   eventAt!: Date;

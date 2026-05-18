@@ -7,6 +7,7 @@ export interface RetrieverResult {
 export interface RetrieverOptions {
   companyId?: string | null;
   language?: string | null;
+  allowedCategories?: string[];
 }
 
 export interface Retriever {

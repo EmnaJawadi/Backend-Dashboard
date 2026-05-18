@@ -1,81 +1,106 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { PrismaService } from '../../database/prisma/prisma.service';
 import { ContactNoteEntity } from './entities/contact-note.entity';
 
 @Injectable()
 export class ContactNotesRepository {
-  private readonly notes: ContactNoteEntity[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Partial<ContactNoteEntity>): ContactNoteEntity {
+  private toEntity(row: {
+    id: string;
+    companyId: string | null;
+    contactId: string;
+    authorId: string;
+    note: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new ContactNoteEntity({
+      id: row.id,
+      companyId: row.companyId,
+      contactId: row.contactId,
+      content: row.note,
+      authorId: row.authorId,
+      authorName: null,
+      isPinned: false,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    });
+  }
+
+  async create(data: Partial<ContactNoteEntity>): Promise<ContactNoteEntity> {
     const now = new Date();
 
-    const note = new ContactNoteEntity({
-      id: randomUUID(),
-      contactId: data.contactId ?? '',
-      content: data.content?.trim() ?? '',
-      authorId: data.authorId ?? null,
-      authorName: data.authorName ?? null,
-      isPinned: data.isPinned ?? false,
-      createdAt: now,
-      updatedAt: now,
+    const note = await this.prisma.contactNote.create({
+      data: {
+        companyId: data.companyId ?? null,
+        contactId: data.contactId ?? '',
+        authorId: data.authorId ?? '',
+        note: data.content?.trim() ?? '',
+        createdAt: now,
+        updatedAt: now,
+      },
     });
 
-    this.notes.push(note);
-    return note;
+    return this.toEntity(note);
   }
 
-  findAll(contactId?: string): ContactNoteEntity[] {
-    const data = contactId
-      ? this.notes.filter((note) => note.contactId === contactId)
-      : [...this.notes];
+  async findAll(
+    contactId?: string,
+    companyId?: string,
+  ): Promise<ContactNoteEntity[]> {
+    const data = await this.prisma.contactNote.findMany({
+      where: {
+        ...(contactId ? { contactId } : {}),
+        ...(companyId ? { companyId } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+    });
 
-    return data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return data.map((item) => this.toEntity(item));
   }
 
-  findById(id: string): ContactNoteEntity {
-    const note = this.notes.find((item) => item.id === id);
+  async findById(
+    id: string,
+    companyId?: string,
+  ): Promise<ContactNoteEntity> {
+    const note = await this.prisma.contactNote.findFirst({
+      where: {
+        id,
+        ...(companyId ? { companyId } : {}),
+      },
+    });
 
     if (!note) {
       throw new NotFoundException(`Contact note with id ${id} not found`);
     }
 
-    return note;
+    return this.toEntity(note);
   }
 
-  update(id: string, data: Partial<ContactNoteEntity>): ContactNoteEntity {
-    const note = this.findById(id);
+  async update(
+    id: string,
+    data: Partial<ContactNoteEntity>,
+    companyId?: string,
+  ): Promise<ContactNoteEntity> {
+    await this.findById(id, companyId);
 
-    if (data.content !== undefined) {
-      note.content = data.content.trim();
-    }
+    const note = await this.prisma.contactNote.update({
+      where: { id },
+      data: {
+        note: data.content !== undefined ? data.content.trim() : undefined,
+        authorId: data.authorId !== undefined ? data.authorId ?? '' : undefined,
+        updatedAt: new Date(),
+      },
+    });
 
-    if (data.authorId !== undefined) {
-      note.authorId = data.authorId;
-    }
-
-    if (data.authorName !== undefined) {
-      note.authorName = data.authorName;
-    }
-
-    if (data.isPinned !== undefined) {
-      note.isPinned = data.isPinned;
-    }
-
-    note.updatedAt = new Date();
-
-    return note;
+    return this.toEntity(note);
   }
 
-  remove(id: string): ContactNoteEntity {
-    const index = this.notes.findIndex((item) => item.id === id);
+  async remove(id: string, companyId?: string): Promise<ContactNoteEntity> {
+    await this.findById(id, companyId);
+    const deleted = await this.prisma.contactNote.delete({ where: { id } });
 
-    if (index === -1) {
-      throw new NotFoundException(`Contact note with id ${id} not found`);
-    }
-
-    const deleted = this.notes[index];
-    this.notes.splice(index, 1);
-
-    return deleted;
+    return this.toEntity(deleted);
   }
 }

@@ -21,10 +21,12 @@ export class ApiKeyGuard implements CanActivate {
       request.headers['api-key'] ??
       request.headers['x-api_key'];
     const expectedApiKeys = [
+      this.configService.get<string>('BACKEND_API_KEY'),
+      process.env.BACKEND_API_KEY,
       this.configService.get<string>('API_KEY'),
       process.env.API_KEY,
-      this.configService.get<string>('EVOLUTION_API_KEY'),
-      process.env.EVOLUTION_API_KEY,
+      this.configService.get<string>('N8N_WEBHOOK_SECRET'),
+      process.env.N8N_WEBHOOK_SECRET,
     ]
       .map((value) => value?.trim())
       .filter((value): value is string => Boolean(value));

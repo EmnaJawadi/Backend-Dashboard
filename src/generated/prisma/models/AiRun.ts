@@ -49,11 +49,15 @@ export type AiRunMinAggregateOutputType = {
   messageId: string | null
   contactId: string | null
   inputText: string | null
+  inputType: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
   status: string | null
+  reason: string | null
+  shouldSendMessage: boolean | null
+  matchedProductId: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
@@ -71,11 +75,15 @@ export type AiRunMaxAggregateOutputType = {
   messageId: string | null
   contactId: string | null
   inputText: string | null
+  inputType: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
   status: string | null
+  reason: string | null
+  shouldSendMessage: boolean | null
+  matchedProductId: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
@@ -93,11 +101,16 @@ export type AiRunCountAggregateOutputType = {
   messageId: number
   contactId: number
   inputText: number
+  inputType: number
   outputText: number
   intent: number
   provider: number
   model: number
   status: number
+  reason: number
+  shouldSendMessage: number
+  imageAnalysisResult: number
+  matchedProductId: number
   promptTokens: number
   completionTokens: number
   totalTokens: number
@@ -135,11 +148,15 @@ export type AiRunMinAggregateInputType = {
   messageId?: true
   contactId?: true
   inputText?: true
+  inputType?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
   status?: true
+  reason?: true
+  shouldSendMessage?: true
+  matchedProductId?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
@@ -157,11 +174,15 @@ export type AiRunMaxAggregateInputType = {
   messageId?: true
   contactId?: true
   inputText?: true
+  inputType?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
   status?: true
+  reason?: true
+  shouldSendMessage?: true
+  matchedProductId?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
@@ -179,11 +200,16 @@ export type AiRunCountAggregateInputType = {
   messageId?: true
   contactId?: true
   inputText?: true
+  inputType?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
   status?: true
+  reason?: true
+  shouldSendMessage?: true
+  imageAnalysisResult?: true
+  matchedProductId?: true
   promptTokens?: true
   completionTokens?: true
   totalTokens?: true
@@ -290,11 +316,16 @@ export type AiRunGroupByOutputType = {
   messageId: string
   contactId: string | null
   inputText: string | null
+  inputType: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
   status: string | null
+  reason: string | null
+  shouldSendMessage: boolean | null
+  imageAnalysisResult: runtime.JsonValue | null
+  matchedProductId: string | null
   promptTokens: number | null
   completionTokens: number | null
   totalTokens: number | null
@@ -337,11 +368,16 @@ export type AiRunWhereInput = {
   messageId?: Prisma.StringFilter<"AiRun"> | string
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  imageAnalysisResult?: Prisma.JsonNullableFilter<"AiRun">
+  matchedProductId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
@@ -355,6 +391,7 @@ export type AiRunWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   contact?: Prisma.XOR<Prisma.ContactNullableScalarRelationFilter, Prisma.ContactWhereInput> | null
+  matchedProduct?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
 }
 
 export type AiRunOrderByWithRelationInput = {
@@ -364,11 +401,16 @@ export type AiRunOrderByWithRelationInput = {
   messageId?: Prisma.SortOrder
   contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
+  inputType?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
+  reason?: Prisma.SortOrderInput | Prisma.SortOrder
+  shouldSendMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageAnalysisResult?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchedProductId?: Prisma.SortOrderInput | Prisma.SortOrder
   promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   totalTokens?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -382,6 +424,7 @@ export type AiRunOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   conversation?: Prisma.ConversationOrderByWithRelationInput
   contact?: Prisma.ContactOrderByWithRelationInput
+  matchedProduct?: Prisma.ProductOrderByWithRelationInput
 }
 
 export type AiRunWhereUniqueInput = Prisma.AtLeast<{
@@ -394,11 +437,16 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   messageId?: Prisma.StringFilter<"AiRun"> | string
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  imageAnalysisResult?: Prisma.JsonNullableFilter<"AiRun">
+  matchedProductId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
@@ -412,6 +460,7 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   contact?: Prisma.XOR<Prisma.ContactNullableScalarRelationFilter, Prisma.ContactWhereInput> | null
+  matchedProduct?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
 }, "id">
 
 export type AiRunOrderByWithAggregationInput = {
@@ -421,11 +470,16 @@ export type AiRunOrderByWithAggregationInput = {
   messageId?: Prisma.SortOrder
   contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
+  inputType?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
+  reason?: Prisma.SortOrderInput | Prisma.SortOrder
+  shouldSendMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageAnalysisResult?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchedProductId?: Prisma.SortOrderInput | Prisma.SortOrder
   promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   totalTokens?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -453,11 +507,16 @@ export type AiRunScalarWhereWithAggregatesInput = {
   messageId?: Prisma.StringWithAggregatesFilter<"AiRun"> | string
   contactId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  inputType?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   status?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  reason?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  shouldSendMessage?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  imageAnalysisResult?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
+  matchedProductId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableWithAggregatesFilter<"AiRun"> | number | null
@@ -474,11 +533,15 @@ export type AiRunCreateInput = {
   id?: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -492,6 +555,7 @@ export type AiRunCreateInput = {
   company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
   conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
   contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
+  matchedProduct?: Prisma.ProductCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateInput = {
@@ -501,11 +565,16 @@ export type AiRunUncheckedCreateInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -522,11 +591,15 @@ export type AiRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -540,6 +613,7 @@ export type AiRunUpdateInput = {
   company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
   contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
+  matchedProduct?: Prisma.ProductUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateInput = {
@@ -549,11 +623,16 @@ export type AiRunUncheckedUpdateInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -573,11 +652,16 @@ export type AiRunCreateManyInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -594,11 +678,15 @@ export type AiRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -618,11 +706,16 @@ export type AiRunUncheckedUpdateManyInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -652,11 +745,16 @@ export type AiRunCountOrderByAggregateInput = {
   messageId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
+  inputType?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  reason?: Prisma.SortOrder
+  shouldSendMessage?: Prisma.SortOrder
+  imageAnalysisResult?: Prisma.SortOrder
+  matchedProductId?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
@@ -684,11 +782,15 @@ export type AiRunMaxOrderByAggregateInput = {
   messageId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
+  inputType?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  reason?: Prisma.SortOrder
+  shouldSendMessage?: Prisma.SortOrder
+  matchedProductId?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
@@ -706,11 +808,15 @@ export type AiRunMinOrderByAggregateInput = {
   messageId?: Prisma.SortOrder
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
+  inputType?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  reason?: Prisma.SortOrder
+  shouldSendMessage?: Prisma.SortOrder
+  matchedProductId?: Prisma.SortOrder
   promptTokens?: Prisma.SortOrder
   completionTokens?: Prisma.SortOrder
   totalTokens?: Prisma.SortOrder
@@ -768,6 +874,48 @@ export type AiRunUncheckedUpdateManyWithoutCompanyNestedInput = {
   connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
   update?: Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput | Prisma.AiRunUpdateWithWhereUniqueWithoutCompanyInput[]
   updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput | Prisma.AiRunUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunCreateNestedManyWithoutMatchedProductInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput> | Prisma.AiRunCreateWithoutMatchedProductInput[] | Prisma.AiRunUncheckedCreateWithoutMatchedProductInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutMatchedProductInput | Prisma.AiRunCreateOrConnectWithoutMatchedProductInput[]
+  createMany?: Prisma.AiRunCreateManyMatchedProductInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUncheckedCreateNestedManyWithoutMatchedProductInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput> | Prisma.AiRunCreateWithoutMatchedProductInput[] | Prisma.AiRunUncheckedCreateWithoutMatchedProductInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutMatchedProductInput | Prisma.AiRunCreateOrConnectWithoutMatchedProductInput[]
+  createMany?: Prisma.AiRunCreateManyMatchedProductInputEnvelope
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+}
+
+export type AiRunUpdateManyWithoutMatchedProductNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput> | Prisma.AiRunCreateWithoutMatchedProductInput[] | Prisma.AiRunUncheckedCreateWithoutMatchedProductInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutMatchedProductInput | Prisma.AiRunCreateOrConnectWithoutMatchedProductInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutMatchedProductInput | Prisma.AiRunUpsertWithWhereUniqueWithoutMatchedProductInput[]
+  createMany?: Prisma.AiRunCreateManyMatchedProductInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutMatchedProductInput | Prisma.AiRunUpdateWithWhereUniqueWithoutMatchedProductInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutMatchedProductInput | Prisma.AiRunUpdateManyWithWhereWithoutMatchedProductInput[]
+  deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
+}
+
+export type AiRunUncheckedUpdateManyWithoutMatchedProductNestedInput = {
+  create?: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput> | Prisma.AiRunCreateWithoutMatchedProductInput[] | Prisma.AiRunUncheckedCreateWithoutMatchedProductInput[]
+  connectOrCreate?: Prisma.AiRunCreateOrConnectWithoutMatchedProductInput | Prisma.AiRunCreateOrConnectWithoutMatchedProductInput[]
+  upsert?: Prisma.AiRunUpsertWithWhereUniqueWithoutMatchedProductInput | Prisma.AiRunUpsertWithWhereUniqueWithoutMatchedProductInput[]
+  createMany?: Prisma.AiRunCreateManyMatchedProductInputEnvelope
+  set?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  disconnect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  delete?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  connect?: Prisma.AiRunWhereUniqueInput | Prisma.AiRunWhereUniqueInput[]
+  update?: Prisma.AiRunUpdateWithWhereUniqueWithoutMatchedProductInput | Prisma.AiRunUpdateWithWhereUniqueWithoutMatchedProductInput[]
+  updateMany?: Prisma.AiRunUpdateManyWithWhereWithoutMatchedProductInput | Prisma.AiRunUpdateManyWithWhereWithoutMatchedProductInput[]
   deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
 }
 
@@ -855,23 +1003,19 @@ export type AiRunUncheckedUpdateManyWithoutConversationNestedInput = {
   deleteMany?: Prisma.AiRunScalarWhereInput | Prisma.AiRunScalarWhereInput[]
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type AiRunCreateWithoutCompanyInput = {
   id?: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -884,6 +1028,7 @@ export type AiRunCreateWithoutCompanyInput = {
   createdAt: Date | string
   conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
   contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
+  matchedProduct?: Prisma.ProductCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateWithoutCompanyInput = {
@@ -892,11 +1037,16 @@ export type AiRunUncheckedCreateWithoutCompanyInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -945,11 +1095,16 @@ export type AiRunScalarWhereInput = {
   messageId?: Prisma.StringFilter<"AiRun"> | string
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  imageAnalysisResult?: Prisma.JsonNullableFilter<"AiRun">
+  matchedProductId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   promptTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   completionTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
   totalTokens?: Prisma.IntNullableFilter<"AiRun"> | number | null
@@ -962,15 +1117,19 @@ export type AiRunScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"AiRun"> | Date | string
 }
 
-export type AiRunCreateWithoutContactInput = {
+export type AiRunCreateWithoutMatchedProductInput = {
   id?: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -983,6 +1142,89 @@ export type AiRunCreateWithoutContactInput = {
   createdAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
   conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
+  contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
+}
+
+export type AiRunUncheckedCreateWithoutMatchedProductInput = {
+  id?: string
+  companyId?: string | null
+  conversationId: string
+  messageId: string
+  contactId?: string | null
+  inputText?: string | null
+  inputType?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunCreateOrConnectWithoutMatchedProductInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput>
+}
+
+export type AiRunCreateManyMatchedProductInputEnvelope = {
+  data: Prisma.AiRunCreateManyMatchedProductInput | Prisma.AiRunCreateManyMatchedProductInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiRunUpsertWithWhereUniqueWithoutMatchedProductInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiRunUpdateWithoutMatchedProductInput, Prisma.AiRunUncheckedUpdateWithoutMatchedProductInput>
+  create: Prisma.XOR<Prisma.AiRunCreateWithoutMatchedProductInput, Prisma.AiRunUncheckedCreateWithoutMatchedProductInput>
+}
+
+export type AiRunUpdateWithWhereUniqueWithoutMatchedProductInput = {
+  where: Prisma.AiRunWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiRunUpdateWithoutMatchedProductInput, Prisma.AiRunUncheckedUpdateWithoutMatchedProductInput>
+}
+
+export type AiRunUpdateManyWithWhereWithoutMatchedProductInput = {
+  where: Prisma.AiRunScalarWhereInput
+  data: Prisma.XOR<Prisma.AiRunUpdateManyMutationInput, Prisma.AiRunUncheckedUpdateManyWithoutMatchedProductInput>
+}
+
+export type AiRunCreateWithoutContactInput = {
+  id?: string
+  messageId: string
+  inputText?: string | null
+  inputType?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
+  conversation: Prisma.ConversationCreateNestedOneWithoutAiRunsInput
+  matchedProduct?: Prisma.ProductCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateWithoutContactInput = {
@@ -991,11 +1233,16 @@ export type AiRunUncheckedCreateWithoutContactInput = {
   conversationId: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1038,11 +1285,15 @@ export type AiRunCreateWithoutConversationInput = {
   id?: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1055,6 +1306,7 @@ export type AiRunCreateWithoutConversationInput = {
   createdAt: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutAiRunsInput
   contact?: Prisma.ContactCreateNestedOneWithoutAiRunsInput
+  matchedProduct?: Prisma.ProductCreateNestedOneWithoutAiRunsInput
 }
 
 export type AiRunUncheckedCreateWithoutConversationInput = {
@@ -1063,11 +1315,16 @@ export type AiRunUncheckedCreateWithoutConversationInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1112,11 +1369,16 @@ export type AiRunCreateManyCompanyInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1133,11 +1395,15 @@ export type AiRunUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1150,6 +1416,7 @@ export type AiRunUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
   contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
+  matchedProduct?: Prisma.ProductUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateWithoutCompanyInput = {
@@ -1158,11 +1425,16 @@ export type AiRunUncheckedUpdateWithoutCompanyInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1181,11 +1453,128 @@ export type AiRunUncheckedUpdateManyWithoutCompanyInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunCreateManyMatchedProductInput = {
+  id?: string
+  companyId?: string | null
+  conversationId: string
+  messageId: string
+  contactId?: string | null
+  inputText?: string | null
+  inputType?: string | null
+  outputText?: string | null
+  intent?: string | null
+  provider?: string | null
+  model?: string | null
+  status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  promptTokens?: number | null
+  completionTokens?: number | null
+  totalTokens?: number | null
+  latencyMs?: number | null
+  confidenceScore?: number | null
+  blockedReason?: string | null
+  handoffRequired?: boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt: Date | string
+}
+
+export type AiRunUpdateWithoutMatchedProductInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
+  conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
+  contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
+}
+
+export type AiRunUncheckedUpdateWithoutMatchedProductInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  blockedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handoffRequired?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  tagsToApply?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rawResponse?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiRunUncheckedUpdateManyWithoutMatchedProductInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationId?: Prisma.StringFieldUpdateOperationsInput | string
+  messageId?: Prisma.StringFieldUpdateOperationsInput | string
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1204,11 +1593,16 @@ export type AiRunCreateManyContactInput = {
   conversationId: string
   messageId: string
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1225,11 +1619,15 @@ export type AiRunUpdateWithoutContactInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1242,6 +1640,7 @@ export type AiRunUpdateWithoutContactInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutAiRunsNestedInput
+  matchedProduct?: Prisma.ProductUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateWithoutContactInput = {
@@ -1250,11 +1649,16 @@ export type AiRunUncheckedUpdateWithoutContactInput = {
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1273,11 +1677,16 @@ export type AiRunUncheckedUpdateManyWithoutContactInput = {
   conversationId?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1296,11 +1705,16 @@ export type AiRunCreateManyConversationInput = {
   messageId: string
   contactId?: string | null
   inputText?: string | null
+  inputType?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
   status?: string | null
+  reason?: string | null
+  shouldSendMessage?: boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: string | null
   promptTokens?: number | null
   completionTokens?: number | null
   totalTokens?: number | null
@@ -1317,11 +1731,15 @@ export type AiRunUpdateWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1334,6 +1752,7 @@ export type AiRunUpdateWithoutConversationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutAiRunsNestedInput
   contact?: Prisma.ContactUpdateOneWithoutAiRunsNestedInput
+  matchedProduct?: Prisma.ProductUpdateOneWithoutAiRunsNestedInput
 }
 
 export type AiRunUncheckedUpdateWithoutConversationInput = {
@@ -1342,11 +1761,16 @@ export type AiRunUncheckedUpdateWithoutConversationInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1365,11 +1789,16 @@ export type AiRunUncheckedUpdateManyWithoutConversationInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  imageAnalysisResult?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  matchedProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1391,11 +1820,16 @@ export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   messageId?: boolean
   contactId?: boolean
   inputText?: boolean
+  inputType?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
   status?: boolean
+  reason?: boolean
+  shouldSendMessage?: boolean
+  imageAnalysisResult?: boolean
+  matchedProductId?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
@@ -1409,6 +1843,7 @@ export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1418,11 +1853,16 @@ export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   messageId?: boolean
   contactId?: boolean
   inputText?: boolean
+  inputType?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
   status?: boolean
+  reason?: boolean
+  shouldSendMessage?: boolean
+  imageAnalysisResult?: boolean
+  matchedProductId?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
@@ -1436,6 +1876,7 @@ export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1445,11 +1886,16 @@ export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   messageId?: boolean
   contactId?: boolean
   inputText?: boolean
+  inputType?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
   status?: boolean
+  reason?: boolean
+  shouldSendMessage?: boolean
+  imageAnalysisResult?: boolean
+  matchedProductId?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
@@ -1463,6 +1909,7 @@ export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }, ExtArgs["result"]["aiRun"]>
 
 export type AiRunSelectScalar = {
@@ -1472,11 +1919,16 @@ export type AiRunSelectScalar = {
   messageId?: boolean
   contactId?: boolean
   inputText?: boolean
+  inputType?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
   status?: boolean
+  reason?: boolean
+  shouldSendMessage?: boolean
+  imageAnalysisResult?: boolean
+  matchedProductId?: boolean
   promptTokens?: boolean
   completionTokens?: boolean
   totalTokens?: boolean
@@ -1489,21 +1941,24 @@ export type AiRunSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "contactId" | "inputText" | "outputText" | "intent" | "provider" | "model" | "status" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "confidenceScore" | "blockedReason" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
+export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "contactId" | "inputText" | "inputType" | "outputText" | "intent" | "provider" | "model" | "status" | "reason" | "shouldSendMessage" | "imageAnalysisResult" | "matchedProductId" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "confidenceScore" | "blockedReason" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
 export type AiRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }
 export type AiRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }
 export type AiRunIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   contact?: boolean | Prisma.AiRun$contactArgs<ExtArgs>
+  matchedProduct?: boolean | Prisma.AiRun$matchedProductArgs<ExtArgs>
 }
 
 export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1512,6 +1967,7 @@ export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     company: Prisma.$CompanyPayload<ExtArgs> | null
     conversation: Prisma.$ConversationPayload<ExtArgs>
     contact: Prisma.$ContactPayload<ExtArgs> | null
+    matchedProduct: Prisma.$ProductPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1520,11 +1976,16 @@ export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     messageId: string
     contactId: string | null
     inputText: string | null
+    inputType: string | null
     outputText: string | null
     intent: string | null
     provider: string | null
     model: string | null
     status: string | null
+    reason: string | null
+    shouldSendMessage: boolean | null
+    imageAnalysisResult: runtime.JsonValue | null
+    matchedProductId: string | null
     promptTokens: number | null
     completionTokens: number | null
     totalTokens: number | null
@@ -1932,6 +2393,7 @@ export interface Prisma__AiRunClient<T, Null = never, ExtArgs extends runtime.Ty
   company<T extends Prisma.AiRun$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   conversation<T extends Prisma.ConversationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConversationClient<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   contact<T extends Prisma.AiRun$contactArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$contactArgs<ExtArgs>>): Prisma.Prisma__ContactClient<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  matchedProduct<T extends Prisma.AiRun$matchedProductArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiRun$matchedProductArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1967,11 +2429,16 @@ export interface AiRunFieldRefs {
   readonly messageId: Prisma.FieldRef<"AiRun", 'String'>
   readonly contactId: Prisma.FieldRef<"AiRun", 'String'>
   readonly inputText: Prisma.FieldRef<"AiRun", 'String'>
+  readonly inputType: Prisma.FieldRef<"AiRun", 'String'>
   readonly outputText: Prisma.FieldRef<"AiRun", 'String'>
   readonly intent: Prisma.FieldRef<"AiRun", 'String'>
   readonly provider: Prisma.FieldRef<"AiRun", 'String'>
   readonly model: Prisma.FieldRef<"AiRun", 'String'>
   readonly status: Prisma.FieldRef<"AiRun", 'String'>
+  readonly reason: Prisma.FieldRef<"AiRun", 'String'>
+  readonly shouldSendMessage: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly imageAnalysisResult: Prisma.FieldRef<"AiRun", 'Json'>
+  readonly matchedProductId: Prisma.FieldRef<"AiRun", 'String'>
   readonly promptTokens: Prisma.FieldRef<"AiRun", 'Int'>
   readonly completionTokens: Prisma.FieldRef<"AiRun", 'Int'>
   readonly totalTokens: Prisma.FieldRef<"AiRun", 'Int'>
@@ -2418,6 +2885,25 @@ export type AiRun$contactArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.ContactInclude<ExtArgs> | null
   where?: Prisma.ContactWhereInput
+}
+
+/**
+ * AiRun.matchedProduct
+ */
+export type AiRun$matchedProductArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Product
+   */
+  select?: Prisma.ProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Product
+   */
+  omit?: Prisma.ProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductInclude<ExtArgs> | null
+  where?: Prisma.ProductWhereInput
 }
 
 /**

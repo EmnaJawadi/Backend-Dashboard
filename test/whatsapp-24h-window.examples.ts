@@ -13,7 +13,6 @@ const customerWroteTwoHoursAgo = windowService.checkWindow(
 );
 assert.equal(customerWroteTwoHoursAgo.isWithinWindow, true);
 assert.equal(customerWroteTwoHoursAgo.canSendFreeForm, true);
-assert.equal(customerWroteTwoHoursAgo.templateRequired, false);
 
 const customerWroteThirtyHoursAgo = windowService.checkWindow(
   hoursAgo(30),
@@ -21,12 +20,11 @@ const customerWroteThirtyHoursAgo = windowService.checkWindow(
 );
 assert.equal(customerWroteThirtyHoursAgo.isWithinWindow, false);
 assert.equal(customerWroteThirtyHoursAgo.canSendFreeForm, false);
-assert.equal(customerWroteThirtyHoursAgo.templateRequired, true);
-assert.equal(customerWroteThirtyHoursAgo.reason, '24_HOUR_WINDOW_CLOSED');
+assert.equal(customerWroteThirtyHoursAgo.reason, 'WINDOW_EXPIRED');
 
 const templateProvidedOutsideWindow = {
   canSendFreeForm: customerWroteThirtyHoursAgo.canSendFreeForm,
-  templateRequired: customerWroteThirtyHoursAgo.templateRequired,
+  templateRequired: !customerWroteThirtyHoursAgo.canSendFreeForm,
   reason: customerWroteThirtyHoursAgo.reason,
   templateName: 'follow_up_support',
   expectedAction: 'sent_template',

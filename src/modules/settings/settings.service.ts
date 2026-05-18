@@ -9,8 +9,11 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { Prisma } from '../../generated/prisma/client';
 import { QueryPlatformAuditLogsDto } from './dto/query-platform-audit-logs.dto';
 import {
+  UpdateCompanyAiSettingsDto,
   UpdateCompanyAdminSettingsDto,
+  UpdateCompanyPreferencesDto,
   UpdateCompanySettingsDto,
+  UpdateCompanyWorkflowSettingsDto,
 } from './dto/update-company-settings.dto';
 import { UpdatePlatformSettingsDto } from './dto/update-platform-settings.dto';
 import { SettingsRepository } from './settings.repository';
@@ -31,6 +34,41 @@ type AuditPagination = {
   page: number;
   limit: number;
 };
+
+const SAFE_VERIFICATION_MESSAGE =
+  "Nous avons bien recu votre demande. Elle necessite une verification complementaire et notre equipe vous repondra des que possible.";
+
+const FORBIDDEN_CUSTOMER_MESSAGE_PATTERNS = [
+  /agent\s+humain/i,
+  /human\s+agent/i,
+  /\bhandoff\b/i,
+  /escalad/i,
+  /transf(?:ert|erer|ere|eree|erons|erez|eront)/i,
+  /prendre\s+le\s+relais/i,
+  /base\s+de\s+connaissances?/i,
+  /knowledge\s+base/i,
+  /\bRAG\b/i,
+  /l.?ia\s+ne\s+sait/i,
+  /erreur\s+(ia|backend|n8n|systeme|syst[eè]me)/i,
+  /\bn8n\b/i,
+  /\bbackend\b/i,
+];
+
+const FORBIDDEN_BOT_GUIDELINE_PATTERNS = [
+  /ignore(r|z)?\s+les?\s+(regles|r[eè]gles|instructions)/i,
+  /ignore(r|z)?\s+(system|syst[eè]me|developer|securit[eé])/i,
+  /system\s+prompt/i,
+  /developer\s+message/i,
+  /desactiv(er|ez)\s+la\s+securit/i,
+  /company\s*id/i,
+  /autre\s+entreprise/i,
+  /toutes?\s+les?\s+entreprises?/i,
+  /secret/i,
+  /token/i,
+  /api\s*key/i,
+  /cle\s+(gemini|evolution|api)/i,
+  /base\s+de\s+connaissances?\s+globale/i,
+];
 
 @Injectable()
 export class SettingsService {
@@ -80,6 +118,33 @@ export class SettingsService {
     return actor.role === UserRole.SUPER_ADMIN;
   }
 
+  private assertCompanyAdminWriteAccess(actor: AuthenticatedUser): string {
+    if (
+      actor.role !== UserRole.COMPANY_ADMIN &&
+      actor.role !== UserRole.SUPER_ADMIN
+    ) {
+      throw new ForbiddenException('Only a company admin can update company settings');
+    }
+
+    return this.assertAuthenticatedCompanyId(actor);
+  }
+
+  private assertPlatformManagedSettingsAccess(actor: AuthenticatedUser): void {
+    if (!this.isSuperAdmin(actor)) {
+      throw new ForbiddenException(
+        'Technical WhatsApp, AI and workflow settings are managed by the platform',
+      );
+    }
+  }
+
+  private assertAuthenticatedCompanyId(actor: AuthenticatedUser): string {
+    if (!actor.companyId) {
+      throw new ForbiddenException('User is not linked to a company');
+    }
+
+    return actor.companyId;
+  }
+
   private assertScopedCompanyId(
     actor: AuthenticatedUser,
     requestedCompanyId?: string,
@@ -98,13 +163,87 @@ export class SettingsService {
       throw new ForbiddenException('User is not linked to a company');
     }
 
-    if (requestedCompanyId && requestedCompanyId !== actor.companyId) {
+    if (requestedCompanyId) {
       throw new ForbiddenException(
-        'You are not allowed to access settings of another company',
+        'companyId must be resolved from the authenticated user',
       );
     }
 
     return actor.companyId;
+  }
+
+  private normalizeLanguage(value: string): string {
+    const normalized = value.trim().toLowerCase();
+
+    if (['fr', 'fr-fr', 'francais', 'français', 'french'].includes(normalized)) {
+      return 'fr';
+    }
+
+    if (['en', 'en-us', 'english', 'anglais'].includes(normalized)) {
+      return 'en';
+    }
+
+    if (['ar', 'arabe', 'arabic'].includes(normalized)) {
+      return 'ar';
+    }
+
+    return normalized;
+  }
+
+  private normalizeResponseTone(value: string): string {
+    const normalized = value.trim().toLowerCase();
+
+    if (['professionnel', 'professional'].includes(normalized)) {
+      return 'professional';
+    }
+
+    if (['amical', 'friendly'].includes(normalized)) {
+      return 'friendly';
+    }
+
+    if (['formel', 'formal'].includes(normalized)) {
+      return 'formal';
+    }
+
+    if (['concis', 'concise'].includes(normalized)) {
+      return 'concise';
+    }
+
+    return normalized;
+  }
+
+  private assertValidTimezone(timezone: string): void {
+    try {
+      new Intl.DateTimeFormat('en-US', { timeZone: timezone });
+    } catch {
+      throw new BadRequestException('Invalid timezone');
+    }
+  }
+
+  private assertSafeCustomerMessage(value: string, fieldName: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) return trimmed;
+
+    if (FORBIDDEN_CUSTOMER_MESSAGE_PATTERNS.some((pattern) => pattern.test(trimmed))) {
+      throw new BadRequestException(
+        `${fieldName} must not expose internal workflow, AI, RAG or handoff details`,
+      );
+    }
+
+    return trimmed;
+  }
+
+  private assertSafeBotGuidelines(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) return trimmed;
+
+    if (FORBIDDEN_BOT_GUIDELINE_PATTERNS.some((pattern) => pattern.test(trimmed))) {
+      throw new BadRequestException(
+        'Bot guidelines cannot override platform security, tenant isolation or internal AI rules',
+      );
+    }
+
+    return trimmed;
   }
 
   private buildCompanySettingsView(
@@ -120,24 +259,37 @@ export class SettingsService {
         handoffEnabled: settings.aiPolicy.handoffEnabled,
         confidenceThreshold: settings.aiPolicy.confidenceThreshold,
         escalationDelayMinutes: settings.aiPolicy.escalationDelayMinutes,
-        responseTone: settings.aiPolicy.responseTone,
-        language: settings.aiPolicy.language,
+        responseTone: this.normalizeResponseTone(settings.aiPolicy.responseTone),
+        language: this.normalizeLanguage(settings.aiPolicy.language),
         botGuidelines: settings.aiPolicy.botGuidelines,
       },
       workflow: {
         enabled: settings.workflow.enabled,
+        defaultAssigneeId: settings.workflow.defaultAssigneeId,
         defaultAssignment: settings.workflow.defaultAssignment,
         welcomeMessage: settings.workflow.welcomeMessage,
         preHandoffMessage: settings.workflow.preHandoffMessage,
       },
       general: {
+        officialName: settings.general.officialName,
         companyName: settings.general.companyName,
+        displayName: settings.general.displayName,
         supportEmail: settings.general.supportEmail,
-        defaultLanguage: settings.general.defaultLanguage,
+        supportPhone: settings.general.supportPhone,
+        city: settings.general.city,
+        country: settings.general.country,
+        defaultLanguage: this.normalizeLanguage(settings.general.defaultLanguage),
         timezone: settings.general.timezone,
+        emailNotificationsEnabled: settings.general.emailNotificationsEnabled,
         emailNotifications: settings.general.emailNotifications,
       },
-      whatsappProfile: settings.whatsappProfile,
+      whatsappProfile: includeAdminOnlyFields
+        ? settings.whatsappProfile
+        : {
+            businessPhoneNumber: settings.whatsappProfile.businessPhoneNumber,
+            displayName: settings.whatsappProfile.displayName,
+            connectionStatus: settings.whatsappProfile.connectionStatus,
+          },
       readonly: {
         confidenceThreshold: !includeAdminOnlyFields,
       },
@@ -161,6 +313,94 @@ export class SettingsService {
     };
   }
 
+  private buildCompanyPreferencesView(settings: CompanySettingsEntity) {
+    return {
+      officialName: settings.general.officialName,
+      companyName: settings.general.companyName,
+      displayName: settings.general.displayName,
+      supportEmail: settings.general.supportEmail,
+      supportPhone: settings.general.supportPhone,
+      city: settings.general.city,
+      country: settings.general.country,
+      defaultLanguage: this.normalizeLanguage(settings.general.defaultLanguage),
+      timezone: settings.general.timezone,
+      emailNotificationsEnabled: settings.general.emailNotificationsEnabled,
+      emailNotifications: settings.general.emailNotifications,
+      visibleOnlyForCompany: true,
+    };
+  }
+
+  private buildCompanyAiSettingsView(settings: CompanySettingsEntity) {
+    return {
+      enabled: settings.aiPolicy.enabled,
+      handoffEnabled: settings.aiPolicy.handoffEnabled,
+      responseTone: this.normalizeResponseTone(settings.aiPolicy.responseTone),
+      language: this.normalizeLanguage(settings.aiPolicy.language),
+      escalationDelayMinutes: settings.aiPolicy.escalationDelayMinutes,
+      botGuidelines: settings.aiPolicy.botGuidelines,
+      confidenceThresholdManagedByPlatform: true,
+      technicalSettingsManagedByPlatform: true,
+    };
+  }
+
+  private buildCompanyWorkflowSettingsView(settings: CompanySettingsEntity) {
+    return {
+      enabled: settings.workflow.enabled,
+      defaultAssigneeId: settings.workflow.defaultAssigneeId,
+      defaultAssignment: settings.workflow.defaultAssignment,
+      welcomeMessage: settings.workflow.welcomeMessage,
+      verificationMessage:
+        settings.workflow.preHandoffMessage || SAFE_VERIFICATION_MESSAGE,
+    };
+  }
+
+  private async resolveDefaultAssigneePatch(
+    companyId: string,
+    assigneeId: string | null | undefined,
+    wasProvided: boolean,
+  ): Promise<
+    Pick<CompanySettingsEntity['workflow'], 'defaultAssigneeId' | 'defaultAssignment'> | {}
+  > {
+    if (!wasProvided) {
+      return {};
+    }
+
+    if (!assigneeId) {
+      return {
+        defaultAssigneeId: null,
+        defaultAssignment: '',
+      };
+    }
+
+    const assignee = await this.prisma.user.findFirst({
+      where: {
+        id: assigneeId,
+        companyId,
+        isActive: true,
+        approvalStatus: 'APPROVED',
+        role: {
+          in: [UserRole.AGENT, UserRole.EMPLOYEE],
+        },
+      },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+      },
+    });
+
+    if (!assignee) {
+      throw new BadRequestException(
+        'defaultAssigneeId must belong to an active support member of this company',
+      );
+    }
+
+    return {
+      defaultAssigneeId: assignee.id,
+      defaultAssignment: assignee.fullName?.trim() || assignee.email,
+    };
+  }
+
   private async checkDatabaseHealth(): Promise<boolean> {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
@@ -177,11 +417,18 @@ export class SettingsService {
   private async buildIntegrationsHealth(): Promise<PlatformIntegrationHealth[]> {
     const now = new Date().toISOString();
     const dbHealthy = await this.checkDatabaseHealth();
-    const hasRedis = Boolean(process.env.REDIS_URL);
+    const hasRedis = Boolean(
+      process.env.REDIS_URL || process.env.REDIS_HOST || process.env.REDIS_PORT,
+    );
     const hasN8n = Boolean(process.env.N8N_WEBHOOK_URL);
     const hasSmtp = Boolean(process.env.SMTP_HOST);
-    const hasWhatsapp = Boolean(
-      process.env.WHATSAPP_ACCESS_TOKEN || process.env.META_WHATSAPP_TOKEN,
+    const hasEvolution = Boolean(
+      process.env.EVOLUTION_API_URL && process.env.EVOLUTION_API_KEY,
+    );
+    const hasGemini = Boolean(
+      process.env.GEMINI_API_KEY ||
+        process.env.GOOGLE_API_KEY ||
+        process.env.GOOGLE_GENERATIVE_AI_API_KEY,
     );
     const hasStorage = Boolean(
       process.env.S3_ENDPOINT || process.env.MINIO_ENDPOINT,
@@ -207,7 +454,7 @@ export class SettingsService {
         label: 'Redis',
         status: this.asStatus(hasRedis),
         lastCheck: now,
-        message: hasRedis ? 'Configuration detectee' : 'REDIS_URL absent',
+        message: hasRedis ? 'Configuration detectee' : 'Configuration Redis absente',
       },
       {
         key: 'n8n',
@@ -224,13 +471,22 @@ export class SettingsService {
         message: hasSmtp ? 'Serveur SMTP configure' : 'SMTP_HOST absent',
       },
       {
-        key: 'whatsapp_meta',
-        label: 'WhatsApp API / Meta',
-        status: this.asStatus(hasWhatsapp),
+        key: 'evolution_api',
+        label: 'Evolution API / WhatsApp',
+        status: this.asStatus(hasEvolution),
         lastCheck: now,
-        message: hasWhatsapp
-          ? 'Token WhatsApp configure'
-          : 'Token WhatsApp non configure',
+        message: hasEvolution
+          ? 'Configuration Evolution API detectee'
+          : 'EVOLUTION_API_URL ou EVOLUTION_API_KEY absent',
+      },
+      {
+        key: 'gemini_ai',
+        label: 'Google Gemini',
+        status: this.asStatus(hasGemini),
+        lastCheck: now,
+        message: hasGemini
+          ? 'Cle Gemini configuree'
+          : 'Cle Gemini non configuree',
       },
       {
         key: 'file_storage',
@@ -575,6 +831,218 @@ export class SettingsService {
     return this.buildCompanySettingsView(settings, this.isSuperAdmin(actor));
   }
 
+  async getCompanyPreferences(actor: AuthenticatedUser) {
+    const companyId = this.assertAuthenticatedCompanyId(actor);
+    const settings = await this.settingsRepository.getCompanySettings(companyId);
+
+    return this.buildCompanyPreferencesView(settings);
+  }
+
+  async updateCompanyPreferences(
+    actor: AuthenticatedUser,
+    dto: UpdateCompanyPreferencesDto,
+  ) {
+    const companyId = this.assertCompanyAdminWriteAccess(actor);
+    const current = await this.settingsRepository.getCompanySettings(companyId);
+
+    if (dto.timezone) {
+      this.assertValidTimezone(dto.timezone);
+    }
+
+    const updated = await this.settingsRepository.updateCompanySettings(
+      companyId,
+      {
+        general: {
+          ...current.general,
+          ...(dto.officialName !== undefined
+            ? {
+                officialName: dto.officialName.trim(),
+                companyName: dto.officialName.trim(),
+              }
+            : {}),
+          ...(dto.displayName !== undefined
+            ? { displayName: dto.displayName.trim() }
+            : {}),
+          ...(dto.supportEmail !== undefined
+            ? { supportEmail: dto.supportEmail.trim().toLowerCase() }
+            : {}),
+          ...(dto.supportPhone !== undefined
+            ? { supportPhone: dto.supportPhone.trim() }
+            : {}),
+          ...(dto.city !== undefined ? { city: dto.city.trim() } : {}),
+          ...(dto.country !== undefined ? { country: dto.country.trim() } : {}),
+          ...(dto.defaultLanguage !== undefined
+            ? { defaultLanguage: this.normalizeLanguage(dto.defaultLanguage) }
+            : {}),
+          ...(dto.timezone !== undefined ? { timezone: dto.timezone.trim() } : {}),
+          ...(dto.emailNotificationsEnabled !== undefined
+            ? {
+                emailNotificationsEnabled: dto.emailNotificationsEnabled,
+                emailNotifications: dto.emailNotificationsEnabled,
+              }
+            : {}),
+          ...(dto.emailNotifications !== undefined
+            ? {
+                emailNotificationsEnabled: dto.emailNotifications,
+                emailNotifications: dto.emailNotifications,
+              }
+            : {}),
+        },
+      },
+      actor.sub,
+    );
+
+    await this.createAuditLog({
+      actor,
+      action: 'UPDATE_COMPANY_PREFERENCES',
+      companyId,
+      details: { scope: 'company' },
+    });
+
+    return this.buildCompanyPreferencesView(updated);
+  }
+
+  async getCompanyAiSettings(actor: AuthenticatedUser) {
+    this.assertPlatformManagedSettingsAccess(actor);
+    const companyId = this.assertAuthenticatedCompanyId(actor);
+    const settings = await this.settingsRepository.getCompanySettings(companyId);
+
+    return this.buildCompanyAiSettingsView(settings);
+  }
+
+  async updateCompanyAiSettings(
+    actor: AuthenticatedUser,
+    dto: UpdateCompanyAiSettingsDto,
+  ) {
+    this.assertPlatformManagedSettingsAccess(actor);
+    const companyId = this.assertCompanyAdminWriteAccess(actor);
+    const current = await this.settingsRepository.getCompanySettings(companyId);
+
+    const updated = await this.settingsRepository.updateCompanySettings(
+      companyId,
+      {
+        aiPolicy: {
+          ...current.aiPolicy,
+          ...(dto.enabled !== undefined ? { enabled: dto.enabled } : {}),
+          ...(dto.handoffEnabled !== undefined
+            ? { handoffEnabled: dto.handoffEnabled }
+            : {}),
+          ...(dto.escalationDelayMinutes !== undefined
+            ? { escalationDelayMinutes: dto.escalationDelayMinutes }
+            : {}),
+          ...(dto.responseTone !== undefined
+            ? { responseTone: this.normalizeResponseTone(dto.responseTone) }
+            : {}),
+          ...(dto.language !== undefined
+            ? { language: this.normalizeLanguage(dto.language) }
+            : {}),
+          ...(dto.botGuidelines !== undefined
+            ? { botGuidelines: this.assertSafeBotGuidelines(dto.botGuidelines) }
+            : {}),
+        },
+      },
+      actor.sub,
+    );
+
+    await this.createAuditLog({
+      actor,
+      action: 'UPDATE_COMPANY_AI_SETTINGS',
+      companyId,
+      details: { scope: 'company' },
+    });
+
+    return this.buildCompanyAiSettingsView(updated);
+  }
+
+  async getCompanyWorkflowSettings(actor: AuthenticatedUser) {
+    this.assertPlatformManagedSettingsAccess(actor);
+    const companyId = this.assertAuthenticatedCompanyId(actor);
+    const settings = await this.settingsRepository.getCompanySettings(companyId);
+
+    return this.buildCompanyWorkflowSettingsView(settings);
+  }
+
+  async updateCompanyWorkflowSettings(
+    actor: AuthenticatedUser,
+    dto: UpdateCompanyWorkflowSettingsDto,
+  ) {
+    this.assertPlatformManagedSettingsAccess(actor);
+    const companyId = this.assertCompanyAdminWriteAccess(actor);
+    const current = await this.settingsRepository.getCompanySettings(companyId);
+    const assigneePatch = await this.resolveDefaultAssigneePatch(
+      companyId,
+      dto.defaultAssigneeId,
+      Object.prototype.hasOwnProperty.call(dto, 'defaultAssigneeId'),
+    );
+
+    const updated = await this.settingsRepository.updateCompanySettings(
+      companyId,
+      {
+        workflow: {
+          ...current.workflow,
+          ...(dto.enabled !== undefined ? { enabled: dto.enabled } : {}),
+          ...assigneePatch,
+          ...(dto.welcomeMessage !== undefined
+            ? {
+                welcomeMessage: this.assertSafeCustomerMessage(
+                  dto.welcomeMessage,
+                  'welcomeMessage',
+                ),
+              }
+            : {}),
+          ...(dto.verificationMessage !== undefined
+            ? {
+                preHandoffMessage: this.assertSafeCustomerMessage(
+                  dto.verificationMessage,
+                  'verificationMessage',
+                ),
+              }
+            : {}),
+        },
+      },
+      actor.sub,
+    );
+
+    await this.createAuditLog({
+      actor,
+      action: 'UPDATE_COMPANY_WORKFLOW_SETTINGS',
+      companyId,
+      details: { scope: 'company' },
+    });
+
+    return this.buildCompanyWorkflowSettingsView(updated);
+  }
+
+  async listCompanySupportAssignees(actor: AuthenticatedUser) {
+    this.assertPlatformManagedSettingsAccess(actor);
+    const companyId = this.assertAuthenticatedCompanyId(actor);
+    const users = await this.prisma.user.findMany({
+      where: {
+        companyId,
+        isActive: true,
+        approvalStatus: 'APPROVED',
+        role: {
+          in: [UserRole.AGENT, UserRole.EMPLOYEE],
+        },
+      },
+      orderBy: [{ fullName: 'asc' }, { email: 'asc' }],
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    return users.map((user) => ({
+      id: user.id,
+      label: user.fullName?.trim() || user.email,
+      email: user.email,
+      role: user.role,
+      type: 'agent' as const,
+    }));
+  }
+
   async updateCompanySettings(
     actor: AuthenticatedUser,
     dto: UpdateCompanySettingsDto,
@@ -582,6 +1050,45 @@ export class SettingsService {
   ) {
     const companyId = this.assertScopedCompanyId(actor, requestedCompanyId);
     const current = await this.settingsRepository.getCompanySettings(companyId);
+    const companyAdminScope = !this.isSuperAdmin(actor);
+
+    if (companyAdminScope && (dto.aiPolicy || dto.workflow || dto.whatsappProfile)) {
+      throw new ForbiddenException(
+        'Technical WhatsApp, AI and workflow settings are managed by the platform',
+      );
+    }
+
+    if (companyAdminScope && dto.whatsappProfile) {
+      throw new BadRequestException(
+        'WhatsApp profile is managed through secure company WhatsApp endpoints',
+      );
+    }
+
+    if (companyAdminScope && dto.workflow?.defaultAssignment) {
+      throw new BadRequestException(
+        'defaultAssignment must be selected from company support assignees',
+      );
+    }
+
+    if (
+      companyAdminScope &&
+      dto.workflow &&
+      Object.prototype.hasOwnProperty.call(dto.workflow, 'defaultAssigneeId')
+    ) {
+      throw new BadRequestException(
+        'defaultAssigneeId must be updated through the workflow settings endpoint',
+      );
+    }
+
+    if (companyAdminScope && dto.general?.companyName) {
+      throw new BadRequestException(
+        'Official company name is managed by the platform; update displayName instead',
+      );
+    }
+
+    if (dto.general?.timezone) {
+      this.assertValidTimezone(dto.general.timezone);
+    }
 
     const updated = await this.settingsRepository.updateCompanySettings(
       companyId,
@@ -603,6 +1110,15 @@ export class SettingsService {
               aiPolicy: {
                 ...current.aiPolicy,
                 ...dto.aiPolicy,
+                responseTone: dto.aiPolicy.responseTone
+                  ? this.normalizeResponseTone(dto.aiPolicy.responseTone)
+                  : current.aiPolicy.responseTone,
+                language: dto.aiPolicy.language
+                  ? this.normalizeLanguage(dto.aiPolicy.language)
+                  : current.aiPolicy.language,
+                botGuidelines: dto.aiPolicy.botGuidelines
+                  ? this.assertSafeBotGuidelines(dto.aiPolicy.botGuidelines)
+                  : current.aiPolicy.botGuidelines,
               },
             }
           : {}),
@@ -611,6 +1127,18 @@ export class SettingsService {
               workflow: {
                 ...current.workflow,
                 ...dto.workflow,
+                welcomeMessage: dto.workflow.welcomeMessage
+                  ? this.assertSafeCustomerMessage(
+                      dto.workflow.welcomeMessage,
+                      'welcomeMessage',
+                    )
+                  : current.workflow.welcomeMessage,
+                preHandoffMessage: dto.workflow.preHandoffMessage
+                  ? this.assertSafeCustomerMessage(
+                      dto.workflow.preHandoffMessage,
+                      'preHandoffMessage',
+                    )
+                  : current.workflow.preHandoffMessage,
               },
             }
           : {}),
@@ -619,6 +1147,9 @@ export class SettingsService {
               general: {
                 ...current.general,
                 ...dto.general,
+                defaultLanguage: dto.general.defaultLanguage
+                  ? this.normalizeLanguage(dto.general.defaultLanguage)
+                  : current.general.defaultLanguage,
               },
             }
           : {}),

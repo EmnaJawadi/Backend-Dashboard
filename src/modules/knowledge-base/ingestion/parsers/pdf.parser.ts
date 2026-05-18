@@ -8,14 +8,22 @@ export class PdfParser {
       throw new BadRequestException('PDF buffer is empty');
     }
 
-    const parser = new PDFParse({ data: buffer });
-    const parsed = await parser.getText();
-    const content = parsed.text.replace(/\s+/g, ' ').trim();
+    try {
+      const parser = new PDFParse({ data: buffer });
+      const parsed = await parser.getText();
+      const content = parsed.text.replace(/\s+/g, ' ').trim();
 
-    if (!content) {
+      if (!content) {
+        throw new BadRequestException(`Unable to parse PDF file: ${filename ?? 'unknown file'}`);
+      }
+
+      return content;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       throw new BadRequestException(`Unable to parse PDF file: ${filename ?? 'unknown file'}`);
     }
-
-    return content;
   }
 }

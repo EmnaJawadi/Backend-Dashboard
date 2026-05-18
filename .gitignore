@@ -11,8 +11,6 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-#seeds
-prisma/seed.js
 # OS
 .DS_Store
 # env
@@ -58,6 +56,7 @@ pids
 *.pid
 *.seed
 *.pid.lock
+/uploads
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

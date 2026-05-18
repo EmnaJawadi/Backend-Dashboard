@@ -17,13 +17,24 @@ export class AiRunsRepository {
         conversationId: data.conversationId ?? '',
         messageId: data.messageId ?? data.contactId ?? '',
         inputText: data.prompt ?? null,
+        inputType: data.inputType ?? null,
         outputText: data.response ?? null,
         intent: data.intent ?? data.status ?? null,
+        provider: data.provider ?? null,
         model: data.model ?? null,
+        status: data.status ?? null,
+        reason: data.reason ?? null,
+        shouldSendMessage: data.shouldSendMessage ?? null,
+        imageAnalysisResult: data.imageAnalysisResult
+          ? (data.imageAnalysisResult as Prisma.InputJsonValue)
+          : undefined,
+        matchedProductId: data.matchedProductId ?? null,
         promptTokens: data.promptTokens ?? null,
         completionTokens: data.completionTokens ?? null,
         totalTokens: data.tokensUsed ?? null,
         latencyMs: data.latencyMs ?? null,
+        confidenceScore: data.confidenceScore ?? null,
+        blockedReason: data.blockedReason ?? null,
         handoffRequired: data.handoffRequired ?? null,
         tagsToApply: data.tagsToApply
           ? (data.tagsToApply as Prisma.InputJsonValue)

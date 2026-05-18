@@ -145,8 +145,81 @@ export class AdminRepository {
     });
   }
 
+  async activateCompanyAdmins(companyId: string) {
+    return this.prisma.user.updateMany({
+      where: {
+        companyId,
+        role: UserRole.COMPANY_ADMIN,
+      },
+      data: {
+        isActive: true,
+      },
+    });
+  }
+
   async removeCompany(id: string) {
-    return this.prisma.company.delete({ where: { id } });
+    return this.prisma.$transaction(async (tx) => {
+      await tx.companyRegistrationRequest.updateMany({
+        where: { approvedCompanyId: id },
+        data: { approvedCompanyId: null },
+      });
+
+      await tx.subscription.deleteMany({ where: { companyId: id } });
+      await tx.companyWhatsappInstance.deleteMany({ where: { companyId: id } });
+
+      await tx.user.deleteMany({ where: { companyId: id } });
+      await tx.contact.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.contactNote.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.conversation.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.conversationTag.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.message.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.aiRun.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.auditLog.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.kbArticle.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.kbChunk.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.kbSuggestion.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.setting.deleteMany({ where: { companyId: id } });
+      await tx.webhookEvent.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+      await tx.notification.updateMany({
+        where: { companyId: id },
+        data: { companyId: null },
+      });
+
+      return tx.company.delete({ where: { id } });
+    });
   }
 
   async createSubscription(data: Prisma.SubscriptionUncheckedCreateInput) {
