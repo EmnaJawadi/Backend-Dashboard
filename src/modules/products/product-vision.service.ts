@@ -93,51 +93,6 @@ export class ProductVisionService {
     };
   }
 
-  buildReplyFromMatch(result: ProductMatchResult): {
-    answer: string;
-    handoffRequired: boolean;
-    reason: string;
-    tagsToApply: string[];
-  } {
-    if (!result.match) {
-      return {
-        answer:
-          "Je ne peux pas identifier ce produit avec certitude a partir de l'image. Notre equipe va verifier votre demande afin de vous donner une reponse fiable.",
-        handoffRequired: true,
-        reason: result.reason,
-        tagsToApply: ['image', 'product_uncertain', 'handoff'],
-      };
-    }
-
-    const product = result.match.product;
-    const productName = product.name;
-
-    if (product.status !== 'ACTIVE' || !product.isAvailable) {
-      return {
-        answer: `Ce produit correspond a ${productName}, mais il est actuellement indisponible. Notre equipe peut vous proposer une alternative.`,
-        handoffRequired: true,
-        reason: 'matched_product_unavailable',
-        tagsToApply: ['image', 'product_matched', 'unavailable', 'handoff'],
-      };
-    }
-
-    if (product.price === null || product.price === undefined) {
-      return {
-        answer: `Ce produit correspond a ${productName}, mais son prix n'est pas encore renseigne dans notre base. Notre equipe va verifier votre demande pour vous donner une reponse fiable.`,
-        handoffRequired: true,
-        reason: 'matched_product_price_missing',
-        tagsToApply: ['image', 'product_matched', 'price_missing', 'handoff'],
-      };
-    }
-
-    return {
-      answer: `Oui, ce produit correspond a ${productName}. Il est actuellement disponible au prix de ${this.formatPrice(product.price, product.currency)}. Souhaitez-vous passer une commande ?`,
-      handoffRequired: false,
-      reason: 'answered_from_product_database',
-      tagsToApply: ['image', 'product_matched'],
-    };
-  }
-
   private async analyzeImage(input: {
     caption?: string | null;
     mediaUrl?: string | null;
@@ -389,8 +344,4 @@ export class ProductVisionService {
     return Number.isFinite(raw) ? Math.max(0, Math.min(1, raw)) : 0.62;
   }
 
-  private formatPrice(price: number, currency: string): string {
-    const amount = Number.isInteger(price) ? String(price) : price.toFixed(2);
-    return currency === 'TND' ? `${amount} DT` : `${amount} ${currency}`;
-  }
 }

@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../../common/utils/evolution-instance.util';
 import { Prisma } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../database/prisma/prisma.service';
 import { NormalizedWebhookDto } from '../dto/normalized-webhook.dto';
@@ -35,6 +39,44 @@ export class InboundMessagesHandler {
     return { firstName, lastName };
   }
 
+  private async findWhatsappInstanceByName(instanceName: string) {
+    const candidates = buildEvolutionInstanceLookupCandidates(instanceName);
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          include: {
+            company: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    if (exact) {
+      return exact;
+    }
+
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
+      include: {
+        company: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return findMatchingEvolutionInstance(instances, instanceName);
+  }
+
   async handle(payload: NormalizedWebhookDto): Promise<void> {
     const now = payload.eventAt ?? new Date();
     const phone = this.normalizePhone(payload.contactPhone);
@@ -48,23 +90,25 @@ export class InboundMessagesHandler {
       return;
     }
 
-    const companyInstance = await this.prisma.companyWhatsappInstance.findUnique({
-      where: {
-        evolutionInstanceName: instanceName,
-      },
-      select: {
-        companyId: true,
-      },
-    });
+    const companyInstance = await this.findWhatsappInstanceByName(instanceName);
 
     if (!companyInstance?.companyId) {
       this.logger.warn(
-        `Inbound webhook ignored because no company is linked to instance=${instanceName}`,
+        `[WEBHOOK_ERROR] Instance not mapped to company instanceName=${instanceName}`,
       );
-      return;
+      throw new BadRequestException({
+        error: 'Instance not mapped to company',
+        instanceName,
+      });
     }
 
     const companyId = companyInstance.companyId;
+    this.logger.log(
+      `[INSTANCE_FOUND] instanceName=${instanceName} mappedInstance=${companyInstance.evolutionInstanceName}`,
+    );
+    this.logger.log(
+      `[COMPANY_FOUND] companyId=${companyId} companyName=${companyInstance.company?.name ?? 'unknown'}`,
+    );
 
     const existingContact = phone
       ? await this.prisma.contact.findFirst({
@@ -136,6 +180,11 @@ export class InboundMessagesHandler {
         },
       }));
 
+    this.logger.log(`[CONTACT_FOUND_OR_CREATED] contactId=${contact.id}`);
+    this.logger.log(
+      `[CONVERSATION_FOUND_OR_CREATED] conversationId=${conversation.id}`,
+    );
+
     if (payload.externalMessageId) {
       const duplicated = await this.prisma.message.findFirst({
         where: {
@@ -153,7 +202,7 @@ export class InboundMessagesHandler {
       }
     }
 
-    await this.prisma.message.create({
+    const message = await this.prisma.message.create({
       data: {
         companyId,
         conversationId: conversation.id,
@@ -188,7 +237,7 @@ export class InboundMessagesHandler {
     });
 
     this.logger.log(
-      `Inbound message stored: contact=${contact.id} conversation=${conversation.id} externalId=${payload.externalMessageId ?? 'n/a'}`,
+      `[MESSAGE_SAVED] messageId=${message.id} externalMessageId=${payload.externalMessageId ?? 'n/a'} conversationId=${conversation.id}`,
     );
   }
 }

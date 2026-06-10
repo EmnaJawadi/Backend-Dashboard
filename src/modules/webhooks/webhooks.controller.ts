@@ -16,6 +16,7 @@ export class WebhooksController {
   constructor(private readonly webhooksService: WebhooksService) {}
 
   @Post('evolution')
+  @UseGuards(ApiKeyGuard)
   receiveEvolutionWebhook(@Body() payload: EvolutionWebhookDto) {
     return this.webhooksService.receiveEvolutionWebhook(payload);
   }

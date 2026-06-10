@@ -14,16 +14,18 @@
     "start:debug": "nest start --debug --watch",
     "prestart:prod": "node scripts/free-port.js 3001",
     "start:prod": "node dist/src/main.js",
-    "test": "npm run build && node test/flavonation-ai-rag.examples.js && node test/product-image-knowledge.examples.js && node test/company-settings-security.examples.js",
-    "test:settings-security": "npm run build && node test/company-settings-security.examples.js",
-    "test:product-images": "npm run build && node test/product-image-knowledge.examples.js",
-    "test:examples": "npm run build && ts-node test/whatsapp-24h-window.examples.ts && node test/flavonation-ai-rag.examples.js",
-    "prisma:seed": "npm run build && node prisma/seed.js"
+    "test": "npm run test:ai-rag && npm run test:kb:flavonation",
+    "test:ai-rag": "npm run build && ts-node test/ai-rag-smoke-test.ts",
+    "test:kb:flavonation": "npm run build && ts-node test/flavonation-kb-rag-test.ts",
+    "prisma:seed": "npm run build && node prisma/seed.js",
+    "kb:seed:flavonation": "npm run build && node prisma/seed-flavonation-kb.js"
   },
   "prisma": {
     "seed": "npm run prisma:seed"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.79",
+    "@ai-sdk/openai-compatible": "^2.0.48",
     "@aws-sdk/client-s3": "^3.1025.0",
     "@aws-sdk/s3-request-presigner": "^3.1025.0",
     "@google/genai": "^1.48.0",
@@ -36,9 +38,11 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.18",
     "@nestjs/websockets": "^11.1.18",
+    "@openrouter/ai-sdk-provider": "^2.9.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@types/bcrypt": "^6.0.0",
+    "ai": "^6.0.191",
     "bcrypt": "^6.0.0",
     "bullmq": "^5.73.0",
     "class-transformer": "^0.5.1",

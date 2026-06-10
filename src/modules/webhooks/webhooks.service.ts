@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../common/utils/evolution-instance.util';
 import { EvolutionWebhookDto } from './dto/evolution-webhook.dto';
 import { WebhookQueryDto } from './dto/webhook-query.dto';
 import { WebhooksRepository } from './webhooks.repository';
@@ -9,7 +13,8 @@ import { ConversationEventsHandler } from './handlers/conversation-event.handler
 import { NormalizedWebhookDto } from './dto/normalized-webhook.dto';
 import { N8nNormalizedMessageDto } from './dto/n8n-normalized-message.dto';
 import { N8nService } from '../../integrations/n8n/n8n.service';
-import { AiService } from '../ai/ai.service';
+import { AiReplyResponseDto } from '../ai/dto/ai-reply-response.dto';
+import { WorkflowAiService } from '../ai/workflow-ai.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationPriority, NotificationType, Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
@@ -26,7 +31,7 @@ export class WebhooksService {
     private readonly deliveryStatusHandler: DeliveryStatusHandler,
     private readonly conversationEventsHandler: ConversationEventsHandler,
     private readonly n8nService: N8nService,
-    private readonly aiService: AiService,
+    private readonly aiService: WorkflowAiService,
     private readonly notificationsService: NotificationsService,
     private readonly prisma: PrismaService,
   ) {}
@@ -53,7 +58,31 @@ export class WebhooksService {
       messageId: string | null;
     };
   }> {
+    this.logger.log(`[WEBHOOK_RECEIVED] ${this.stringifyForLog(payload)}`);
     const normalized: NormalizedWebhookDto = normalizeEvolutionWebhook(payload);
+    this.logger.log(
+      `[WEBHOOK_NORMALIZED] ${this.stringifyForLog({
+        instanceName: normalized.instanceName,
+        remoteJid: normalized.conversationExternalId ?? normalized.contactPhone,
+        fromMe: normalized.direction === 'outbound',
+        messageId: normalized.externalMessageId,
+        pushName: normalized.contactName,
+        messageText: normalized.messageText ?? normalized.caption,
+        messageType: normalized.messageType,
+        timestamp: normalized.eventAt,
+      })}`,
+    );
+
+    const missingFields = this.getMissingEvolutionFields(normalized);
+    if (missingFields.length > 0) {
+      const error = {
+        error: 'Missing required fields',
+        missingFields,
+      };
+      this.logger.warn(`[WEBHOOK_ERROR] ${this.stringifyForLog(error)}`);
+      throw new BadRequestException(error);
+    }
+
     const webhookLog = await this.webhooksRepository.createWebhookLog(normalized);
     this.logger.log(
       `Evolution webhook received: instanceName=${normalized.instanceName ?? 'null'} companyId=${webhookLog.companyId ?? 'null'}`,
@@ -376,7 +405,7 @@ export class WebhooksService {
     });
 
     this.logger.log(
-      `n8n AI decision: conversationId=${state.conversation.id} canAnswer=${aiReply.canAnswer} handoffRequired=${aiReply.handoffRequired} canSendFreeForm=${aiReply.canSendFreeForm} reason=${aiReply.reason ?? 'null'} replyLength=${aiReply.reply.length} answerLength=${aiReply.answer.length} aiRunId=${aiReply.aiRunId ?? 'null'}`,
+      `n8n AI decision: conversationId=${state.conversation.id} intent=${aiReply.intent} importance=${aiReply.importance} source=${aiReply.source} canAnswer=${aiReply.canAnswer} handoffRequired=${aiReply.handoffRequired} canSendFreeForm=${aiReply.canSendFreeForm} reason=${aiReply.reason ?? 'null'} replyText="${this.truncateForLog(aiReply.replyText ?? aiReply.reply ?? '', 180)}" replyLength=${aiReply.reply.length} answerLength=${aiReply.answer.length} aiRunId=${aiReply.aiRunId ?? 'null'}`,
     );
 
     const geminiReturnedText = Boolean(
@@ -417,8 +446,20 @@ export class WebhooksService {
         evolutionConfigured: company.evolutionConfigured,
         provider: aiReply.provider,
         model: aiReply.model,
+        intent: aiReply.intent,
+        importance: aiReply.importance,
+        source: aiReply.source,
         sources: aiReply.sources,
+        tagsToApply: aiReply.tagsToApply,
+        needsClarification: aiReply.needsClarification,
+        canAnswer: aiReply.canAnswer,
         confidence: aiReply.confidence,
+        normalizedMessage: aiReply.normalizedMessage,
+        detectedLanguage: aiReply.detectedLanguage,
+        needsRag: aiReply.needsRag,
+        orderIntent: aiReply.orderIntent,
+        orderDetails: aiReply.orderDetails,
+        keywordsForSearch: aiReply.keywordsForSearch,
       });
     }
 
@@ -454,8 +495,20 @@ export class WebhooksService {
         evolutionConfigured: company.evolutionConfigured,
         provider: aiReply.provider,
         model: aiReply.model,
+        intent: aiReply.intent,
+        importance: aiReply.importance,
+        source: aiReply.source,
         sources: aiReply.sources,
+        tagsToApply: aiReply.tagsToApply,
+        needsClarification: aiReply.needsClarification,
+        canAnswer: aiReply.canAnswer,
         confidence: aiReply.confidence,
+        normalizedMessage: aiReply.normalizedMessage,
+        detectedLanguage: aiReply.detectedLanguage,
+        needsRag: aiReply.needsRag,
+        orderIntent: aiReply.orderIntent,
+        orderDetails: aiReply.orderDetails,
+        keywordsForSearch: aiReply.keywordsForSearch,
       });
     }
 
@@ -478,8 +531,20 @@ export class WebhooksService {
       evolutionConfigured: company.evolutionConfigured,
       provider: aiReply.provider,
       model: aiReply.model,
+      intent: aiReply.intent,
+      importance: aiReply.importance,
+      source: aiReply.source,
       sources: aiReply.sources,
+      tagsToApply: aiReply.tagsToApply,
+      needsClarification: aiReply.needsClarification,
+      canAnswer: aiReply.canAnswer,
       confidence: aiReply.confidence,
+      normalizedMessage: aiReply.normalizedMessage,
+      detectedLanguage: aiReply.detectedLanguage,
+      needsRag: aiReply.needsRag,
+      orderIntent: aiReply.orderIntent,
+      orderDetails: aiReply.orderDetails,
+      keywordsForSearch: aiReply.keywordsForSearch,
     });
   }
 
@@ -556,28 +621,110 @@ export class WebhooksService {
     };
   }
 
+  private getMissingEvolutionFields(payload: NormalizedWebhookDto): string[] {
+    if (payload.eventType !== 'inbound_message') {
+      return [];
+    }
+
+    const missingFields: string[] = [];
+    const hasMessageContent = Boolean(
+      payload.messageText?.trim() ||
+        payload.caption?.trim() ||
+        payload.mediaUrl ||
+        payload.mediaId,
+    );
+
+    if (!payload.instanceName?.trim()) {
+      missingFields.push('instanceName');
+    }
+
+    if (
+      !payload.conversationExternalId?.trim() &&
+      !payload.contactPhone?.trim()
+    ) {
+      missingFields.push('remoteJid');
+    }
+
+    if (!hasMessageContent) {
+      missingFields.push('messageText');
+    }
+
+    return missingFields;
+  }
+
+  private async findWhatsappInstanceByName(instanceName: string) {
+    const candidates = buildEvolutionInstanceLookupCandidates(instanceName);
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          select: {
+            companyId: true,
+            evolutionInstanceName: true,
+            apiBaseUrl: true,
+            apiKey: true,
+            company: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    if (exact) {
+      return exact;
+    }
+
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
+      select: {
+        companyId: true,
+        evolutionInstanceName: true,
+        apiBaseUrl: true,
+        apiKey: true,
+        company: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return findMatchingEvolutionInstance(instances, instanceName);
+  }
+
   private async resolveCompanyForInbound(normalized: {
     instanceName: string | null;
     businessPhoneNumber: string | null;
   }) {
     if (normalized.instanceName) {
-      const instance = await this.prisma.companyWhatsappInstance.findUnique({
-        where: { evolutionInstanceName: normalized.instanceName },
-        select: {
-          companyId: true,
-          evolutionInstanceName: true,
-          apiBaseUrl: true,
-          apiKey: true,
-        },
-      });
+      const instance = await this.findWhatsappInstanceByName(
+        normalized.instanceName,
+      );
 
       if (instance?.companyId) {
+        this.logger.log(
+          `[INSTANCE_FOUND] instanceName=${normalized.instanceName} mappedInstance=${instance.evolutionInstanceName}`,
+        );
+        this.logger.log(
+          `[COMPANY_FOUND] companyId=${instance.companyId} companyName=${instance.company?.name ?? 'unknown'}`,
+        );
+
         return {
           companyId: instance.companyId,
           instanceName: instance.evolutionInstanceName,
           evolutionConfigured: this.isEvolutionConfigured(instance),
         };
       }
+
+      this.logger.warn(
+        `[WEBHOOK_ERROR] Instance not mapped to company instanceName=${normalized.instanceName}`,
+      );
     }
 
     const phoneCandidates = this.normalizePhoneCandidates(
@@ -589,7 +736,7 @@ export class WebhooksService {
       return null;
     }
 
-    const instance = await this.prisma.companyWhatsappInstance.findFirst({
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
       where: {
         OR: phoneCandidates.map((phone) => ({ whatsappNumber: phone })),
       },
@@ -600,8 +747,19 @@ export class WebhooksService {
         apiKey: true,
       },
       orderBy: { updatedAt: 'desc' },
+      take: 2,
     });
 
+    if (instances.length !== 1) {
+      if (instances.length > 1) {
+        this.logger.warn(
+          `n8n inbound rejected: ambiguous business phone mapping phone=${normalized.businessPhoneNumber}`,
+        );
+      }
+      return null;
+    }
+
+    const instance = instances[0];
     return instance?.companyId
       ? {
           companyId: instance.companyId,
@@ -752,10 +910,17 @@ export class WebhooksService {
         },
       });
 
+      const shouldResumeAiAutomation =
+        conversation.status === 'human_assigned' &&
+        !conversation.assignedTo &&
+        conversation.handoffRequired === true;
+
       conversation = await tx.conversation.update({
         where: { id: conversation.id },
         data: {
           unreadCount: { increment: 1 },
+          status: shouldResumeAiAutomation ? 'waiting_customer' : undefined,
+          botPaused: shouldResumeAiAutomation ? false : undefined,
           lastMessageAt: params.eventAt,
           lastCustomerMessageAt: params.eventAt,
           updatedAt: new Date(),
@@ -865,25 +1030,45 @@ export class WebhooksService {
     evolutionConfigured?: boolean;
     provider?: string | null;
     model?: string | null;
+    intent?: string | null;
+    importance?: string | null;
+    source?: string | null;
     sources?: string[];
+    tagsToApply?: string[];
+    needsClarification?: boolean;
+    canAnswer?: boolean;
     confidence?: number;
+    normalizedMessage?: string;
+    detectedLanguage?: string;
+    needsRag?: boolean;
+    orderIntent?: boolean;
+    orderDetails?: AiReplyResponseDto['orderDetails'];
+    keywordsForSearch?: string[];
   }) {
     const finalReplyText = params.replyText.trim();
     const shouldSend = params.shouldSendMessage && finalReplyText.length > 0;
     const blockReason = shouldSend ? null : params.reason;
     const humanAssigned = params.humanAssigned ?? false;
+    const canAnswer = params.canAnswer ?? (shouldSend && !params.handoffRequired);
 
     this.logger.log(
-      `n8n response: conversationId=${params.conversationId ?? 'null'} messageId=${params.inboundMessageId ?? 'null'} shouldSend=${shouldSend} replyTextLength=${shouldSend ? finalReplyText.length : 0} handoffRequired=${params.handoffRequired} botPaused=${params.botPaused} humanAssigned=${humanAssigned} blockReason=${blockReason ?? 'null'} instanceName=${params.instanceName ?? 'null'} phoneNumber=${params.phoneNumber ?? 'null'}`,
+      `n8n response: conversationId=${params.conversationId ?? 'null'} messageId=${params.inboundMessageId ?? 'null'} intent=${params.intent ?? 'null'} importance=${params.importance ?? 'null'} source=${params.source ?? 'null'} shouldSend=${shouldSend} replyText="${this.truncateForLog(shouldSend ? finalReplyText : '', 180)}" replyTextLength=${shouldSend ? finalReplyText.length : 0} handoffRequired=${params.handoffRequired} botPaused=${params.botPaused} humanAssigned=${humanAssigned} blockReason=${blockReason ?? 'null'} instanceName=${params.instanceName ?? 'null'} phoneNumber=${params.phoneNumber ?? 'null'}`,
     );
 
     return {
       success: true,
       shouldSend,
       shouldSendMessage: shouldSend,
-      canAnswer: shouldSend,
+      canAnswer,
+      normalizedMessage: params.normalizedMessage ?? '',
+      detectedLanguage: params.detectedLanguage ?? 'unknown',
+      needsRag: params.needsRag ?? false,
+      orderIntent: params.orderIntent ?? false,
+      orderDetails: params.orderDetails ?? null,
+      keywordsForSearch: params.keywordsForSearch ?? [],
       replyText: shouldSend ? finalReplyText : '',
       handoffRequired: params.handoffRequired,
+      needsClarification: params.needsClarification ?? false,
       blockReason,
       conversationId: params.conversationId ?? null,
       companyId: params.companyId ?? null,
@@ -896,7 +1081,11 @@ export class WebhooksService {
       reason: params.reason,
       provider: params.provider ?? null,
       model: params.model ?? null,
+      intent: params.intent ?? null,
+      importance: params.importance ?? null,
+      source: params.source ?? null,
       sources: params.sources ?? [],
+      tagsToApply: params.tagsToApply ?? [],
       confidence: params.confidence ?? 0,
       aiRunId: params.aiRunId ?? null,
       instance: params.instanceName ?? null,
@@ -910,11 +1099,35 @@ export class WebhooksService {
         humanAssigned,
         evolutionConfigured: params.evolutionConfigured ?? false,
         apiKeyAccepted: true,
-        canAnswer: shouldSend,
+        canAnswer,
+        needsClarification: params.needsClarification ?? false,
         shouldSend,
         blockReason,
       },
     };
+  }
+
+  private stringifyForLog(value: unknown, maxLength = 4000): string {
+    try {
+      const serialized = JSON.stringify(value);
+      if (!serialized) {
+        return 'null';
+      }
+
+      return serialized.length > maxLength
+        ? `${serialized.slice(0, maxLength)}...`
+        : serialized;
+    } catch {
+      return '[unserializable payload]';
+    }
+  }
+
+  private truncateForLog(value: string, maxLength = 500): string {
+    const compact = value.replace(/\s+/g, ' ').trim();
+
+    return compact.length > maxLength
+      ? `${compact.slice(0, maxLength)}...`
+      : compact;
   }
 
   private normalizePhoneCandidates(

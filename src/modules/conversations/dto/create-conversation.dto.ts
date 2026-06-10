@@ -2,6 +2,10 @@ import { ConversationStatus } from '../entities/conversation.entity';
 import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
 
 export class CreateConversationDto {
+  @IsOptional()
+  @IsString()
+  companyId?: string;
+
   @IsString()
   contactId!: string;
 

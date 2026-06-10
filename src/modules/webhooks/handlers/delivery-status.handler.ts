@@ -1,4 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../../common/utils/evolution-instance.util';
 import { PrismaService } from '../../../database/prisma/prisma.service';
 import { NormalizedWebhookDto } from '../dto/normalized-webhook.dto';
 
@@ -8,6 +12,38 @@ export class DeliveryStatusHandler {
 
   constructor(private readonly prisma: PrismaService) {}
 
+  private async findCompanyIdByInstance(instanceName: string) {
+    const candidates = buildEvolutionInstanceLookupCandidates(instanceName);
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          select: {
+            companyId: true,
+            evolutionInstanceName: true,
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    if (exact?.companyId) {
+      return exact.companyId;
+    }
+
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
+      select: {
+        companyId: true,
+        evolutionInstanceName: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return findMatchingEvolutionInstance(instances, instanceName)?.companyId ?? null;
+  }
+
   async handle(payload: NormalizedWebhookDto): Promise<void> {
     if (!payload.externalMessageId || !payload.deliveryStatus) {
       this.logger.warn('Delivery webhook skipped because externalMessageId/status is missing');
@@ -15,12 +51,7 @@ export class DeliveryStatusHandler {
     }
 
     const companyId = payload.instanceName
-      ? (
-          await this.prisma.companyWhatsappInstance.findUnique({
-            where: { evolutionInstanceName: payload.instanceName },
-            select: { companyId: true },
-          })
-        )?.companyId ?? null
+      ? await this.findCompanyIdByInstance(payload.instanceName)
       : null;
 
     const message = await this.prisma.message.findFirst({

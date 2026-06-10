@@ -45,8 +45,12 @@ export class ContactsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUser() actor: AuthenticatedUser) {
-    return this.contactsService.findOne(id, actor);
+  findOne(
+    @Param('id') id: string,
+    @Query('companyId') companyId: string | undefined,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.contactsService.findOne(id, actor, companyId);
   }
 
   @Patch(':id')
@@ -67,7 +71,11 @@ export class ContactsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUser() actor: AuthenticatedUser) {
-    return this.contactsService.remove(id, actor);
+  remove(
+    @Param('id') id: string,
+    @Query('companyId') companyId: string | undefined,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.contactsService.remove(id, actor, companyId);
   }
 }

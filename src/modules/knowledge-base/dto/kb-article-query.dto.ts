@@ -30,6 +30,10 @@ export enum SortOrder {
 export class KbArticleQueryDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   @Length(1, 120)
   search?: string;
 

@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../database/prisma/prisma.service';
+import { EmbeddingsService } from '../../knowledge-base/ingestion/embeddings.service';
 import {
   Retriever,
   RetrieverOptions,
@@ -25,9 +26,31 @@ type RawKbChunk = {
   };
 };
 
+type RawVectorKbChunk = {
+  id: string;
+  company_id: string | null;
+  article_id: string;
+  chunk_index: number;
+  chunk_text: string | null;
+  metadata_json: Prisma.JsonValue | null;
+  article_company_id: string | null;
+  article_title: string | null;
+  article_category: string | null;
+  article_tags: Prisma.JsonValue | null;
+  article_language: string | null;
+  article_status: string;
+  article_source_url: string | null;
+  score: number | string | null;
+};
+
 @Injectable()
 export class PgvectorRetriever implements Retriever {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(PgvectorRetriever.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly embeddingsService: EmbeddingsService = new EmbeddingsService(),
+  ) {}
 
   async retrieve(
     query: string,
@@ -45,6 +68,11 @@ export class PgvectorRetriever implements Retriever {
     }
 
     const candidateLimit = Math.max(topK * 100, 1000);
+    const vectorResults = await this.tryRetrieveWithVector(
+      query,
+      candidateLimit,
+      options,
+    );
     const chunks = await this.prisma.kbChunk.findMany({
       where: this.buildWhere(options),
       take: candidateLimit,
@@ -70,14 +98,80 @@ export class PgvectorRetriever implements Retriever {
       },
     });
 
-    return chunks
+    const textResults = chunks
       .map((chunk) => this.scoreChunk(chunk as RawKbChunk, tokens, query))
       .filter((result) => (result.score ?? 0) > 0)
-      .filter((result) =>
-        this.isAllowedCategory(result, options.allowedCategories),
-      )
+      .filter((result) => this.isAllowedCategory(result, options.allowedCategories));
+
+    return this.dedupeByChunkIdKeepingBestScore([...vectorResults, ...textResults])
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, topK);
+  }
+
+  private async tryRetrieveWithVector(
+    query: string,
+    candidateLimit: number,
+    options?: RetrieverOptions,
+  ): Promise<RetrieverResult[]> {
+    try {
+      const companyId = options?.companyId?.trim();
+
+      if (!companyId) {
+        return [];
+      }
+
+      const queryEmbedding = await this.embeddingsService.generateEmbedding(query);
+
+      if (!queryEmbedding.length) {
+        return [];
+      }
+
+      const vectorLiteral = this.toVectorLiteral(queryEmbedding);
+      const languageFilter = options?.language?.trim()
+        ? Prisma.sql`AND (a."language" = ${options.language.trim()} OR a."language" IS NULL)`
+        : Prisma.empty;
+      const rows = await this.prisma.$queryRaw<RawVectorKbChunk[]>(Prisma.sql`
+        SELECT
+          c."id",
+          c."company_id",
+          c."article_id",
+          c."chunk_index",
+          c."chunk_text",
+          c."metadata_json",
+          a."company_id" AS "article_company_id",
+          a."title" AS "article_title",
+          a."category" AS "article_category",
+          a."tags" AS "article_tags",
+          a."language" AS "article_language",
+          a."status" AS "article_status",
+          a."source_url" AS "article_source_url",
+          (1 - (c."embedding_vector" <=> ${vectorLiteral}::vector)) AS "score"
+        FROM "kb_chunks" c
+        INNER JOIN "kb_articles" a ON a."id" = c."article_id"
+        WHERE
+          c."chunk_text" IS NOT NULL
+          AND c."embedding_vector" IS NOT NULL
+          AND a."status" = 'published'
+          AND a."company_id" = ${companyId}
+          AND c."company_id" = ${companyId}
+          ${languageFilter}
+        ORDER BY c."embedding_vector" <=> ${vectorLiteral}::vector
+        LIMIT ${candidateLimit}
+      `);
+
+      return rows
+        .map((row) => this.scoreVectorChunk(row))
+        .filter((result) => (result.score ?? 0) > 0)
+        .filter((result) =>
+          this.isAllowedCategory(result, options?.allowedCategories),
+        );
+    } catch (error) {
+      this.logger.warn(
+        `VECTOR_RAG_FALLBACK reason=${error instanceof Error ? error.message : 'unknown'}`,
+      );
+
+      return [];
+    }
   }
 
   private buildWhere(options?: RetrieverOptions): Prisma.KbChunkWhereInput {
@@ -103,7 +197,7 @@ export class PgvectorRetriever implements Retriever {
         article: { companyId },
       });
       andFilters.push({
-        OR: [{ companyId }, { companyId: null }],
+        companyId,
       });
     }
 
@@ -131,8 +225,12 @@ export class PgvectorRetriever implements Retriever {
     )
       ? 0.12
       : 0;
+    const categoryIntentBonus = this.categoryIntentBonus(
+      query,
+      chunk.article.category,
+    );
     const score = Number(
-      Math.min(1, tokenScore + phraseBonus + titleBonus).toFixed(3),
+      Math.min(1, tokenScore + phraseBonus + titleBonus + categoryIntentBonus).toFixed(3),
     );
 
     return {
@@ -155,17 +253,79 @@ export class PgvectorRetriever implements Retriever {
     };
   }
 
+  private scoreVectorChunk(row: RawVectorKbChunk): RetrieverResult {
+    return {
+      content: row.chunk_text ?? '',
+      score: Number(Number(row.score ?? 0).toFixed(3)),
+      metadata: {
+        id: row.id,
+        chunkId: row.id,
+        articleId: row.article_id,
+        articleTitle: row.article_title,
+        companyId: row.article_company_id ?? row.company_id,
+        category: row.article_category,
+        tags: row.article_tags,
+        chunkIndex: row.chunk_index,
+        language: row.article_language,
+        sourceUrl: row.article_source_url,
+        metadata: row.metadata_json,
+        matchedBy: 'vector',
+      },
+    };
+  }
+
+  private dedupeByChunkIdKeepingBestScore(
+    results: RetrieverResult[],
+  ): RetrieverResult[] {
+    const bestByChunkId = new Map<string, RetrieverResult>();
+    const fallbackResults: RetrieverResult[] = [];
+
+    for (const result of results) {
+      const key = String(result.metadata?.chunkId ?? result.metadata?.id ?? '');
+
+      if (!key) {
+        fallbackResults.push(result);
+        continue;
+      }
+
+      const current = bestByChunkId.get(key);
+
+      if (!current || (result.score ?? 0) > (current.score ?? 0)) {
+        bestByChunkId.set(key, result);
+      }
+    }
+
+    return [...bestByChunkId.values(), ...fallbackResults];
+  }
+
   private tokenize(value: string): string[] {
     const stopWords = new Set([
       'avec',
+      'aux',
+      'au',
       'bonjour',
       'bonsoir',
       'cest',
       'dans',
+      'de',
       'des',
+      'du',
+      'en',
       'est',
       'for',
       'hello',
+      'jaimerais',
+      'je',
+      'l',
+      'la',
+      'le',
+      'connaitre',
+      'quel',
+      'quelle',
+      'quels',
+      'quelles',
+      'qule',
+      'qules',
       'les',
       'nos',
       'notre',
@@ -175,13 +335,17 @@ export class PgvectorRetriever implements Retriever {
       'quels',
       'quelles',
       'salut',
+      'savoir',
       'sont',
+      'souhaite',
       'the',
       'tout',
       'une',
       'vos',
       'vous',
       'votre',
+      'veux',
+      'voudrais',
       '\u0634\u0646\u0648\u0629',
       '\u0634\u0646\u0648',
       '\u0634\u0643\u0648\u0646',
@@ -215,61 +379,83 @@ export class PgvectorRetriever implements Retriever {
 
   private expandTokenSynonyms(token: string): string[] {
     const synonyms: Record<string, string[]> = {
-      service: [
-        'services',
-        'catalogue',
-        'support',
-        'commande',
-        'livraison',
-        'international',
-      ],
-      menu: ['repas', 'plats', 'cuisine'],
-      manger: ['repas', 'plats'],
-      faim: ['repas', 'plats'],
-      nourriture: ['repas', 'plats', 'menu'],
-      plat: ['repas', 'menu'],
-      plats: ['repas', 'menu'],
-      today: ['aujourd', 'jour'],
-      makla: ['repas', 'plats', 'menu'],
-      ma9la: ['repas', 'plats', 'menu'],
+      service: ['services', 'offres', 'prestations', 'support'],
+      services: ['service', 'offres', 'prestations', 'support'],
       produit: ['produits', 'catalogue', 'stock'],
-      produits: ['catalogue', 'stock'],
-      services: ['catalogue', 'support'],
+      produits: ['produit', 'catalogue', 'stock'],
+      article: ['articles', 'catalogue', 'stock'],
+      articles: ['article', 'catalogue', 'stock'],
+      offre: ['offres', 'services', 'produits'],
+      offres: ['offre', 'services', 'produits'],
       catalogue: ['produits', 'services', 'offres'],
+      menu: ['plats', 'repas', 'produits', 'catalogue'],
+      plat: ['menu', 'repas', 'produits', 'catalogue'],
+      plats: ['menu', 'repas', 'produits', 'catalogue'],
+      repas: ['menu', 'plats', 'produits'],
+      makla: ['menu', 'plats', 'repas'],
+      ma9la: ['menu', 'plats', 'repas'],
+      dish: ['menu', 'plats', 'produits'],
+      dishes: ['menu', 'plats', 'produits'],
+      disponible: ['disponibilite', 'stock'],
+      disponibilite: ['disponible', 'stock'],
+      stock: ['disponible', 'disponibilite'],
+      tarif: ['tarifs', 'prix'],
+      tarifs: ['tarif', 'prix'],
+      price: ['prix', 'tarifs'],
+      today: ['aujourd', 'jour'],
       deliver: ['livraison'],
       delivery: ['livraison'],
-      odeur: ['securite', 'alimentaire', 'reclamation', 'anormale'],
-      gout: ['securite', 'alimentaire', 'reclamation', 'etrange'],
-      bizarre: ['anormale', 'etrange', 'securite'],
-      intoxication: ['securite', 'alimentaire', 'reclamation'],
-      allergie: ['securite', 'alimentaire', 'reclamation'],
+      shipping: ['livraison'],
+      payment: ['paiement'],
+      order: ['commande'],
+      commande: ['order', 'ncommandi'],
+      ncommandi: ['commande', 'order'],
+      touslou: ['livraison'],
+      twasslou: ['livraison'],
+      '9addech': ['prix'],
+      '9adech': ['prix'],
+      soum: ['prix'],
+      chrab: ['boissons'],
+      machroub: ['boissons'],
       '\u062a\u0648\u0635\u064a\u0644': ['livraison'],
       '\u062a\u0648\u0635\u0644': ['livraison'],
       '\u062f\u0644\u064a\u0641\u0631\u064a': ['livraison'],
-      '\u0627\u0644\u0645\u0627\u0643\u0644\u0629': [
-        'repas',
-        'plats',
-        'menu',
-      ],
-      '\u0645\u0627\u0643\u0644\u0629': ['repas', 'plats', 'menu'],
-      '\u0627\u0644\u0627\u0643\u0644': ['repas', 'plats', 'menu'],
-      '\u0627\u0644\u0623\u0643\u0644': ['repas', 'plats', 'menu'],
-      '\u0645\u0648\u062c\u0648\u062f\u0629': ['disponibles', 'menu'],
-      '\u0645\u062a\u0648\u0641\u0631\u0629': ['disponibles', 'menu'],
+      '\u0645\u0648\u062c\u0648\u062f': ['disponible', 'stock'],
+      '\u0645\u062a\u0648\u0641\u0631': ['disponible', 'stock'],
       '\u0627\u0644\u064a\u0648\u0645': ['aujourd', 'jour'],
       '\u0642\u062f\u0627\u0634': ['prix'],
       '\u0633\u0648\u0645': ['prix'],
       '\u0627\u0644\u0633\u0639\u0631': ['prix'],
-      '\u0631\u064a\u062d\u0629': ['odeur', 'securite', 'reclamation'],
-      '\u0637\u0639\u0645': ['gout', 'securite', 'reclamation'],
-      '\u062d\u0633\u0627\u0633\u064a\u0629': [
-        'allergie',
-        'securite',
-        'reclamation',
-      ],
     };
 
     return synonyms[token] ?? [];
+  }
+
+  private categoryIntentBonus(query: string, category?: string | null): number {
+    const normalizedQuery = this.normalize(query);
+    const normalizedCategory = this.normalizeCategory(category ?? '');
+    const hasTerm = (terms: string[]) =>
+      terms.some((term) =>
+        new RegExp(`(^|[^\\p{L}\\p{N}])${term}([^\\p{L}\\p{N}]|$)`, 'u').test(
+          normalizedQuery,
+        ),
+      );
+
+    if (
+      normalizedCategory === 'produits' &&
+      hasTerm(['menu', 'plat', 'plats', 'produit', 'produits', 'catalogue', 'dish', 'dishes'])
+    ) {
+      return 0.4;
+    }
+
+    if (
+      normalizedCategory === 'services' &&
+      hasTerm(['service', 'services', 'prestation', 'prestations', 'offre', 'offres'])
+    ) {
+      return 0.4;
+    }
+
+    return 0;
   }
 
   private normalize(value: string): string {
@@ -284,6 +470,11 @@ export class PgvectorRetriever implements Retriever {
     return value
       .split(/[^\p{L}\p{N}]+/u)
       .map((token) => token.trim())
+      .flatMap((token) =>
+        token.length > 4 && token.endsWith('s')
+          ? [token, token.slice(0, -1)]
+          : [token],
+      )
       .filter((token) => [...token].length >= 2);
   }
 
@@ -308,5 +499,15 @@ export class PgvectorRetriever implements Retriever {
 
   private normalizeCategory(value: string): string {
     return this.normalize(value).replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  }
+
+  private toVectorLiteral(values: number[]): string {
+    const dimensions = 1536;
+    const normalized = Array.from({ length: dimensions }, (_, index) => {
+      const value = values[index] ?? 0;
+      return Number.isFinite(value) ? Number(value.toFixed(6)) : 0;
+    });
+
+    return `[${normalized.join(',')}]`;
   }
 }

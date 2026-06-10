@@ -5,14 +5,14 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
-import { AiService } from './ai.service';
 import { AiReplyRequestDto } from './dto/ai-reply-request.dto';
+import { WorkflowAiService } from './workflow-ai.service';
 
 @Controller('ai')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN, UserRole.AGENT)
 export class AiController {
-  constructor(private readonly aiService: AiService) {}
+  constructor(private readonly aiService: WorkflowAiService) {}
 
   @Post('reply')
   generateReply(

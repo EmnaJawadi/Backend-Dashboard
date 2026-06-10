@@ -241,7 +241,10 @@ export class AuthService {
       return;
     }
 
-    const latestRegistration = await this.getLatestRegistrationStatus(user.email);
+    const latestCompanyRegistration =
+      user.role === UserRole.COMPANY_ADMIN
+        ? await this.getLatestRegistrationStatus(user.email)
+        : null;
     const latestAgentRegistration =
       user.role === UserRole.AGENT
         ? await this.getLatestAgentRegistrationStatus(user.email)
@@ -255,22 +258,23 @@ export class AuthService {
       throw new UnauthorizedException(this.getPendingApprovalMessage());
     }
 
-    if (latestRegistration?.status === CompanyRegistrationStatus.REJECTED) {
-      throw new UnauthorizedException(this.getRejectedApprovalMessage());
-    }
-
-    if (latestAgentRegistration?.status === AgentRegistrationStatus.REJECTED) {
-      throw new UnauthorizedException(this.getRejectedApprovalMessage());
-    }
-
     if (!user.isActive) {
+      if (
+        latestCompanyRegistration?.status === CompanyRegistrationStatus.REJECTED ||
+        latestAgentRegistration?.status === AgentRegistrationStatus.REJECTED
+      ) {
+        throw new UnauthorizedException(this.getRejectedApprovalMessage());
+      }
+
       if (latestAgentRegistration?.status === AgentRegistrationStatus.PENDING) {
         throw new UnauthorizedException(this.getPendingApprovalMessage());
       }
 
       if (
-        latestRegistration?.status === CompanyRegistrationStatus.PENDING_APPROVAL ||
-        latestRegistration?.status === CompanyRegistrationStatus.NEEDS_MORE_INFO
+        latestCompanyRegistration?.status ===
+          CompanyRegistrationStatus.PENDING_APPROVAL ||
+        latestCompanyRegistration?.status ===
+          CompanyRegistrationStatus.NEEDS_MORE_INFO
       ) {
         throw new UnauthorizedException(this.getPendingApprovalMessage());
       }

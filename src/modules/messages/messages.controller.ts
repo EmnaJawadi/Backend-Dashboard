@@ -52,7 +52,7 @@ export class MessagesController {
 
   @Post('incoming')
   @UseGuards(ApiKeyGuard)
-  saveIncoming(@Body() payload: SaveMessageDto) {
+  saveIncoming(@Body() payload: Record<string, unknown>) {
     return this.messagesService.saveIncoming(payload);
   }
 

@@ -45,6 +45,10 @@ function toBoolean(value: unknown): boolean | undefined {
 export class IngestKbFileDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   @Length(3, 150)
   title?: string;
 

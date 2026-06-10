@@ -3,6 +3,10 @@ import { IsArray, IsBoolean, IsEmail, IsOptional, IsString } from 'class-validat
 export class UpdateContactDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   firstName?: string;
 
   @IsOptional()

@@ -10,7 +10,7 @@ export class RetrievalPolicyService {
   private readonly minScore = 0.35;
 
   getTopK(): number {
-    return 5;
+    return 8;
   }
 
   getMinScore(): number {
@@ -20,10 +20,10 @@ export class RetrievalPolicyService {
   filter<T extends { score?: number; metadata?: Record<string, unknown> }>(
     results: T[],
     options?: RetrievalFilterOptions,
-  ) {
-    const allowedCategorySet = new Set(
+  ): T[] {
+    const allowedCategories = new Set(
       (options?.allowedCategories ?? []).map((category) =>
-        this.normalizeCategory(category),
+        this.normalize(category),
       ),
     );
 
@@ -32,31 +32,28 @@ export class RetrievalPolicyService {
         return false;
       }
 
-      if (allowedCategorySet.size === 0) {
-        return false;
-      }
-
-      const category = this.normalizeCategory(
+      const category = this.normalize(
         typeof result.metadata?.category === 'string'
           ? result.metadata.category
-          : null,
+          : '',
       );
 
-      if (!category || !allowedCategorySet.has(category)) {
-        return false;
-      }
-
       if (
-        this.isSensitiveCategory(category) &&
-        !this.isSensitiveIntent(options?.intent)
+        allowedCategories.size > 0 &&
+        (!category || !allowedCategories.has(category))
       ) {
         return false;
       }
 
-      if (
-        this.isInternalOnly(result.metadata?.metadata) &&
-        !this.isSensitiveIntent(options?.intent)
-      ) {
+      if (this.isInternalOnly(result.metadata?.metadata)) {
+        return false;
+      }
+
+      if (this.isCustomerFacingFalse(result.metadata?.metadata)) {
+        return false;
+      }
+
+      if (this.isRestrictedCategory(category) && !this.canUseRestrictedEvidence(options?.intent)) {
         return false;
       }
 
@@ -64,40 +61,62 @@ export class RetrievalPolicyService {
     });
   }
 
-  private normalizeCategory(category?: string | null): string {
-    return (category ?? '')
+  rank<T extends { score?: number }>(
+    results: T[],
+    _options?: RetrievalFilterOptions,
+  ): T[] {
+    return [...results].sort((left, right) => (right.score ?? 0) - (left.score ?? 0));
+  }
+
+  private normalize(value: string): string {
+    return value
       .trim()
       .toUpperCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Z0-9]+/g, '_')
+      .replace(/^_|_$/g, '');
   }
 
-  private isSensitiveCategory(category: string): boolean {
+  private isRestrictedCategory(category: string): boolean {
     return [
-      'SECURITE_ALIMENTAIRE',
-      'RECLAMATION',
-      'RECLAMATIONS',
-      'COMPLAINT',
-      'COMPLAINTS',
-      'SAFETY',
-      'SECURITE',
-      'PROCEDURE_INTERNE',
       'INTERNAL',
-      'INTERNE',
+      'PRIVATE',
+      'SECURITY',
+      'LEGAL',
+      'COMPLAINT',
+      'INCIDENT',
+      'FRAUD',
+      'PRIVACY',
     ].includes(category);
   }
 
-  private isSensitiveIntent(intent?: string | null): boolean {
-    return intent === 'FOOD_COMPLAINT';
+  private canUseRestrictedEvidence(intent?: string | null): boolean {
+    return [
+      'COMPLAINT',
+      'INCIDENT',
+      'SECURITY',
+      'LEGAL',
+      'FRAUD',
+      'PRIVACY',
+      'HUMAN_REVIEW_REQUIRED',
+    ].includes(this.normalize(intent ?? ''));
   }
 
   private isInternalOnly(metadata: unknown): boolean {
+    return this.metadataFlag(metadata, 'internalOnly') === true;
+  }
+
+  private isCustomerFacingFalse(metadata: unknown): boolean {
+    return this.metadataFlag(metadata, 'customerFacing') === false;
+  }
+
+  private metadataFlag(metadata: unknown, key: string): boolean | undefined {
     if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
-      return false;
+      return undefined;
     }
 
-    const record = metadata as Record<string, unknown>;
-
-    return record.internalOnly === true;
+    const value = (metadata as Record<string, unknown>)[key];
+    return typeof value === 'boolean' ? value : undefined;
   }
 }

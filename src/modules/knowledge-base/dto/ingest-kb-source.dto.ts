@@ -24,6 +24,10 @@ export enum KbIngestSourceType {
 }
 
 export class IngestKbSourceDto {
+  @IsOptional()
+  @IsString()
+  companyId?: string;
+
   @IsEnum(KbIngestSourceType)
   sourceType!: KbIngestSourceType;
 

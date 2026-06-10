@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { MessageQueryDto } from './dto/message-query.dto';
@@ -95,6 +95,10 @@ export class MessagesRepository {
         })
       )?.companyId ??
       null;
+
+    if (!resolvedCompanyId) {
+      throw new BadRequestException('Message must be linked to a company');
+    }
 
     const created = await this.prisma.message.create({
       data: {

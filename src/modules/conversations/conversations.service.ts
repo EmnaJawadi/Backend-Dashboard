@@ -5,6 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../common/utils/evolution-instance.util';
 import { resolveCompanyScope } from '../../common/utils/company-scope.util';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
@@ -18,6 +22,7 @@ import { UpdateConversationStatusDto } from './dto/update-conversation-status.dt
 import { UpdateConversationContextDto } from './dto/update-conversation-context.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { WorkflowHandoffDto } from './dto/workflow-handoff.dto';
+import { WorkflowOrderIntentDto } from './dto/workflow-order-intent.dto';
 import {
   ConversationEntity,
   ConversationStatus,
@@ -40,6 +45,46 @@ export class ConversationsService {
   private readonly logger = new Logger(ConversationsService.name);
 
   constructor(private readonly prisma: PrismaService) {}
+
+  private async resolveRequiredCompanyId(
+    actor: AuthenticatedUser | undefined,
+    requestedCompanyId?: string | null,
+    action = 'conversations',
+  ): Promise<string> {
+    const actorCompanyId = resolveCompanyScope(actor);
+    const requested = requestedCompanyId?.trim() || null;
+
+    if (actorCompanyId) {
+      if (requested && requested !== actorCompanyId) {
+        throw new BadRequestException(
+          'companyId is resolved from the authenticated user',
+        );
+      }
+
+      return actorCompanyId;
+    }
+
+    if (!requested) {
+      throw new BadRequestException(
+        'companyId is required for strict multi-company conversation operations',
+      );
+    }
+
+    const company = await this.prisma.company.findUnique({
+      where: { id: requested },
+      select: { id: true, name: true, isActive: true, status: true },
+    });
+
+    if (!company) {
+      throw new NotFoundException('Company not found for conversation operation');
+    }
+
+    this.logger.log(
+      `CONVERSATION_COMPANY_SCOPE action=${action} companyId=${company.id} companyName=${company.name} status=${company.status} isActive=${company.isActive}`,
+    );
+
+    return company.id;
+  }
 
   private toEntity(data: {
     id: string;
@@ -260,40 +305,37 @@ export class ConversationsService {
       };
     }
 
-    const [existingMessage, inboundWebhookEventsCount] =
-      await this.prisma.$transaction([
-        this.prisma.message.findFirst({
-          where: {
-            externalMessageId: normalizedMessageId,
-            direction: 'inbound',
-            ...(params.companyId ? { companyId: params.companyId } : {}),
+    const existingMessage = await this.prisma.message.findFirst({
+      where: {
+        externalMessageId: normalizedMessageId,
+        direction: 'inbound',
+        ...(params.companyId ? { companyId: params.companyId } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        conversation: {
+          select: {
+            id: true,
+            companyId: true,
+            contactId: true,
+            assignedTo: true,
+            status: true,
+            botPaused: true,
+            handoffRequired: true,
+            lastCustomerMessageAt: true,
+            lastMessageAt: true,
           },
-          orderBy: { createdAt: 'desc' },
-          include: {
-            conversation: {
-              select: {
-                id: true,
-                companyId: true,
-                contactId: true,
-                assignedTo: true,
-                status: true,
-                botPaused: true,
-                handoffRequired: true,
-                lastCustomerMessageAt: true,
-                lastMessageAt: true,
-              },
-            },
-          },
-        }),
-        this.prisma.webhookEvent.count({
-          where: {
-            externalEventId: normalizedMessageId,
-            eventType: 'inbound_message',
-            ...(params.companyId ? { companyId: params.companyId } : {}),
-            processingStatus: { in: ['pending', 'processed'] },
-          },
-        }),
-      ]);
+        },
+      },
+    });
+    const inboundWebhookEventsCount = await this.prisma.webhookEvent.count({
+      where: {
+        externalEventId: normalizedMessageId,
+        eventType: 'inbound_message',
+        ...(params.companyId ? { companyId: params.companyId } : {}),
+        processingStatus: { in: ['pending', 'processed'] },
+      },
+    });
 
     const isDuplicate =
       inboundWebhookEventsCount > 1 ||
@@ -308,10 +350,20 @@ export class ConversationsService {
   async getOrCreateForWhatsapp(dto: GetOrCreateConversationDto) {
     const resolvedCompanyId = await this.resolveCompanyIdForWhatsapp(dto);
     if (!resolvedCompanyId) {
+      const instanceName = this.normalizeNullableString(
+        dto.instance ?? dto.instanceName,
+      );
+
+      if (instanceName) {
+        throw new BadRequestException({
+          error: 'Instance not mapped to company',
+          instanceName,
+        });
+      }
+
       throw new BadRequestException({
-        code: 'COMPANY_RESOLUTION_FAILED',
-        message:
-          'Unable to resolve company from instance/companyId. Provide companyId or a mapped Evolution instance.',
+        error: 'Missing required fields',
+        missingFields: ['instanceName'],
       });
     }
     const phoneCandidates = this.normalizePhoneCandidates(
@@ -452,6 +504,10 @@ export class ConversationsService {
         });
       } else {
         const shouldPauseBot = this.shouldPauseBotForConversation(conversation);
+        const shouldResumeAiAutomation =
+          conversation.status === 'human_assigned' &&
+          !conversation.assignedTo &&
+          conversation.handoffRequired === true;
         const shouldRefreshInboundTimeline =
           !conversation.lastCustomerMessageAt ||
           eventAt.getTime() > conversation.lastCustomerMessageAt.getTime();
@@ -459,7 +515,12 @@ export class ConversationsService {
         conversation = await tx.conversation.update({
           where: { id: conversation.id },
           data: {
-            botPaused: shouldPauseBot ? true : conversation.botPaused,
+            status: shouldResumeAiAutomation ? 'waiting_customer' : undefined,
+            botPaused: shouldResumeAiAutomation
+              ? false
+              : shouldPauseBot
+                ? true
+                : conversation.botPaused,
             lastCustomerMessageAt: shouldRefreshInboundTimeline
               ? eventAt
               : undefined,
@@ -494,6 +555,12 @@ export class ConversationsService {
     this.logger.log(
       `get-or-create resolved: companyId=${response.companyId ?? 'null'} contactId=${response.contactId} conversationId=${response.conversationId}`,
     );
+    this.logger.log(
+      `[CONTACT_FOUND_OR_CREATED] contactId=${workflowState.contact.id}`,
+    );
+    this.logger.log(
+      `[CONVERSATION_FOUND_OR_CREATED] conversationId=${workflowState.conversation.id}`,
+    );
 
     return response;
   }
@@ -503,7 +570,20 @@ export class ConversationsService {
     actor?: AuthenticatedUser,
   ): Promise<ConversationEntity> {
     const now = new Date();
-    const companyId = resolveCompanyScope(actor);
+    const actorCompanyId = resolveCompanyScope(actor);
+    const requestedCompanyId = createConversationDto.companyId?.trim() || null;
+
+    if (
+      actorCompanyId &&
+      requestedCompanyId &&
+      requestedCompanyId !== actorCompanyId
+    ) {
+      throw new BadRequestException(
+        'companyId is resolved from the authenticated user',
+      );
+    }
+
+    const companyId = actorCompanyId ?? requestedCompanyId ?? undefined;
     const status = this.normalizeStatus(createConversationDto.status);
     const shouldPauseBot =
       status === 'human_assigned' || createConversationDto.botActive === false;
@@ -525,6 +605,16 @@ export class ConversationsService {
     }
 
     const resolvedCompanyId = contact.companyId ?? companyId ?? null;
+
+    if (!resolvedCompanyId) {
+      throw new BadRequestException('Conversation must be linked to a company');
+    }
+
+    if (companyId && resolvedCompanyId !== companyId) {
+      throw new BadRequestException(
+        'Contact does not belong to the requested company',
+      );
+    }
 
     if (createConversationDto.contactName || createConversationDto.phoneNumber) {
       await this.prisma.contact.updateMany({
@@ -589,12 +679,14 @@ export class ConversationsService {
   async findAll(query: ConversationQueryDto, actor?: AuthenticatedUser) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
-    const companyId = resolveCompanyScope(actor);
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      query.companyId,
+      'list_conversations',
+    );
     const andFilters: Prisma.ConversationWhereInput[] = [];
 
-    if (companyId) {
-      andFilters.push({ companyId });
-    }
+    andFilters.push({ companyId });
 
     if (query.search?.trim()) {
       const search = query.search.trim();
@@ -674,11 +766,36 @@ export class ConversationsService {
         messages: {
           orderBy: { createdAt: 'asc' },
         },
+        aiRuns: {
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+          select: {
+            id: true,
+            normalizedMessage: true,
+            detectedLanguage: true,
+            intent: true,
+            outputText: true,
+            responseMode: true,
+            needsRag: true,
+            usedKb: true,
+            canAnswer: true,
+            orderIntent: true,
+            handoffRequired: true,
+            status: true,
+            reason: true,
+            confidenceScore: true,
+            createdAt: true,
+          },
+        },
       },
     });
 
     if (!conversation) {
       throw new NotFoundException(`Conversation with id ${id} not found`);
+    }
+
+    if (!conversation.companyId?.trim()) {
+      throw new BadRequestException('Conversation is not linked to a company');
     }
 
     const entity = this.toEntity(conversation);
@@ -723,6 +840,10 @@ export class ConversationsService {
         lastAiDecision: conversation.lastAiDecision ?? null,
         importantNotes: conversation.importantNotes ?? null,
       },
+      aiRuns: conversation.aiRuns.map((run) => ({
+        ...run,
+        createdAt: run.createdAt.toISOString(),
+      })),
       messages: conversation.messages.map((item) => ({
         id: item.id,
         conversationId: item.conversationId,
@@ -940,6 +1061,137 @@ export class ConversationsService {
     };
   }
 
+  async prepareOrderIntentForWorkflow(dto: WorkflowOrderIntentDto) {
+    if (!dto.orderIntent) {
+      return {
+        success: true,
+        prepared: false,
+        conversationId: dto.conversationId,
+        companyId: dto.companyId,
+        contactId: dto.contactId,
+      };
+    }
+
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        id: dto.conversationId,
+        companyId: dto.companyId,
+        contactId: dto.contactId,
+      },
+      select: {
+        id: true,
+        companyId: true,
+        contactId: true,
+      },
+    });
+
+    const contact = await this.prisma.contact.findFirst({
+      where: {
+        id: dto.contactId,
+        companyId: dto.companyId,
+      },
+      select: {
+        id: true,
+        tags: true,
+      },
+    });
+
+    if (!conversation || !contact) {
+      throw new BadRequestException(
+        'Conversation, company and contact do not match for order preparation',
+      );
+    }
+
+    const existingTags = Array.isArray(contact.tags)
+      ? contact.tags.filter((tag): tag is string => typeof tag === 'string')
+      : [];
+    const requestTags = this.requestTagsForAction(dto.orderDetails?.actionType);
+    const tags = Array.from(new Set([...existingTags, ...requestTags]));
+    const lastAiDecision = JSON.stringify({
+      source: 'workflow_ai',
+      orderIntent: true,
+      intent: dto.intent,
+      normalizedMessage: dto.normalizedMessage,
+      detectedLanguage: dto.detectedLanguage ?? null,
+      orderDetails: dto.orderDetails ?? null,
+      keywordsForSearch: dto.keywordsForSearch ?? [],
+      nextAction: 'prepare_customer_request',
+    });
+
+    await this.prisma.$transaction([
+      this.prisma.conversation.update({
+        where: { id: conversation.id },
+        data: {
+          customerIntent: dto.intent,
+          requestedProductService:
+            dto.orderDetails?.requestedItem?.trim() || undefined,
+          requestedDeliveryDate:
+            dto.orderDetails?.requestedDate?.trim() || undefined,
+          deliveryAddress: dto.orderDetails?.address?.trim() || undefined,
+          nextAction: 'prepare_customer_request',
+          lastAiDecision,
+          updatedAt: new Date(),
+        },
+      }),
+      this.prisma.contact.update({
+        where: { id: contact.id },
+        data: {
+          tags,
+          updatedAt: new Date(),
+        },
+      }),
+      ...requestTags.map((tag) =>
+        this.prisma.conversationTag.upsert({
+          where: {
+            conversationId_tag: {
+              conversationId: conversation.id,
+              tag,
+            },
+          },
+          update: {
+            companyId: dto.companyId,
+          },
+          create: {
+            companyId: dto.companyId,
+            conversationId: conversation.id,
+            tag,
+            createdAt: new Date(),
+          },
+        }),
+      ),
+    ]);
+
+    this.logger.log(
+      `ORDER_INTENT_PREPARED conversationId=${conversation.id} companyId=${conversation.companyId ?? 'null'} contactId=${conversation.contactId}`,
+    );
+
+    return {
+      success: true,
+      prepared: true,
+      conversationId: conversation.id,
+      companyId: conversation.companyId,
+      contactId: conversation.contactId,
+      nextAction: 'prepare_customer_request',
+      tags,
+    };
+  }
+
+  private requestTagsForAction(actionType?: string | null): string[] {
+    const normalized = (actionType ?? '').trim().toLowerCase();
+    const tag =
+      normalized === 'reservation' || normalized === 'booking'
+        ? 'demande_reservation'
+        : normalized === 'appointment' || normalized === 'rendez_vous'
+          ? 'demande_rendez_vous'
+          : normalized === 'quote_request' || normalized === 'quote'
+            ? 'demande_devis'
+            : normalized === 'order' || normalized === 'purchase'
+              ? 'demande_commande'
+              : null;
+
+    return tag ? ['demande_client', tag] : ['demande_client'];
+  }
+
   async reactivateBot(
     id: string,
     reactivateBotDto: ReactivateBotDto,
@@ -1008,6 +1260,10 @@ export class ConversationsService {
 
     if (!conversation) {
       throw new NotFoundException(`Conversation with id ${id} not found`);
+    }
+
+    if (!conversation.companyId?.trim()) {
+      throw new BadRequestException('Conversation is not linked to a company');
     }
 
     return {
@@ -1105,35 +1361,87 @@ export class ConversationsService {
     };
   }
 
-  private async resolveCompanyIdForWhatsapp(dto: GetOrCreateConversationDto) {
-    const requestedCompanyId = this.normalizeNullableString(dto.companyId);
-    if (requestedCompanyId) {
-      const company = await this.prisma.company.findUnique({
-        where: { id: requestedCompanyId },
-        select: { id: true },
-      });
+  private async findWhatsappInstanceByName(instanceName: string) {
+    const candidates = buildEvolutionInstanceLookupCandidates(instanceName);
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          include: {
+            company: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
 
-      if (company?.id) {
-        return company.id;
-      }
-
-      this.logger.warn(
-        `get-or-create ignored invalid companyId=${requestedCompanyId}`,
-      );
+    if (exact) {
+      return exact;
     }
 
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
+      include: {
+        company: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return findMatchingEvolutionInstance(instances, instanceName);
+  }
+
+  private async resolveCompanyIdForWhatsapp(dto: GetOrCreateConversationDto) {
+    const requestedCompanyId = this.normalizeNullableString(dto.companyId);
     const instanceName = this.normalizeNullableString(
       dto.instance ?? dto.instanceName,
     );
-    if (!instanceName) {
+    if (instanceName) {
+      const mapping = await this.findWhatsappInstanceByName(instanceName);
+
+      if (!mapping?.companyId) {
+        this.logger.warn(
+          `[WEBHOOK_ERROR] Instance not mapped to company instanceName=${instanceName}`,
+        );
+        return null;
+      }
+
+      if (requestedCompanyId && requestedCompanyId !== mapping.companyId) {
+        throw new BadRequestException({
+          code: 'COMPANY_SCOPE_MISMATCH',
+          message: 'The WhatsApp instance is not linked to the requested company.',
+        });
+      }
+
+      this.logger.log(
+        `[INSTANCE_FOUND] instanceName=${instanceName} mappedInstance=${mapping.evolutionInstanceName}`,
+      );
+      this.logger.log(
+        `[COMPANY_FOUND] companyId=${mapping.companyId} companyName=${mapping.company?.name ?? 'unknown'}`,
+      );
+
+      return mapping.companyId;
+    }
+
+    if (!requestedCompanyId) {
       return null;
     }
 
-    const mapping = await this.prisma.companyWhatsappInstance.findUnique({
-      where: { evolutionInstanceName: instanceName },
-      select: { companyId: true },
+    const company = await this.prisma.company.findUnique({
+      where: { id: requestedCompanyId },
+      select: { id: true },
     });
 
-    return mapping?.companyId ?? null;
+    return company?.id ?? null;
   }
 }

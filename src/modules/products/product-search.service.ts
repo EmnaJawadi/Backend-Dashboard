@@ -257,6 +257,6 @@ export class ProductSearchService {
 
   private formatPrice(price: number, currency: string): string {
     const amount = Number.isInteger(price) ? String(price) : price.toFixed(2);
-    return currency === 'TND' ? `${amount} DT` : `${amount} ${currency}`;
+    return `${amount} ${currency || 'TND'}`;
   }
 }

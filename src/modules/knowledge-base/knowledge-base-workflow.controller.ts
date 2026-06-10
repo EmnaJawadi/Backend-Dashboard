@@ -34,7 +34,7 @@ export class KnowledgeBaseWorkflowController {
       dto.companyId = actor.companyId ?? dto.companyId;
     }
     dto.createdBy = actor.sub;
-    return this.kbArticlesService.learnFromHumanResponse(dto);
+    return this.kbArticlesService.learnFromHumanResponse(dto, actor);
   }
 
   @Get('suggestions')

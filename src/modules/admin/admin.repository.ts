@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import {
+  AgentRegistrationStatus,
   Prisma,
   SubscriptionStatus,
+  UserApprovalStatus,
   UserRole,
 } from '../../generated/prisma/client';
 
@@ -153,6 +155,7 @@ export class AdminRepository {
       },
       data: {
         isActive: true,
+        approvalStatus: UserApprovalStatus.APPROVED,
       },
     });
   }
@@ -382,23 +385,62 @@ export class AdminRepository {
     return user ? this.toUserView(user) : null;
   }
 
-  async updateUser(id: string, data: Prisma.UserUpdateInput) {
-    const user = await this.prisma.user.update({
-      where: { id },
-      data,
-      include: {
-        company: {
-          select: {
-            id: true,
-            name: true,
-            status: true,
-            isActive: true,
+  async updateUser(
+    id: string,
+    data: Prisma.UserUpdateInput,
+    reviewedByUserId?: string,
+  ) {
+    return this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.update({
+        where: { id },
+        data,
+        include: {
+          company: {
+            select: {
+              id: true,
+              name: true,
+              status: true,
+              isActive: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    return this.toUserView(user);
+      if (
+        reviewedByUserId &&
+        user.isActive &&
+        user.role === UserRole.AGENT &&
+        user.companyId
+      ) {
+        const pendingRequest = await tx.agentRegistrationRequest.findFirst({
+          where: {
+            userId: user.id,
+            companyId: user.companyId,
+            status: AgentRegistrationStatus.PENDING,
+          },
+          orderBy: { createdAt: 'desc' },
+          select: { id: true },
+        });
+
+        if (pendingRequest) {
+          const reviewedAt = new Date();
+
+          await tx.agentRegistrationRequest.update({
+            where: { id: pendingRequest.id },
+            data: {
+              status: AgentRegistrationStatus.APPROVED,
+              rejectionReason: null,
+              reviewedByUserId,
+              reviewedAt,
+              approvedAt: reviewedAt,
+              approvedUserId: user.id,
+            },
+          });
+        }
+      }
+
+      return this.toUserView(user);
+    });
   }
 
   async removeUser(id: string) {

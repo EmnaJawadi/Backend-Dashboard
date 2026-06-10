@@ -50,10 +50,19 @@ export type AiRunMinAggregateOutputType = {
   contactId: string | null
   inputText: string | null
   inputType: string | null
+  normalizedMessage: string | null
+  detectedLanguage: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
+  errorMessage: string | null
+  fallbackUsed: boolean | null
+  responseMode: string | null
+  needsRag: boolean | null
+  canAnswer: boolean | null
+  orderIntent: boolean | null
+  usedKb: boolean | null
   status: string | null
   reason: string | null
   shouldSendMessage: boolean | null
@@ -76,10 +85,19 @@ export type AiRunMaxAggregateOutputType = {
   contactId: string | null
   inputText: string | null
   inputType: string | null
+  normalizedMessage: string | null
+  detectedLanguage: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
+  errorMessage: string | null
+  fallbackUsed: boolean | null
+  responseMode: string | null
+  needsRag: boolean | null
+  canAnswer: boolean | null
+  orderIntent: boolean | null
+  usedKb: boolean | null
   status: string | null
   reason: string | null
   shouldSendMessage: boolean | null
@@ -102,10 +120,23 @@ export type AiRunCountAggregateOutputType = {
   contactId: number
   inputText: number
   inputType: number
+  normalizedMessage: number
+  detectedLanguage: number
   outputText: number
   intent: number
   provider: number
   model: number
+  errorMessage: number
+  fallbackUsed: number
+  responseMode: number
+  needsRag: number
+  ragSources: number
+  canAnswer: number
+  orderIntent: number
+  usedKb: number
+  sourceArticleIds: number
+  sourceChunkIds: number
+  retrievedChunksPreview: number
   status: number
   reason: number
   shouldSendMessage: number
@@ -149,10 +180,19 @@ export type AiRunMinAggregateInputType = {
   contactId?: true
   inputText?: true
   inputType?: true
+  normalizedMessage?: true
+  detectedLanguage?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
+  errorMessage?: true
+  fallbackUsed?: true
+  responseMode?: true
+  needsRag?: true
+  canAnswer?: true
+  orderIntent?: true
+  usedKb?: true
   status?: true
   reason?: true
   shouldSendMessage?: true
@@ -175,10 +215,19 @@ export type AiRunMaxAggregateInputType = {
   contactId?: true
   inputText?: true
   inputType?: true
+  normalizedMessage?: true
+  detectedLanguage?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
+  errorMessage?: true
+  fallbackUsed?: true
+  responseMode?: true
+  needsRag?: true
+  canAnswer?: true
+  orderIntent?: true
+  usedKb?: true
   status?: true
   reason?: true
   shouldSendMessage?: true
@@ -201,10 +250,23 @@ export type AiRunCountAggregateInputType = {
   contactId?: true
   inputText?: true
   inputType?: true
+  normalizedMessage?: true
+  detectedLanguage?: true
   outputText?: true
   intent?: true
   provider?: true
   model?: true
+  errorMessage?: true
+  fallbackUsed?: true
+  responseMode?: true
+  needsRag?: true
+  ragSources?: true
+  canAnswer?: true
+  orderIntent?: true
+  usedKb?: true
+  sourceArticleIds?: true
+  sourceChunkIds?: true
+  retrievedChunksPreview?: true
   status?: true
   reason?: true
   shouldSendMessage?: true
@@ -317,10 +379,23 @@ export type AiRunGroupByOutputType = {
   contactId: string | null
   inputText: string | null
   inputType: string | null
+  normalizedMessage: string | null
+  detectedLanguage: string | null
   outputText: string | null
   intent: string | null
   provider: string | null
   model: string | null
+  errorMessage: string | null
+  fallbackUsed: boolean | null
+  responseMode: string | null
+  needsRag: boolean | null
+  ragSources: runtime.JsonValue | null
+  canAnswer: boolean | null
+  orderIntent: boolean | null
+  usedKb: boolean | null
+  sourceArticleIds: runtime.JsonValue | null
+  sourceChunkIds: runtime.JsonValue | null
+  retrievedChunksPreview: runtime.JsonValue | null
   status: string | null
   reason: string | null
   shouldSendMessage: boolean | null
@@ -369,10 +444,23 @@ export type AiRunWhereInput = {
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  normalizedMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  detectedLanguage?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  fallbackUsed?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  responseMode?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  needsRag?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  ragSources?: Prisma.JsonNullableFilter<"AiRun">
+  canAnswer?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  orderIntent?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  usedKb?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  sourceArticleIds?: Prisma.JsonNullableFilter<"AiRun">
+  sourceChunkIds?: Prisma.JsonNullableFilter<"AiRun">
+  retrievedChunksPreview?: Prisma.JsonNullableFilter<"AiRun">
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
@@ -402,10 +490,23 @@ export type AiRunOrderByWithRelationInput = {
   contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
   inputType?: Prisma.SortOrderInput | Prisma.SortOrder
+  normalizedMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  detectedLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  fallbackUsed?: Prisma.SortOrderInput | Prisma.SortOrder
+  responseMode?: Prisma.SortOrderInput | Prisma.SortOrder
+  needsRag?: Prisma.SortOrderInput | Prisma.SortOrder
+  ragSources?: Prisma.SortOrderInput | Prisma.SortOrder
+  canAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  usedKb?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceArticleIds?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceChunkIds?: Prisma.SortOrderInput | Prisma.SortOrder
+  retrievedChunksPreview?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   shouldSendMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -438,10 +539,23 @@ export type AiRunWhereUniqueInput = Prisma.AtLeast<{
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  normalizedMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  detectedLanguage?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  fallbackUsed?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  responseMode?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  needsRag?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  ragSources?: Prisma.JsonNullableFilter<"AiRun">
+  canAnswer?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  orderIntent?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  usedKb?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  sourceArticleIds?: Prisma.JsonNullableFilter<"AiRun">
+  sourceChunkIds?: Prisma.JsonNullableFilter<"AiRun">
+  retrievedChunksPreview?: Prisma.JsonNullableFilter<"AiRun">
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
@@ -471,10 +585,23 @@ export type AiRunOrderByWithAggregationInput = {
   contactId?: Prisma.SortOrderInput | Prisma.SortOrder
   inputText?: Prisma.SortOrderInput | Prisma.SortOrder
   inputType?: Prisma.SortOrderInput | Prisma.SortOrder
+  normalizedMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  detectedLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
   outputText?: Prisma.SortOrderInput | Prisma.SortOrder
   intent?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrderInput | Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  fallbackUsed?: Prisma.SortOrderInput | Prisma.SortOrder
+  responseMode?: Prisma.SortOrderInput | Prisma.SortOrder
+  needsRag?: Prisma.SortOrderInput | Prisma.SortOrder
+  ragSources?: Prisma.SortOrderInput | Prisma.SortOrder
+  canAnswer?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  usedKb?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceArticleIds?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceChunkIds?: Prisma.SortOrderInput | Prisma.SortOrder
+  retrievedChunksPreview?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   shouldSendMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -508,10 +635,23 @@ export type AiRunScalarWhereWithAggregatesInput = {
   contactId?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   inputType?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  normalizedMessage?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  detectedLanguage?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  errorMessage?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  fallbackUsed?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  responseMode?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
+  needsRag?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  ragSources?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
+  canAnswer?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  orderIntent?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  usedKb?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
+  sourceArticleIds?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
+  sourceChunkIds?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
+  retrievedChunksPreview?: Prisma.JsonNullableWithAggregatesFilter<"AiRun">
   status?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   reason?: Prisma.StringNullableWithAggregatesFilter<"AiRun"> | string | null
   shouldSendMessage?: Prisma.BoolNullableWithAggregatesFilter<"AiRun"> | boolean | null
@@ -534,10 +674,23 @@ export type AiRunCreateInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -566,10 +719,23 @@ export type AiRunUncheckedCreateInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -592,10 +758,23 @@ export type AiRunUpdateInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -624,10 +803,23 @@ export type AiRunUncheckedUpdateInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -653,10 +845,23 @@ export type AiRunCreateManyInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -679,10 +884,23 @@ export type AiRunUpdateManyMutationInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -707,10 +925,23 @@ export type AiRunUncheckedUpdateManyInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -746,10 +977,23 @@ export type AiRunCountOrderByAggregateInput = {
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   inputType?: Prisma.SortOrder
+  normalizedMessage?: Prisma.SortOrder
+  detectedLanguage?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  fallbackUsed?: Prisma.SortOrder
+  responseMode?: Prisma.SortOrder
+  needsRag?: Prisma.SortOrder
+  ragSources?: Prisma.SortOrder
+  canAnswer?: Prisma.SortOrder
+  orderIntent?: Prisma.SortOrder
+  usedKb?: Prisma.SortOrder
+  sourceArticleIds?: Prisma.SortOrder
+  sourceChunkIds?: Prisma.SortOrder
+  retrievedChunksPreview?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   shouldSendMessage?: Prisma.SortOrder
@@ -783,10 +1027,19 @@ export type AiRunMaxOrderByAggregateInput = {
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   inputType?: Prisma.SortOrder
+  normalizedMessage?: Prisma.SortOrder
+  detectedLanguage?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  fallbackUsed?: Prisma.SortOrder
+  responseMode?: Prisma.SortOrder
+  needsRag?: Prisma.SortOrder
+  canAnswer?: Prisma.SortOrder
+  orderIntent?: Prisma.SortOrder
+  usedKb?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   shouldSendMessage?: Prisma.SortOrder
@@ -809,10 +1062,19 @@ export type AiRunMinOrderByAggregateInput = {
   contactId?: Prisma.SortOrder
   inputText?: Prisma.SortOrder
   inputType?: Prisma.SortOrder
+  normalizedMessage?: Prisma.SortOrder
+  detectedLanguage?: Prisma.SortOrder
   outputText?: Prisma.SortOrder
   intent?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
+  fallbackUsed?: Prisma.SortOrder
+  responseMode?: Prisma.SortOrder
+  needsRag?: Prisma.SortOrder
+  canAnswer?: Prisma.SortOrder
+  orderIntent?: Prisma.SortOrder
+  usedKb?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   shouldSendMessage?: Prisma.SortOrder
@@ -1008,10 +1270,23 @@ export type AiRunCreateWithoutCompanyInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1038,10 +1313,23 @@ export type AiRunUncheckedCreateWithoutCompanyInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1096,10 +1384,23 @@ export type AiRunScalarWhereInput = {
   contactId?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   inputType?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  normalizedMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  detectedLanguage?: Prisma.StringNullableFilter<"AiRun"> | string | null
   outputText?: Prisma.StringNullableFilter<"AiRun"> | string | null
   intent?: Prisma.StringNullableFilter<"AiRun"> | string | null
   provider?: Prisma.StringNullableFilter<"AiRun"> | string | null
   model?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  errorMessage?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  fallbackUsed?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  responseMode?: Prisma.StringNullableFilter<"AiRun"> | string | null
+  needsRag?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  ragSources?: Prisma.JsonNullableFilter<"AiRun">
+  canAnswer?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  orderIntent?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  usedKb?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
+  sourceArticleIds?: Prisma.JsonNullableFilter<"AiRun">
+  sourceChunkIds?: Prisma.JsonNullableFilter<"AiRun">
+  retrievedChunksPreview?: Prisma.JsonNullableFilter<"AiRun">
   status?: Prisma.StringNullableFilter<"AiRun"> | string | null
   reason?: Prisma.StringNullableFilter<"AiRun"> | string | null
   shouldSendMessage?: Prisma.BoolNullableFilter<"AiRun"> | boolean | null
@@ -1122,10 +1423,23 @@ export type AiRunCreateWithoutMatchedProductInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1153,10 +1467,23 @@ export type AiRunUncheckedCreateWithoutMatchedProductInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1204,10 +1531,23 @@ export type AiRunCreateWithoutContactInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1234,10 +1574,23 @@ export type AiRunUncheckedCreateWithoutContactInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1286,10 +1639,23 @@ export type AiRunCreateWithoutConversationInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1316,10 +1682,23 @@ export type AiRunUncheckedCreateWithoutConversationInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1370,10 +1749,23 @@ export type AiRunCreateManyCompanyInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1396,10 +1788,23 @@ export type AiRunUpdateWithoutCompanyInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1426,10 +1831,23 @@ export type AiRunUncheckedUpdateWithoutCompanyInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1454,10 +1872,23 @@ export type AiRunUncheckedUpdateManyWithoutCompanyInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1483,10 +1914,23 @@ export type AiRunCreateManyMatchedProductInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1508,10 +1952,23 @@ export type AiRunUpdateWithoutMatchedProductInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1539,10 +1996,23 @@ export type AiRunUncheckedUpdateWithoutMatchedProductInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1567,10 +2037,23 @@ export type AiRunUncheckedUpdateManyWithoutMatchedProductInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1594,10 +2077,23 @@ export type AiRunCreateManyContactInput = {
   messageId: string
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1620,10 +2116,23 @@ export type AiRunUpdateWithoutContactInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1650,10 +2159,23 @@ export type AiRunUncheckedUpdateWithoutContactInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1678,10 +2200,23 @@ export type AiRunUncheckedUpdateManyWithoutContactInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1706,10 +2241,23 @@ export type AiRunCreateManyConversationInput = {
   contactId?: string | null
   inputText?: string | null
   inputType?: string | null
+  normalizedMessage?: string | null
+  detectedLanguage?: string | null
   outputText?: string | null
   intent?: string | null
   provider?: string | null
   model?: string | null
+  errorMessage?: string | null
+  fallbackUsed?: boolean | null
+  responseMode?: string | null
+  needsRag?: boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: boolean | null
+  orderIntent?: boolean | null
+  usedKb?: boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: string | null
   reason?: string | null
   shouldSendMessage?: boolean | null
@@ -1732,10 +2280,23 @@ export type AiRunUpdateWithoutConversationInput = {
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1762,10 +2323,23 @@ export type AiRunUncheckedUpdateWithoutConversationInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1790,10 +2364,23 @@ export type AiRunUncheckedUpdateManyWithoutConversationInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inputType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  normalizedMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   intent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fallbackUsed?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  needsRag?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  ragSources?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  canAnswer?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  orderIntent?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  usedKb?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sourceArticleIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  sourceChunkIds?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  retrievedChunksPreview?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shouldSendMessage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -1821,10 +2408,23 @@ export type AiRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   contactId?: boolean
   inputText?: boolean
   inputType?: boolean
+  normalizedMessage?: boolean
+  detectedLanguage?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
+  errorMessage?: boolean
+  fallbackUsed?: boolean
+  responseMode?: boolean
+  needsRag?: boolean
+  ragSources?: boolean
+  canAnswer?: boolean
+  orderIntent?: boolean
+  usedKb?: boolean
+  sourceArticleIds?: boolean
+  sourceChunkIds?: boolean
+  retrievedChunksPreview?: boolean
   status?: boolean
   reason?: boolean
   shouldSendMessage?: boolean
@@ -1854,10 +2454,23 @@ export type AiRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   contactId?: boolean
   inputText?: boolean
   inputType?: boolean
+  normalizedMessage?: boolean
+  detectedLanguage?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
+  errorMessage?: boolean
+  fallbackUsed?: boolean
+  responseMode?: boolean
+  needsRag?: boolean
+  ragSources?: boolean
+  canAnswer?: boolean
+  orderIntent?: boolean
+  usedKb?: boolean
+  sourceArticleIds?: boolean
+  sourceChunkIds?: boolean
+  retrievedChunksPreview?: boolean
   status?: boolean
   reason?: boolean
   shouldSendMessage?: boolean
@@ -1887,10 +2500,23 @@ export type AiRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   contactId?: boolean
   inputText?: boolean
   inputType?: boolean
+  normalizedMessage?: boolean
+  detectedLanguage?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
+  errorMessage?: boolean
+  fallbackUsed?: boolean
+  responseMode?: boolean
+  needsRag?: boolean
+  ragSources?: boolean
+  canAnswer?: boolean
+  orderIntent?: boolean
+  usedKb?: boolean
+  sourceArticleIds?: boolean
+  sourceChunkIds?: boolean
+  retrievedChunksPreview?: boolean
   status?: boolean
   reason?: boolean
   shouldSendMessage?: boolean
@@ -1920,10 +2546,23 @@ export type AiRunSelectScalar = {
   contactId?: boolean
   inputText?: boolean
   inputType?: boolean
+  normalizedMessage?: boolean
+  detectedLanguage?: boolean
   outputText?: boolean
   intent?: boolean
   provider?: boolean
   model?: boolean
+  errorMessage?: boolean
+  fallbackUsed?: boolean
+  responseMode?: boolean
+  needsRag?: boolean
+  ragSources?: boolean
+  canAnswer?: boolean
+  orderIntent?: boolean
+  usedKb?: boolean
+  sourceArticleIds?: boolean
+  sourceChunkIds?: boolean
+  retrievedChunksPreview?: boolean
   status?: boolean
   reason?: boolean
   shouldSendMessage?: boolean
@@ -1941,7 +2580,7 @@ export type AiRunSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "contactId" | "inputText" | "inputType" | "outputText" | "intent" | "provider" | "model" | "status" | "reason" | "shouldSendMessage" | "imageAnalysisResult" | "matchedProductId" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "confidenceScore" | "blockedReason" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
+export type AiRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "conversationId" | "messageId" | "contactId" | "inputText" | "inputType" | "normalizedMessage" | "detectedLanguage" | "outputText" | "intent" | "provider" | "model" | "errorMessage" | "fallbackUsed" | "responseMode" | "needsRag" | "ragSources" | "canAnswer" | "orderIntent" | "usedKb" | "sourceArticleIds" | "sourceChunkIds" | "retrievedChunksPreview" | "status" | "reason" | "shouldSendMessage" | "imageAnalysisResult" | "matchedProductId" | "promptTokens" | "completionTokens" | "totalTokens" | "latencyMs" | "confidenceScore" | "blockedReason" | "handoffRequired" | "tagsToApply" | "rawResponse" | "createdAt", ExtArgs["result"]["aiRun"]>
 export type AiRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.AiRun$companyArgs<ExtArgs>
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
@@ -1977,10 +2616,23 @@ export type $AiRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     contactId: string | null
     inputText: string | null
     inputType: string | null
+    normalizedMessage: string | null
+    detectedLanguage: string | null
     outputText: string | null
     intent: string | null
     provider: string | null
     model: string | null
+    errorMessage: string | null
+    fallbackUsed: boolean | null
+    responseMode: string | null
+    needsRag: boolean | null
+    ragSources: runtime.JsonValue | null
+    canAnswer: boolean | null
+    orderIntent: boolean | null
+    usedKb: boolean | null
+    sourceArticleIds: runtime.JsonValue | null
+    sourceChunkIds: runtime.JsonValue | null
+    retrievedChunksPreview: runtime.JsonValue | null
     status: string | null
     reason: string | null
     shouldSendMessage: boolean | null
@@ -2430,10 +3082,23 @@ export interface AiRunFieldRefs {
   readonly contactId: Prisma.FieldRef<"AiRun", 'String'>
   readonly inputText: Prisma.FieldRef<"AiRun", 'String'>
   readonly inputType: Prisma.FieldRef<"AiRun", 'String'>
+  readonly normalizedMessage: Prisma.FieldRef<"AiRun", 'String'>
+  readonly detectedLanguage: Prisma.FieldRef<"AiRun", 'String'>
   readonly outputText: Prisma.FieldRef<"AiRun", 'String'>
   readonly intent: Prisma.FieldRef<"AiRun", 'String'>
   readonly provider: Prisma.FieldRef<"AiRun", 'String'>
   readonly model: Prisma.FieldRef<"AiRun", 'String'>
+  readonly errorMessage: Prisma.FieldRef<"AiRun", 'String'>
+  readonly fallbackUsed: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly responseMode: Prisma.FieldRef<"AiRun", 'String'>
+  readonly needsRag: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly ragSources: Prisma.FieldRef<"AiRun", 'Json'>
+  readonly canAnswer: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly orderIntent: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly usedKb: Prisma.FieldRef<"AiRun", 'Boolean'>
+  readonly sourceArticleIds: Prisma.FieldRef<"AiRun", 'Json'>
+  readonly sourceChunkIds: Prisma.FieldRef<"AiRun", 'Json'>
+  readonly retrievedChunksPreview: Prisma.FieldRef<"AiRun", 'Json'>
   readonly status: Prisma.FieldRef<"AiRun", 'String'>
   readonly reason: Prisma.FieldRef<"AiRun", 'String'>
   readonly shouldSendMessage: Prisma.FieldRef<"AiRun", 'Boolean'>

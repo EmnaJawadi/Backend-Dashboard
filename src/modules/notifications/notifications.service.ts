@@ -25,6 +25,7 @@ export class NotificationsService {
     actor?: AuthenticatedUser,
   ) {
     const companyId = await this.resolveNotificationCompanyId(dto, actor);
+    await this.assertNotificationRelationsInScope(dto, companyId);
     const created = await this.prisma.notification.create({
       data: {
         companyId,
@@ -262,7 +263,15 @@ export class NotificationsService {
     const linkedCompanyId = await this.resolveCompanyFromConversation(
       dto.conversationId,
     );
-    const requestedCompanyId = dto.companyId ?? linkedCompanyId ?? null;
+    if (
+      dto.companyId &&
+      linkedCompanyId &&
+      dto.companyId !== linkedCompanyId
+    ) {
+      throw new NotFoundException('Notification target not found');
+    }
+
+    const requestedCompanyId = linkedCompanyId ?? dto.companyId ?? null;
 
     if (!actor) {
       return requestedCompanyId;
@@ -281,6 +290,39 @@ export class NotificationsService {
     }
 
     return actor.companyId;
+  }
+
+  private async assertNotificationRelationsInScope(
+    dto: CreateNotificationDto,
+    companyId: string | null,
+  ) {
+    if (dto.conversationId) {
+      const conversation = await this.prisma.conversation.findFirst({
+        where: {
+          id: dto.conversationId,
+          ...(companyId ? { companyId } : {}),
+        },
+        select: { id: true },
+      });
+
+      if (!conversation) {
+        throw new NotFoundException('Notification target not found');
+      }
+    }
+
+    if (dto.contactId) {
+      const contact = await this.prisma.contact.findFirst({
+        where: {
+          id: dto.contactId,
+          ...(companyId ? { companyId } : {}),
+        },
+        select: { id: true },
+      });
+
+      if (!contact) {
+        throw new NotFoundException('Notification target not found');
+      }
+    }
   }
 
   private async resolveCompanyFromConversation(conversationId?: string | null) {

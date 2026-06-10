@@ -5,6 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../common/utils/evolution-instance.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import {
   CompanyStatus,
@@ -473,18 +477,34 @@ export class CompaniesService {
 
   async resolveCompanyByEvolutionInstance(instanceName: string) {
     const raw = instanceName.trim();
-    const normalized = this.normalizeInstanceName(instanceName);
     if (!raw) {
       throw new BadRequestException('instance is required');
     }
 
-    const mapping = await this.prisma.companyWhatsappInstance.findFirst({
-      where: {
-        OR: [
-          { evolutionInstanceName: raw },
-          { evolutionInstanceName: normalized },
-        ],
-      },
+    const candidates = buildEvolutionInstanceLookupCandidates(raw);
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          include: {
+            company: {
+              select: {
+                id: true,
+                name: true,
+                status: true,
+                isActive: true,
+              },
+            },
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    const mapping = exact ?? findMatchingEvolutionInstance(
+      await this.prisma.companyWhatsappInstance.findMany({
       include: {
         company: {
           select: {
@@ -495,7 +515,10 @@ export class CompaniesService {
           },
         },
       },
-    });
+        orderBy: { updatedAt: 'desc' },
+      }),
+      raw,
+    );
 
     if (!mapping || !mapping.company) {
       throw new NotFoundException(

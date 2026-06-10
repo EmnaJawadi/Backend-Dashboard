@@ -5,6 +5,7 @@ import {
 } from '../entities/message.entity';
 
 export class CreateMessageDto {
+  companyId?: string;
   conversationId!: string;
   senderType!: MessageSenderType;
   senderId?: string | null;

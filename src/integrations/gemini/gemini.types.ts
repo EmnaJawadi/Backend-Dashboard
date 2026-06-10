@@ -4,6 +4,7 @@ export type GeminiGenerateTextInput = {
   model?: string;
   temperature?: number;
   maxOutputTokens?: number;
+  responseMimeType?: string;
 };
 
 export type GeminiImageUnderstandingInput = {

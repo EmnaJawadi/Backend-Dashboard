@@ -4,6 +4,10 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class ContactQueryDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   search?: string;
 
   @IsOptional()

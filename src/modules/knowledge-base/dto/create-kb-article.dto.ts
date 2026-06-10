@@ -11,6 +11,10 @@ import {
 } from 'class-validator';
 
 export class CreateKbArticleDto {
+  @IsOptional()
+  @IsString()
+  companyId?: string;
+
   @IsString()
   @IsNotEmpty()
   @Length(3, 150)

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 
@@ -97,29 +98,71 @@ export class KbRepository {
   async createChunks(
     articleId: string,
     chunks: CreateKbChunkInput[],
-    companyId?: string | null,
+    companyId: string,
   ) {
     if (chunks.length === 0) {
       return;
     }
 
+    const now = new Date();
+    const rows = chunks.map((chunk) => ({
+      id: randomUUID(),
+      companyId,
+      articleId,
+      chunkIndex: chunk.chunkIndex,
+      chunkText: chunk.content,
+      embedding: this.normalizeEmbedding(chunk.embedding),
+      metadataJson: JSON.stringify(chunk.metadata ?? null),
+      createdAt: now,
+    }));
+
+    if (rows.some((row) => row.embedding.length > 0)) {
+      await this.prisma.$executeRaw(Prisma.sql`
+        INSERT INTO "kb_chunks"
+          ("id", "company_id", "article_id", "chunk_index", "chunk_text", "embedding_vector", "metadata_json", "created_at")
+        VALUES ${Prisma.join(
+          rows.map((row) => Prisma.sql`(
+            ${row.id},
+            ${row.companyId},
+            ${row.articleId},
+            ${row.chunkIndex},
+            ${row.chunkText},
+            ${row.embedding.length ? this.toVectorLiteral(row.embedding) : null}::vector,
+            ${row.metadataJson}::jsonb,
+            ${row.createdAt}
+          )`),
+        )}
+      `);
+      return;
+    }
+
     await this.prisma.kbChunk.createMany({
-      data: chunks.map((chunk) => ({
-        companyId: companyId ?? null,
-        articleId,
-        chunkIndex: chunk.chunkIndex,
-        chunkText: chunk.content,
-        metadataJson: (chunk.metadata ?? null) as Prisma.InputJsonValue,
-        createdAt: new Date(),
+      data: rows.map((row) => ({
+        id: row.id,
+        companyId: row.companyId,
+        articleId: row.articleId,
+        chunkIndex: row.chunkIndex,
+        chunkText: row.chunkText,
+        metadataJson: JSON.parse(row.metadataJson) as Prisma.InputJsonValue,
+        createdAt: row.createdAt,
       })),
     });
   }
 
-  findChunksByArticleId(articleId: string, companyId?: string) {
+  deleteChunksByArticleId(articleId: string) {
+    return this.prisma.kbChunk.deleteMany({
+      where: { articleId },
+    });
+  }
+
+  findChunksByArticleId(articleId: string, companyId: string) {
     return this.prisma.kbChunk.findMany({
       where: {
         articleId,
-        ...(companyId ? { companyId } : {}),
+        companyId,
+        article: {
+          companyId,
+        },
       },
       orderBy: { chunkIndex: 'asc' },
     });
@@ -154,5 +197,22 @@ export class KbRepository {
           }
         : {}),
     };
+  }
+
+  private normalizeEmbedding(embedding?: number[] | null): number[] {
+    if (!embedding?.length) {
+      return [];
+    }
+
+    const dimensions = 1536;
+
+    return Array.from({ length: dimensions }, (_, index) => {
+      const value = embedding[index] ?? 0;
+      return Number.isFinite(value) ? Number(value.toFixed(6)) : 0;
+    });
+  }
+
+  private toVectorLiteral(values: number[]): string {
+    return `[${values.join(',')}]`;
   }
 }

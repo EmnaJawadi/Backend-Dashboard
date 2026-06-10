@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Worker } from 'bullmq';
 import { RedisService } from '../../integrations/redis/redis.service';
-import { AiService } from '../../modules/ai/ai.service';
+import { WorkflowAiService } from '../../modules/ai/workflow-ai.service';
 
 @Injectable()
 export class AiReplyProcessor implements OnModuleInit {
@@ -9,7 +9,7 @@ export class AiReplyProcessor implements OnModuleInit {
 
   constructor(
     private readonly redisService: RedisService,
-    private readonly aiService: AiService,
+    private readonly aiService: WorkflowAiService,
   ) {}
 
   onModuleInit() {

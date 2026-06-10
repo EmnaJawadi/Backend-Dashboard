@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ContactQueryDto } from './dto/contact-query.dto';
@@ -39,6 +44,19 @@ function normalizeTags(value: Prisma.JsonValue | null): string[] {
 export class ContactsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private requireCompanyId(
+    companyId: string | null | undefined,
+    action: string,
+  ): string {
+    const scopedCompanyId = companyId?.trim();
+
+    if (!scopedCompanyId) {
+      throw new BadRequestException(`companyId is required to ${action}`);
+    }
+
+    return scopedCompanyId;
+  }
+
   private toEntity(data: {
     id: string;
     fullName: string | null;
@@ -69,6 +87,8 @@ export class ContactsRepository {
   }
 
   async create(data: ContactWriteData): Promise<ContactEntity> {
+    const companyId = this.requireCompanyId(data.companyId, 'create a contact');
+
     const firstName = data.firstName?.trim() ?? '';
     const lastName = data.lastName?.trim() ?? null;
     const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
@@ -77,7 +97,7 @@ export class ContactsRepository {
     try {
       created = await this.prisma.contact.create({
         data: {
-          companyId: data.companyId ?? null,
+          companyId,
           phone: data.phoneNumber?.trim() ?? null,
           whatsappName: fullName || null,
           fullName: fullName || null,
@@ -104,14 +124,15 @@ export class ContactsRepository {
   }
 
   async findAll(query: ContactQueryDto, companyId?: string) {
+    const scopedCompanyId = this.requireCompanyId(
+      companyId,
+      'list contacts',
+    );
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
     const andFilters: Prisma.ContactWhereInput[] = [];
-
-    if (companyId) {
-      andFilters.push({ companyId });
-    }
+    andFilters.push({ companyId: scopedCompanyId });
 
     if (query.search?.trim()) {
       const search = query.search.trim();
@@ -161,10 +182,14 @@ export class ContactsRepository {
   }
 
   async findById(id: string, companyId?: string): Promise<ContactEntity> {
+    const scopedCompanyId = this.requireCompanyId(
+      companyId,
+      'read a contact',
+    );
     const contact = await this.prisma.contact.findFirst({
       where: {
         id,
-        ...(companyId ? { companyId } : {}),
+        companyId: scopedCompanyId,
       },
     });
 
@@ -179,10 +204,14 @@ export class ContactsRepository {
     phoneNumber: string,
     companyId?: string | null,
   ): Promise<ContactEntity | null> {
+    const scopedCompanyId = this.requireCompanyId(
+      companyId,
+      'search contacts',
+    );
     const contact = await this.prisma.contact.findFirst({
       where: {
         phone: phoneNumber,
-        ...(companyId ? { companyId } : {}),
+        companyId: scopedCompanyId,
       },
       orderBy: { updatedAt: 'desc' },
     });
@@ -256,12 +285,17 @@ export class ContactsRepository {
   }
 
   async remove(id: string, companyId?: string): Promise<ContactEntity> {
+    const scopedCompanyId = this.requireCompanyId(
+      companyId,
+      'remove a contact',
+    );
+
     try {
       const deleted = await this.prisma.$transaction(async (tx) => {
         const existing = await tx.contact.findFirst({
           where: {
             id,
-            ...(companyId ? { companyId } : {}),
+            companyId: scopedCompanyId,
           },
         });
 
@@ -270,11 +304,17 @@ export class ContactsRepository {
         }
 
         await tx.contactNote.deleteMany({
-          where: { contactId: id },
+          where: {
+            contactId: id,
+            companyId: scopedCompanyId,
+          },
         });
 
         const conversations = await tx.conversation.findMany({
-          where: { contactId: id },
+          where: {
+            contactId: id,
+            companyId: scopedCompanyId,
+          },
           select: { id: true },
         });
 
@@ -282,19 +322,31 @@ export class ContactsRepository {
 
         if (conversationIds.length > 0) {
           await tx.aiRun.deleteMany({
-            where: { conversationId: { in: conversationIds } },
+            where: {
+              companyId: scopedCompanyId,
+              conversationId: { in: conversationIds },
+            },
           });
 
           await tx.message.deleteMany({
-            where: { conversationId: { in: conversationIds } },
+            where: {
+              companyId: scopedCompanyId,
+              conversationId: { in: conversationIds },
+            },
           });
 
           await tx.conversationTag.deleteMany({
-            where: { conversationId: { in: conversationIds } },
+            where: {
+              companyId: scopedCompanyId,
+              conversationId: { in: conversationIds },
+            },
           });
 
           await tx.conversation.deleteMany({
-            where: { id: { in: conversationIds } },
+            where: {
+              companyId: scopedCompanyId,
+              id: { in: conversationIds },
+            },
           });
         }
 

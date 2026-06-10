@@ -5,6 +5,7 @@ import {
 } from '../entities/message.entity';
 
 export class MessageQueryDto {
+  companyId?: string;
   conversationId?: string;
   senderType?: MessageSenderType;
   type?: MessageType;

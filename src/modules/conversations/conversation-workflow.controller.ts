@@ -1,7 +1,8 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 import { ConversationsService } from './conversations.service';
 import { WorkflowHandoffDto } from './dto/workflow-handoff.dto';
+import { WorkflowOrderIntentDto } from './dto/workflow-order-intent.dto';
 
 @Controller(['', 'api'])
 @UseGuards(ApiKeyGuard)
@@ -15,5 +16,10 @@ export class ConversationWorkflowController {
     return this.conversationsService.handoffForWorkflow(
       workflowHandoffDto,
     );
+  }
+
+  @Post('conversations/workflow/order-intent')
+  prepareOrderIntent(@Body() dto: WorkflowOrderIntentDto) {
+    return this.conversationsService.prepareOrderIntentForWorkflow(dto);
   }
 }

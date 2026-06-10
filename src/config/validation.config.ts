@@ -21,6 +21,19 @@ const validationSchema = Joi.object({
   EVOLUTION_API_KEY: Joi.string().optional().allow('', null),
   EVOLUTION_INSTANCE: Joi.string().optional().allow('', null),
   WHATSAPP_DEFAULT_INSTANCE: Joi.string().optional().allow('', null),
+  AI_PROVIDER: Joi.string()
+    .valid('openrouter', 'ollama', 'gemini')
+    .default('openrouter'),
+  AI_FALLBACK_PROVIDER: Joi.string()
+    .valid('openrouter', 'ollama', 'gemini')
+    .default('ollama'),
+  AI_REQUEST_TIMEOUT_MS: Joi.number().integer().positive().default(45000),
+  AI_MAX_CONTEXT_CHARS: Joi.number().integer().positive().default(6000),
+  OPENROUTER_API_KEY: Joi.string().optional().allow('', null),
+  OPENROUTER_MODEL: Joi.string().optional().allow('', null),
+  OLLAMA_BASE_URL: Joi.string().uri().default('http://localhost:11434/v1'),
+  OLLAMA_MODEL: Joi.string().default('llama3.1:latest'),
+  OLLAMA_API_KEY: Joi.string().default('ollama'),
   GEMINI_API_KEY: Joi.string().optional().allow('', null),
   GOOGLE_API_KEY: Joi.string().optional().allow('', null),
   GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().optional().allow('', null),

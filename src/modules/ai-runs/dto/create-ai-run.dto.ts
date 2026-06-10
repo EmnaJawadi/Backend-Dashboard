@@ -36,6 +36,14 @@ export class CreateAiRunDto {
 
   @IsOptional()
   @IsString()
+  normalizedMessage?: string;
+
+  @IsOptional()
+  @IsString()
+  detectedLanguage?: string;
+
+  @IsOptional()
+  @IsString()
   response?: string;
 
   @IsOptional()
@@ -44,11 +52,58 @@ export class CreateAiRunDto {
 
   @IsOptional()
   @IsString()
-  provider?: string = 'gemini';
+  provider?: string;
 
   @IsOptional()
   @IsString()
-  model?: string = 'gemini-2.5-flash';
+  model?: string;
+
+  @IsOptional()
+  @IsString()
+  errorMessage?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  fallbackUsed?: boolean;
+
+  @IsOptional()
+  @IsString()
+  responseMode?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  needsRag?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  ragSources?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  canAnswer?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  orderIntent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  usedKb?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  sourceArticleIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  sourceChunkIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  retrievedChunksPreview?: Array<Record<string, unknown>>;
 
   @IsOptional()
   @IsIn(['success', 'failed', 'blocked', 'pending'])
@@ -112,6 +167,10 @@ export class CreateAiRunDto {
   @IsArray()
   @IsString({ each: true })
   tagsToApply?: string[];
+
+  @IsOptional()
+  @IsObject()
+  rawResponse?: Record<string, unknown>;
 
   @IsOptional()
   @IsObject()

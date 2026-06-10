@@ -21,6 +21,7 @@ type GoogleGenAIInstance = {
         systemInstruction?: string;
         temperature?: number;
         maxOutputTokens?: number;
+        responseMimeType?: string;
       };
       contents: unknown;
     }) => Promise<{
@@ -96,6 +97,9 @@ export class GeminiService {
             : {}),
           ...(typeof input.maxOutputTokens === 'number'
             ? { maxOutputTokens: input.maxOutputTokens }
+            : {}),
+          ...(input.responseMimeType
+            ? { responseMimeType: input.responseMimeType }
             : {}),
         },
         contents: input.prompt,

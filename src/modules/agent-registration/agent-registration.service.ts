@@ -398,7 +398,15 @@ export class AgentRegistrationService {
         );
       }
 
-      if (existingUser?.isActive && existingUser.approvalStatus === UserApprovalStatus.APPROVED) {
+      const isLinkedApprovedAgent =
+        existingUser?.id === request.userId &&
+        existingUser.role === UserRole.AGENT;
+
+      if (
+        existingUser?.isActive &&
+        existingUser.approvalStatus === UserApprovalStatus.APPROVED &&
+        !isLinkedApprovedAgent
+      ) {
         throw new ConflictException('Un compte actif existe deja avec cet email.');
       }
 

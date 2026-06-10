@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsIn,
   IsObject,
   IsOptional,
@@ -61,6 +62,25 @@ export class SaveMessageDto {
   @IsOptional()
   @IsString()
   rawRemoteJid?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === undefined || value === null || value === '') {
+      return undefined;
+    }
+
+    if (typeof value === 'boolean') {
+      return value;
+    }
+
+    if (typeof value === 'number') {
+      return value === 1;
+    }
+
+    return String(value).toLowerCase().trim() === 'true';
+  })
+  @IsBoolean()
+  fromMe?: boolean;
 
   @IsOptional()
   @IsString()

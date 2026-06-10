@@ -198,6 +198,7 @@ export type ConversationTagOrderByWithRelationInput = {
 
 export type ConversationTagWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  conversationId_tag?: Prisma.ConversationTagConversationIdTagCompoundUniqueInput
   AND?: Prisma.ConversationTagWhereInput | Prisma.ConversationTagWhereInput[]
   OR?: Prisma.ConversationTagWhereInput[]
   NOT?: Prisma.ConversationTagWhereInput | Prisma.ConversationTagWhereInput[]
@@ -207,7 +208,7 @@ export type ConversationTagWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"ConversationTag"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
-}, "id">
+}, "id" | "conversationId_tag">
 
 export type ConversationTagOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -293,6 +294,11 @@ export type ConversationTagListRelationFilter = {
 
 export type ConversationTagOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ConversationTagConversationIdTagCompoundUniqueInput = {
+  conversationId: string
+  tag: string
 }
 
 export type ConversationTagCountOrderByAggregateInput = {

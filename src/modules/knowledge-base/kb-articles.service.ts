@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
@@ -57,6 +58,8 @@ type RawKbArticle = {
 
 @Injectable()
 export class KbArticlesService {
+  private readonly logger = new Logger(KbArticlesService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly kbRepository: KbRepository,
@@ -64,13 +67,57 @@ export class KbArticlesService {
     private readonly ingestionService: IngestionService,
   ) {}
 
+  private async resolveRequiredCompanyId(
+    actor: AuthenticatedUser | undefined,
+    requestedCompanyId?: string | null,
+    action = 'knowledge_base',
+  ): Promise<string> {
+    const actorCompanyId = resolveCompanyScope(actor);
+    const requested = requestedCompanyId?.trim() || null;
+
+    if (actorCompanyId) {
+      if (requested && requested !== actorCompanyId) {
+        throw new BadRequestException(
+          'companyId is resolved from the authenticated user',
+        );
+      }
+
+      return actorCompanyId;
+    }
+
+    if (!requested) {
+      throw new BadRequestException(
+        'companyId is required for strict multi-company knowledge base operations',
+      );
+    }
+
+    const company = await this.prisma.company.findUnique({
+      where: { id: requested },
+      select: { id: true, name: true, isActive: true, status: true },
+    });
+
+    if (!company) {
+      throw new NotFoundException('Company not found for knowledge base operation');
+    }
+
+    this.logger.log(
+      `KB_COMPANY_SCOPE action=${action} companyId=${company.id} companyName=${company.name} status=${company.status} isActive=${company.isActive}`,
+    );
+
+    return company.id;
+  }
+
   async create(
     createKbArticleDto: CreateKbArticleDto,
     actor?: AuthenticatedUser,
   ) {
-    const companyId = resolveCompanyScope(actor);
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      createKbArticleDto.companyId,
+      'create_article',
+    );
     const article = await this.kbRepository.createArticle({
-      companyId: companyId ?? undefined,
+      companyId,
       title: createKbArticleDto.title,
       body: createKbArticleDto.content,
       language: createKbArticleDto.language ?? null,
@@ -83,11 +130,19 @@ export class KbArticlesService {
       category: createKbArticleDto.summary ?? null,
     });
 
-    return this.kbMapper.toArticleEntity(article as RawKbArticle);
+    await this.reindexArticle(article.id);
+
+    const indexedArticle = await this.kbRepository.findById(article.id);
+
+    return this.kbMapper.toArticleEntity((indexedArticle ?? article) as RawKbArticle);
   }
 
   async findAll(query: KbArticleQueryDto, actor?: AuthenticatedUser) {
-    const companyId = resolveCompanyScope(actor);
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      query.companyId,
+      'list_articles',
+    );
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     const skip = (page - 1) * limit;
@@ -155,7 +210,11 @@ export class KbArticlesService {
       category: updateKbArticleDto.summary,
     });
 
-    return this.kbMapper.toArticleEntity(article as RawKbArticle);
+    await this.reindexArticle(id);
+
+    const indexedArticle = await this.kbRepository.findById(id);
+
+    return this.kbMapper.toArticleEntity((indexedArticle ?? article) as RawKbArticle);
   }
 
   async publish(
@@ -177,7 +236,11 @@ export class KbArticlesService {
         : null,
     });
 
-    return this.kbMapper.toArticleEntity(article as RawKbArticle);
+    await this.reindexArticle(id);
+
+    const indexedArticle = await this.kbRepository.findById(id);
+
+    return this.kbMapper.toArticleEntity((indexedArticle ?? article) as RawKbArticle);
   }
 
   async remove(id: string, actor?: AuthenticatedUser) {
@@ -189,7 +252,10 @@ export class KbArticlesService {
     };
   }
 
-  async learnFromHumanResponse(dto: LearnFromHumanResponseDto) {
+  async learnFromHumanResponse(
+    dto: LearnFromHumanResponseDto,
+    actor?: AuthenticatedUser,
+  ) {
     const customerQuestion = dto.customerQuestion.trim();
     const humanAnswer = dto.humanAnswer.trim();
 
@@ -208,8 +274,48 @@ export class KbArticlesService {
       );
     }
 
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      dto.companyId,
+      'learn_from_human_response',
+    );
+
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        id: dto.conversationId,
+        companyId,
+        ...(dto.contactId ? { contactId: dto.contactId } : {}),
+      },
+      select: { id: true, contactId: true },
+    });
+    if (!conversation) {
+      throw new NotFoundException('Conversation not found for this company.');
+    }
+
+    const customerMessage = await this.prisma.message.findFirst({
+      where: {
+        id: customerMessageId,
+        conversationId: conversation.id,
+        companyId,
+        direction: 'inbound',
+      },
+      select: { id: true },
+    });
+    const humanAnswerMessage = await this.prisma.message.findFirst({
+      where: {
+        id: humanAnswerMessageId,
+        conversationId: conversation.id,
+        companyId,
+        direction: 'outbound',
+      },
+      select: { id: true },
+    });
+    if (!customerMessage || !humanAnswerMessage) {
+      throw new NotFoundException('Messages not found for this company conversation.');
+    }
+
     const alreadyExists = await this.prisma.kbSuggestion.findFirst({
-      where: { humanAnswerMessageId },
+      where: { humanAnswerMessageId, companyId },
       select: { id: true },
     });
 
@@ -223,7 +329,7 @@ export class KbArticlesService {
 
     const suggestion = await this.prisma.kbSuggestion.create({
       data: {
-        companyId: dto.companyId,
+        companyId,
         conversationId: dto.conversationId,
         customerMessageId,
         humanAnswerMessageId,
@@ -239,9 +345,9 @@ export class KbArticlesService {
 
     await this.prisma.notification.create({
       data: {
-        companyId: dto.companyId,
+        companyId,
         conversationId: dto.conversationId,
-        contactId: dto.contactId ?? null,
+        contactId: dto.contactId ?? conversation.contactId,
         type: NotificationType.KB_DRAFT_SUGGESTION,
         title: 'KB suggestion pending review',
         message: 'A human answer was saved as a pending KB suggestion.',
@@ -264,10 +370,14 @@ export class KbArticlesService {
     status?: 'pending' | 'approved' | 'rejected';
     actor?: AuthenticatedUser;
   }) {
-    const companyId = resolveCompanyScope(params?.actor) ?? params?.companyId;
+    const companyId = await this.resolveRequiredCompanyId(
+      params?.actor,
+      params?.companyId,
+      'list_suggestions',
+    );
     const rows = await this.prisma.kbSuggestion.findMany({
       where: {
-        ...(companyId ? { companyId } : {}),
+        companyId,
         ...(params?.status ? { status: params.status } : {}),
       },
       orderBy: { createdAt: 'desc' },
@@ -321,7 +431,13 @@ export class KbArticlesService {
       throw new NotFoundException('KB suggestion not found');
     }
 
-    if (companyId && suggestion.companyId !== companyId) {
+    const suggestionCompanyId = suggestion.companyId?.trim();
+
+    if (!suggestionCompanyId) {
+      throw new BadRequestException('KB suggestion is not linked to a company');
+    }
+
+    if (companyId && suggestionCompanyId !== companyId) {
       throw new NotFoundException('KB suggestion not found');
     }
 
@@ -347,7 +463,7 @@ export class KbArticlesService {
     });
 
     const article = await this.kbRepository.createArticle({
-      companyId: suggestion.companyId,
+      companyId: suggestionCompanyId,
       title: suggestion.question.slice(0, 220),
       body: `Customer question:\n${suggestion.question}\n\nHuman answer:\n${suggestion.answer}`,
       category: dto.category?.trim() || 'agent-learning',
@@ -362,16 +478,11 @@ export class KbArticlesService {
       sourceUrl: null,
     });
 
-    await this.kbRepository.createChunks(article.id, [
-      {
-        content: `Question: ${suggestion.question}\nAnswer: ${suggestion.answer}`,
-        chunkIndex: 0,
-        metadata: {
-          source: 'kb_suggestion',
-          suggestionId: suggestion.id,
-        },
-      },
-    ], suggestion.companyId);
+    await this.reindexArticle(article.id);
+
+    this.logger.log(
+      `KB_SUGGESTION_APPROVED companyId=${suggestionCompanyId} suggestionId=${suggestion.id} articleId=${article.id}`,
+    );
 
     return {
       suggestionId: approved.id,
@@ -397,7 +508,13 @@ export class KbArticlesService {
       throw new NotFoundException('KB suggestion not found');
     }
 
-    if (companyId && suggestion.companyId !== companyId) {
+    const suggestionCompanyId = suggestion.companyId?.trim();
+
+    if (!suggestionCompanyId) {
+      throw new BadRequestException('KB suggestion is not linked to a company');
+    }
+
+    if (companyId && suggestionCompanyId !== companyId) {
       throw new NotFoundException('KB suggestion not found');
     }
 
@@ -410,6 +527,10 @@ export class KbArticlesService {
       },
     });
 
+    this.logger.log(
+      `KB_SUGGESTION_REJECTED companyId=${suggestionCompanyId} suggestionId=${suggestion.id}`,
+    );
+
     return {
       suggestionId: rejected.id,
       status: rejected.status,
@@ -419,10 +540,14 @@ export class KbArticlesService {
   }
 
   async findDrafts(companyId?: string, actor?: AuthenticatedUser) {
-    const scopedCompanyId = resolveCompanyScope(actor) ?? companyId;
+    const scopedCompanyId = await this.resolveRequiredCompanyId(
+      actor,
+      companyId,
+      'list_drafts',
+    );
     const items = await this.kbRepository.findMany({
       status: 'draft',
-      companyId: scopedCompanyId ?? undefined,
+      companyId: scopedCompanyId,
       skip: 0,
       take: 200,
       orderBy: { createdAt: 'desc' },
@@ -452,6 +577,12 @@ export class KbArticlesService {
       throw new BadRequestException('File ingestion is not supported yet');
     }
 
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      ingestKbSourceDto.companyId,
+      'ingest_source',
+    );
+
     const ingestionResult = await this.ingestionService.ingest({
       sourceType:
         ingestKbSourceDto.sourceType === 'url'
@@ -468,7 +599,7 @@ export class KbArticlesService {
     });
 
     return this.createArticleFromIngestionResult(ingestionResult, {
-      companyId: resolveCompanyScope(actor),
+      companyId,
       title: ingestKbSourceDto.title,
       language: ingestKbSourceDto.language,
       sourceUrl: ingestKbSourceDto.sourceUrl,
@@ -486,6 +617,12 @@ export class KbArticlesService {
   ) {
     const sourceType = this.resolveIngestionFileType(file.originalname, file.mimetype);
 
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      ingestKbFileDto.companyId,
+      'ingest_file',
+    );
+
     const ingestionResult = await this.ingestionService.ingest({
       sourceType,
       fileBuffer: file.buffer,
@@ -498,7 +635,7 @@ export class KbArticlesService {
     });
 
     return this.createArticleFromIngestionResult(ingestionResult, {
-      companyId: resolveCompanyScope(actor),
+      companyId,
       title: ingestKbFileDto.title,
       language: ingestKbFileDto.language,
       sourceUrl: null,
@@ -509,6 +646,100 @@ export class KbArticlesService {
     });
   }
 
+  async reindexArticle(articleId: string) {
+    const article = await this.kbRepository.findById(articleId);
+
+    if (!article) {
+      throw new NotFoundException('Knowledge base article not found');
+    }
+
+    if (!article.companyId?.trim()) {
+      throw new BadRequestException(
+        'Knowledge base article is not linked to a company',
+      );
+    }
+
+    await this.kbRepository.deleteChunksByArticleId(article.id);
+
+    const content = [article.title, article.body].filter(Boolean).join('\n\n');
+
+    if (!content.trim()) {
+      return {
+        articleId: article.id,
+        companyId: article.companyId,
+        chunksIndexed: 0,
+      };
+    }
+
+    const tags = this.toStringList(article.tags);
+    const ingestionResult = await this.ingestionService.ingest({
+      sourceType: IngestionSourceType.TEXT,
+      title: article.title ?? undefined,
+      content,
+      language: article.language ?? undefined,
+      tags,
+      chunkSize: 2400,
+      chunkOverlap: 240,
+      metadata: {
+        language: article.language,
+        category: article.category,
+        tags,
+        product: null,
+        companyId: article.companyId,
+        articleId: article.id,
+        indexedAt: new Date().toISOString(),
+      },
+    });
+
+    await this.kbRepository.createChunks(
+      article.id,
+      ingestionResult.chunks.map((chunk: RawKbChunkInput) => ({
+        content: chunk.content,
+        chunkIndex: chunk.chunkIndex,
+        embedding: chunk.embedding ?? null,
+        metadata: {
+          ...(chunk.metadata ?? {}),
+          language: article.language,
+          category: article.category,
+          tags,
+          product: null,
+          companyId: article.companyId,
+          articleId: article.id,
+        },
+      })),
+      article.companyId,
+    );
+
+    return {
+      articleId: article.id,
+      companyId: article.companyId,
+      chunksIndexed: ingestionResult.chunks.length,
+    };
+  }
+
+  async reindexCompanyKb(companyId: string) {
+    const articles = await this.kbRepository.findMany({
+      companyId,
+      skip: 0,
+      take: 10000,
+      orderBy: { updatedAt: 'desc' },
+    });
+    const results = [];
+
+    for (const article of articles) {
+      results.push(await this.reindexArticle(article.id));
+    }
+
+    return {
+      companyId,
+      articlesIndexed: results.length,
+      chunksIndexed: results.reduce(
+        (sum, result) => sum + result.chunksIndexed,
+        0,
+      ),
+    };
+  }
+
   private async ensureArticleExists(id: string, companyId?: string) {
     const article = await this.kbRepository.findById(id, companyId);
 
@@ -516,7 +747,24 @@ export class KbArticlesService {
       throw new NotFoundException('Knowledge base article not found');
     }
 
+    if (!article.companyId?.trim()) {
+      throw new BadRequestException(
+        'Knowledge base article is not linked to a company',
+      );
+    }
+
     return article;
+  }
+
+  private toStringList(value: unknown): string[] {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    return value
+      .filter((item): item is string => typeof item === 'string')
+      .map((item) => item.trim())
+      .filter(Boolean);
   }
 
   private resolveIngestionFileType(
@@ -556,7 +804,7 @@ export class KbArticlesService {
   private async createArticleFromIngestionResult(
     ingestionResult: Awaited<ReturnType<IngestionService['ingest']>>,
     input: {
-      companyId?: string;
+      companyId: string;
       title?: string | null;
       language?: string | null;
       sourceUrl?: string | null;
@@ -569,7 +817,7 @@ export class KbArticlesService {
     const shouldPublish = input.autoPublish ?? true;
 
     const article = await this.kbRepository.createArticle({
-      companyId: input.companyId ?? undefined,
+      companyId: input.companyId,
       title: ingestionResult.title ?? input.title ?? 'Untitled article',
       body: ingestionResult.content,
       language: input.language ?? null,
@@ -589,7 +837,11 @@ export class KbArticlesService {
           content: chunk.content,
           chunkIndex: chunk.chunkIndex,
           embedding: chunk.embedding ?? null,
-          metadata: chunk.metadata ?? null,
+          metadata: {
+            ...(chunk.metadata ?? {}),
+            companyId: input.companyId,
+            articleId: article.id,
+          },
         })),
         input.companyId,
       );

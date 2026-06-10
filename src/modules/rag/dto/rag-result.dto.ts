@@ -10,6 +10,14 @@ export class RagResultDto {
     score: number;
     metadata?: Record<string, unknown>;
   }>;
+  sourceChunkIds!: string[];
+  sourceArticleIds!: string[];
+  retrievedChunksPreview!: Array<{
+    chunkId: string;
+    articleId: string | null;
+    score: number;
+    preview: string;
+  }>;
 
   constructor(partial: Partial<RagResultDto>) {
     Object.assign(this, partial);

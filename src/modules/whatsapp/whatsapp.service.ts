@@ -8,6 +8,10 @@ import {
 import { UserRole } from '../../common/enums/user-role.enum';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import { resolveCompanyScope } from '../../common/utils/company-scope.util';
+import {
+  buildEvolutionInstanceLookupCandidates,
+  findMatchingEvolutionInstance,
+} from '../../common/utils/evolution-instance.util';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import {
@@ -39,6 +43,13 @@ type WhatsappConversationContext = {
 
 type ResolvedEvolutionInstance = {
   instanceName: string | null;
+  apiBaseUrl: string | null;
+  apiKey: string | null;
+};
+
+type CompanyWhatsappInstanceConfig = {
+  companyId: string;
+  evolutionInstanceName: string;
   apiBaseUrl: string | null;
   apiKey: string | null;
 };
@@ -214,25 +225,9 @@ export class WhatsappService {
     );
 
     if (params.conversation && !windowStatus.canSendFreeForm) {
-      this.logger.warn(
-        `WHATSAPP_REPLY_SKIPPED conversationId=${params.conversation.id} reason=whatsapp_24h_window_expired`,
+      this.logger.log(
+        `WHATSAPP_WINDOW_OBSERVED conversationId=${params.conversation.id} reason=${windowStatus.reason ?? 'unknown'} action=continue_evolution_send`,
       );
-      return {
-        success: false,
-        sent: false,
-        skipped: true,
-        action: 'skipped',
-        canSendFreeForm: false,
-        reason: 'WHATSAPP_24H_WINDOW_EXPIRED',
-        message:
-          'The 24-hour WhatsApp customer service window is closed for this conversation.',
-        messageType: null,
-        messageId: null,
-        storedMessageId: null,
-        instanceName: params.instance.instanceName,
-        kbSuggestionId: null,
-        window: windowStatus,
-      };
     }
 
     if (!params.instance.instanceName) {
@@ -402,19 +397,33 @@ export class WhatsappService {
       return null;
     }
 
-    const recentWindowStart = new Date(Date.now() - 5 * 60 * 1000);
-
-    return this.prisma.message.findFirst({
+    const latestMessage = await this.prisma.message.findFirst({
       where: {
         conversationId: params.conversationId,
-        direction: 'outbound',
-        senderType: 'bot',
-        content: params.content,
-        createdAt: { gte: recentWindowStart },
       },
-      select: { id: true },
+      select: {
+        id: true,
+        direction: true,
+        senderType: true,
+        content: true,
+        createdAt: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
+
+    if (
+      latestMessage?.direction !== 'outbound' ||
+      latestMessage.senderType !== 'bot' ||
+      latestMessage.content !== params.content
+    ) {
+      return null;
+    }
+
+    const recentWindowStart = new Date(Date.now() - 5 * 60 * 1000);
+
+    return latestMessage.createdAt >= recentWindowStart
+      ? { id: latestMessage.id }
+      : null;
   }
 
   private isHumanAgentSender(senderType: StoredWhatsappSenderType) {
@@ -428,6 +437,10 @@ export class WhatsappService {
     occurredAt: Date;
   }) {
     if (!params.conversation || !params.humanAnswer.trim()) {
+      return null;
+    }
+
+    if (!(await this.shouldCreateKbSuggestion(params.conversation))) {
       return null;
     }
 
@@ -486,6 +499,29 @@ export class WhatsappService {
     );
 
     return suggestion;
+  }
+
+  private async shouldCreateKbSuggestion(
+    conversation: WhatsappConversationContext,
+  ): Promise<boolean> {
+    if (conversation.handoffRequired === true) {
+      return true;
+    }
+
+    const latestAiRun = await this.prisma.aiRun.findFirst({
+      where: {
+        conversationId: conversation.id,
+        OR: [
+          { responseMode: 'HANDOFF_REQUIRED' },
+          { handoffRequired: true },
+          { reason: 'no_reliable_knowledge_base_answer' },
+        ],
+      },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true },
+    });
+
+    return Boolean(latestAiRun);
   }
 
   private async releaseConversationAfterHumanReply(
@@ -1149,23 +1185,14 @@ export class WhatsappService {
     const providedInstance = params.providedInstance?.trim();
 
     if (providedInstance) {
-      const instance = await this.prisma.companyWhatsappInstance.findFirst({
-        where: {
-          evolutionInstanceName: providedInstance,
-          ...(params.companyId ? { companyId: params.companyId } : {}),
-        },
-        select: {
-          evolutionInstanceName: true,
-          apiBaseUrl: true,
-          apiKey: true,
-        },
-      });
+      const instance = await this.findCompanyWhatsappInstanceByName(
+        providedInstance,
+        params.companyId,
+      );
 
-      return {
-        instanceName: instance?.evolutionInstanceName ?? null,
-        apiBaseUrl: instance?.apiBaseUrl ?? null,
-        apiKey: instance?.apiKey ?? null,
-      };
+      if (instance) {
+        return this.toResolvedEvolutionInstance(instance, providedInstance);
+      }
     }
 
     if (!params.companyId) {
@@ -1183,10 +1210,62 @@ export class WhatsappService {
       orderBy: [{ connectionStatus: 'desc' }, { updatedAt: 'desc' }],
     });
 
+    return this.toResolvedEvolutionInstance(linked);
+  }
+
+  private async findCompanyWhatsappInstanceByName(
+    instanceName: string,
+    companyId: string | null,
+  ): Promise<CompanyWhatsappInstanceConfig | null> {
+    const candidates = buildEvolutionInstanceLookupCandidates(instanceName);
+    const companyScope = companyId ? { companyId } : {};
+    const exact = candidates.length
+      ? await this.prisma.companyWhatsappInstance.findFirst({
+          where: {
+            ...companyScope,
+            OR: candidates.map((candidate) => ({
+              evolutionInstanceName: candidate,
+            })),
+          },
+          select: {
+            companyId: true,
+            evolutionInstanceName: true,
+            apiBaseUrl: true,
+            apiKey: true,
+          },
+          orderBy: { updatedAt: 'desc' },
+        })
+      : null;
+
+    if (exact) {
+      return exact;
+    }
+
+    const instances = await this.prisma.companyWhatsappInstance.findMany({
+      where: companyScope,
+      select: {
+        companyId: true,
+        evolutionInstanceName: true,
+        apiBaseUrl: true,
+        apiKey: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return findMatchingEvolutionInstance(instances, instanceName);
+  }
+
+  private toResolvedEvolutionInstance(
+    instance?: CompanyWhatsappInstanceConfig | null,
+    runtimeInstanceName?: string | null,
+  ): ResolvedEvolutionInstance {
+    const providedRuntimeInstance = runtimeInstanceName?.trim();
+
     return {
-      instanceName: linked?.evolutionInstanceName ?? null,
-      apiBaseUrl: linked?.apiBaseUrl ?? null,
-      apiKey: linked?.apiKey ?? null,
+      instanceName:
+        (providedRuntimeInstance || instance?.evolutionInstanceName) ?? null,
+      apiBaseUrl: instance?.apiBaseUrl ?? null,
+      apiKey: instance?.apiKey ?? null,
     };
   }
 

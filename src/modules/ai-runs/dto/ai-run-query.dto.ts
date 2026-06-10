@@ -11,6 +11,10 @@ import {
 export class AiRunQueryDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   provider?: string;
 
   @IsOptional()

@@ -12,6 +12,7 @@ import {
   CompanyStatus,
   Prisma,
   SubscriptionStatus,
+  UserApprovalStatus,
 } from '../../generated/prisma/client';
 import { CreateAdminSubscriptionDto } from './dto/create-admin-subscription.dto';
 import { CreateAdminUserDto } from './dto/create-admin-user.dto';
@@ -733,6 +734,7 @@ export class AdminService {
         role,
         companyId,
         isActive: true,
+        approvalStatus: UserApprovalStatus.APPROVED,
       });
 
       await this.logAuditEvent({
@@ -815,7 +817,14 @@ export class AdminService {
         ? { email: updateUserDto.email.trim().toLowerCase() }
         : {}),
       ...(updateUserDto.role !== undefined ? { role: nextRole } : {}),
-      ...(updateUserDto.isActive !== undefined ? { isActive: updateUserDto.isActive } : {}),
+      ...(updateUserDto.isActive !== undefined
+        ? {
+            isActive: updateUserDto.isActive,
+            ...(updateUserDto.isActive
+              ? { approvalStatus: UserApprovalStatus.APPROVED }
+              : {}),
+          }
+        : {}),
       ...(updateUserDto.password
         ? { passwordHash: await hashPassword(updateUserDto.password) }
         : {}),
@@ -835,7 +844,11 @@ export class AdminService {
     };
 
     try {
-      const updated = await this.adminRepository.updateUser(id, data);
+      const updated = await this.adminRepository.updateUser(
+        id,
+        data,
+        updateUserDto.isActive === true ? actor.sub : undefined,
+      );
 
       await this.logAuditEvent({
         actor,
@@ -864,9 +877,16 @@ export class AdminService {
   ) {
     await this.getScopedUser(id, actor);
 
-    const updated = await this.adminRepository.updateUser(id, {
-      isActive: dto.isActive,
-    });
+    const updated = await this.adminRepository.updateUser(
+      id,
+      {
+        isActive: dto.isActive,
+        ...(dto.isActive
+          ? { approvalStatus: UserApprovalStatus.APPROVED }
+          : {}),
+      },
+      actor.sub,
+    );
 
     await this.logAuditEvent({
       actor,

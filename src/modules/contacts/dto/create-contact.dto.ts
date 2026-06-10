@@ -1,6 +1,10 @@
 import { IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class CreateContactDto {
+  @IsOptional()
+  @IsString()
+  companyId?: string;
+
   @IsString()
   firstName!: string;
 

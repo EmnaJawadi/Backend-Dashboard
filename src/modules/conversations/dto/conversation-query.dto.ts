@@ -5,6 +5,10 @@ import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 export class ConversationQueryDto {
   @IsOptional()
   @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
   search?: string;
 
   @IsOptional()
