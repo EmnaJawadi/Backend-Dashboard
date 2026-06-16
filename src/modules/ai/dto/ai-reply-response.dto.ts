@@ -27,6 +27,16 @@ export class AiReplyResponseDto {
     availability: string | null;
     confirmationStatus: string | null;
     missingFields: string[];
+    checkInDate: string | null;
+    checkOutDate: string | null;
+    nights: number | null;
+    numberOfAdults: number | null;
+    numberOfChildren: number | null;
+    childrenAges: string | null;
+    roomType: string | null;
+    boardFormula: string | null;
+    numberOfRooms: number | null;
+    selectedChoice: string | null;
   } = {
     actionType: null,
     customerName: null,
@@ -42,6 +52,16 @@ export class AiReplyResponseDto {
     availability: null,
     confirmationStatus: null,
     missingFields: [],
+    checkInDate: null,
+    checkOutDate: null,
+    nights: null,
+    numberOfAdults: null,
+    numberOfChildren: null,
+    childrenAges: null,
+    roomType: null,
+    boardFormula: null,
+    numberOfRooms: null,
+    selectedChoice: null,
   };
   replyDraft = '';
   keywordsForSearch: string[] = [];

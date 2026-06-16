@@ -14,11 +14,19 @@
     "start:debug": "nest start --debug --watch",
     "prestart:prod": "node scripts/free-port.js 3001",
     "start:prod": "node dist/src/main.js",
-    "test": "npm run test:ai-rag && npm run test:kb:flavonation",
+    "test": "npm run test:security && npm run test:ai-rag && npm run test:prompt:rag && npm run test:hotel-agent && npm run test:kb:flavonation && npm run test:kb:toskana",
+    "test:security": "npm run build && ts-node test/security-regression-test.ts",
     "test:ai-rag": "npm run build && ts-node test/ai-rag-smoke-test.ts",
+    "test:prompt:rag": "npm run build && ts-node test/workflow-rag-prompt-test.ts",
+    "test:hotel-agent": "npm run build && ts-node test/hotel-conversation-agent-test.ts",
     "test:kb:flavonation": "npm run build && ts-node test/flavonation-kb-rag-test.ts",
+    "test:kb:toskana": "npm run build && ts-node test/toskana-kb-rag-test.ts",
     "prisma:seed": "npm run build && node prisma/seed.js",
-    "kb:seed:flavonation": "npm run build && node prisma/seed-flavonation-kb.js"
+    "kb:seed:flavonation": "npm run build && node prisma/seed-flavonation-kb.js",
+    "kb:rebuild": "npm run build && node scripts/rebuild-kb.js",
+    "kb:replace:toskana": "npm run build && node scripts/replace-toskanaworld-2026-kb.js",
+    "kb:verify:toskana": "npm run build && node scripts/verify-toskanaworld-rag.js",
+    "kb:seed:tanfous": "ts-node src/seeds/seed-kb-articles.ts"
   },
   "prisma": {
     "seed": "npm run prisma:seed"
@@ -49,6 +57,7 @@
     "class-validator": "^0.15.1",
     "ioredis": "^5.10.1",
     "joi": "^18.1.2",
+    "js-yaml": "^4.1.1",
     "jszip": "^3.10.1",
     "mammoth": "^1.12.0",
     "minio": "^8.0.7",

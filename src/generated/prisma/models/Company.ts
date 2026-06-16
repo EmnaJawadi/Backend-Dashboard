@@ -257,6 +257,7 @@ export type CompanyWhereInput = {
   products?: Prisma.ProductListRelationFilter
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestListRelationFilter
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestListRelationFilter
+  pdfImportDrafts?: Prisma.PdfImportDraftListRelationFilter
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -291,6 +292,7 @@ export type CompanyOrderByWithRelationInput = {
   products?: Prisma.ProductOrderByRelationAggregateInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestOrderByRelationAggregateInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestOrderByRelationAggregateInput
+  pdfImportDrafts?: Prisma.PdfImportDraftOrderByRelationAggregateInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -328,6 +330,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   products?: Prisma.ProductListRelationFilter
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestListRelationFilter
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestListRelationFilter
+  pdfImportDrafts?: Prisma.PdfImportDraftListRelationFilter
 }, "id" | "name" | "email">
 
 export type CompanyOrderByWithAggregationInput = {
@@ -398,6 +401,7 @@ export type CompanyCreateInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -432,6 +436,7 @@ export type CompanyUncheckedCreateInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -466,6 +471,7 @@ export type CompanyUpdateInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -500,6 +506,7 @@ export type CompanyUncheckedUpdateInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -844,12 +851,10 @@ export type CompanyCreateNestedOneWithoutKbChunksInput = {
   connect?: Prisma.CompanyWhereUniqueInput
 }
 
-export type CompanyUpdateOneWithoutKbChunksNestedInput = {
+export type CompanyUpdateOneRequiredWithoutKbChunksNestedInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutKbChunksInput, Prisma.CompanyUncheckedCreateWithoutKbChunksInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutKbChunksInput
   upsert?: Prisma.CompanyUpsertWithoutKbChunksInput
-  disconnect?: Prisma.CompanyWhereInput | boolean
-  delete?: Prisma.CompanyWhereInput | boolean
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutKbChunksInput, Prisma.CompanyUpdateWithoutKbChunksInput>, Prisma.CompanyUncheckedUpdateWithoutKbChunksInput>
 }
@@ -902,6 +907,20 @@ export type CompanyUpdateOneWithoutWebhookEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutWebhookEventsInput, Prisma.CompanyUpdateWithoutWebhookEventsInput>, Prisma.CompanyUncheckedUpdateWithoutWebhookEventsInput>
 }
 
+export type CompanyCreateNestedOneWithoutPdfImportDraftsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedCreateWithoutPdfImportDraftsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutPdfImportDraftsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutPdfImportDraftsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedCreateWithoutPdfImportDraftsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutPdfImportDraftsInput
+  upsert?: Prisma.CompanyUpsertWithoutPdfImportDraftsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutPdfImportDraftsInput, Prisma.CompanyUpdateWithoutPdfImportDraftsInput>, Prisma.CompanyUncheckedUpdateWithoutPdfImportDraftsInput>
+}
+
 export type CompanyCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -933,6 +952,7 @@ export type CompanyCreateWithoutUsersInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -966,6 +986,7 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -1015,6 +1036,7 @@ export type CompanyUpdateWithoutUsersInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -1048,6 +1070,7 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutApprovedRegistrationRequestsInput = {
@@ -1081,6 +1104,7 @@ export type CompanyCreateWithoutApprovedRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput = {
@@ -1114,6 +1138,7 @@ export type CompanyUncheckedCreateWithoutApprovedRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutApprovedRegistrationRequestsInput = {
@@ -1163,6 +1188,7 @@ export type CompanyUpdateWithoutApprovedRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput = {
@@ -1196,6 +1222,7 @@ export type CompanyUncheckedUpdateWithoutApprovedRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAgentRegistrationRequestsInput = {
@@ -1229,6 +1256,7 @@ export type CompanyCreateWithoutAgentRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAgentRegistrationRequestsInput = {
@@ -1262,6 +1290,7 @@ export type CompanyUncheckedCreateWithoutAgentRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAgentRegistrationRequestsInput = {
@@ -1311,6 +1340,7 @@ export type CompanyUpdateWithoutAgentRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAgentRegistrationRequestsInput = {
@@ -1344,6 +1374,7 @@ export type CompanyUncheckedUpdateWithoutAgentRegistrationRequestsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutWhatsappInstancesInput = {
@@ -1377,6 +1408,7 @@ export type CompanyCreateWithoutWhatsappInstancesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutWhatsappInstancesInput = {
@@ -1410,6 +1442,7 @@ export type CompanyUncheckedCreateWithoutWhatsappInstancesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutWhatsappInstancesInput = {
@@ -1459,6 +1492,7 @@ export type CompanyUpdateWithoutWhatsappInstancesInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutWhatsappInstancesInput = {
@@ -1492,6 +1526,7 @@ export type CompanyUncheckedUpdateWithoutWhatsappInstancesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutProductsInput = {
@@ -1525,6 +1560,7 @@ export type CompanyCreateWithoutProductsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutProductsInput = {
@@ -1558,6 +1594,7 @@ export type CompanyUncheckedCreateWithoutProductsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutProductsInput = {
@@ -1607,6 +1644,7 @@ export type CompanyUpdateWithoutProductsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutProductsInput = {
@@ -1640,6 +1678,7 @@ export type CompanyUncheckedUpdateWithoutProductsInput = {
   whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSubscriptionsInput = {
@@ -1673,6 +1712,7 @@ export type CompanyCreateWithoutSubscriptionsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
@@ -1706,6 +1746,7 @@ export type CompanyUncheckedCreateWithoutSubscriptionsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSubscriptionsInput = {
@@ -1755,6 +1796,7 @@ export type CompanyUpdateWithoutSubscriptionsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
@@ -1788,6 +1830,7 @@ export type CompanyUncheckedUpdateWithoutSubscriptionsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutContactsInput = {
@@ -1821,6 +1864,7 @@ export type CompanyCreateWithoutContactsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutContactsInput = {
@@ -1854,6 +1898,7 @@ export type CompanyUncheckedCreateWithoutContactsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutContactsInput = {
@@ -1903,6 +1948,7 @@ export type CompanyUpdateWithoutContactsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutContactsInput = {
@@ -1936,6 +1982,7 @@ export type CompanyUncheckedUpdateWithoutContactsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutContactNotesInput = {
@@ -1969,6 +2016,7 @@ export type CompanyCreateWithoutContactNotesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutContactNotesInput = {
@@ -2002,6 +2050,7 @@ export type CompanyUncheckedCreateWithoutContactNotesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutContactNotesInput = {
@@ -2051,6 +2100,7 @@ export type CompanyUpdateWithoutContactNotesInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutContactNotesInput = {
@@ -2084,6 +2134,7 @@ export type CompanyUncheckedUpdateWithoutContactNotesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutConversationsInput = {
@@ -2117,6 +2168,7 @@ export type CompanyCreateWithoutConversationsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutConversationsInput = {
@@ -2150,6 +2202,7 @@ export type CompanyUncheckedCreateWithoutConversationsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutConversationsInput = {
@@ -2199,6 +2252,7 @@ export type CompanyUpdateWithoutConversationsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutConversationsInput = {
@@ -2232,6 +2286,7 @@ export type CompanyUncheckedUpdateWithoutConversationsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutConversationTagsInput = {
@@ -2265,6 +2320,7 @@ export type CompanyCreateWithoutConversationTagsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutConversationTagsInput = {
@@ -2298,6 +2354,7 @@ export type CompanyUncheckedCreateWithoutConversationTagsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutConversationTagsInput = {
@@ -2347,6 +2404,7 @@ export type CompanyUpdateWithoutConversationTagsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutConversationTagsInput = {
@@ -2380,6 +2438,7 @@ export type CompanyUncheckedUpdateWithoutConversationTagsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutMessagesInput = {
@@ -2413,6 +2472,7 @@ export type CompanyCreateWithoutMessagesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutMessagesInput = {
@@ -2446,6 +2506,7 @@ export type CompanyUncheckedCreateWithoutMessagesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutMessagesInput = {
@@ -2495,6 +2556,7 @@ export type CompanyUpdateWithoutMessagesInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutMessagesInput = {
@@ -2528,6 +2590,7 @@ export type CompanyUncheckedUpdateWithoutMessagesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutKbSuggestionsInput = {
@@ -2561,6 +2624,7 @@ export type CompanyCreateWithoutKbSuggestionsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutKbSuggestionsInput = {
@@ -2594,6 +2658,7 @@ export type CompanyUncheckedCreateWithoutKbSuggestionsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutKbSuggestionsInput = {
@@ -2643,6 +2708,7 @@ export type CompanyUpdateWithoutKbSuggestionsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutKbSuggestionsInput = {
@@ -2676,6 +2742,7 @@ export type CompanyUncheckedUpdateWithoutKbSuggestionsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAiRunsInput = {
@@ -2709,6 +2776,7 @@ export type CompanyCreateWithoutAiRunsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAiRunsInput = {
@@ -2742,6 +2810,7 @@ export type CompanyUncheckedCreateWithoutAiRunsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAiRunsInput = {
@@ -2791,6 +2860,7 @@ export type CompanyUpdateWithoutAiRunsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAiRunsInput = {
@@ -2824,6 +2894,7 @@ export type CompanyUncheckedUpdateWithoutAiRunsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAuditLogsInput = {
@@ -2857,6 +2928,7 @@ export type CompanyCreateWithoutAuditLogsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAuditLogsInput = {
@@ -2890,6 +2962,7 @@ export type CompanyUncheckedCreateWithoutAuditLogsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAuditLogsInput = {
@@ -2939,6 +3012,7 @@ export type CompanyUpdateWithoutAuditLogsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
@@ -2972,6 +3046,7 @@ export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutKbArticlesInput = {
@@ -3005,6 +3080,7 @@ export type CompanyCreateWithoutKbArticlesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutKbArticlesInput = {
@@ -3038,6 +3114,7 @@ export type CompanyUncheckedCreateWithoutKbArticlesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutKbArticlesInput = {
@@ -3087,6 +3164,7 @@ export type CompanyUpdateWithoutKbArticlesInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutKbArticlesInput = {
@@ -3120,6 +3198,7 @@ export type CompanyUncheckedUpdateWithoutKbArticlesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutKbChunksInput = {
@@ -3153,6 +3232,7 @@ export type CompanyCreateWithoutKbChunksInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutKbChunksInput = {
@@ -3186,6 +3266,7 @@ export type CompanyUncheckedCreateWithoutKbChunksInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutKbChunksInput = {
@@ -3235,6 +3316,7 @@ export type CompanyUpdateWithoutKbChunksInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutKbChunksInput = {
@@ -3268,6 +3350,7 @@ export type CompanyUncheckedUpdateWithoutKbChunksInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutNotificationsInput = {
@@ -3301,6 +3384,7 @@ export type CompanyCreateWithoutNotificationsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutNotificationsInput = {
@@ -3334,6 +3418,7 @@ export type CompanyUncheckedCreateWithoutNotificationsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutNotificationsInput = {
@@ -3383,6 +3468,7 @@ export type CompanyUpdateWithoutNotificationsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutNotificationsInput = {
@@ -3416,6 +3502,7 @@ export type CompanyUncheckedUpdateWithoutNotificationsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSettingsInput = {
@@ -3449,6 +3536,7 @@ export type CompanyCreateWithoutSettingsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSettingsInput = {
@@ -3482,6 +3570,7 @@ export type CompanyUncheckedCreateWithoutSettingsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSettingsInput = {
@@ -3531,6 +3620,7 @@ export type CompanyUpdateWithoutSettingsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSettingsInput = {
@@ -3564,6 +3654,7 @@ export type CompanyUncheckedUpdateWithoutSettingsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutWebhookEventsInput = {
@@ -3597,6 +3688,7 @@ export type CompanyCreateWithoutWebhookEventsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutWebhookEventsInput = {
@@ -3630,6 +3722,7 @@ export type CompanyUncheckedCreateWithoutWebhookEventsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutWebhookEventsInput = {
@@ -3679,6 +3772,7 @@ export type CompanyUpdateWithoutWebhookEventsInput = {
   products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutWebhookEventsInput = {
@@ -3712,6 +3806,159 @@ export type CompanyUncheckedUpdateWithoutWebhookEventsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
   approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
   agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutPdfImportDraftsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  emailNotificationsEnabled?: boolean
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkCreateNestedManyWithoutCompanyInput
+  kbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceCreateNestedManyWithoutCompanyInput
+  products?: Prisma.ProductCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutApprovedCompanyInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutPdfImportDraftsInput = {
+  id?: string
+  name: string
+  legalName?: string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  address?: string | null
+  emailNotificationsEnabled?: boolean
+  status?: $Enums.CompanyStatus
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutCompanyInput
+  contactNotes?: Prisma.ContactNoteUncheckedCreateNestedManyWithoutCompanyInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutCompanyInput
+  conversationTags?: Prisma.ConversationTagUncheckedCreateNestedManyWithoutCompanyInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCompanyInput
+  aiRuns?: Prisma.AiRunUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  kbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCompanyInput
+  kbChunks?: Prisma.KbChunkUncheckedCreateNestedManyWithoutCompanyInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCompanyInput
+  settings?: Prisma.SettingUncheckedCreateNestedManyWithoutCompanyInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedCreateNestedManyWithoutCompanyInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutCompanyInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutApprovedCompanyInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutPdfImportDraftsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedCreateWithoutPdfImportDraftsInput>
+}
+
+export type CompanyUpsertWithoutPdfImportDraftsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedUpdateWithoutPdfImportDraftsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedCreateWithoutPdfImportDraftsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutPdfImportDraftsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutPdfImportDraftsInput, Prisma.CompanyUncheckedUpdateWithoutPdfImportDraftsInput>
+}
+
+export type CompanyUpdateWithoutPdfImportDraftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUpdateManyWithoutCompanyNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUpdateManyWithoutCompanyNestedInput
+  products?: Prisma.ProductUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUpdateManyWithoutApprovedCompanyNestedInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutPdfImportDraftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  legalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutCompanyNestedInput
+  contactNotes?: Prisma.ContactNoteUncheckedUpdateManyWithoutCompanyNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutCompanyNestedInput
+  conversationTags?: Prisma.ConversationTagUncheckedUpdateManyWithoutCompanyNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCompanyNestedInput
+  aiRuns?: Prisma.AiRunUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  kbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCompanyNestedInput
+  kbChunks?: Prisma.KbChunkUncheckedUpdateManyWithoutCompanyNestedInput
+  kbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCompanyNestedInput
+  settings?: Prisma.SettingUncheckedUpdateManyWithoutCompanyNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInstances?: Prisma.CompanyWhatsappInstanceUncheckedUpdateManyWithoutCompanyNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutCompanyNestedInput
+  approvedRegistrationRequests?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutApprovedCompanyNestedInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 
@@ -3739,6 +3986,7 @@ export type CompanyCountOutputType = {
   products: number
   approvedRegistrationRequests: number
   agentRegistrationRequests: number
+  pdfImportDrafts: number
 }
 
 export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3761,6 +4009,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   products?: boolean | CompanyCountOutputTypeCountProductsArgs
   approvedRegistrationRequests?: boolean | CompanyCountOutputTypeCountApprovedRegistrationRequestsArgs
   agentRegistrationRequests?: boolean | CompanyCountOutputTypeCountAgentRegistrationRequestsArgs
+  pdfImportDrafts?: boolean | CompanyCountOutputTypeCountPdfImportDraftsArgs
 }
 
 /**
@@ -3906,6 +4155,13 @@ export type CompanyCountOutputTypeCountAgentRegistrationRequestsArgs<ExtArgs ext
   where?: Prisma.AgentRegistrationRequestWhereInput
 }
 
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountPdfImportDraftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PdfImportDraftWhereInput
+}
+
 
 export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3939,6 +4195,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   products?: boolean | Prisma.Company$productsArgs<ExtArgs>
   approvedRegistrationRequests?: boolean | Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>
   agentRegistrationRequests?: boolean | Prisma.Company$agentRegistrationRequestsArgs<ExtArgs>
+  pdfImportDrafts?: boolean | Prisma.Company$pdfImportDraftsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
@@ -4008,6 +4265,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   products?: boolean | Prisma.Company$productsArgs<ExtArgs>
   approvedRegistrationRequests?: boolean | Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>
   agentRegistrationRequests?: boolean | Prisma.Company$agentRegistrationRequestsArgs<ExtArgs>
+  pdfImportDrafts?: boolean | Prisma.Company$pdfImportDraftsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4035,6 +4293,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     products: Prisma.$ProductPayload<ExtArgs>[]
     approvedRegistrationRequests: Prisma.$CompanyRegistrationRequestPayload<ExtArgs>[]
     agentRegistrationRequests: Prisma.$AgentRegistrationRequestPayload<ExtArgs>[]
+    pdfImportDrafts: Prisma.$PdfImportDraftPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4462,6 +4721,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   products<T extends Prisma.Company$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   approvedRegistrationRequests<T extends Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$approvedRegistrationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyRegistrationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   agentRegistrationRequests<T extends Prisma.Company$agentRegistrationRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$agentRegistrationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentRegistrationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pdfImportDrafts<T extends Prisma.Company$pdfImportDraftsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$pdfImportDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PdfImportDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5349,6 +5609,30 @@ export type Company$agentRegistrationRequestsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.AgentRegistrationRequestScalarFieldEnum | Prisma.AgentRegistrationRequestScalarFieldEnum[]
+}
+
+/**
+ * Company.pdfImportDrafts
+ */
+export type Company$pdfImportDraftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PdfImportDraft
+   */
+  select?: Prisma.PdfImportDraftSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PdfImportDraft
+   */
+  omit?: Prisma.PdfImportDraftOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PdfImportDraftInclude<ExtArgs> | null
+  where?: Prisma.PdfImportDraftWhereInput
+  orderBy?: Prisma.PdfImportDraftOrderByWithRelationInput | Prisma.PdfImportDraftOrderByWithRelationInput[]
+  cursor?: Prisma.PdfImportDraftWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PdfImportDraftScalarFieldEnum | Prisma.PdfImportDraftScalarFieldEnum[]
 }
 
 /**

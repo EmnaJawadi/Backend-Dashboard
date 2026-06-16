@@ -341,7 +341,8 @@ export class WebhooksService {
     const handoffPending = state.conversation.handoffRequired === true;
     const automationBlocked =
       botPaused ||
-      humanAssigned;
+      humanAssigned ||
+      handoffPending;
     const aiEnabled = await this.isCompanyAiEnabled(company.companyId);
 
     this.logger.log(
@@ -353,7 +354,9 @@ export class WebhooksService {
         ? 'ai_disabled'
         : botPaused
           ? 'bot_paused'
-          : 'human_takeover_active';
+          : handoffPending
+            ? 'human_handoff_active'
+            : 'human_takeover_active';
 
       await this.notifyInternalHandoff({
         companyId: company.companyId,
@@ -484,7 +487,7 @@ export class WebhooksService {
         shouldSendMessage: shouldSendHandoffNotice,
         replyText: shouldSendHandoffNotice ? replyText : '',
         reason: aiReply.reason ?? 'ai_handoff_required',
-        botPaused: false,
+        botPaused: true,
         humanAssigned: false,
         handoffRequired: true,
         aiRunId: aiReply.aiRunId,
@@ -587,7 +590,7 @@ export class WebhooksService {
     const mediaId = this.normalizeNullableString(payload.mediaId);
     const mimeType = this.normalizeNullableString(payload.mimeType);
     const messageType =
-      payload.messageType?.trim() || (mediaUrl || mediaId ? 'image' : 'text');
+      payload.messageType?.trim() || payload.type?.trim() || (mediaUrl || mediaId ? 'image' : 'text');
     const hasMedia =
       payload.hasMedia === true ||
       ['image', 'audio', 'video', 'document'].includes(messageType);

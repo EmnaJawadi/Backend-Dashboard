@@ -62,6 +62,16 @@ type OrderDetails = {
   availability: string | null;
   confirmationStatus: string | null;
   missingFields: string[];
+  checkInDate: string | null;
+  checkOutDate: string | null;
+  nights: number | null;
+  numberOfAdults: number | null;
+  numberOfChildren: number | null;
+  childrenAges: string | null;
+  roomType: string | null;
+  boardFormula: string | null;
+  numberOfRooms: number | null;
+  selectedChoice: string | null;
 };
 
 type Scenario = {
@@ -84,7 +94,8 @@ const TENANTS: Tenant[] = [
     instanceName: 'alpha-instance',
     companyName: 'Alpha Services',
     sourceId: 'kb-alpha',
-    evidence: 'Alpha Services offers Alpha-only assistance and Alpha-only conditions.',
+    evidence:
+      'Alpha Services offers Alpha-only assistance and Alpha-only conditions. Standard Room rate: 115 TND.',
   },
   {
     companyId: 'company-beta',
@@ -93,7 +104,8 @@ const TENANTS: Tenant[] = [
     instanceName: 'beta-instance',
     companyName: 'Beta Solutions',
     sourceId: 'kb-beta',
-    evidence: 'Beta Solutions offers Beta-only assistance and Beta-only conditions.',
+    evidence:
+      'Beta Solutions offers Beta-only assistance and Beta-only conditions. Standard Room rate: 125 TND.',
   },
 ];
 
@@ -112,6 +124,16 @@ const EMPTY_ORDER_DETAILS: OrderDetails = {
   availability: null,
   confirmationStatus: null,
   missingFields: [],
+  checkInDate: null,
+  checkOutDate: null,
+  nights: null,
+  numberOfAdults: null,
+  numberOfChildren: null,
+  childrenAges: null,
+  roomType: null,
+  boardFormula: null,
+  numberOfRooms: null,
+  selectedChoice: null,
 };
 
 const SCENARIOS: Scenario[] = [
@@ -202,7 +224,14 @@ const SCENARIOS: Scenario[] = [
     orderDetails: {
       ...EMPTY_ORDER_DETAILS,
       actionType: 'reservation',
-      missingFields: ['requestedItem', 'date'],
+      confirmationStatus: 'collecting_details',
+      missingFields: [
+        'checkInDate',
+        'checkOutDate',
+        'numberOfAdults',
+        'numberOfChildren',
+        'roomType',
+      ],
     },
   },
   {
@@ -882,7 +911,7 @@ async function run() {
     [{ role: 'user', content: '\u0647\u0644 \u0644\u062f\u064a\u0643\u0645 \u0633\u0648\u0634\u064a\u061f' }],
   );
   assert.equal(englishAfterArabicHistory, 'en');
-  assert.match(fallbackService.verificationReply('en'), /I'll check/);
+  assert.match(fallbackService.verificationReply('en'), /exact information/i);
   assert.match(fallbackService.verificationReply('tunisian_arabic'), /[\u0600-\u06ff]/u);
   assert.doesNotMatch(
     fallbackService.verificationReply('tunisian_arabic'),
@@ -894,6 +923,7 @@ async function run() {
 
   for (const scenario of answerableScenarios) {
     const reply = await generate(service, scenario.message);
+    const isGenericHotelPrice = scenario.message === 'prix svp';
     assert.equal(reply.normalizedMessage, scenario.normalizedMessage);
     assert.equal(reply.detectedLanguage, scenario.detectedLanguage);
     assert.equal(reply.intent, scenario.intent);
@@ -902,9 +932,13 @@ async function run() {
     assert.equal(reply.orderIntent, scenario.orderIntent === true);
     assert.equal(reply.shouldSendMessage, true);
     assert.deepEqual(reply.orderDetails, scenario.orderDetails);
-    assert.deepEqual(reply.sources, ['kb-alpha']);
+    assert.deepEqual(reply.sources, isGenericHotelPrice ? [] : ['kb-alpha']);
 
-    if (scenario.detectedLanguage === 'en') {
+    if (isGenericHotelPrice) {
+      assert.match(reply.reply, /type de chambre/);
+      assert.match(reply.reply, /date du sejour/);
+      assert.doesNotMatch(reply.reply, /115 TND/);
+    } else if (scenario.detectedLanguage === 'en') {
       assert.match(reply.reply, /confirmed|Please share/i);
       assert.doesNotMatch(reply.reply, /information confirmee/i);
     } else if (scenario.detectedLanguage === 'tunisian_arabic_latin') {
@@ -914,8 +948,11 @@ async function run() {
       scenario.detectedLanguage === 'ar'
     ) {
       assert.match(reply.reply, /[\u0600-\u06ff]/u);
+    } else if (scenario.intent === 'PRICE_QUERY') {
+      assert.match(reply.reply, /115 TND/);
+      assert.doesNotMatch(reply.reply, /Voici les informations disponibles/);
     } else if (scenario.detectedLanguage === 'fr') {
-      assert.match(reply.reply, /information confirmee|Precisez/i);
+      assert.match(reply.reply, /information confirmee|Precisez|indiquez/i);
     }
   }
 
@@ -974,7 +1011,8 @@ async function run() {
   assert.equal(missingReply.canAnswer, false);
   assert.equal(missingReply.handoffRequired, true);
   assert.equal(missingReply.shouldSendMessage, true);
-  assert.match(missingReply.reply, /v.rifier/);
+  assert.match(missingReply.reply, /information exacte/);
+  assert.match(missingReply.reply, /responsable/);
   assert.deepEqual(missingReply.sources, []);
 
   const socialBefore = ragCalls.length;
@@ -987,7 +1025,7 @@ async function run() {
   assert.equal(technicalFailureReply.handoffRequired, true);
   assert.equal(technicalFailureReply.shouldSendMessage, true);
   assert.equal(technicalFailureReply.reason, 'ai_provider_understanding_failed');
-  assert.match(technicalFailureReply.reply, /v.rifier/);
+  assert.match(technicalFailureReply.reply, /information exacte/);
 
   const tunisianContextFailureReply = await service.generateReply(
     {
@@ -997,7 +1035,8 @@ async function run() {
     undefined,
     { enforceWorkflowPayload: true },
   );
-  assert.match(tunisianContextFailureReply.reply, /Bech nthabetlek/);
+  assert.match(tunisianContextFailureReply.reply, /Ma 3andich/);
+  assert.match(tunisianContextFailureReply.reply, /responsable/);
 
   const providerFailureReply = await generate(service, 'quota menu');
   assert.equal(providerFailureReply.shouldSendMessage, true);
@@ -1006,12 +1045,19 @@ async function run() {
   assert.doesNotMatch(providerFailureReply.reply, /Alpha-only assistance/);
 
   const ungroundedSourceReply = await generate(service, 'tarifs hotel sans sources');
-  assert.equal(ungroundedSourceReply.reason, 'rag_evidence_fallback_after_ungrounded_llm_reply');
+  assert.equal(
+    ungroundedSourceReply.reason,
+    'rag_evidence_fallback_after_ungrounded_llm_reply',
+  );
   assert.equal(ungroundedSourceReply.canAnswer, true);
   assert.equal(ungroundedSourceReply.usedKb, true);
   assert.equal(ungroundedSourceReply.responseMode, 'KB_DIRECT_DEBUG');
   assert.deepEqual(ungroundedSourceReply.sources, ['kb-alpha']);
-  assert.match(ungroundedSourceReply.reply, /Voici les informations disponibles|Alpha Services/);
+  assert.match(ungroundedSourceReply.reply, /115 TND/);
+  assert.doesNotMatch(
+    ungroundedSourceReply.reply,
+    /Voici les informations disponibles/,
+  );
 
   const groundedFailureReply = await generate(
     service,
@@ -1062,7 +1108,9 @@ async function run() {
     companyId: 'company-alpha',
   });
   assert.equal(dashboardReply.canAnswer, true);
-  assert.deepEqual(dashboardReply.sources, ['kb-alpha']);
+  assert.deepEqual(dashboardReply.sources, []);
+  assert.match(dashboardReply.reply, /type de chambre/);
+  assert.match(dashboardReply.reply, /date du sejour/);
 
   const priceRun = aiRuns.find((run) => run.intent === 'PRICE_QUERY');
   assert.ok(priceRun);

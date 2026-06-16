@@ -13,6 +13,22 @@ export class N8nNormalizedMessageDto {
 
   @IsOptional()
   @IsString()
+  direction?: string;
+
+  @IsOptional()
+  @IsString()
+  senderType?: string;
+
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @IsOptional()
+  @IsString()
+  type?: string;
+
+  @IsOptional()
+  @IsString()
   eventType?: string;
 
   @IsOptional()

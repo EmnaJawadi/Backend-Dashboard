@@ -227,6 +227,7 @@ export class ConversationsService {
   ): boolean {
     return (
       conversation.botPaused === true ||
+      conversation.handoffRequired === true ||
       conversation.status === 'human_assigned' ||
       Boolean(conversation.assignedTo)
     );
@@ -504,10 +505,6 @@ export class ConversationsService {
         });
       } else {
         const shouldPauseBot = this.shouldPauseBotForConversation(conversation);
-        const shouldResumeAiAutomation =
-          conversation.status === 'human_assigned' &&
-          !conversation.assignedTo &&
-          conversation.handoffRequired === true;
         const shouldRefreshInboundTimeline =
           !conversation.lastCustomerMessageAt ||
           eventAt.getTime() > conversation.lastCustomerMessageAt.getTime();
@@ -515,12 +512,7 @@ export class ConversationsService {
         conversation = await tx.conversation.update({
           where: { id: conversation.id },
           data: {
-            status: shouldResumeAiAutomation ? 'waiting_customer' : undefined,
-            botPaused: shouldResumeAiAutomation
-              ? false
-              : shouldPauseBot
-                ? true
-                : conversation.botPaused,
+            botPaused: shouldPauseBot ? true : conversation.botPaused,
             lastCustomerMessageAt: shouldRefreshInboundTimeline
               ? eventAt
               : undefined,
@@ -956,16 +948,20 @@ export class ConversationsService {
         botPaused:
           status === 'human_assigned'
             ? true
-            : status === 'bot_active' || status === 'waiting_customer'
+            : status === 'waiting_customer'
+              ? true
+              : status === 'bot_active' || status === 'closed'
               ? false
               : undefined,
         handoffRequired:
           status === 'human_assigned'
             ? true
-            : status === 'bot_active' || status === 'waiting_customer'
+            : status === 'waiting_customer'
+              ? true
+              : status === 'bot_active' || status === 'closed'
               ? false
               : undefined,
-        assignedTo: status === 'bot_active' ? null : undefined,
+        assignedTo: status === 'bot_active' || status === 'closed' ? null : undefined,
         updatedAt: new Date(),
       },
     });
@@ -1028,7 +1024,7 @@ export class ConversationsService {
         ? {
             assignedTo: workflowHandoffDto.assignedTo ?? null,
             status: 'waiting_customer',
-            botPaused: false,
+            botPaused: true,
             handoffRequired: true,
             updatedAt: now,
           }

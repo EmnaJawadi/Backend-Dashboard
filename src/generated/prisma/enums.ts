@@ -131,3 +131,22 @@ export const KbSuggestionStatus = {
 } as const
 
 export type KbSuggestionStatus = (typeof KbSuggestionStatus)[keyof typeof KbSuggestionStatus]
+
+
+export const PdfImportStatus = {
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  PARTIALLY_DONE: 'PARTIALLY_DONE',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type PdfImportStatus = (typeof PdfImportStatus)[keyof typeof PdfImportStatus]
+
+
+export const DraftArticleStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  EDITED: 'EDITED'
+} as const
+
+export type DraftArticleStatus = (typeof DraftArticleStatus)[keyof typeof DraftArticleStatus]

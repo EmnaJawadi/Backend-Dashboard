@@ -7,6 +7,7 @@ import { ConversationSummaryBuilder } from './builders/conversation-summary.buil
 import { EvidenceContextBuilder } from './builders/evidence-context.builder';
 import { ProductSearchService } from '../products/product-search.service';
 import { RagSearchService } from './rag-search.service';
+import { deduplicateRagResults } from './utils/deduplicate-rag-results';
 
 @Injectable()
 export class RagService implements RagSearchService {
@@ -85,10 +86,12 @@ export class RagService implements RagSearchService {
           matchedTokens: result.matchedTokens,
         },
       }));
-    const dedupedEvidences = this.dedupeEvidences([
-      ...filtered,
-      ...productEvidences,
-    ]);
+    const dedupedEvidences = deduplicateRagResults(
+      [...filtered, ...productEvidences].filter((evidence) =>
+        this.hasUsableContent(evidence),
+      ),
+      6,
+    );
     const outOfScopeCount = dedupedEvidences.filter(
       (evidence) => !this.isEvidenceInCompanyScope(evidence, companyId),
     ).length;
@@ -103,12 +106,19 @@ export class RagService implements RagSearchService {
         allowedCategories: dto.allowedCategories,
         intent: dto.intent,
       })
-      .filter((evidence) => this.isEvidenceInCompanyScope(evidence, companyId));
-    const reliableEvidences = rankedEvidences
-      .slice(0, topK);
+      .filter((evidence) => this.isEvidenceInCompanyScope(evidence, companyId))
+      .filter(
+        (evidence) =>
+          (evidence.score ?? 0) >= this.policy.getMinScore(),
+      );
+    const reliableEvidences = rankedEvidences.slice(0, topK);
+    const cleanedReliableEvidences = reliableEvidences.map((evidence) => ({
+      ...evidence,
+      content: this.cleanEvidenceContent(evidence.content),
+    }));
 
     const summary = new ConversationSummaryBuilder().build(dto.history ?? []);
-    const context = new EvidenceContextBuilder().build(reliableEvidences);
+    const context = new EvidenceContextBuilder().build(cleanedReliableEvidences);
     const scores = reliableEvidences.map((result) => result.score ?? 0);
     const confidence =
       scores.length > 0
@@ -119,7 +129,7 @@ export class RagService implements RagSearchService {
           )
         : 0;
 
-    const answer = `Based on context:\n${context}\n\nUser question: ${dto.query}`;
+    const answer = context;
     const hasReliableSources =
       reliableEvidences.length > 0 &&
       Math.max(...scores, 0) >= this.policy.getMinScore();
@@ -143,7 +153,7 @@ export class RagService implements RagSearchService {
       sources: reliableEvidences.map((r) => String(r.metadata?.id ?? 'unknown')),
       confidence,
       hasReliableSources,
-      evidences: reliableEvidences.map((result) => ({
+      evidences: cleanedReliableEvidences.map((result) => ({
         id: String(result.metadata?.id ?? 'unknown'),
         content: this.dedupeSentences(result.content),
         score: result.score ?? 0,
@@ -206,29 +216,44 @@ export class RagService implements RagSearchService {
       .slice(0, 10);
   }
 
-  private dedupeEvidences<T extends { content: string; metadata?: Record<string, unknown> }>(
-    evidences: T[],
-  ): T[] {
-    const seen = new Set<string>();
-    const unique: T[] = [];
-
-    for (const evidence of evidences) {
-      const key = String(
-        evidence.metadata?.articleId ??
-          evidence.metadata?.productId ??
-          evidence.metadata?.id ??
-          this.normalize(evidence.content).slice(0, 260),
-      );
-
-      if (!key || seen.has(key)) {
-        continue;
-      }
-
-      seen.add(key);
-      unique.push(evidence);
+  private hasUsableContent(evidence: {
+    content: string;
+    metadata?: Record<string, unknown>;
+  }): boolean {
+    const content = evidence.content.replace(/\s+/g, ' ').trim();
+    if (content.length < 20) {
+      return false;
     }
 
-    return unique;
+    const title =
+      typeof evidence.metadata?.articleTitle === 'string'
+        ? evidence.metadata.articleTitle.trim()
+        : '';
+    const normalizedContent = this.normalize(content);
+    const normalizedTitle = this.normalize(title);
+
+    if (normalizedTitle && normalizedContent === normalizedTitle) {
+      return false;
+    }
+
+    const withoutTitle = normalizedTitle
+      ? normalizedContent.replace(normalizedTitle, '').trim()
+      : normalizedContent;
+
+    return withoutTitle.split(/\s+/).filter(Boolean).length >= 3;
+  }
+
+  private cleanEvidenceContent(content: string): string {
+    const blocks = content.trim().split(/\n{2,}/);
+    let cleaned = content.trim();
+    if (
+      blocks.length > 1 &&
+      /\b(section|mots-cles|keywords)\s*:/i.test(blocks[0])
+    ) {
+      cleaned = blocks.slice(1).join('\n\n').trim();
+    }
+
+    return cleaned.replace(/^#{1,6}\s*/gm, '').trim();
   }
 
   private shouldSearchProductsForIntent(intent?: string | null): boolean {

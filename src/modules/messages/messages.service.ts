@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import {
   buildEvolutionInstanceLookupCandidates,
@@ -705,18 +705,30 @@ export class MessagesService {
     );
     await this.assertConversationInScope(createMessageDto.conversationId, companyId);
 
-    const message = await this.messagesRepository.create({
-      conversationId: createMessageDto.conversationId,
-      companyId,
-      senderType: createMessageDto.senderType,
-      senderId: createMessageDto.senderId ?? null,
-      content: createMessageDto.content,
-      type: createMessageDto.type ?? 'text',
-      status: createMessageDto.status ?? 'sent',
-      isFromCustomer: createMessageDto.isFromCustomer ?? false,
-    });
+    try {
+      const message = await this.messagesRepository.create({
+        conversationId: createMessageDto.conversationId,
+        companyId,
+        senderType: createMessageDto.senderType,
+        senderId: createMessageDto.senderId ?? null,
+        content: createMessageDto.content,
+        type: createMessageDto.type ?? 'text',
+        status: createMessageDto.status ?? 'sent',
+        isFromCustomer: createMessageDto.isFromCustomer ?? false,
+      });
 
-    return MessageSerializer.serialize(message);
+      return MessageSerializer.serialize(message);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2003'
+      ) {
+        throw new BadRequestException(
+          'Conversation not found or does not belong to this company',
+        );
+      }
+      throw error;
+    }
   }
 
   async save(saveMessageDto: SaveMessageDto) {
@@ -740,6 +752,17 @@ export class MessagesService {
     const requestedCompanyId = await this.resolveWorkflowCompanyId(saveMessageDto);
     const resolved = await this.resolveConversationId(saveMessageDto);
     const scopedCompanyId = resolved.companyId ?? requestedCompanyId ?? null;
+
+    if (!scopedCompanyId) {
+      this.logger.warn(
+        `SAVE_MESSAGE_NO_COMPANY_SCOPE messageId=${externalMessageId ?? 'none'} direction=${saveMessageDto.direction ?? 'unknown'}`,
+      );
+      throw new BadRequestException({
+        code: 'COMPANY_SCOPE_REQUIRED',
+        message:
+          'Could not resolve companyId from WhatsApp instance or request payload. Cannot persist message without a valid company scope.',
+      });
+    }
 
     if (externalMessageId) {
       const existingByExternalId = await this.prisma.message.findFirst({
@@ -801,24 +824,50 @@ export class MessagesService {
     const senderType = this.resolveSenderType(direction, saveMessageDto.senderType);
     const status = this.normalizeDirectionStatus(saveMessageDto.status, direction);
 
-    const saved = await this.messagesRepository.create({
-      conversationId,
-      companyId: scopedCompanyId,
-      externalMessageId,
-      senderType,
-      content,
-      caption: saveMessageDto.caption ?? null,
-      mediaUrl: saveMessageDto.mediaUrl ?? null,
-      mediaId: saveMessageDto.mediaId ?? null,
-      mimeType: saveMessageDto.mimeType ?? null,
-      type: messageType,
-      status,
-      isFromCustomer: direction === 'inbound',
-      rawPayload: saveMessageDto.rawPayload
-        ? this.toJson(saveMessageDto.rawPayload)
-        : undefined,
-      occurredAt,
-    });
+    let saved;
+    try {
+      saved = await this.messagesRepository.create({
+        conversationId,
+        companyId: scopedCompanyId,
+        externalMessageId,
+        senderType,
+        content,
+        caption: saveMessageDto.caption ?? null,
+        mediaUrl: saveMessageDto.mediaUrl ?? null,
+        mediaId: saveMessageDto.mediaId ?? null,
+        mimeType: saveMessageDto.mimeType ?? null,
+        type: messageType,
+        status,
+        isFromCustomer: direction === 'inbound',
+        rawPayload: saveMessageDto.rawPayload
+          ? this.toJson(saveMessageDto.rawPayload)
+          : undefined,
+        occurredAt,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002' &&
+        externalMessageId
+      ) {
+        const concurrent = await this.prisma.message.findFirst({
+          where: { companyId: scopedCompanyId, externalMessageId },
+          select: { id: true, conversationId: true },
+        });
+        if (concurrent) {
+          return {
+            saved: false,
+            ignored: true,
+            duplicate: true,
+            reason: 'DUPLICATE_EXTERNAL_MESSAGE_ID',
+            conversationId: concurrent.conversationId,
+            messageId: concurrent.id,
+            externalMessageId,
+          };
+        }
+      }
+      throw error;
+    }
     const kbSuggestion =
       direction === 'outbound' && this.isHumanSenderType(senderType)
         ? await this.createKbSuggestionFromHumanReply({
@@ -861,30 +910,73 @@ export class MessagesService {
     actor?: AuthenticatedUser,
   ) {
     const companyId = resolveCompanyScope(actor);
-    await this.assertConversationInScope(sendMessageDto.conversationId, companyId);
 
-    const result = await this.whatsappService.reply({
-      conversationId: sendMessageDto.conversationId,
-      message: sendMessageDto.content,
-      automated: false,
-      senderId: sendMessageDto.senderId ?? actor?.sub ?? undefined,
-      senderType: 'agent',
-    }, actor);
-
-    if (!result.storedMessageId) {
-      return result;
+    const conversationId = sendMessageDto.conversationId?.trim();
+    if (!conversationId) {
+      throw new BadRequestException('conversationId is required');
     }
 
-    const storedMessage = await this.messagesRepository.findById(
-      result.storedMessageId,
-      companyId,
-    );
+    await this.assertConversationInScope(conversationId, companyId);
 
-    return {
-      ...MessageSerializer.serialize(storedMessage),
-      whatsapp: result,
-      kbSuggestionId: result.kbSuggestionId ?? null,
-    };
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: { contact: true },
+    });
+
+    if (!conversation) {
+      throw new BadRequestException(
+        'Conversation not found or does not belong to this company',
+      );
+    }
+
+    const phoneNumber = conversation.contact?.phone ?? undefined;
+
+    try {
+      const result = await this.whatsappService.reply({
+        conversationId,
+        message: sendMessageDto.content,
+        automated: false,
+        senderId: sendMessageDto.senderId ?? actor?.sub ?? undefined,
+        senderType: 'agent',
+        phoneNumber,
+      }, actor);
+
+      if (!result.storedMessageId) {
+        return result;
+      }
+
+      const storedMessage = await this.messagesRepository.findById(
+        result.storedMessageId,
+        companyId,
+      );
+
+      return {
+        ...MessageSerializer.serialize(storedMessage),
+        whatsapp: result,
+        kbSuggestionId: result.kbSuggestionId ?? null,
+      };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2003'
+      ) {
+        throw new BadRequestException(
+          'Conversation not found or does not belong to this company',
+        );
+      }
+      if (error instanceof BadRequestException) {
+        const response = error.getResponse() as Record<string, unknown>;
+        const code = response?.code as string | undefined;
+        if (
+          code === 'PHONE_NUMBER_REQUIRED' ||
+          code === 'EVOLUTION_INSTANCE_NOT_CONFIGURED' ||
+          code === 'EVOLUTION_PLATFORM_CONFIG_MISSING'
+        ) {
+          throw new ServiceUnavailableException('WhatsApp instance not connected');
+        }
+      }
+      throw error;
+    }
   }
 
   async findAll(query: MessageQueryDto, actor?: AuthenticatedUser) {

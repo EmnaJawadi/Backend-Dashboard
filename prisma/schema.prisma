@@ -118,6 +118,7 @@ model User {
   createdKbSuggestions       KbSuggestion[]               @relation("KbSuggestionCreatedBy")
   reviewedKbSuggestions      KbSuggestion[]               @relation("KbSuggestionReviewedBy")
   readNotifications          Notification[]               @relation("NotificationReadBy")
+  pdfImportDrafts            PdfImportDraft[]             @relation("PdfImportUploader")
 
   @@index([companyId])
   @@index([role])
@@ -156,6 +157,7 @@ model Company {
   products                     Product[]
   approvedRegistrationRequests CompanyRegistrationRequest[] @relation("ApprovedCompanyRegistration")
   agentRegistrationRequests    AgentRegistrationRequest[]
+  pdfImportDrafts              PdfImportDraft[]
 
   @@map("companies")
 }
@@ -322,6 +324,7 @@ model Contact {
 
   @@index([companyId])
   @@index([phone])
+  @@unique([companyId, phone])
   @@map("contacts")
 }
 
@@ -422,6 +425,7 @@ model Message {
   @@index([companyId])
   @@index([conversationId])
   @@index([externalMessageId])
+  @@unique([companyId, externalMessageId])
   @@map("messages")
 }
 
@@ -553,6 +557,7 @@ model KbArticle {
   creator              User?           @relation("KbArticleCreator", fields: [createdBy], references: [id], onDelete: SetNull)
 
   @@index([companyId])
+  @@unique([id, companyId])
   @@index([status])
   @@index([source])
   @@map("kb_articles")
@@ -560,17 +565,19 @@ model KbArticle {
 
 model KbChunk {
   id               String                 @id @default(uuid())
-  companyId        String?                @map("company_id")
+  companyId        String                 @map("company_id")
   articleId        String                 @map("article_id")
   chunkIndex       Int                    @map("chunk_index")
   chunkText        String?                @map("chunk_text")
   embeddingsVector Unsupported("vector")? @map("embedding_vector")
   metadataJson     Json?                  @map("metadata_json")
   createdAt        DateTime               @map("created_at")
-  article          KbArticle              @relation(fields: [articleId], references: [id])
-  company          Company?               @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  article          KbArticle              @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  company          Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId])
+  @@index([companyId, articleId])
+  @@unique([articleId, chunkIndex])
   @@map("kb_chunks")
 }
 
@@ -632,4 +639,57 @@ model WebhookEvent {
   @@index([companyId])
   @@index([instanceName])
   @@map("webhook_events")
+}
+
+enum PdfImportStatus {
+  PENDING_REVIEW
+  PARTIALLY_DONE
+  COMPLETED
+}
+
+enum DraftArticleStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EDITED
+}
+
+model PdfImportDraft {
+  id         String          @id @default(cuid())
+  companyId  String          @map("company_id")
+  uploadedBy String          @map("uploaded_by")
+  fileName   String          @map("file_name")
+  status     PdfImportStatus @default(PENDING_REVIEW)
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+
+  articles PdfDraftArticle[]
+  company  Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  uploader User              @relation("PdfImportUploader", fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([uploadedBy])
+  @@index([status])
+  @@map("pdf_import_drafts")
+}
+
+model PdfDraftArticle {
+  id          String             @id @default(cuid())
+  importId    String             @map("import_id")
+  title       String
+  category    String
+  body        String             @db.Text
+  tags        String[]
+  status      DraftArticleStatus @default(PENDING)
+  reviewedBy  String?            @map("reviewed_by")
+  reviewedAt  DateTime?          @map("reviewed_at")
+  kbArticleId String?            @map("kb_article_id")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  import PdfImportDraft @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  @@index([importId])
+  @@index([status])
+  @@map("pdf_draft_articles")
 }

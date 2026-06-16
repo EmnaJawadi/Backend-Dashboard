@@ -497,6 +497,40 @@ export type EnumNotificationPriorityWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumNotificationPriorityFilter<$PrismaModel>
 }
 
+export type EnumPdfImportStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PdfImportStatus | Prisma.EnumPdfImportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel> | $Enums.PdfImportStatus
+}
+
+export type EnumPdfImportStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PdfImportStatus | Prisma.EnumPdfImportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPdfImportStatusWithAggregatesFilter<$PrismaModel> | $Enums.PdfImportStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel>
+}
+
+export type EnumDraftArticleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftArticleStatus | Prisma.EnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel> | $Enums.DraftArticleStatus
+}
+
+export type EnumDraftArticleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftArticleStatus | Prisma.EnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftArticleStatusWithAggregatesFilter<$PrismaModel> | $Enums.DraftArticleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -953,6 +987,40 @@ export type NestedEnumNotificationPriorityWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationPriorityFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationPriorityFilter<$PrismaModel>
+}
+
+export type NestedEnumPdfImportStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PdfImportStatus | Prisma.EnumPdfImportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel> | $Enums.PdfImportStatus
+}
+
+export type NestedEnumPdfImportStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PdfImportStatus | Prisma.EnumPdfImportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PdfImportStatus[] | Prisma.ListEnumPdfImportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPdfImportStatusWithAggregatesFilter<$PrismaModel> | $Enums.PdfImportStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPdfImportStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDraftArticleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftArticleStatus | Prisma.EnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel> | $Enums.DraftArticleStatus
+}
+
+export type NestedEnumDraftArticleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftArticleStatus | Prisma.EnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftArticleStatus[] | Prisma.ListEnumDraftArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftArticleStatusWithAggregatesFilter<$PrismaModel> | $Enums.DraftArticleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDraftArticleStatusFilter<$PrismaModel>
 }
 
 

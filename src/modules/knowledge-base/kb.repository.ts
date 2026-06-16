@@ -26,6 +26,8 @@ type CreateKbArticleInput = Omit<
   'createdAt' | 'updatedAt'
 >;
 
+type KbWriteClient = Prisma.TransactionClient | PrismaService;
+
 @Injectable()
 export class KbRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -49,6 +51,9 @@ export class KbRepository {
       take: params.take,
       orderBy: params.orderBy ?? { createdAt: 'desc' },
       include: {
+        company: {
+          select: { id: true, name: true, legalName: true },
+        },
         chunks: {
           orderBy: { chunkIndex: 'asc' },
         },
@@ -69,6 +74,9 @@ export class KbRepository {
         ...(companyId ? { companyId } : {}),
       },
       include: {
+        company: {
+          select: { id: true, name: true, legalName: true },
+        },
         chunks: {
           orderBy: { chunkIndex: 'asc' },
         },
@@ -76,17 +84,17 @@ export class KbRepository {
     });
   }
 
-  updateArticle(id: string, data: Prisma.KbArticleUpdateInput) {
-    return this.prisma.kbArticle.update({
-      where: { id },
-      data,
-    });
+  updateArticle(id: string, data: Prisma.KbArticleUpdateInput, companyId?: string) {
+    const where: Prisma.KbArticleWhereUniqueInput = companyId
+      ? { id_companyId: { id, companyId } }
+      : { id };
+    return this.prisma.kbArticle.update({ where, data });
   }
 
-  async deleteArticle(id: string) {
+  async deleteArticle(id: string, companyId: string) {
     return this.prisma.$transaction(async (tx) => {
       await tx.kbChunk.deleteMany({
-        where: { articleId: id },
+        where: { articleId: id, companyId },
       });
 
       return tx.kbArticle.delete({
@@ -100,58 +108,44 @@ export class KbRepository {
     chunks: CreateKbChunkInput[],
     companyId: string,
   ) {
-    if (chunks.length === 0) {
-      return;
-    }
-
-    const now = new Date();
-    const rows = chunks.map((chunk) => ({
-      id: randomUUID(),
-      companyId,
-      articleId,
-      chunkIndex: chunk.chunkIndex,
-      chunkText: chunk.content,
-      embedding: this.normalizeEmbedding(chunk.embedding),
-      metadataJson: JSON.stringify(chunk.metadata ?? null),
-      createdAt: now,
-    }));
-
-    if (rows.some((row) => row.embedding.length > 0)) {
-      await this.prisma.$executeRaw(Prisma.sql`
-        INSERT INTO "kb_chunks"
-          ("id", "company_id", "article_id", "chunk_index", "chunk_text", "embedding_vector", "metadata_json", "created_at")
-        VALUES ${Prisma.join(
-          rows.map((row) => Prisma.sql`(
-            ${row.id},
-            ${row.companyId},
-            ${row.articleId},
-            ${row.chunkIndex},
-            ${row.chunkText},
-            ${row.embedding.length ? this.toVectorLiteral(row.embedding) : null}::vector,
-            ${row.metadataJson}::jsonb,
-            ${row.createdAt}
-          )`),
-        )}
-      `);
-      return;
-    }
-
-    await this.prisma.kbChunk.createMany({
-      data: rows.map((row) => ({
-        id: row.id,
-        companyId: row.companyId,
-        articleId: row.articleId,
-        chunkIndex: row.chunkIndex,
-        chunkText: row.chunkText,
-        metadataJson: JSON.parse(row.metadataJson) as Prisma.InputJsonValue,
-        createdAt: row.createdAt,
-      })),
+    await this.prisma.$transaction(async (tx) => {
+      await this.assertArticleCompany(tx, articleId, companyId);
+      await this.insertChunks(tx, articleId, chunks, companyId);
     });
   }
 
-  deleteChunksByArticleId(articleId: string) {
+  async replaceChunksByArticleId(
+    articleId: string,
+    chunks: CreateKbChunkInput[],
+    companyId: string,
+  ) {
+    return this.prisma.$transaction(async (tx) => {
+      await this.assertArticleCompany(tx, articleId, companyId);
+      await tx.kbChunk.deleteMany({
+        where: { articleId, companyId },
+      });
+      await this.insertChunks(tx, articleId, chunks, companyId);
+    });
+  }
+
+  deleteChunksByArticleId(articleId: string, companyId: string) {
     return this.prisma.kbChunk.deleteMany({
-      where: { articleId },
+      where: { articleId, companyId },
+    });
+  }
+
+  deleteChunksForCompany(companyId: string) {
+    return this.prisma.kbChunk.deleteMany({
+      where: {
+        OR: [
+          { companyId },
+          {
+            article: {
+              companyId,
+            },
+          },
+        ],
+      },
     });
   }
 
@@ -214,5 +208,77 @@ export class KbRepository {
 
   private toVectorLiteral(values: number[]): string {
     return `[${values.join(',')}]`;
+  }
+
+  private async assertArticleCompany(
+    client: KbWriteClient,
+    articleId: string,
+    companyId: string,
+  ): Promise<void> {
+    const article = await client.kbArticle.findFirst({
+      where: { id: articleId, companyId },
+      select: { id: true },
+    });
+
+    if (!article) {
+      throw new Error(
+        `Knowledge base article ${articleId} does not belong to company ${companyId}`,
+      );
+    }
+  }
+
+  private async insertChunks(
+    client: KbWriteClient,
+    articleId: string,
+    chunks: CreateKbChunkInput[],
+    companyId: string,
+  ): Promise<void> {
+    if (chunks.length === 0) {
+      return;
+    }
+
+    const now = new Date();
+    const rows = chunks.map((chunk) => ({
+      id: randomUUID(),
+      companyId,
+      articleId,
+      chunkIndex: chunk.chunkIndex,
+      chunkText: chunk.content,
+      embedding: this.normalizeEmbedding(chunk.embedding),
+      metadataJson: JSON.stringify(chunk.metadata ?? null),
+      createdAt: now,
+    }));
+
+    if (rows.some((row) => row.embedding.length > 0)) {
+      await client.$executeRaw(Prisma.sql`
+        INSERT INTO "kb_chunks"
+          ("id", "company_id", "article_id", "chunk_index", "chunk_text", "embedding_vector", "metadata_json", "created_at")
+        VALUES ${Prisma.join(
+          rows.map((row) => Prisma.sql`(
+            ${row.id},
+            ${row.companyId},
+            ${row.articleId},
+            ${row.chunkIndex},
+            ${row.chunkText},
+            ${row.embedding.length ? this.toVectorLiteral(row.embedding) : null}::vector,
+            ${row.metadataJson}::jsonb,
+            ${row.createdAt}
+          )`),
+        )}
+      `);
+      return;
+    }
+
+    await client.kbChunk.createMany({
+      data: rows.map((row) => ({
+        id: row.id,
+        companyId: row.companyId,
+        articleId: row.articleId,
+        chunkIndex: row.chunkIndex,
+        chunkText: row.chunkText,
+        metadataJson: JSON.parse(row.metadataJson) as Prisma.InputJsonValue,
+        createdAt: row.createdAt,
+      })),
+    });
   }
 }

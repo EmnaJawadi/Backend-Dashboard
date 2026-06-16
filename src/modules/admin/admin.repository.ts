@@ -199,11 +199,12 @@ export class AdminRepository {
         where: { companyId: id },
         data: { companyId: null },
       });
-      await tx.kbArticle.updateMany({
-        where: { companyId: id },
-        data: { companyId: null },
+      await tx.kbChunk.deleteMany({
+        where: {
+          OR: [{ companyId: id }, { article: { companyId: id } }],
+        },
       });
-      await tx.kbChunk.updateMany({
+      await tx.kbArticle.updateMany({
         where: { companyId: id },
         data: { companyId: null },
       });

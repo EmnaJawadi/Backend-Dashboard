@@ -6,6 +6,8 @@ import { PgvectorRetriever } from './retrievers/pgvector.retriever';
 import { RetrievalPolicyService } from './policies/retrieval-policy.service';
 import { ProductsModule } from '../products/products.module';
 import { EmbeddingsService } from '../knowledge-base/ingestion/embeddings.service';
+import { OpenAiCompatibleEmbeddingProvider } from '../knowledge-base/ingestion/openai-compatible-embedding.provider';
+import { GeminiEmbeddingProvider } from '../knowledge-base/ingestion/gemini-embedding.provider';
 
 @Module({
   imports: [PrismaModule, ProductsModule],
@@ -14,6 +16,8 @@ import { EmbeddingsService } from '../knowledge-base/ingestion/embeddings.servic
     RagService,
     PgvectorRetriever,
     RetrievalPolicyService,
+    OpenAiCompatibleEmbeddingProvider,
+    GeminiEmbeddingProvider,
     EmbeddingsService,
   ],
   exports: [RagService],

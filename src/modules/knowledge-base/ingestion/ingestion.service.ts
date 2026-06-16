@@ -9,6 +9,7 @@ import { UrlParser } from './parsers/url.parser';
 import { PdfParser } from './parsers/pdf.parser';
 import { DocParser } from './parsers/doc.parser';
 import { PptParser } from './parsers/ppt.parser';
+import { StructuredDataParser } from './parsers/structured-data.parser';
 
 export enum IngestionSourceType {
   TEXT = 'text',
@@ -16,6 +17,8 @@ export enum IngestionSourceType {
   PDF = 'pdf',
   DOC = 'doc',
   PPT = 'ppt',
+  JSON = 'json',
+  YAML = 'yaml',
 }
 
 export interface IngestSourceInput {
@@ -30,6 +33,8 @@ export interface IngestSourceInput {
   metadata?: Record<string, unknown>;
   chunkSize?: number;
   chunkOverlap?: number;
+  contextPrefix?: string;
+  generateEmbeddings?: boolean;
 }
 
 export interface IngestedChunkResult {
@@ -57,6 +62,7 @@ export class IngestionService {
     private readonly pdfParser: PdfParser,
     private readonly docParser: DocParser,
     private readonly pptParser: PptParser,
+    private readonly structuredDataParser: StructuredDataParser,
   ) {}
 
   async ingest(source: IngestSourceInput): Promise<IngestionResult> {
@@ -66,11 +72,15 @@ export class IngestionService {
       parsed.content,
       source.chunkSize ?? 1000,
       source.chunkOverlap ?? 100,
+      source.contextPrefix,
     );
 
-    const embeddings = await this.embeddingsService.generateEmbeddings(
-      chunks.map((chunk) => chunk.content),
-    );
+    const embeddings =
+      source.generateEmbeddings === false
+        ? chunks.map(() => [])
+        : await this.embeddingsService.generateEmbeddings(
+            chunks.map((chunk) => chunk.content),
+          );
 
     const resultChunks: IngestedChunkResult[] = chunks.map((chunk, index) => ({
       chunkIndex: chunk.index,
@@ -79,6 +89,7 @@ export class IngestionService {
       metadata: {
         start: chunk.start,
         end: chunk.end,
+        ...(chunk.metadata ?? {}),
       },
     }));
 
@@ -159,6 +170,27 @@ export class IngestionService {
           content: await this.pptParser.parse(source.fileBuffer, source.filename),
           metadata: {
             sourceType: IngestionSourceType.PPT,
+            filename: source.filename,
+          },
+        };
+
+      case IngestionSourceType.JSON:
+      case IngestionSourceType.YAML:
+        if (!source.fileBuffer) {
+          throw new BadRequestException(
+            `${source.sourceType.toUpperCase()} file buffer is required`,
+          );
+        }
+
+        return {
+          title: source.title ?? source.filename,
+          content: this.structuredDataParser.parse(
+            source.fileBuffer,
+            source.sourceType,
+            source.filename,
+          ),
+          metadata: {
+            sourceType: source.sourceType,
             filename: source.filename,
           },
         };

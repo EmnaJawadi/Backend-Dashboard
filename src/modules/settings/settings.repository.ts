@@ -83,6 +83,7 @@ export class SettingsRepository {
         ],
       },
       aiPolicy: {
+        businessDomain: 'generic',
         enabled: true,
         handoffEnabled: true,
         confidenceThreshold: 0.75,
@@ -241,6 +242,13 @@ export class SettingsRepository {
       },
       aiPolicy: {
         ...defaults.aiPolicy,
+        businessDomain:
+          this.parseString(
+            aiRaw.businessDomain ?? aiRaw.domain,
+            defaults.aiPolicy.businessDomain,
+          ) === 'hospitality'
+            ? 'hospitality'
+            : 'generic',
         enabled: this.parseBoolean(aiRaw.enabled, defaults.aiPolicy.enabled),
         handoffEnabled: this.parseBoolean(
           aiRaw.handoffEnabled,

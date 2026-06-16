@@ -71,7 +71,9 @@ export const ModelName = {
   KbChunk: 'KbChunk',
   Notification: 'Notification',
   Setting: 'Setting',
-  WebhookEvent: 'WebhookEvent'
+  WebhookEvent: 'WebhookEvent',
+  PdfImportDraft: 'PdfImportDraft',
+  PdfDraftArticle: 'PdfDraftArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -502,6 +504,37 @@ export const WebhookEventScalarFieldEnum = {
 } as const
 
 export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
+
+
+export const PdfImportDraftScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  uploadedBy: 'uploadedBy',
+  fileName: 'fileName',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PdfImportDraftScalarFieldEnum = (typeof PdfImportDraftScalarFieldEnum)[keyof typeof PdfImportDraftScalarFieldEnum]
+
+
+export const PdfDraftArticleScalarFieldEnum = {
+  id: 'id',
+  importId: 'importId',
+  title: 'title',
+  category: 'category',
+  body: 'body',
+  tags: 'tags',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  kbArticleId: 'kbArticleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PdfDraftArticleScalarFieldEnum = (typeof PdfDraftArticleScalarFieldEnum)[keyof typeof PdfDraftArticleScalarFieldEnum]
 
 
 export const SortOrder = {

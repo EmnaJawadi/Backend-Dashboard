@@ -306,6 +306,7 @@ export type MessageOrderByWithRelationInput = {
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  companyId_externalMessageId?: Prisma.MessageCompanyIdExternalMessageIdCompoundUniqueInput
   AND?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
@@ -329,7 +330,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   customerSuggestions?: Prisma.KbSuggestionListRelationFilter
   humanAnswerSuggestions?: Prisma.KbSuggestionListRelationFilter
-}, "id">
+}, "id" | "companyId_externalMessageId">
 
 export type MessageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -531,6 +532,11 @@ export type MessageListRelationFilter = {
 
 export type MessageOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type MessageCompanyIdExternalMessageIdCompoundUniqueInput = {
+  companyId: string
+  externalMessageId: string
 }
 
 export type MessageCountOrderByAggregateInput = {

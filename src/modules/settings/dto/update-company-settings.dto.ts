@@ -22,6 +22,7 @@ export const COMPANY_RESPONSE_TONE_VALUES = [
   'formal',
   'concise',
 ] as const;
+export const COMPANY_BUSINESS_DOMAIN_VALUES = ['generic', 'hospitality'] as const;
 
 class UpdateCompanyBusinessHoursDayDto {
   @IsOptional()
@@ -68,6 +69,11 @@ class UpdateCompanyBusinessHoursDto {
 }
 
 class UpdateCompanyAiPolicyDto {
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_BUSINESS_DOMAIN_VALUES)
+  businessDomain?: 'generic' | 'hospitality';
+
   @IsOptional()
   @IsBoolean()
   enabled?: boolean;
@@ -346,6 +352,11 @@ export class UpdateCompanyPreferencesDto {
 }
 
 export class UpdateCompanyAiSettingsDto {
+  @IsOptional()
+  @IsString()
+  @IsIn(COMPANY_BUSINESS_DOMAIN_VALUES)
+  businessDomain?: 'generic' | 'hospitality';
+
   @IsOptional()
   @IsBoolean()
   enabled?: boolean;

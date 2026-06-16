@@ -3,15 +3,40 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserRole } from '../../../common/enums/user-role.enum';
 import { JwtPayload } from '../../../common/types/jwt-payload.type';
+import { PrismaService } from '../../../database/prisma/prisma.service';
 import { AuthenticatedUser } from '../types/authenticated-user.type';
+
+type JwtRequest = { headers?: { cookie?: string } };
+
+function extractCookie(request: JwtRequest, name: string): string | null {
+  const cookieHeader = request?.headers?.cookie;
+  if (!cookieHeader) return null;
+
+  for (const part of cookieHeader.split(';')) {
+    const [key, ...valueParts] = part.trim().split('=');
+    if (key === name) {
+      return decodeURIComponent(valueParts.join('='));
+    }
+  }
+
+  return null;
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly prisma: PrismaService) {
+    const secret = process.env.JWT_ACCESS_SECRET?.trim();
+    if (!secret) {
+      throw new Error('JWT_ACCESS_SECRET is required');
+    }
+
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: JwtRequest) => extractCookie(request, 'access_token'),
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_ACCESS_SECRET ?? 'dev-access-secret',
+      secretOrKey: secret,
     });
   }
 
@@ -28,16 +53,37 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return UserRole.EMPLOYEE;
   }
 
-  validate(payload: JwtPayload): AuthenticatedUser {
+  async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
     if (!payload?.sub || !payload?.email) {
       throw new UnauthorizedException('Invalid authentication payload');
     }
 
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        companyId: true,
+        isActive: true,
+        company: { select: { isActive: true, status: true } },
+      },
+    });
+
+    if (
+      !user ||
+      !user.isActive ||
+      user.email !== payload.email ||
+      (user.company && (!user.company.isActive || user.company.status !== 'ACTIVE'))
+    ) {
+      throw new UnauthorizedException('Authentication session is no longer active');
+    }
+
     return {
-      sub: payload.sub,
-      email: payload.email,
-      role: this.normalizeRole(payload.role),
-      companyId: payload.companyId ?? null,
+      sub: user.id,
+      email: user.email,
+      role: this.normalizeRole(user.role),
+      companyId: user.companyId,
     };
   }
 }

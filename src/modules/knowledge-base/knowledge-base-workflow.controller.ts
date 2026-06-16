@@ -77,6 +77,7 @@ export class KnowledgeBaseWorkflowController {
   }
 
   @Patch(':id/publish')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   publish(
     @Param('id') id: string,
     @Body() dto: PublishKbArticleDto,
@@ -86,6 +87,7 @@ export class KnowledgeBaseWorkflowController {
   }
 
   @Patch(':id/reject')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   reject(@Param('id') id: string, @CurrentUser() actor: AuthenticatedUser) {
     return this.kbArticlesService.reject(id, actor);
   }

@@ -281,7 +281,14 @@ export class ContactsRepository {
       return this.update(existing.id, data, data.companyId ?? undefined);
     }
 
-    return this.create(data);
+    try {
+      return await this.create(data);
+    } catch (error) {
+      if (!(error instanceof ConflictException)) throw error;
+      const concurrent = await this.findByPhoneNumber(phoneNumber, data.companyId);
+      if (!concurrent) throw error;
+      return this.update(concurrent.id, data, data.companyId ?? undefined);
+    }
   }
 
   async remove(id: string, companyId?: string): Promise<ContactEntity> {

@@ -232,6 +232,7 @@ export type UserWhereInput = {
   createdKbSuggestions?: Prisma.KbSuggestionListRelationFilter
   reviewedKbSuggestions?: Prisma.KbSuggestionListRelationFilter
   readNotifications?: Prisma.NotificationListRelationFilter
+  pdfImportDrafts?: Prisma.PdfImportDraftListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -255,6 +256,7 @@ export type UserOrderByWithRelationInput = {
   createdKbSuggestions?: Prisma.KbSuggestionOrderByRelationAggregateInput
   reviewedKbSuggestions?: Prisma.KbSuggestionOrderByRelationAggregateInput
   readNotifications?: Prisma.NotificationOrderByRelationAggregateInput
+  pdfImportDrafts?: Prisma.PdfImportDraftOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -281,6 +283,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdKbSuggestions?: Prisma.KbSuggestionListRelationFilter
   reviewedKbSuggestions?: Prisma.KbSuggestionListRelationFilter
   readNotifications?: Prisma.NotificationListRelationFilter
+  pdfImportDrafts?: Prisma.PdfImportDraftListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -335,6 +338,7 @@ export type UserCreateInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -357,6 +361,7 @@ export type UserUncheckedCreateInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUpdateInput = {
@@ -379,6 +384,7 @@ export type UserUpdateInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -401,6 +407,7 @@ export type UserUncheckedUpdateInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -493,6 +500,11 @@ export type UserOrderByRelationAggregateInput = {
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -705,6 +717,20 @@ export type UserUpdateOneWithoutReadNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReadNotificationsInput, Prisma.UserUpdateWithoutReadNotificationsInput>, Prisma.UserUncheckedUpdateWithoutReadNotificationsInput>
 }
 
+export type UserCreateNestedOneWithoutPdfImportDraftsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPdfImportDraftsInput, Prisma.UserUncheckedCreateWithoutPdfImportDraftsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPdfImportDraftsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPdfImportDraftsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPdfImportDraftsInput, Prisma.UserUncheckedCreateWithoutPdfImportDraftsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPdfImportDraftsInput
+  upsert?: Prisma.UserUpsertWithoutPdfImportDraftsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPdfImportDraftsInput, Prisma.UserUpdateWithoutPdfImportDraftsInput>, Prisma.UserUncheckedUpdateWithoutPdfImportDraftsInput>
+}
+
 export type UserCreateWithoutCompanyInput = {
   id?: string
   fullName?: string | null
@@ -724,6 +750,7 @@ export type UserCreateWithoutCompanyInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutCompanyInput = {
@@ -745,6 +772,7 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutCompanyInput = {
@@ -808,6 +836,7 @@ export type UserCreateWithoutReviewedRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -829,6 +858,7 @@ export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -866,6 +896,7 @@ export type UserUpdateWithoutReviewedRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -887,6 +918,7 @@ export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateWithoutAgentRegistrationRequestsInput = {
@@ -908,6 +940,7 @@ export type UserCreateWithoutAgentRegistrationRequestsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutAgentRegistrationRequestsInput = {
@@ -929,6 +962,7 @@ export type UserUncheckedCreateWithoutAgentRegistrationRequestsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutAgentRegistrationRequestsInput = {
@@ -955,6 +989,7 @@ export type UserCreateWithoutReviewedAgentRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutReviewedAgentRegistrationsInput = {
@@ -976,6 +1011,7 @@ export type UserUncheckedCreateWithoutReviewedAgentRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutReviewedAgentRegistrationsInput = {
@@ -1002,6 +1038,7 @@ export type UserCreateWithoutApprovedAgentRegistrationInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutApprovedAgentRegistrationInput = {
@@ -1023,6 +1060,7 @@ export type UserUncheckedCreateWithoutApprovedAgentRegistrationInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutApprovedAgentRegistrationInput = {
@@ -1060,6 +1098,7 @@ export type UserUpdateWithoutAgentRegistrationRequestsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAgentRegistrationRequestsInput = {
@@ -1081,6 +1120,7 @@ export type UserUncheckedUpdateWithoutAgentRegistrationRequestsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUpsertWithoutReviewedAgentRegistrationsInput = {
@@ -1113,6 +1153,7 @@ export type UserUpdateWithoutReviewedAgentRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedAgentRegistrationsInput = {
@@ -1134,6 +1175,7 @@ export type UserUncheckedUpdateWithoutReviewedAgentRegistrationsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUpsertWithoutApprovedAgentRegistrationInput = {
@@ -1166,6 +1208,7 @@ export type UserUpdateWithoutApprovedAgentRegistrationInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedAgentRegistrationInput = {
@@ -1187,6 +1230,7 @@ export type UserUncheckedUpdateWithoutApprovedAgentRegistrationInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateWithoutCreatedKbSuggestionsInput = {
@@ -1208,6 +1252,7 @@ export type UserCreateWithoutCreatedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutCreatedKbSuggestionsInput = {
@@ -1229,6 +1274,7 @@ export type UserUncheckedCreateWithoutCreatedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutCreatedKbSuggestionsInput = {
@@ -1255,6 +1301,7 @@ export type UserCreateWithoutReviewedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutReviewedKbSuggestionsInput = {
@@ -1276,6 +1323,7 @@ export type UserUncheckedCreateWithoutReviewedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutReviewedKbSuggestionsInput = {
@@ -1313,6 +1361,7 @@ export type UserUpdateWithoutCreatedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedKbSuggestionsInput = {
@@ -1334,6 +1383,7 @@ export type UserUncheckedUpdateWithoutCreatedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUpsertWithoutReviewedKbSuggestionsInput = {
@@ -1366,6 +1416,7 @@ export type UserUpdateWithoutReviewedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedKbSuggestionsInput = {
@@ -1387,6 +1438,7 @@ export type UserUncheckedUpdateWithoutReviewedKbSuggestionsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1408,6 +1460,7 @@ export type UserCreateWithoutAuditLogsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1429,6 +1482,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1466,6 +1520,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1487,6 +1542,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateWithoutCreatedKbArticlesInput = {
@@ -1508,6 +1564,7 @@ export type UserCreateWithoutCreatedKbArticlesInput = {
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutCreatedKbArticlesInput = {
@@ -1529,6 +1586,7 @@ export type UserUncheckedCreateWithoutCreatedKbArticlesInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
   readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutCreatedKbArticlesInput = {
@@ -1566,6 +1624,7 @@ export type UserUpdateWithoutCreatedKbArticlesInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedKbArticlesInput = {
@@ -1587,6 +1646,7 @@ export type UserUncheckedUpdateWithoutCreatedKbArticlesInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserCreateWithoutReadNotificationsInput = {
@@ -1608,6 +1668,7 @@ export type UserCreateWithoutReadNotificationsInput = {
   createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
   createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftCreateNestedManyWithoutUploaderInput
 }
 
 export type UserUncheckedCreateWithoutReadNotificationsInput = {
@@ -1629,6 +1690,7 @@ export type UserUncheckedCreateWithoutReadNotificationsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedCreateNestedManyWithoutUploaderInput
 }
 
 export type UserCreateOrConnectWithoutReadNotificationsInput = {
@@ -1666,6 +1728,7 @@ export type UserUpdateWithoutReadNotificationsInput = {
   createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReadNotificationsInput = {
@@ -1687,6 +1750,111 @@ export type UserUncheckedUpdateWithoutReadNotificationsInput = {
   createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
+}
+
+export type UserCreateWithoutPdfImportDraftsInput = {
+  id?: string
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  approvalStatus?: $Enums.UserApprovalStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  reviewedAgentRegistrations?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutReviewedByUserInput
+  approvedAgentRegistration?: Prisma.AgentRegistrationRequestCreateNestedOneWithoutApprovedUserInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestCreateNestedManyWithoutUserInput
+  createdKbArticles?: Prisma.KbArticleCreateNestedManyWithoutCreatorInput
+  createdKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutCreatedByUserInput
+  reviewedKbSuggestions?: Prisma.KbSuggestionCreateNestedManyWithoutReviewedByUserInput
+  readNotifications?: Prisma.NotificationCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserUncheckedCreateWithoutPdfImportDraftsInput = {
+  id?: string
+  companyId?: string | null
+  fullName?: string | null
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  approvalStatus?: $Enums.UserApprovalStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  reviewedAgentRegistrations?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutReviewedByUserInput
+  approvedAgentRegistration?: Prisma.AgentRegistrationRequestUncheckedCreateNestedOneWithoutApprovedUserInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedCreateNestedManyWithoutUserInput
+  createdKbArticles?: Prisma.KbArticleUncheckedCreateNestedManyWithoutCreatorInput
+  createdKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutCreatedByUserInput
+  reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedCreateNestedManyWithoutReviewedByUserInput
+  readNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutReadByUserInput
+}
+
+export type UserCreateOrConnectWithoutPdfImportDraftsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPdfImportDraftsInput, Prisma.UserUncheckedCreateWithoutPdfImportDraftsInput>
+}
+
+export type UserUpsertWithoutPdfImportDraftsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPdfImportDraftsInput, Prisma.UserUncheckedUpdateWithoutPdfImportDraftsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPdfImportDraftsInput, Prisma.UserUncheckedCreateWithoutPdfImportDraftsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPdfImportDraftsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPdfImportDraftsInput, Prisma.UserUncheckedUpdateWithoutPdfImportDraftsInput>
+}
+
+export type UserUpdateWithoutPdfImportDraftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  approvalStatus?: Prisma.EnumUserApprovalStatusFieldUpdateOperationsInput | $Enums.UserApprovalStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  reviewedAgentRegistrations?: Prisma.AgentRegistrationRequestUpdateManyWithoutReviewedByUserNestedInput
+  approvedAgentRegistration?: Prisma.AgentRegistrationRequestUpdateOneWithoutApprovedUserNestedInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUpdateManyWithoutUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUpdateManyWithoutCreatorNestedInput
+  createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
+  reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
+  readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPdfImportDraftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  approvalStatus?: Prisma.EnumUserApprovalStatusFieldUpdateOperationsInput | $Enums.UserApprovalStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  reviewedRegistrations?: Prisma.CompanyRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  reviewedAgentRegistrations?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  approvedAgentRegistration?: Prisma.AgentRegistrationRequestUncheckedUpdateOneWithoutApprovedUserNestedInput
+  agentRegistrationRequests?: Prisma.AgentRegistrationRequestUncheckedUpdateManyWithoutUserNestedInput
+  createdKbArticles?: Prisma.KbArticleUncheckedUpdateManyWithoutCreatorNestedInput
+  createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
+  readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
 }
 
 export type UserCreateManyCompanyInput = {
@@ -1720,6 +1888,7 @@ export type UserUpdateWithoutCompanyInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -1741,6 +1910,7 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   createdKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutCreatedByUserNestedInput
   reviewedKbSuggestions?: Prisma.KbSuggestionUncheckedUpdateManyWithoutReviewedByUserNestedInput
   readNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutReadByUserNestedInput
+  pdfImportDrafts?: Prisma.PdfImportDraftUncheckedUpdateManyWithoutUploaderNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -1769,6 +1939,7 @@ export type UserCountOutputType = {
   createdKbSuggestions: number
   reviewedKbSuggestions: number
   readNotifications: number
+  pdfImportDrafts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1780,6 +1951,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdKbSuggestions?: boolean | UserCountOutputTypeCountCreatedKbSuggestionsArgs
   reviewedKbSuggestions?: boolean | UserCountOutputTypeCountReviewedKbSuggestionsArgs
   readNotifications?: boolean | UserCountOutputTypeCountReadNotificationsArgs
+  pdfImportDrafts?: boolean | UserCountOutputTypeCountPdfImportDraftsArgs
 }
 
 /**
@@ -1848,6 +2020,13 @@ export type UserCountOutputTypeCountReadNotificationsArgs<ExtArgs extends runtim
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPdfImportDraftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PdfImportDraftWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1870,6 +2049,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdKbSuggestions?: boolean | Prisma.User$createdKbSuggestionsArgs<ExtArgs>
   reviewedKbSuggestions?: boolean | Prisma.User$reviewedKbSuggestionsArgs<ExtArgs>
   readNotifications?: boolean | Prisma.User$readNotificationsArgs<ExtArgs>
+  pdfImportDrafts?: boolean | Prisma.User$pdfImportDraftsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1926,6 +2106,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdKbSuggestions?: boolean | Prisma.User$createdKbSuggestionsArgs<ExtArgs>
   reviewedKbSuggestions?: boolean | Prisma.User$reviewedKbSuggestionsArgs<ExtArgs>
   readNotifications?: boolean | Prisma.User$readNotificationsArgs<ExtArgs>
+  pdfImportDrafts?: boolean | Prisma.User$pdfImportDraftsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1948,6 +2129,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdKbSuggestions: Prisma.$KbSuggestionPayload<ExtArgs>[]
     reviewedKbSuggestions: Prisma.$KbSuggestionPayload<ExtArgs>[]
     readNotifications: Prisma.$NotificationPayload<ExtArgs>[]
+    pdfImportDrafts: Prisma.$PdfImportDraftPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2364,6 +2546,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdKbSuggestions<T extends Prisma.User$createdKbSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdKbSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewedKbSuggestions<T extends Prisma.User$reviewedKbSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedKbSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KbSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   readNotifications<T extends Prisma.User$readNotificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$readNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pdfImportDrafts<T extends Prisma.User$pdfImportDraftsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pdfImportDraftsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PdfImportDraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3031,6 +3214,30 @@ export type User$readNotificationsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.pdfImportDrafts
+ */
+export type User$pdfImportDraftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PdfImportDraft
+   */
+  select?: Prisma.PdfImportDraftSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PdfImportDraft
+   */
+  omit?: Prisma.PdfImportDraftOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PdfImportDraftInclude<ExtArgs> | null
+  where?: Prisma.PdfImportDraftWhereInput
+  orderBy?: Prisma.PdfImportDraftOrderByWithRelationInput | Prisma.PdfImportDraftOrderByWithRelationInput[]
+  cursor?: Prisma.PdfImportDraftWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PdfImportDraftScalarFieldEnum | Prisma.PdfImportDraftScalarFieldEnum[]
 }
 
 /**

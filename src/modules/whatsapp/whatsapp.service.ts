@@ -172,6 +172,27 @@ export class WhatsappService {
     const conversation = params.conversationId
       ? await this.findConversationContext(params.conversationId)
       : null;
+    const senderType = this.normalizeSenderType(params.senderType ?? 'bot');
+
+    if (senderType === 'bot' && this.isHumanTakeoverActive(conversation)) {
+      this.logger.warn(
+        `WHATSAPP_REPLY_SKIPPED conversationId=${conversation?.id ?? params.conversationId ?? 'null'} reason=human_handoff_active`,
+      );
+      return {
+        success: false,
+        sent: false,
+        skipped: true,
+        action: 'skipped',
+        canSendFreeForm: false,
+        reason: 'HUMAN_HANDOFF_ACTIVE',
+        message: 'Automatic reply blocked while a human handoff is active.',
+        messageType: null,
+        messageId: null,
+        storedMessageId: null,
+        instanceName: params.instanceName ?? null,
+        kbSuggestionId: null,
+      };
+    }
     if (!params.message?.trim()) {
       this.logger.warn(
         `WHATSAPP_REPLY_SKIPPED conversationId=${conversation?.id ?? params.conversationId ?? 'null'} reason=empty_reply_text`,
@@ -205,7 +226,7 @@ export class WhatsappService {
       phoneNumber,
       message,
       conversation,
-      senderType: this.normalizeSenderType(params.senderType ?? 'bot'),
+      senderType,
       instance,
       action: 'sent_free_form',
     });
@@ -225,9 +246,23 @@ export class WhatsappService {
     );
 
     if (params.conversation && !windowStatus.canSendFreeForm) {
-      this.logger.log(
-        `WHATSAPP_WINDOW_OBSERVED conversationId=${params.conversation.id} reason=${windowStatus.reason ?? 'unknown'} action=continue_evolution_send`,
+      this.logger.warn(
+        `WHATSAPP_REPLY_SKIPPED conversationId=${params.conversation.id} reason=${windowStatus.reason ?? 'whatsapp_window_closed'} action=blocked_free_form_send`,
       );
+      return {
+        success: false,
+        sent: false,
+        skipped: true,
+        action: 'skipped',
+        canSendFreeForm: false,
+        reason: windowStatus.reason ?? 'WHATSAPP_WINDOW_CLOSED',
+        message: 'The WhatsApp customer service window is closed.',
+        messageType: null,
+        messageId: null,
+        storedMessageId: null,
+        instanceName: params.instance.instanceName,
+        kbSuggestionId: null,
+      };
     }
 
     if (!params.instance.instanceName) {
@@ -317,10 +352,6 @@ export class WhatsappService {
             occurredAt: storedMessage.createdAt,
           })
         : null;
-
-    if (storedMessage && this.isHumanAgentSender(params.senderType)) {
-      await this.releaseConversationAfterHumanReply(params.conversation);
-    }
 
     return {
       success: providerResult.success,
@@ -522,25 +553,6 @@ export class WhatsappService {
     });
 
     return Boolean(latestAiRun);
-  }
-
-  private async releaseConversationAfterHumanReply(
-    conversation: WhatsappConversationContext | null,
-  ) {
-    if (!conversation) {
-      return;
-    }
-
-    await this.prisma.conversation.update({
-      where: { id: conversation.id },
-      data: {
-        status: 'bot_active',
-        handoffRequired: false,
-        botPaused: false,
-        assignedTo: null,
-        updatedAt: new Date(),
-      },
-    });
   }
 
   private async findConversationContext(

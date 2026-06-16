@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import validationSchema from './config/validation.config';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { AiModule } from './modules/ai/ai.module';
 import { AiRunsModule } from './modules/ai-runs/ai-runs.module';
@@ -20,7 +21,6 @@ import { CompanyRegistrationModule } from './modules/company-registration/compan
 import { CompaniesModule } from './modules/companies/companies.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { SettingsModule } from './modules/settings/settings.module';
-import { UsersModule } from './modules/users/users.module';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { HealthModule } from './modules/health/health.module';
@@ -35,6 +35,7 @@ import { ConversationsGateway } from './gateways/conversations.gateway';
       isGlobal: true,
       envFilePath: '.env',
       expandVariables: true,
+      validationSchema,
     }),
     PrismaModule,
     GeminiModule,
@@ -58,7 +59,6 @@ import { ConversationsGateway } from './gateways/conversations.gateway';
     CompaniesModule,
     WebhooksModule,
     SettingsModule,
-    UsersModule,
     WhatsappModule,
     NotificationsModule,
     ProductsModule,

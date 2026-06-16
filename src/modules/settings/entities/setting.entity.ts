@@ -17,6 +17,7 @@ export interface CompanyBusinessHours {
 }
 
 export interface CompanyAiPolicy {
+  businessDomain: 'generic' | 'hospitality';
   enabled: boolean;
   handoffEnabled: boolean;
   confidenceThreshold: number;

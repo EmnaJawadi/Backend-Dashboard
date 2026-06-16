@@ -404,7 +404,9 @@ export const ModelName = {
   KbChunk: 'KbChunk',
   Notification: 'Notification',
   Setting: 'Setting',
-  WebhookEvent: 'WebhookEvent'
+  WebhookEvent: 'WebhookEvent',
+  PdfImportDraft: 'PdfImportDraft',
+  PdfDraftArticle: 'PdfDraftArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "companyRegistrationRequest" | "agentRegistrationRequest" | "companyWhatsappInstance" | "product" | "productImage" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "kbSuggestion" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "notification" | "setting" | "webhookEvent"
+    modelProps: "user" | "company" | "companyRegistrationRequest" | "agentRegistrationRequest" | "companyWhatsappInstance" | "product" | "productImage" | "subscription" | "contact" | "contactNote" | "conversation" | "conversationTag" | "message" | "kbSuggestion" | "aiRun" | "auditLog" | "kbArticle" | "kbChunk" | "notification" | "setting" | "webhookEvent" | "pdfImportDraft" | "pdfDraftArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1978,6 +1980,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PdfImportDraft: {
+      payload: Prisma.$PdfImportDraftPayload<ExtArgs>
+      fields: Prisma.PdfImportDraftFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PdfImportDraftFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PdfImportDraftFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        findFirst: {
+          args: Prisma.PdfImportDraftFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PdfImportDraftFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        findMany: {
+          args: Prisma.PdfImportDraftFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>[]
+        }
+        create: {
+          args: Prisma.PdfImportDraftCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        createMany: {
+          args: Prisma.PdfImportDraftCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PdfImportDraftCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>[]
+        }
+        delete: {
+          args: Prisma.PdfImportDraftDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        update: {
+          args: Prisma.PdfImportDraftUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        deleteMany: {
+          args: Prisma.PdfImportDraftDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PdfImportDraftUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PdfImportDraftUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>[]
+        }
+        upsert: {
+          args: Prisma.PdfImportDraftUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfImportDraftPayload>
+        }
+        aggregate: {
+          args: Prisma.PdfImportDraftAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePdfImportDraft>
+        }
+        groupBy: {
+          args: Prisma.PdfImportDraftGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PdfImportDraftGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PdfImportDraftCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PdfImportDraftCountAggregateOutputType> | number
+        }
+      }
+    }
+    PdfDraftArticle: {
+      payload: Prisma.$PdfDraftArticlePayload<ExtArgs>
+      fields: Prisma.PdfDraftArticleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PdfDraftArticleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PdfDraftArticleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        findFirst: {
+          args: Prisma.PdfDraftArticleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PdfDraftArticleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        findMany: {
+          args: Prisma.PdfDraftArticleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>[]
+        }
+        create: {
+          args: Prisma.PdfDraftArticleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        createMany: {
+          args: Prisma.PdfDraftArticleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PdfDraftArticleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>[]
+        }
+        delete: {
+          args: Prisma.PdfDraftArticleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        update: {
+          args: Prisma.PdfDraftArticleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        deleteMany: {
+          args: Prisma.PdfDraftArticleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PdfDraftArticleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PdfDraftArticleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>[]
+        }
+        upsert: {
+          args: Prisma.PdfDraftArticleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PdfDraftArticlePayload>
+        }
+        aggregate: {
+          args: Prisma.PdfDraftArticleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePdfDraftArticle>
+        }
+        groupBy: {
+          args: Prisma.PdfDraftArticleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PdfDraftArticleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PdfDraftArticleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PdfDraftArticleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2431,6 +2581,37 @@ export const WebhookEventScalarFieldEnum = {
 export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
 
 
+export const PdfImportDraftScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  uploadedBy: 'uploadedBy',
+  fileName: 'fileName',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PdfImportDraftScalarFieldEnum = (typeof PdfImportDraftScalarFieldEnum)[keyof typeof PdfImportDraftScalarFieldEnum]
+
+
+export const PdfDraftArticleScalarFieldEnum = {
+  id: 'id',
+  importId: 'importId',
+  title: 'title',
+  category: 'category',
+  body: 'body',
+  tags: 'tags',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  kbArticleId: 'kbArticleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PdfDraftArticleScalarFieldEnum = (typeof PdfDraftArticleScalarFieldEnum)[keyof typeof PdfDraftArticleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2722,6 +2903,34 @@ export type EnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputT
 export type ListEnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationPriority[]'>
     
 
+
+/**
+ * Reference to a field of type 'PdfImportStatus'
+ */
+export type EnumPdfImportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PdfImportStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PdfImportStatus[]'
+ */
+export type ListEnumPdfImportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PdfImportStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DraftArticleStatus'
+ */
+export type EnumDraftArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DraftArticleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DraftArticleStatus[]'
+ */
+export type ListEnumDraftArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DraftArticleStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2838,6 +3047,8 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   setting?: Prisma.SettingOmit
   webhookEvent?: Prisma.WebhookEventOmit
+  pdfImportDraft?: Prisma.PdfImportDraftOmit
+  pdfDraftArticle?: Prisma.PdfDraftArticleOmit
 }
 
 /* Types for Logging */

@@ -110,27 +110,38 @@ export class InboundMessagesHandler {
       `[COMPANY_FOUND] companyId=${companyId} companyName=${companyInstance.company?.name ?? 'unknown'}`,
     );
 
-    const existingContact = phone
-      ? await this.prisma.contact.findFirst({
-          where: { companyId, phone },
-          orderBy: { updatedAt: 'desc' },
-        })
-      : null;
-
-    const contact = existingContact
-      ? await this.prisma.contact.update({
-          where: { id: existingContact.id },
-          data: {
+    const contact = phone
+      ? await this.prisma.contact.upsert({
+          where: { companyId_phone: { companyId, phone } },
+          update: {
             whatsappName: payload.contactName ?? undefined,
             fullName: payload.contactName ?? undefined,
             lastSeen: now,
+            updatedAt: now,
+          },
+          create: {
+            companyId,
+            phone,
+            whatsappName: payload.contactName ?? names.firstName,
+            fullName: payload.contactName ?? names.firstName,
+            email: null,
+            language: null,
+            city: null,
+            country: null,
+            tags: [],
+            notes: null,
+            segment: null,
+            source: 'whatsapp_webhook',
+            status: 'active',
+            lastSeen: now,
+            createdAt: now,
             updatedAt: now,
           },
         })
       : await this.prisma.contact.create({
           data: {
             companyId,
-            phone,
+            phone: null,
             whatsappName: payload.contactName ?? names.firstName,
             fullName: payload.contactName ?? names.firstName,
             email: null,
@@ -202,8 +213,10 @@ export class InboundMessagesHandler {
       }
     }
 
-    const message = await this.prisma.message.create({
-      data: {
+    let message;
+    try {
+      message = await this.prisma.message.create({
+        data: {
         companyId,
         conversationId: conversation.id,
         externalMessageId: payload.externalMessageId,
@@ -220,8 +233,21 @@ export class InboundMessagesHandler {
         errorMessage: null,
         createdAt: now,
         messageTimestamp: now,
-      },
-    });
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002' &&
+        payload.externalMessageId
+      ) {
+        this.logger.warn(
+          `Skipping concurrently duplicated inbound message externalId=${payload.externalMessageId}`,
+        );
+        return;
+      }
+      throw error;
+    }
 
     await this.prisma.conversation.update({
       where: { id: conversation.id },

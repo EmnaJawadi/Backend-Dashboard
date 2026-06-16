@@ -21,7 +21,7 @@ export class WebhooksController {
     return this.webhooksService.receiveEvolutionWebhook(payload);
   }
 
-  @Post('n8n/normalized-message')
+  @Post(['n8n/normalized', 'n8n/normalized-message'])
   @UseGuards(ApiKeyGuard)
   receiveN8nNormalizedMessage(@Body() payload: N8nNormalizedMessageDto) {
     return this.webhooksService.processN8nNormalizedMessage(payload);

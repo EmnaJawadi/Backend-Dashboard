@@ -8,6 +8,7 @@ import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
 import { resolveCompanyScope } from '../../common/utils/company-scope.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import {
+  KbArticleStatus,
   NotificationPriority,
   NotificationType,
 } from '../../generated/prisma/client';
@@ -35,6 +36,7 @@ type RawKbChunkInput = {
 
 type RawKbArticle = {
   id: string;
+  companyId?: string | null;
   title: string | null;
   body: string | null;
   category?: string | null;
@@ -45,6 +47,11 @@ type RawKbArticle = {
   publishedAt?: Date | string | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  company?: {
+    id: string;
+    name: string;
+    legalName?: string | null;
+  } | null;
   chunks?: Array<{
     id: string;
     articleId: string;
@@ -56,6 +63,16 @@ type RawKbArticle = {
   }> | null;
 };
 
+function toKbArticleStatus(value: string): KbArticleStatus {
+  const valid = Object.values(KbArticleStatus) as string[];
+  if (!valid.includes(value)) {
+    throw new BadRequestException(
+      `Invalid article status "${value}". Allowed: ${valid.join(', ')}`,
+    );
+  }
+  return value as KbArticleStatus;
+}
+
 @Injectable()
 export class KbArticlesService {
   private readonly logger = new Logger(KbArticlesService.name);
@@ -66,6 +83,82 @@ export class KbArticlesService {
     private readonly kbMapper: KbMapper,
     private readonly ingestionService: IngestionService,
   ) {}
+
+  async createFromPdfDraft(params: {
+    draftArticleId: string;
+    companyId: string;
+    title: string;
+    content: string;
+    category: string;
+    tags: string[];
+    actor: AuthenticatedUser;
+  }) {
+    const companyId = await this.resolveRequiredCompanyId(
+      params.actor,
+      params.companyId,
+      'publish_pdf_draft',
+    );
+    const articleId = `pdf-draft:${params.draftArticleId}`;
+    let article = await this.kbRepository.findById(articleId, companyId);
+
+    if (!article) {
+      try {
+        await this.kbRepository.createArticle({
+          id: articleId,
+          companyId,
+          title: params.title,
+          body: params.content,
+          category: params.category,
+          tags: params.tags,
+          language: null,
+          status: KbArticleStatus.draft,
+          source: 'imported',
+          sourceUrl: null,
+          sourceConversationId: null,
+          sourceContactId: null,
+          createdBy: params.actor.sub,
+          publishedAt: null,
+        });
+        article = await this.kbRepository.findById(articleId, companyId);
+      } catch (error) {
+        article = await this.kbRepository.findById(articleId, companyId);
+        if (!article) throw error;
+      }
+    }
+
+    if (!article) {
+      throw new NotFoundException('PDF knowledge base article could not be created');
+    }
+
+    if (article.status !== KbArticleStatus.published || !article.chunks?.length) {
+      await this.reindexArticle(articleId, companyId, true);
+      await this.kbRepository.updateArticle(articleId, {
+        status: KbArticleStatus.published,
+        publishedAt: new Date(),
+      }, companyId);
+    }
+
+    const published = await this.kbRepository.findById(articleId, companyId);
+    if (!published) throw new NotFoundException('Published PDF article not found');
+    return this.kbMapper.toArticleEntity(published as RawKbArticle);
+  }
+
+  async rollbackPdfDraftPublication(
+    draftArticleId: string,
+    companyId: string,
+  ): Promise<void> {
+    const articleId = `pdf-draft:${draftArticleId}`;
+    const article = await this.kbRepository.findById(articleId, companyId);
+
+    if (!article) {
+      return;
+    }
+
+    await this.kbRepository.deleteArticle(articleId, companyId);
+    this.logger.warn(
+      `KB_PDF_PUBLICATION_ROLLED_BACK companyId=${companyId} articleId=${articleId}`,
+    );
+  }
 
   private async resolveRequiredCompanyId(
     actor: AuthenticatedUser | undefined,
@@ -116,6 +209,10 @@ export class KbArticlesService {
       createKbArticleDto.companyId,
       'create_article',
     );
+    const articleStatus = toKbArticleStatus(
+      createKbArticleDto.status ?? 'published',
+    );
+    const shouldPublish = articleStatus === KbArticleStatus.published;
     const article = await this.kbRepository.createArticle({
       companyId,
       title: createKbArticleDto.title,
@@ -123,14 +220,30 @@ export class KbArticlesService {
       language: createKbArticleDto.language ?? null,
       sourceUrl: createKbArticleDto.sourceUrl ?? null,
       tags: createKbArticleDto.tags ?? [],
-      status: 'draft',
+      status: shouldPublish ? KbArticleStatus.draft : articleStatus,
       source: 'manual',
       createdBy: null,
       publishedAt: null,
-      category: createKbArticleDto.summary ?? null,
+      category:
+        createKbArticleDto.category ?? createKbArticleDto.summary ?? null,
     });
 
-    await this.reindexArticle(article.id);
+    this.logger.log(
+      `KB_ARTICLE_CREATED companyId=${companyId} articleId=${article.id} status=${article.status}`,
+    );
+
+    try {
+      if (shouldPublish) {
+        await this.reindexArticle(article.id, companyId, true);
+        await this.kbRepository.updateArticle(article.id, {
+          status: KbArticleStatus.published,
+          publishedAt: new Date(),
+        }, companyId);
+      }
+    } catch (error) {
+      await this.rollbackCreatedArticle(article.id, companyId, error);
+      throw error;
+    }
 
     const indexedArticle = await this.kbRepository.findById(article.id);
 
@@ -199,18 +312,46 @@ export class KbArticlesService {
     actor?: AuthenticatedUser,
   ) {
     const companyId = resolveCompanyScope(actor);
-    await this.ensureArticleExists(id, companyId);
+    const existing = await this.ensureArticleExists(id, companyId);
+    const articleCompanyId = existing.companyId as string;
+    const targetStatus = toKbArticleStatus(
+      updateKbArticleDto.status ?? existing.status ?? KbArticleStatus.draft,
+    );
+    const shouldPublish = targetStatus === KbArticleStatus.published;
+    let article: unknown;
 
-    const article = await this.kbRepository.updateArticle(id, {
-      title: updateKbArticleDto.title,
-      body: updateKbArticleDto.content,
-      language: updateKbArticleDto.language,
-      sourceUrl: updateKbArticleDto.sourceUrl,
-      tags: updateKbArticleDto.tags,
-      category: updateKbArticleDto.summary,
-    });
+    try {
+      article = await this.kbRepository.updateArticle(id, {
+        title: updateKbArticleDto.title,
+        body: updateKbArticleDto.content,
+        language: updateKbArticleDto.language,
+        sourceUrl: updateKbArticleDto.sourceUrl,
+        tags: updateKbArticleDto.tags,
+        category:
+          updateKbArticleDto.category ?? updateKbArticleDto.summary,
+        status: KbArticleStatus.draft,
+        publishedAt: null,
+      }, articleCompanyId);
 
-    await this.reindexArticle(id);
+      if (shouldPublish) {
+        await this.reindexArticle(id, articleCompanyId, true);
+        article = await this.kbRepository.updateArticle(id, {
+          status: KbArticleStatus.published,
+          publishedAt: existing.publishedAt
+            ? new Date(existing.publishedAt)
+            : new Date(),
+        }, articleCompanyId);
+      } else {
+        await this.kbRepository.deleteChunksByArticleId(id, articleCompanyId);
+        article = await this.kbRepository.updateArticle(id, {
+          status: targetStatus,
+          publishedAt: null,
+        }, articleCompanyId);
+      }
+    } catch (error) {
+      await this.restoreArticleSnapshot(existing, error);
+      throw error;
+    }
 
     const indexedArticle = await this.kbRepository.findById(id);
 
@@ -223,20 +364,28 @@ export class KbArticlesService {
     actor?: AuthenticatedUser,
   ) {
     const companyId = resolveCompanyScope(actor);
-    await this.ensureArticleExists(id, companyId);
+    const existing = await this.ensureArticleExists(id, companyId);
 
     const published = publishKbArticleDto.published ?? true;
 
-    const article = await this.kbRepository.updateArticle(id, {
-      status: published ? 'published' : 'draft',
-      publishedAt: published
-        ? publishKbArticleDto.publishedAt
-          ? new Date(publishKbArticleDto.publishedAt)
-          : new Date()
-        : null,
-    });
+    const articleCompanyId = existing.companyId as string;
+    let article: unknown;
 
-    await this.reindexArticle(id);
+    if (published) {
+      await this.reindexArticle(id, articleCompanyId, true);
+      article = await this.kbRepository.updateArticle(id, {
+        status: KbArticleStatus.published,
+        publishedAt: publishKbArticleDto.publishedAt
+          ? new Date(publishKbArticleDto.publishedAt)
+          : new Date(),
+      }, articleCompanyId);
+    } else {
+      article = await this.kbRepository.updateArticle(id, {
+        status: KbArticleStatus.draft,
+        publishedAt: null,
+      }, articleCompanyId);
+      await this.kbRepository.deleteChunksByArticleId(id, articleCompanyId);
+    }
 
     const indexedArticle = await this.kbRepository.findById(id);
 
@@ -244,8 +393,15 @@ export class KbArticlesService {
   }
 
   async remove(id: string, actor?: AuthenticatedUser) {
-    await this.ensureArticleExists(id, resolveCompanyScope(actor));
-    await this.kbRepository.deleteArticle(id);
+    const article = await this.ensureArticleExists(
+      id,
+      resolveCompanyScope(actor),
+    );
+    await this.kbRepository.deleteArticle(id, article.companyId as string);
+
+    this.logger.log(
+      `KB_ARTICLE_DELETED companyId=${article.companyId} articleId=${article.id} chunksDeleted=true`,
+    );
 
     return {
       message: 'Knowledge base article deleted successfully',
@@ -453,6 +609,33 @@ export class KbArticlesService {
     }
 
     const reviewedAt = new Date();
+    const article = await this.kbRepository.createArticle({
+      companyId: suggestionCompanyId,
+      title: suggestion.question.slice(0, 220),
+      body: `Customer question:\n${suggestion.question}\n\nHuman answer:\n${suggestion.answer}`,
+      category: dto.category?.trim() || 'agent-learning',
+      tags: dto.tags ?? [],
+      language: dto.language ?? 'fr',
+      status: KbArticleStatus.draft,
+      source: 'human_agent_response',
+      sourceConversationId: suggestion.conversationId,
+      sourceContactId: suggestion.conversation.contactId,
+      createdBy: suggestion.createdBy,
+      publishedAt: null,
+      sourceUrl: null,
+    });
+
+    try {
+      await this.reindexArticle(article.id, suggestionCompanyId, true);
+      await this.kbRepository.updateArticle(article.id, {
+        status: KbArticleStatus.published,
+        publishedAt: reviewedAt,
+      }, suggestionCompanyId);
+    } catch (error) {
+      await this.rollbackCreatedArticle(article.id, suggestionCompanyId, error);
+      throw error;
+    }
+
     const approved = await this.prisma.kbSuggestion.update({
       where: { id },
       data: {
@@ -461,24 +644,6 @@ export class KbArticlesService {
         reviewedAt,
       },
     });
-
-    const article = await this.kbRepository.createArticle({
-      companyId: suggestionCompanyId,
-      title: suggestion.question.slice(0, 220),
-      body: `Customer question:\n${suggestion.question}\n\nHuman answer:\n${suggestion.answer}`,
-      category: dto.category?.trim() || 'agent-learning',
-      tags: dto.tags ?? [],
-      language: dto.language ?? 'fr',
-      status: 'published',
-      source: 'human_agent_response',
-      sourceConversationId: suggestion.conversationId,
-      sourceContactId: suggestion.conversation.contactId,
-      createdBy: suggestion.createdBy,
-      publishedAt: reviewedAt,
-      sourceUrl: null,
-    });
-
-    await this.reindexArticle(article.id);
 
     this.logger.log(
       `KB_SUGGESTION_APPROVED companyId=${suggestionCompanyId} suggestionId=${suggestion.id} articleId=${article.id}`,
@@ -596,6 +761,7 @@ export class KbArticlesService {
       metadata: ingestKbSourceDto.metadata,
       chunkSize: ingestKbSourceDto.chunkSize,
       chunkOverlap: ingestKbSourceDto.chunkOverlap,
+      generateEmbeddings: false,
     });
 
     return this.createArticleFromIngestionResult(ingestionResult, {
@@ -632,6 +798,7 @@ export class KbArticlesService {
       tags: ingestKbFileDto.tags,
       chunkSize: ingestKbFileDto.chunkSize,
       chunkOverlap: ingestKbFileDto.chunkOverlap,
+      generateEmbeddings: false,
     });
 
     return this.createArticleFromIngestionResult(ingestionResult, {
@@ -646,8 +813,15 @@ export class KbArticlesService {
     });
   }
 
-  async reindexArticle(articleId: string) {
-    const article = await this.kbRepository.findById(articleId);
+  async reindexArticle(
+    articleId: string,
+    expectedCompanyId?: string,
+    allowUnpublished = false,
+  ) {
+    const article = await this.kbRepository.findById(
+      articleId,
+      expectedCompanyId,
+    );
 
     if (!article) {
       throw new NotFoundException('Knowledge base article not found');
@@ -659,11 +833,34 @@ export class KbArticlesService {
       );
     }
 
-    await this.kbRepository.deleteChunksByArticleId(article.id);
+    if (
+      article.status !== KbArticleStatus.published &&
+      !allowUnpublished
+    ) {
+      const cleanup = await this.kbRepository.deleteChunksByArticleId(
+        article.id,
+        article.companyId,
+      );
+      this.logger.log(
+        `KB_CHUNK_GENERATION_SKIPPED companyId=${article.companyId} articleId=${article.id} status=${article.status} chunksDeleted=${cleanup.count}`,
+      );
+      return {
+        articleId: article.id,
+        companyId: article.companyId,
+        chunksIndexed: 0,
+      };
+    }
 
-    const content = [article.title, article.body].filter(Boolean).join('\n\n');
+    const content = article.body?.trim() ?? '';
 
     if (!content.trim()) {
+      await this.kbRepository.deleteChunksByArticleId(
+        article.id,
+        article.companyId,
+      );
+      this.logger.warn(
+        `KB_CHUNK_GENERATION_SKIPPED companyId=${article.companyId} articleId=${article.id} reason=empty_content`,
+      );
       return {
         articleId: article.id,
         companyId: article.companyId,
@@ -672,14 +869,22 @@ export class KbArticlesService {
     }
 
     const tags = this.toStringList(article.tags);
+    const contextPrefix = this.buildArticleContextPrefix(
+      article as RawKbArticle,
+      tags,
+    );
+    this.logger.log(
+      `KB_CHUNK_GENERATION_STARTED companyId=${article.companyId} articleId=${article.id} status=${article.status}`,
+    );
     const ingestionResult = await this.ingestionService.ingest({
       sourceType: IngestionSourceType.TEXT,
       title: article.title ?? undefined,
       content,
       language: article.language ?? undefined,
       tags,
-      chunkSize: 2400,
-      chunkOverlap: 240,
+      chunkSize: 1200,
+      chunkOverlap: 120,
+      contextPrefix,
       metadata: {
         language: article.language,
         category: article.category,
@@ -691,7 +896,21 @@ export class KbArticlesService {
       },
     });
 
-    await this.kbRepository.createChunks(
+    if (ingestionResult.chunks.length === 0) {
+      throw new BadRequestException(
+        'A published knowledge base article must generate at least one chunk',
+      );
+    }
+
+    if (
+      ingestionResult.chunks.some((chunk) => chunk.embedding.length !== 1536)
+    ) {
+      throw new BadRequestException(
+        'Every published knowledge base chunk must have a 1536-dimension embedding',
+      );
+    }
+
+    await this.kbRepository.replaceChunksByArticleId(
       article.id,
       ingestionResult.chunks.map((chunk: RawKbChunkInput) => ({
         content: chunk.content,
@@ -710,6 +929,13 @@ export class KbArticlesService {
       article.companyId,
     );
 
+    const embeddingsGenerated = ingestionResult.chunks.filter(
+      (chunk) => chunk.embedding.length > 0,
+    ).length;
+    this.logger.log(
+      `KB_CHUNK_GENERATION_COMPLETED companyId=${article.companyId} articleId=${article.id} chunksCount=${ingestionResult.chunks.length} embeddingsGenerated=${embeddingsGenerated}`,
+    );
+
     return {
       articleId: article.id,
       companyId: article.companyId,
@@ -720,6 +946,7 @@ export class KbArticlesService {
   async reindexCompanyKb(companyId: string) {
     const articles = await this.kbRepository.findMany({
       companyId,
+      status: KbArticleStatus.published,
       skip: 0,
       take: 10000,
       orderBy: { updatedAt: 'desc' },
@@ -727,7 +954,7 @@ export class KbArticlesService {
     const results = [];
 
     for (const article of articles) {
-      results.push(await this.reindexArticle(article.id));
+      results.push(await this.reindexArticle(article.id, companyId));
     }
 
     return {
@@ -738,6 +965,107 @@ export class KbArticlesService {
         0,
       ),
     };
+  }
+
+  async rebuildCompanyKb(
+    requestedCompanyId: string | undefined,
+    actor?: AuthenticatedUser,
+  ) {
+    const companyId = await this.resolveRequiredCompanyId(
+      actor,
+      requestedCompanyId,
+      'rebuild_company_kb',
+    );
+    const company = await this.prisma.company.findUnique({
+      where: { id: companyId },
+      select: { id: true, name: true },
+    });
+    if (!company) throw new NotFoundException('Company not found');
+
+    const articles = await this.kbRepository.findMany({
+      companyId,
+      status: KbArticleStatus.published,
+      skip: 0,
+      take: 10000,
+      orderBy: { updatedAt: 'asc' },
+    });
+    const cleanup = await this.kbRepository.deleteChunksForCompany(companyId);
+    const errors: Array<{ articleId: string; title: string | null; error: string }> = [];
+    let chunksCreated = 0;
+
+    for (const article of articles) {
+      try {
+        const result = await this.reindexArticle(article.id, companyId);
+        chunksCreated += result.chunksIndexed;
+      } catch (error) {
+        errors.push({
+          articleId: article.id,
+          title: article.title,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+
+    const report = {
+      companyId,
+      companyName: company.name,
+      articlesFound: articles.length,
+      articlesIndexed: articles.length - errors.length,
+      chunksDeleted: cleanup.count,
+      chunksCreated,
+      errors,
+    };
+    this.logger.log(`KB_COMPANY_REBUILD_COMPLETED report=${JSON.stringify(report)}`);
+    return report;
+  }
+
+  async rebuildCompanyKbByName(companyName: string) {
+    const company = await this.findCompanyByFlexibleName(companyName);
+    const activeArticles = await this.prisma.kbArticle.findMany({
+      where: {
+        companyId: company.id,
+        status: 'published',
+      },
+      select: { id: true, title: true },
+      orderBy: { updatedAt: 'asc' },
+    });
+    const cleanup = await this.kbRepository.deleteChunksForCompany(company.id);
+    const errors: Array<{
+      articleId: string;
+      title: string | null;
+      error: string;
+    }> = [];
+    let chunksCreated = 0;
+
+    this.logger.log(
+      `KB_COMPANY_REBUILD_STARTED companyId=${company.id} companyName=${company.name} activeArticles=${activeArticles.length} chunksDeleted=${cleanup.count}`,
+    );
+
+    for (const article of activeArticles) {
+      try {
+        const result = await this.reindexArticle(article.id, company.id);
+        chunksCreated += result.chunksIndexed;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        errors.push({ articleId: article.id, title: article.title, error: message });
+        this.logger.error(
+          `KB_COMPANY_REBUILD_ARTICLE_FAILED companyId=${company.id} articleId=${article.id} reason=${message}`,
+        );
+      }
+    }
+
+    const report = {
+      companyId: company.id,
+      companyName: company.name,
+      articlesFound: activeArticles.length,
+      articlesIndexed: activeArticles.length - errors.length,
+      chunksDeleted: cleanup.count,
+      chunksCreated,
+      errors,
+    };
+
+    this.logger.log(`KB_COMPANY_REBUILD_COMPLETED report=${JSON.stringify(report)}`);
+    return report;
   }
 
   private async ensureArticleExists(id: string, companyId?: string) {
@@ -796,8 +1124,21 @@ export class KbArticlesService {
       return IngestionSourceType.PPT;
     }
 
+    if (lowerName.endsWith('.json') || lowerMime.includes('json')) {
+      return IngestionSourceType.JSON;
+    }
+
+    if (
+      lowerName.endsWith('.yaml') ||
+      lowerName.endsWith('.yml') ||
+      lowerMime.includes('yaml') ||
+      lowerMime.includes('yml')
+    ) {
+      return IngestionSourceType.YAML;
+    }
+
     throw new BadRequestException(
-      'Unsupported file type. Allowed: PDF, DOC/DOCX, PPT/PPTX',
+      'Unsupported file type. Allowed: PDF, DOC/DOCX, PPT/PPTX, JSON, YAML/YML',
     );
   }
 
@@ -823,28 +1164,28 @@ export class KbArticlesService {
       language: input.language ?? null,
       sourceUrl: input.sourceUrl ?? null,
       tags: input.tags ?? [],
-      status: shouldPublish ? 'published' : 'draft',
+      status: KbArticleStatus.draft,
       source: 'imported',
       createdBy: null,
-      publishedAt: shouldPublish ? new Date() : null,
+      publishedAt: null,
       category: input.summary ?? null,
     });
 
-    if (ingestionResult.chunks.length > 0) {
-      await this.kbRepository.createChunks(
-        article.id,
-        ingestionResult.chunks.map((chunk: RawKbChunkInput) => ({
-          content: chunk.content,
-          chunkIndex: chunk.chunkIndex,
-          embedding: chunk.embedding ?? null,
-          metadata: {
-            ...(chunk.metadata ?? {}),
-            companyId: input.companyId,
-            articleId: article.id,
-          },
-        })),
-        input.companyId,
-      );
+    this.logger.log(
+      `KB_ARTICLE_CREATED companyId=${input.companyId} articleId=${article.id} status=${article.status} sourceType=${input.sourceType}`,
+    );
+
+    try {
+      if (shouldPublish) {
+        await this.reindexArticle(article.id, input.companyId, true);
+        await this.kbRepository.updateArticle(article.id, {
+          status: KbArticleStatus.published,
+          publishedAt: new Date(),
+        }, input.companyId);
+      }
+    } catch (error) {
+      await this.rollbackCreatedArticle(article.id, input.companyId, error);
+      throw error;
     }
 
     const createdArticle = await this.kbRepository.findById(article.id);
@@ -854,5 +1195,145 @@ export class KbArticlesService {
     }
 
     return this.kbMapper.toArticleEntity(createdArticle as RawKbArticle);
+  }
+
+  private buildArticleContextPrefix(
+    article: RawKbArticle,
+    tags: string[],
+  ): string {
+    const parts = [
+      article.company?.name,
+      article.company?.legalName,
+      article.title,
+      article.category ? `Section: ${article.category}` : null,
+      tags.length > 0 ? `Mots-cles: ${tags.join(', ')}` : null,
+    ].filter((value): value is string => Boolean(value?.trim()));
+
+    return Array.from(new Set(parts)).join('. ');
+  }
+
+  private async findCompanyByFlexibleName(companyName: string) {
+    const requested = this.normalizeCompanyName(companyName);
+
+    if (!requested) {
+      throw new BadRequestException('A company name is required');
+    }
+
+    const companies = await this.prisma.company.findMany({
+      select: { id: true, name: true, legalName: true },
+      orderBy: { name: 'asc' },
+    });
+    const ranked = companies
+      .map((company) => {
+        const names = [company.name, company.legalName]
+          .filter((value): value is string => Boolean(value))
+          .map((value) => this.normalizeCompanyName(value));
+        const score = names.some((name) => name === requested)
+          ? 3
+          : names.some(
+                (name) => name.includes(requested) || requested.includes(name),
+              )
+            ? 2
+            : names.some((name) => name.includes('toskanaworld')) &&
+                requested.includes('toskanaworld')
+              ? 1
+              : 0;
+
+        return { company, score };
+      })
+      .filter((item) => item.score > 0)
+      .sort((left, right) => right.score - left.score);
+
+    if (ranked.length === 0) {
+      throw new NotFoundException(`Company not found: ${companyName}`);
+    }
+
+    if (
+      ranked.length > 1 &&
+      ranked[0].score === ranked[1].score &&
+      ranked[0].company.id !== ranked[1].company.id
+    ) {
+      throw new BadRequestException(
+        `Several companies match "${companyName}": ${ranked
+          .filter((item) => item.score === ranked[0].score)
+          .map((item) => item.company.name)
+          .join(', ')}`,
+      );
+    }
+
+    return ranked[0].company;
+  }
+
+  private normalizeCompanyName(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '');
+  }
+
+  private async rollbackCreatedArticle(
+    articleId: string,
+    companyId: string,
+    indexingError: unknown,
+  ): Promise<void> {
+    const reason =
+      indexingError instanceof Error ? indexingError.message : 'Unknown error';
+
+    this.logger.error(
+      `KB_ARTICLE_INDEXING_FAILED companyId=${companyId} articleId=${articleId} reason=${reason}`,
+    );
+
+    try {
+      await this.kbRepository.deleteArticle(articleId, companyId);
+      this.logger.warn(
+        `KB_ARTICLE_ROLLED_BACK companyId=${companyId} articleId=${articleId}`,
+      );
+    } catch (rollbackError) {
+      this.logger.error(
+        `KB_ARTICLE_ROLLBACK_FAILED companyId=${companyId} articleId=${articleId} reason=${rollbackError instanceof Error ? rollbackError.message : 'Unknown error'}`,
+      );
+    }
+  }
+
+  private async restoreArticleSnapshot(
+    article: RawKbArticle,
+    indexingError: unknown,
+  ): Promise<void> {
+    const companyId = article.companyId?.trim();
+    if (!companyId) {
+      return;
+    }
+
+    const reason =
+      indexingError instanceof Error ? indexingError.message : 'Unknown error';
+    this.logger.error(
+      `KB_ARTICLE_UPDATE_INDEXING_FAILED companyId=${companyId} articleId=${article.id} reason=${reason}`,
+    );
+
+    try {
+      await this.kbRepository.updateArticle(article.id, {
+        title: article.title,
+        body: article.body,
+        category: article.category,
+        language: article.language,
+        sourceUrl: article.sourceUrl,
+        tags: Array.isArray(article.tags) ? article.tags : [],
+        status: toKbArticleStatus(article.status ?? KbArticleStatus.draft),
+        publishedAt: article.publishedAt
+          ? new Date(article.publishedAt)
+          : null,
+      }, companyId);
+
+      if (article.status === KbArticleStatus.published) {
+        await this.reindexArticle(article.id, companyId, true);
+      } else {
+        await this.kbRepository.deleteChunksByArticleId(article.id, companyId);
+      }
+    } catch (rollbackError) {
+      this.logger.error(
+        `KB_ARTICLE_UPDATE_ROLLBACK_FAILED companyId=${companyId} articleId=${article.id} reason=${rollbackError instanceof Error ? rollbackError.message : 'Unknown error'}`,
+      );
+    }
   }
 }

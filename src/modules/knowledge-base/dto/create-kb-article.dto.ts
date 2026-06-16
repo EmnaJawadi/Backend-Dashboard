@@ -30,6 +30,11 @@ export class CreateKbArticleDto {
   @MaxLength(500)
   summary?: string;
 
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  category?: string;
+
   @IsString()
   @IsNotEmpty()
   @Length(20, 50000)
@@ -53,6 +58,10 @@ export class CreateKbArticleDto {
   @IsString({ each: true })
   @MaxLength(30, { each: true })
   tags?: string[];
+
+  @IsOptional()
+  @IsString()
+  status?: string;
 
   @IsOptional()
   @IsObject()

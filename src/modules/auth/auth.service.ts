@@ -48,11 +48,11 @@ export class AuthService {
   ) {}
 
   private getAccessSecret(): string {
-    return process.env.JWT_ACCESS_SECRET ?? 'dev-access-secret';
+    return this.requireSecret('JWT_ACCESS_SECRET');
   }
 
   private getRefreshSecret(): string {
-    return process.env.JWT_REFRESH_SECRET ?? 'dev-refresh-secret';
+    return this.requireSecret('JWT_REFRESH_SECRET');
   }
 
   private getAccessExpiresIn(): StringValue | number {
@@ -86,11 +86,15 @@ export class AuthService {
   }
 
   private getResetPasswordSecret(): string {
-    return (
-      process.env.JWT_RESET_PASSWORD_SECRET ??
-      process.env.JWT_ACCESS_SECRET ??
-      'dev-reset-password-secret'
-    );
+    return this.requireSecret('JWT_RESET_PASSWORD_SECRET');
+  }
+
+  private requireSecret(name: string): string {
+    const value = process.env[name]?.trim();
+    if (!value) {
+      throw new Error(`${name} is required`);
+    }
+    return value;
   }
 
   private getResetPasswordExpiresIn(): StringValue | number {
@@ -133,6 +137,28 @@ export class AuthService {
     return { firstName, lastName };
   }
 
+  private buildProfileFromUser(user: {
+    id: string;
+    fullName: string | null;
+    email: string;
+    role: string | UserRole;
+    isActive: boolean;
+    companyId: string | null;
+  }) {
+    const names = this.splitFullName(user.fullName);
+    return {
+      id: user.id,
+      firstName: names.firstName,
+      lastName: names.lastName,
+      fullName: user.fullName ?? [names.firstName, names.lastName].filter(Boolean).join(' '),
+      email: user.email,
+      phoneNumber: null,
+      role: this.normalizeRole(user.role),
+      companyId: user.companyId,
+      isActive: user.isActive,
+    };
+  }
+
   private async resolveUserFromAuthorization(authorization?: string) {
     if (!authorization) {
       throw new UnauthorizedException('Missing authorization token');
@@ -142,7 +168,8 @@ export class AuthService {
 
     let userId: string | null = null;
 
-    if (normalized.startsWith('access-')) {
+    // Raccourci réservé au développement local — jamais actif en production
+    if (process.env.NODE_ENV === 'development' && normalized.startsWith('access-')) {
       userId = normalized.replace('access-', '');
     } else {
       try {
@@ -481,11 +508,16 @@ export class AuthService {
   }
 
   async refresh(refreshTokenDto: RefreshTokenDto) {
+    const refreshToken = refreshTokenDto.refreshToken?.trim();
+    if (!refreshToken) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+
     let payload: RefreshTokenPayload;
 
     try {
       payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
-        refreshTokenDto.refreshToken,
+        refreshToken,
         {
           secret: this.getRefreshSecret(),
         },
@@ -594,29 +626,16 @@ export class AuthService {
     return { message: 'Password reset successful' };
   }
 
-  async getProfileFromToken(token?: string) {
-    const user = await this.resolveUserFromAuthorization(token);
-
-    const names = this.splitFullName(user.fullName);
-
-    return {
-      id: user.id,
-      firstName: names.firstName,
-      lastName: names.lastName,
-      fullName: user.fullName ?? [names.firstName, names.lastName].filter(Boolean).join(' '),
-      email: user.email,
-      phoneNumber: null,
-      role: this.normalizeRole(user.role),
-      companyId: user.companyId,
-      isActive: user.isActive,
-    };
+  async getProfile(userId: string) {
+    const user = await this.resolveActiveUser(userId);
+    return this.buildProfileFromUser(user);
   }
 
-  async updateProfileFromToken(
-    authorization: string | undefined,
+  async updateProfile(
+    userId: string,
     updateProfileDto: UpdateProfileDto,
   ) {
-    const user = await this.resolveUserFromAuthorization(authorization);
+    const user = await this.resolveActiveUser(userId);
 
     if (
       updateProfileDto.firstName === undefined &&
@@ -649,14 +668,14 @@ export class AuthService {
       },
     });
 
-    return this.getProfileFromToken(`access-${updatedUser.id}`);
+    return this.buildProfileFromUser(updatedUser);
   }
 
-  async changePasswordFromToken(
-    authorization: string | undefined,
+  async changePassword(
+    userId: string,
     changePasswordDto: ChangePasswordDto,
   ) {
-    const user = await this.resolveUserFromAuthorization(authorization);
+    const user = await this.resolveActiveUser(userId);
 
     const currentPasswordCheck = await verifyPassword(
       changePasswordDto.currentPassword,
@@ -686,5 +705,13 @@ export class AuthService {
     });
 
     return { message: 'Password updated successfully' };
+  }
+
+  private async resolveActiveUser(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user;
   }
 }

@@ -39,6 +39,14 @@ const validationSchema = Joi.object({
   GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().optional().allow('', null),
   GEMINI_MODEL: Joi.string().optional().allow('', null),
   PRODUCT_IMAGE_MATCH_MIN_CONFIDENCE: Joi.number().min(0).max(1).default(0.62),
+  EMBEDDING_PROVIDER: Joi.string()
+    .valid('openai-compatible', 'gemini')
+    .default('openai-compatible'),
+  EMBEDDING_API_URL: Joi.string().uri().optional().allow('', null),
+  EMBEDDING_API_KEY: Joi.string().optional().allow('', null),
+  EMBEDDING_MODEL: Joi.string().optional().allow('', null),
+  EMBEDDING_BATCH_SIZE: Joi.number().integer().min(1).max(100).default(16),
+  EMBEDDING_REQUEST_TIMEOUT_MS: Joi.number().integer().positive().default(20000),
   N8N_WEBHOOK_URL: Joi.string().uri().optional().allow('', null),
   N8N_WEBHOOK_SECRET: Joi.string().optional().allow('', null),
   N8N_WEBHOOK_TIMEOUT_MS: Joi.number().default(8000),

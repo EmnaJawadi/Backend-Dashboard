@@ -100,26 +100,40 @@ export class MessagesRepository {
       throw new BadRequestException('Message must be linked to a company');
     }
 
-    const created = await this.prisma.message.create({
-      data: {
-        companyId: resolvedCompanyId,
-        conversationId: data.conversationId ?? '',
-        externalMessageId: data.externalMessageId ?? null,
-        direction,
-        senderType,
-        content: data.content ?? null,
-        messageType: data.type ?? 'text',
-        caption: data.caption ?? null,
-        mediaId: data.mediaId ?? null,
-        mediaUrl: data.mediaUrl ?? null,
-        mimeType: data.mimeType ?? null,
-        rawPayload: this.buildRawPayload(data),
-        deliveryStatus: data.status ?? 'sent',
-        errorMessage: null,
-        createdAt: now,
-        messageTimestamp: now,
-      },
-    });
+    let created: Awaited<ReturnType<typeof this.prisma.message.create>>;
+    try {
+      created = await this.prisma.message.create({
+        data: {
+          companyId: resolvedCompanyId,
+          conversationId: data.conversationId ?? '',
+          externalMessageId: data.externalMessageId ?? null,
+          direction,
+          senderType,
+          content: data.content ?? null,
+          messageType: data.type ?? 'text',
+          caption: data.caption ?? null,
+          mediaId: data.mediaId ?? null,
+          mediaUrl: data.mediaUrl ?? null,
+          mimeType: data.mimeType ?? null,
+          rawPayload: this.buildRawPayload(data),
+          deliveryStatus: data.status ?? 'sent',
+          errorMessage: null,
+          createdAt: now,
+          messageTimestamp: now,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2003' &&
+        String(error.meta?.['field_name'] ?? '').includes('conversation_id')
+      ) {
+        throw new BadRequestException(
+          'Conversation not found or does not belong to this company',
+        );
+      }
+      throw error;
+    }
 
     await this.touchConversation({
       conversationId: created.conversationId,

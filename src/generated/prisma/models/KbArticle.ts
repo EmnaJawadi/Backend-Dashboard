@@ -299,6 +299,7 @@ export type KbArticleOrderByWithRelationInput = {
 
 export type KbArticleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  id_companyId?: Prisma.KbArticleIdCompanyIdCompoundUniqueInput
   AND?: Prisma.KbArticleWhereInput | Prisma.KbArticleWhereInput[]
   OR?: Prisma.KbArticleWhereInput[]
   NOT?: Prisma.KbArticleWhereInput | Prisma.KbArticleWhereInput[]
@@ -322,7 +323,7 @@ export type KbArticleWhereUniqueInput = Prisma.AtLeast<{
   sourceConversation?: Prisma.XOR<Prisma.ConversationNullableScalarRelationFilter, Prisma.ConversationWhereInput> | null
   sourceContact?: Prisma.XOR<Prisma.ContactNullableScalarRelationFilter, Prisma.ContactWhereInput> | null
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id">
+}, "id" | "id_companyId">
 
 export type KbArticleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -509,6 +510,11 @@ export type KbArticleListRelationFilter = {
 
 export type KbArticleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type KbArticleIdCompanyIdCompoundUniqueInput = {
+  id: string
+  companyId: string
 }
 
 export type KbArticleCountOrderByAggregateInput = {

@@ -1,0 +1,851 @@
+{
+  "info": {
+    "name": "WhatsApp AI Support — Tests Complets",
+    "description": "Collection Postman complète pour tester le système multi-entreprise WhatsApp AI (Toskana World + Flavo Nation). Inclut : IA, RAG, KB, handoff, multi-langue, sécurité.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "pfe-whatsapp-ai"
+  },
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:3000", "type": "string" },
+    { "key": "JWT_TOKEN", "value": "", "type": "string", "description": "Rempli automatiquement par la requête Login" },
+    { "key": "API_KEY", "value": "your-api-key-here", "type": "string", "description": "Clé API pour /ai/workflow/reply" },
+    { "key": "TOSKANA_COMPANY_ID", "value": "", "type": "string", "description": "ID de la company ToskanaWorld (récupéré après login admin)" },
+    { "key": "FLAVO_COMPANY_ID", "value": "", "type": "string", "description": "ID de la company FlavoNation (récupéré après login admin)" },
+    { "key": "TOSKANA_CONVERSATION_ID", "value": "", "type": "string", "description": "ID d'une conversation ToskanaWorld active" },
+    { "key": "FLAVO_CONVERSATION_ID", "value": "", "type": "string", "description": "ID d'une conversation FlavoNation active" },
+    { "key": "TOSKANA_CONTACT_ID", "value": "", "type": "string", "description": "ID contact ToskanaWorld" },
+    { "key": "FLAVO_CONTACT_ID", "value": "", "type": "string", "description": "ID contact FlavoNation" },
+    { "key": "KB_ARTICLE_ID", "value": "", "type": "string", "description": "ID d'un article KB (rempli après création)" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{JWT_TOKEN}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "1. Authentification",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.accessToken) pm.environment.set('JWT_TOKEN', json.accessToken);",
+                  "else if (json.user) pm.test('Login OK - cookie mode', () => pm.response.to.have.status(200));",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@toskanaworld.tn\",\n  \"password\": \"Admin123!\"\n}"
+            },
+            "url": "{{BASE_URL}}/auth/login",
+            "description": "Connexion admin. Le JWT est enregistré automatiquement dans la variable JWT_TOKEN."
+          }
+        },
+        {
+          "name": "Login Agent FlavoNation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"agent@flavonation.tn\",\n  \"password\": \"Agent123!\"\n}"
+            },
+            "url": "{{BASE_URL}}/auth/login",
+            "description": "Connexion d'un agent FlavoNation pour tester la séparation multi-entreprise."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. IA — Réponses simples et sociales",
+      "item": [
+        {
+          "name": "Message simple Bonjour (FR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 ou 201', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('IA répond sans RAG pour message social', () => {",
+                  "  pm.expect(json.needsRag).to.be.false;",
+                  "  pm.expect(json.handoffRequired).to.be.false;",
+                  "  pm.expect(json.reply).to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Bonjour !\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-001\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Message social pur. L'IA doit répondre sans appeler le RAG. needsRag=false, handoffRequired=false."
+          }
+        },
+        {
+          "name": "Message Arabizi (nheb = je veux)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Langue détectée Arabizi', () => {",
+                  "  pm.expect(json.detectedLanguage).to.include('tunisian_arabic_latin');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Aaslama, nheb na3ref les prix mte3kom\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-002\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Message en Arabizi. L'IA doit détecter la langue et répondre en Arabizi."
+          }
+        },
+        {
+          "name": "Message en arabe (Arabic script)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"شنوة الخدمات الموجودة؟\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-003\",\n  \"phoneNumber\": \"+21655000003\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Question en arabe sur les services. L'IA doit répondre en arabe depuis la KB ToskanaWorld."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. IA — Questions métier ToskanaWorld (RAG)",
+      "item": [
+        {
+          "name": "Tarifs hôtel ToskanaWorld (FR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('RAG utilisé pour question prix', () => {",
+                  "  pm.expect(json.needsRag).to.be.true;",
+                  "});",
+                  "pm.test('Réponse contient un tarif en TND', () => {",
+                  "  pm.expect(json.reply).to.match(/TND|tarif|prix/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Quels sont les tarifs de l'hôtel en juillet ?\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-004\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Question sur les tarifs. L'IA doit utiliser le RAG et répondre avec les vrais tarifs ToskanaWorld 2026."
+          }
+        },
+        {
+          "name": "Question spa ToskanaWorld",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Est-ce qu'il y a un spa à l'hôtel ?\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-005\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Question spa. L'IA doit répondre depuis l'article spa ToskanaWorld (nouvellement ajouté)."
+          }
+        },
+        {
+          "name": "Localisation ToskanaWorld",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Où se trouve l'hôtel ToskanaWorld ?\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-006\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Question localisation. L'IA doit répondre depuis l'article Localisation ToskanaWorld."
+          }
+        },
+        {
+          "name": "Demande de réservation ToskanaWorld (Arabizi)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('orderIntent=true pour demande réservation', () => {",
+                  "  pm.expect(json.orderIntent).to.be.true;",
+                  "});",
+                  "pm.test('actionType=reservation', () => {",
+                  "  pm.expect(json.orderDetails?.actionType).to.equal('reservation');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Nheb naamel réservation, 2 adultes, arrivée 10 juillet\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-007\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Demande de réservation en Arabizi avec dates et nombre d'adultes. L'IA doit détecter actionType=reservation et poser uniquement les questions manquantes."
+          }
+        },
+        {
+          "name": "Calcul prix séjour Standard Room P2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Réponse contient un prix ou demande info manquante', () => {",
+                  "  pm.expect(json.reply).to.not.be.empty;",
+                  "  pm.expect(json.handoffRequired).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Combien coûte une Standard Room pour 2 adultes du 1er au 8 juillet 2026 ?\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-008\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Calcul de prix complet : 2 adultes, Standard Room, 7 nuits en P2 (1-15 juillet). L'IA doit calculer : 2 adultes × 160 TND × 7 nuits = 2240 TND."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. IA — Questions métier FlavoNation (RAG)",
+      "item": [
+        {
+          "name": "Menu FlavoNation (Arabizi)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('RAG utilisé pour menu', () => pm.expect(json.needsRag).to.be.true);",
+                  "pm.test('Réponse mentionne couscous ou pizza', () => {",
+                  "  pm.expect(json.reply).to.match(/couscous|pizza/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"شنوة عندكم في المنيو ؟\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-010\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Demande du menu en arabe tunisien. L'IA doit répondre avec le menu FlavoNation (couscous 18 TND, pizza 20 TND, etc.)."
+          }
+        },
+        {
+          "name": "Prix pizza FlavoNation (FR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Réponse contient le prix pizza 20 TND', () => {",
+                  "  pm.expect(json.reply).to.match(/20|pizza/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"prix pizza ?\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-011\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Demande du prix pizza. L'IA doit répondre 20 TND depuis la KB FlavoNation."
+          }
+        },
+        {
+          "name": "Disponibilité sushi FlavoNation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Réponse sur sushi ne doit pas inventer de prix', () => {",
+                  "  pm.expect(json.reply).to.not.be.empty;",
+                  "  pm.expect(json.reply).to.match(/confirmer|vérifier|équipe|sushi/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"عندكم sushi ؟\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-012\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Demande sur le sushi. L'IA doit mentionner sushi mais préciser que le prix/disponibilité sera confirmé par l'équipe."
+          }
+        },
+        {
+          "name": "Commande FlavoNation — Début commande",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('orderIntent=true pour commande', () => {",
+                  "  pm.expect(json.orderIntent).to.be.true;",
+                  "});",
+                  "pm.test('actionType=order', () => {",
+                  "  pm.expect(json.orderDetails?.actionType).to.equal('order');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"nheb ncommandi 2 couscous w 1 pizza\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-013\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Début de commande en Arabizi. L'IA doit détecter les items (2 couscous × 18 + 1 pizza × 20 = 56 TND) et demander les infos manquantes (nom, téléphone, adresse)."
+          }
+        },
+        {
+          "name": "Livraison disponible FlavoNation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"livraison disponible ?\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-014\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Question livraison. L'IA doit mentionner la zone confirmée (Tunis Aouina) et demander l'adresse pour les autres zones."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Handoff humain",
+      "item": [
+        {
+          "name": "Client insatisfait — Frustration FR",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('handoffRequired=true pour frustration', () => {",
+                  "  pm.expect(json.handoffRequired).to.be.true;",
+                  "});",
+                  "pm.test('shouldSendMessage=true — message de transfert envoyé', () => {",
+                  "  pm.expect(json.shouldSendMessage).to.be.true;",
+                  "  pm.expect(json.reply).to.not.be.empty;",
+                  "});",
+                  "pm.test('reason indique frustration ou human request', () => {",
+                  "  pm.expect(json.reason).to.match(/frustration|human|explicit/);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Je suis pas content du tout avec votre service, c'est scandaleux !\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-020\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Client très insatisfait. L'IA doit détecter la frustration et activer le handoff immédiatement avec un message de transfert poli."
+          }
+        },
+        {
+          "name": "Demande responsable — Arabizi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('handoffRequired=true pour demande responsable', () => {",
+                  "  pm.expect(json.handoffRequired).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Nheb nkellim wa7ed min el mas'oulin barra\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-021\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Demande de parler à un responsable en Arabizi. handoffRequired=true immédiat."
+          }
+        },
+        {
+          "name": "Réclamation paiement — Arabic",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('handoffRequired=true pour réclamation paiement', () => {",
+                  "  pm.expect(json.handoffRequired).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"أريد استرجاع أموالي، هذا غير مقبول\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-022\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Réclamation remboursement en arabe. handoffRequired=true immédiat."
+          }
+        },
+        {
+          "name": "Vérifier que le bot est bloqué quand handoffRequired=true (DB)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Bot bloqué : shouldSendMessage=false, handoffRequired=true', () => {",
+                  "  pm.expect(json.handoffRequired).to.be.true;",
+                  "  pm.expect(json.shouldSendMessage).to.be.false;",
+                  "  pm.expect(json.reason).to.equal('human_handoff_active');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Bonjour\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-023\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Envoyer ce test APRÈS qu'une conversation a handoffRequired=true en DB. Le bot doit rester silencieux (shouldSendMessage=false, reason=human_handoff_active)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Sécurité multi-entreprise",
+      "item": [
+        {
+          "name": "Vérifier que ToskanaWorld ne récupère pas les données FlavoNation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('La réponse ne contient pas de données FlavoNation', () => {",
+                  "  pm.expect(json.reply).to.not.match(/FlavoNation|couscous tunisien 18|pizza 20/i);",
+                  "});",
+                  "pm.test('sourceArticleIds ne contient que des articles Toskana', () => {",
+                  "  pm.expect(json.sourceArticleIds).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Quels sont vos plats disponibles ?\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-030\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Vérification isolation : une question sur les plats dans une conversation ToskanaWorld ne doit JAMAIS retourner les données FlavoNation."
+          }
+        },
+        {
+          "name": "Vérifier que FlavoNation ne récupère pas les données ToskanaWorld",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('La réponse ne contient pas de données ToskanaWorld', () => {",
+                  "  pm.expect(json.reply).to.not.match(/ToskanaWorld|Hammamet|Junior Suite|Senior Suite|TND.*tarif.*chambre/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Quels sont les tarifs de la chambre ?\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-test-031\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Vérification isolation : une conversation FlavoNation ne doit JAMAIS récupérer les tarifs chambres de ToskanaWorld."
+          }
+        },
+        {
+          "name": "CompanyId mismatch — Doit être rejeté",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 avec rejet scope', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Rejeté pour scope mismatch', () => {",
+                  "  pm.expect(json.reason).to.match(/scope_mismatch|company_scope/i);",
+                  "  pm.expect(json.shouldSendMessage).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Bonjour\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-test-032\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Tentative d'accès avec un companyId qui ne correspond pas à la conversation. Doit être rejeté avec company_scope_mismatch."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Base de connaissance (KB)",
+      "item": [
+        {
+          "name": "Lister les articles KB ToskanaWorld",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Au moins 19 articles ToskanaWorld', () => {",
+                  "  pm.expect(json.data?.length || json.items?.length || json.length).to.be.above(12);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/knowledge-base/articles?companyId={{TOSKANA_COMPANY_ID}}&status=published",
+              "host": ["{{BASE_URL}}"],
+              "path": ["knowledge-base", "articles"],
+              "query": [
+                { "key": "companyId", "value": "{{TOSKANA_COMPANY_ID}}" },
+                { "key": "status", "value": "published" }
+              ]
+            },
+            "description": "Lister tous les articles publiés de ToskanaWorld. Doit inclure les 12 articles tarifs + 7 nouveaux articles services/spa/localisation."
+          }
+        },
+        {
+          "name": "Créer un article KB (FlavoNation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.environment.set('KB_ARTICLE_ID', json.id || json.data?.id);",
+                  "pm.test('Article créé avec status draft', () => {",
+                  "  pm.expect(json.status).to.equal('draft');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"title\": \"Test Article — Biryani Prix Confirme\",\n  \"category\": \"PRODUITS\",\n  \"tags\": [\"biryani\", \"prix\", \"test\"],\n  \"content\": \"Le biryani est disponible chez FlavoNation au prix de 22 TND par portion. Ce tarif est confirme par l equipe.\",\n  \"language\": \"fr\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/knowledge-base/articles",
+            "description": "Créer un article KB pour FlavoNation. L'article est créé en statut 'draft' et doit être publié pour être utilisé par le RAG."
+          }
+        },
+        {
+          "name": "Publier l'article KB (génère chunks + embeddings)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Article publié', () => {",
+                  "  pm.expect(json.status).to.equal('published');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/knowledge-base/articles/{{KB_ARTICLE_ID}}/publish",
+            "description": "Publier l'article créé précédemment. La publication doit créer automatiquement les chunks et les embeddings dans kb_chunks."
+          }
+        },
+        {
+          "name": "Vérifier les chunks créés après publication",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Au moins 1 chunk créé avec embedding', () => {",
+                  "  const chunks = json.chunks || json.data?.chunks || json;",
+                  "  pm.expect(Array.isArray(chunks) && chunks.length > 0).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/knowledge-base/articles/{{KB_ARTICLE_ID}}",
+            "description": "Vérifier que des chunks ont été créés après la publication de l'article. Chaque article publié doit avoir au moins 1 chunk avec embedding vectoriel."
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Workflow AI (API Key — n8n/webhook)",
+      "item": [
+        {
+          "name": "Workflow Reply — Message simple ToskanaWorld",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Reply générée par workflow', () => {",
+                  "  pm.expect(json.reply).to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                { "key": "value", "value": "{{API_KEY}}", "type": "string" },
+                { "key": "key", "value": "x-api-key", "type": "string" },
+                { "key": "in", "value": "header", "type": "string" }
+              ]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Bonjour, je voudrais des informations sur l'hôtel\",\n  \"conversationId\": \"{{TOSKANA_CONVERSATION_ID}}\",\n  \"companyId\": \"{{TOSKANA_COMPANY_ID}}\",\n  \"contactId\": \"{{TOSKANA_CONTACT_ID}}\",\n  \"instanceName\": \"toskana-whatsapp-instance\",\n  \"messageId\": \"msg-workflow-001\",\n  \"phoneNumber\": \"+21655000001\",\n  \"messageType\": \"text\",\n  \"hasMedia\": false,\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/workflow/reply",
+            "description": "Endpoint utilisé par n8n/webhook avec authentification par API Key. Même logique que /ai/reply mais sans JWT."
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Analytics",
+      "item": [
+        {
+          "name": "Vue d'ensemble analytics ToskanaWorld",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Analytics contient conversations et aiRuns', () => {",
+                  "  pm.expect(json.conversations).to.not.be.undefined;",
+                  "  pm.expect(json.aiRuns).to.not.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/analytics/overview?companyId={{TOSKANA_COMPANY_ID}}&startDate=2026-01-01&endDate=2026-12-31&groupBy=month",
+              "host": ["{{BASE_URL}}"],
+              "path": ["analytics", "overview"],
+              "query": [
+                { "key": "companyId", "value": "{{TOSKANA_COMPANY_ID}}" },
+                { "key": "startDate", "value": "2026-01-01" },
+                { "key": "endDate", "value": "2026-12-31" },
+                { "key": "groupBy", "value": "month" }
+              ]
+            },
+            "description": "Vue d'ensemble analytics pour ToskanaWorld. Vérifie que les métriques sont bien filtrées par companyId."
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Médias",
+      "item": [
+        {
+          "name": "Audio sans texte — Demande clarification",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('shouldSendMessage=true pour clarification audio', () => {",
+                  "  pm.expect(json.shouldSendMessage).to.be.true;",
+                  "  pm.expect(json.reason).to.equal('media_requires_clarification');",
+                  "});",
+                  "pm.test('handoffRequired=false pour clarification simple', () => {",
+                  "  pm.expect(json.handoffRequired).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"\",\n  \"conversationId\": \"{{FLAVO_CONVERSATION_ID}}\",\n  \"companyId\": \"{{FLAVO_COMPANY_ID}}\",\n  \"contactId\": \"{{FLAVO_CONTACT_ID}}\",\n  \"instanceName\": \"flavo-whatsapp-instance\",\n  \"messageId\": \"msg-audio-001\",\n  \"phoneNumber\": \"+21655000002\",\n  \"messageType\": \"audio\",\n  \"hasMedia\": true,\n  \"mediaType\": \"audio\",\n  \"direction\": \"inbound\",\n  \"rawPayload\": {}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{BASE_URL}}/ai/reply",
+            "description": "Message audio sans texte. L'IA doit demander au client d'écrire sa demande. LLM et RAG ne doivent pas être appelés."
+          }
+        }
+      ]
+    }
+  ]
+}

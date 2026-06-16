@@ -1,3 +1,5 @@
+import { deduplicateRagResults } from '../utils/deduplicate-rag-results';
+
 export interface EvidenceItem {
   content: string;
   score?: number;
@@ -8,41 +10,12 @@ export class EvidenceContextBuilder {
   build(evidences: EvidenceItem[]): string {
     if (!evidences?.length) return '';
 
-    return this.dedupe(evidences)
+    return deduplicateRagResults(evidences, 6)
       .map((e, i) => {
         const sourceId = String(e.metadata?.id ?? `source_${i + 1}`);
-        const title = e.metadata?.articleTitle
-          ? ` (${String(e.metadata.articleTitle)})`
-          : '';
-
-        return `[${sourceId}]${title}\n${this.dedupeSentences(e.content)}`;
+        return `[${sourceId}]\n${this.dedupeSentences(e.content)}`;
       })
       .join('\n\n');
-  }
-
-  private dedupe(evidences: EvidenceItem[]): EvidenceItem[] {
-    const seen = new Set<string>();
-    const unique: EvidenceItem[] = [];
-
-    for (const evidence of evidences) {
-      const sourceKey = String(
-        evidence.metadata?.articleId ??
-          evidence.metadata?.productId ??
-          evidence.metadata?.id ??
-          '',
-      );
-      const contentKey = this.normalize(evidence.content).slice(0, 260);
-      const key = sourceKey || contentKey;
-
-      if (!key || seen.has(key)) {
-        continue;
-      }
-
-      seen.add(key);
-      unique.push(evidence);
-    }
-
-    return unique;
   }
 
   private dedupeSentences(content: string): string {

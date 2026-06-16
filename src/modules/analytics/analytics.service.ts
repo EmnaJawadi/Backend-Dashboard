@@ -105,7 +105,10 @@ export class AnalyticsService {
 
     const openConversationsExpr = statusColumn
       ? `COUNT(*) FILTER (
-          WHERE LOWER(COALESCE(${this.q(statusColumn)}::text, '')) IN ('open', 'pending', 'active')
+          WHERE LOWER(COALESCE(${this.q(statusColumn)}::text, '')) IN (
+            'bot_active', 'human_assigned', 'waiting_customer',
+            'open', 'pending', 'active'
+          )
         )::int AS "openConversations"`
       : '0::int AS "openConversations"';
 

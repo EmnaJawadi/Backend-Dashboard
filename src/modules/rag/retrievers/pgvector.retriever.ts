@@ -49,7 +49,7 @@ export class PgvectorRetriever implements Retriever {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly embeddingsService: EmbeddingsService = new EmbeddingsService(),
+    private readonly embeddingsService: EmbeddingsService,
   ) {}
 
   async retrieve(
@@ -64,8 +64,15 @@ export class PgvectorRetriever implements Retriever {
     const tokens = this.tokenize(query);
 
     if (tokens.length === 0) {
+      this.logger.warn(
+        `RAG_RETRIEVER_EMPTY_QUERY companyId=${options.companyId} reason=no_search_tokens`,
+      );
       return [];
     }
+
+    this.logger.log(
+      `RAG_RETRIEVER_QUERY companyId=${options.companyId} query="${this.normalize(query).replace(/\s+/g, ' ').slice(0, 240)}" tokens=${tokens.join(',')}`,
+    );
 
     const candidateLimit = Math.max(topK * 100, 1000);
     const vectorResults = await this.tryRetrieveWithVector(
@@ -103,9 +110,24 @@ export class PgvectorRetriever implements Retriever {
       .filter((result) => (result.score ?? 0) > 0)
       .filter((result) => this.isAllowedCategory(result, options.allowedCategories));
 
-    return this.dedupeByChunkIdKeepingBestScore([...vectorResults, ...textResults])
+    const ranked = this.dedupeByChunkIdKeepingBestScore([
+      ...vectorResults,
+      ...textResults,
+    ])
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, topK);
+
+    this.logger.log(
+      `RAG_RETRIEVER_RESULT companyId=${options.companyId} vectorMatches=${vectorResults.length} textMatches=${textResults.length} returned=${ranked.length} scores=${ranked.map((result) => `${result.metadata?.chunkId ?? 'unknown'}:${result.score ?? 0}`).join(',') || 'none'}`,
+    );
+
+    if (ranked.length === 0) {
+      this.logger.warn(
+        `RAG_RETRIEVER_NO_MATCH companyId=${options.companyId} reason=no_chunk_above_zero candidates=${chunks.length}`,
+      );
+    }
+
+    return ranked;
   }
 
   private async tryRetrieveWithVector(
@@ -216,8 +238,17 @@ export class PgvectorRetriever implements Retriever {
     const searchableTokens = new Set(this.splitTokens(searchable));
     const queryPhrase = this.normalize(query);
     const matchedTokens = queryTokens.filter((token) => searchableTokens.has(token));
+    const queryConcepts = this.baseTokens(query);
+    const matchedConcepts = queryConcepts.filter((token) =>
+      [token, ...this.expandTokenSynonyms(token)].some((candidate) =>
+        searchableTokens.has(candidate),
+      ),
+    );
 
-    const tokenScore = matchedTokens.length / queryTokens.length;
+    const tokenScore =
+      queryConcepts.length > 0
+        ? matchedConcepts.length / queryConcepts.length
+        : 0;
     const phraseBonus =
       queryPhrase.length >= 12 && searchable.includes(queryPhrase) ? 0.3 : 0;
     const titleBonus = matchedTokens.some((token) =>
@@ -299,6 +330,19 @@ export class PgvectorRetriever implements Retriever {
   }
 
   private tokenize(value: string): string[] {
+    const baseTokens = this.baseTokens(value);
+
+    return Array.from(
+      new Set(
+        baseTokens.flatMap((token) => [
+          token,
+          ...this.expandTokenSynonyms(token),
+        ]),
+      ),
+    );
+  }
+
+  private baseTokens(value: string): string[] {
     const stopWords = new Set([
       'avec',
       'aux',
@@ -346,6 +390,10 @@ export class PgvectorRetriever implements Retriever {
       'votre',
       'veux',
       'voudrais',
+      'ممكن',
+      'نحب',
+      'نعرف',
+      'تعدي',
       '\u0634\u0646\u0648\u0629',
       '\u0634\u0646\u0648',
       '\u0634\u0643\u0648\u0646',
@@ -357,7 +405,7 @@ export class PgvectorRetriever implements Retriever {
       '\u0647\u0644',
     ]);
 
-    const baseTokens = this.normalize(value)
+    return Array.from(new Set(this.normalize(value)
       .split(/[^\p{L}\p{N}]+/u)
       .map((token) => token.trim())
       .flatMap((token) =>
@@ -365,16 +413,7 @@ export class PgvectorRetriever implements Retriever {
           ? [token, token.slice(0, -1)]
           : [token],
       )
-      .filter((token) => [...token].length >= 2 && !stopWords.has(token));
-
-    return Array.from(
-      new Set(
-        baseTokens.flatMap((token) => [
-          token,
-          ...this.expandTokenSynonyms(token),
-        ]),
-      ),
-    );
+      .filter((token) => [...token].length >= 2 && !stopWords.has(token))));
   }
 
   private expandTokenSynonyms(token: string): string[] {
@@ -401,7 +440,18 @@ export class PgvectorRetriever implements Retriever {
       stock: ['disponible', 'disponibilite'],
       tarif: ['tarifs', 'prix'],
       tarifs: ['tarif', 'prix'],
+      prix: ['tarif', 'tarifs', 'cout', 'cost', 'تكلفة', 'التكلفة', 'السعر'],
+      cout: ['prix', 'tarif', 'cost', 'تكلفة', 'التكلفة', 'السعر'],
+      combien: ['prix', 'tarif', 'cout', 'price', 'تكلفة', 'السعر'],
+      cost: ['prix', 'tarif', 'cout', 'تكلفة', 'التكلفة'],
       price: ['prix', 'tarifs'],
+      reservation: ['booking', 'hotel', 'chambre', 'room', 'tarif', 'prix', 'الحجز', 'حجز', 'نحجز', 'nhajez'],
+      booking: ['reservation', 'hotel', 'chambre', 'room', 'tarif', 'prix', 'الحجز', 'حجز', 'نحجز', 'nhajez'],
+      nhajez: ['reservation', 'booking', 'hotel', 'chambre', 'tarif', 'prix', 'الحجز', 'حجز', 'نحجز'],
+      chambre: ['room', 'بيت', 'غرفة', 'اقامة', 'إقامة'],
+      room: ['chambre', 'بيت', 'غرفة'],
+      sejour: ['hotel', 'reservation', 'اقامة', 'إقامة'],
+      taklfa: ['prix', 'tarif', 'cout', 'تكلفة', 'التكلفة'],
       today: ['aujourd', 'jour'],
       deliver: ['livraison'],
       delivery: ['livraison'],
@@ -426,6 +476,15 @@ export class PgvectorRetriever implements Retriever {
       '\u0642\u062f\u0627\u0634': ['prix'],
       '\u0633\u0648\u0645': ['prix'],
       '\u0627\u0644\u0633\u0639\u0631': ['prix'],
+      '\u062a\u0643\u0644\u0641\u0629': ['prix', 'tarif', 'cout', 'taklfa'],
+      '\u0627\u0644\u062a\u0643\u0644\u0641\u0629': ['prix', 'tarif', 'cout', 'taklfa'],
+      '\u062d\u062c\u0632': ['reservation', 'booking', 'hotel', 'chambre', 'room', 'tarif', 'prix', 'nhajez'],
+      '\u0627\u0644\u062d\u062c\u0632': ['reservation', 'booking', 'hotel', 'chambre', 'room', 'tarif', 'prix', 'nhajez'],
+      '\u0646\u062d\u062c\u0632': ['reservation', 'booking', 'hotel', 'chambre', 'room', 'tarif', 'prix', 'nhajez'],
+      '\u0628\u064a\u062a': ['chambre', 'room'],
+      '\u063a\u0631\u0641\u0629': ['chambre', 'room'],
+      '\u0627\u0642\u0627\u0645\u0629': ['sejour', 'hotel', 'reservation'],
+      '\u0625\u0642\u0627\u0645\u0629': ['sejour', 'hotel', 'reservation'],
     };
 
     return synonyms[token] ?? [];

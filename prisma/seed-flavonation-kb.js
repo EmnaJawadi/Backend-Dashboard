@@ -46,78 +46,117 @@ const LEGACY_CONFLICTING_TITLES = [
   'Processus de commande FlavoNation',
   'Produits et plats disponibles FlavoNation',
   'Services proposes FlavoNation',
+  // Old single-article titles replaced by new structured articles
+  'Presentation et services - FlavoNation',
+  'Menu disponible - FlavoNation',
+  'Prix des plats - FlavoNation',
+  'Couscous tunisien - disponibilite et prix',
+  'Pizza - disponibilite, prix et variantes',
+  'Boissons disponibles - FlavoNation',
+  'Livraison et adresse - FlavoNation',
+  'Commande WhatsApp et confirmation - FlavoNation',
+  'Paiement - FlavoNation',
+  'Information absente de la base - FlavoNation',
 ];
 
 const ARTICLES = [
   {
     title: 'Presentation et services - FlavoNation',
     category: 'SERVICES',
-    tags: ['presentation', 'services', 'whatsapp', 'flavonation'],
+    tags: ['presentation', 'services', 'whatsapp', 'flavonation', 'restaurant', 'livraison'],
     content:
-      'FlavoNation prend les commandes de repas sur WhatsApp. Le client peut consulter le menu documente, demander les prix documentes, transmettre une adresse de livraison et confirmer une commande. Les reponses doivent rester limitees aux informations confirmees dans la base FlavoNation.',
+      "FlavoNation est un restaurant qui prend les commandes de repas sur WhatsApp. Le client peut consulter le menu documente, demander les prix confirmes, transmettre une adresse de livraison et confirmer sa commande via WhatsApp. FlavoNation propose des plats tunisiens, pizzas, sushi et biryani. Les reponses doivent rester limitees aux informations confirmees dans la base FlavoNation. Pour toute question non documentee, l'equipe sera consultee.",
   },
   {
-    title: 'Menu disponible - FlavoNation',
+    title: 'Menu complet disponible - FlavoNation',
     category: 'PRODUITS',
-    tags: ['menu', 'plats', 'couscous', 'pizza', 'flavonation'],
+    tags: ['menu', 'plats', 'couscous', 'pizza', 'sushi', 'biryani', 'flavonation'],
     content:
-      'Menu actuellement confirme chez FlavoNation : couscous tunisien et pizza. Le couscous tunisien est disponible. La pizza est disponible. Aucun autre plat ni aucune variante de pizza ne doit etre annonce comme disponible sans une information publiee dans la base.',
+      "Menu FlavoNation confirme : couscous tunisien (18 TND), pizza (20 TND), sushi (prix a confirmer avec l'equipe), biryani (prix a confirmer avec l'equipe). Les plats confirmes disponibles sont le couscous tunisien et la pizza. Les plats sushi et biryani sont proposes mais leur disponibilite et leurs prix doivent etre confirmes avec l'equipe avant de les annoncer au client.",
   },
   {
-    title: 'Prix des plats - FlavoNation',
+    title: 'Prix des plats confirmes - FlavoNation',
     category: 'PRIX',
     tags: ['prix', 'tarifs', 'couscous', 'pizza', 'flavonation'],
     content:
-      'Prix confirmes FlavoNation : couscous tunisien : 18 TND par portion. Pizza : 20 TND par pizza. Pour un total de commande, multiplier uniquement ces prix confirmes par les quantites demandees puis additionner les sous-totaux.',
+      "Prix confirmes FlavoNation : couscous tunisien : 18 TND par portion. Pizza : 20 TND par pizza. Pour un total de commande, multiplier uniquement ces prix confirmes par les quantites demandees puis additionner les sous-totaux. Exemple : 2 couscous + 1 pizza = 2 x 18 + 1 x 20 = 56 TND. Les prix des autres plats (sushi, biryani, boissons) doivent etre confirmes avec l'equipe.",
   },
   {
     title: 'Couscous tunisien - disponibilite et prix',
     category: 'PRODUITS',
-    tags: ['couscous', 'tunisien', 'disponibilite', 'prix'],
+    tags: ['couscous', 'tunisien', 'disponibilite', 'prix', '18 tnd'],
     content:
-      'Le couscous tunisien est disponible chez FlavoNation au prix confirme de 18 TND par portion.',
+      "Le couscous tunisien est disponible chez FlavoNation au prix confirme de 18 TND par portion. C'est un plat traditionnel tunisien confirme dans notre catalogue.",
   },
   {
     title: 'Pizza - disponibilite, prix et variantes',
     category: 'PRODUITS',
-    tags: ['pizza', 'margherita', 'variante', 'prix'],
+    tags: ['pizza', 'margherita', 'variante', 'prix', '20 tnd'],
     content:
-      "La pizza est disponible chez FlavoNation au prix confirme de 20 TND par pizza. Aucune variante precise n'est confirmee dans la base. Si le client demande une pizza Margherita ou une autre variante, indiquer que cette variante doit etre verifiee avec l'equipe avant confirmation.",
+      "La pizza est disponible chez FlavoNation au prix confirme de 20 TND par pizza. Aucune variante precise (Margherita, Pepperoni, etc.) n'est confirmee dans la base. Si le client demande une variante specifique, indiquer que cette variante doit etre verifiee avec l'equipe avant confirmation.",
+  },
+  {
+    title: 'Sushi - disponibilite et prix',
+    category: 'PRODUITS',
+    tags: ['sushi', 'japonais', 'disponibilite', 'prix', 'flavonation'],
+    content:
+      "FlavoNation propose du sushi. La disponibilite et les prix du sushi doivent etre confirmes avec l'equipe avant de les annoncer au client. Si le client demande le prix ou les types de sushi disponibles, indiquer que l'equipe va confirmer la disponibilite et le tarif exact.",
+  },
+  {
+    title: 'Biryani - disponibilite et prix',
+    category: 'PRODUITS',
+    tags: ['biryani', 'riz', 'indien', 'disponibilite', 'prix', 'flavonation'],
+    content:
+      "FlavoNation propose du biryani. La disponibilite et le prix du biryani doivent etre confirmes avec l'equipe avant de les annoncer au client. Si le client demande le biryani, indiquer que l'equipe va confirmer la disponibilite et le prix.",
   },
   {
     title: 'Boissons disponibles - FlavoNation',
     category: 'PRODUITS',
-    tags: ['boissons', 'drink', 'disponibilite', 'flavonation'],
+    tags: ['boissons', 'drink', 'jus', 'eau', 'coca', 'disponibilite', 'flavonation'],
     content:
-      "La liste des boissons disponibles et leurs prix ne sont pas documentes actuellement dans la base FlavoNation. Si le client demande une boisson, indiquer que l'equipe va verifier les boissons disponibles et le prix; ne proposer aucune boisson sans confirmation.",
+      "Les boissons disponibles et leurs prix doivent etre confirmes avec l'equipe FlavoNation. Si le client demande une boisson (eau, jus, soda, coca, etc.), indiquer que l'equipe va confirmer les boissons disponibles et leurs prix. Ne proposer aucune boisson sans confirmation explicite.",
   },
   {
-    title: 'Livraison et adresse - FlavoNation',
+    title: 'Livraison et zones couvertes - FlavoNation',
     category: 'LIVRAISON',
-    tags: ['livraison', 'adresse', 'tunis', 'aouina', 'grand-tunis'],
+    tags: ['livraison', 'adresse', 'tunis', 'aouina', 'grand-tunis', 'zone'],
     content:
-      "Zone de livraison confirmee pour ce parcours : Tunis Aouina, dans le Grand Tunis. Pour livrer, demander l'adresse complete si elle manque. Pour toute autre zone, demander l'adresse et indiquer que la couverture sera verifiee avec l'equipe avant de confirmer la livraison.",
+      "Zone de livraison confirmee : Tunis Aouina, dans le Grand Tunis. Pour livrer, demander l'adresse complete si elle manque (rue, quartier, ville). Pour toute autre zone en dehors de Tunis Aouina, demander l'adresse et indiquer que la couverture sera verifiee avec l'equipe avant de confirmer la livraison. Ne pas confirmer de livraison hors zone sans verification.",
   },
   {
-    title: 'Commande WhatsApp et confirmation - FlavoNation',
+    title: 'Processus de commande WhatsApp - FlavoNation',
     category: 'COMMANDE',
-    tags: ['commande', 'confirmation', 'whatsapp', 'total'],
+    tags: ['commande', 'confirmation', 'whatsapp', 'total', 'processus'],
     content:
-      "Pour finaliser une commande WhatsApp FlavoNation, collecter uniquement les elements manquants : nom du client, telephone, adresse de livraison, plats et quantites. Si le client a deja transmis une information, ne pas la redemander. Quand les quantites, disponibilites et prix documentes sont connus, afficher chaque ligne, le total, l'adresse et le telephone, puis demander une confirmation explicite. Apres un oui explicite pour une commande complete et livrable, confirmer la commande et indiquer qu'un recapitulatif suivra.",
+      "Pour finaliser une commande WhatsApp FlavoNation, collecter uniquement les elements manquants : nom du client, numero de telephone, adresse de livraison complete, plats souhaites et quantites. Si le client a deja transmis une information, ne pas la redemander. Une fois toutes les informations collectees, afficher le recapitulatif : liste des plats, quantites, sous-totaux, total, adresse, telephone, puis demander une confirmation explicite du client. Apres confirmation explicite, confirmer la commande et indiquer qu'un recapitulatif de confirmation suivra.",
   },
   {
     title: 'Paiement - FlavoNation',
     category: 'PAIEMENT',
-    tags: ['paiement', 'reglement', 'verification', 'flavonation'],
+    tags: ['paiement', 'reglement', 'especes', 'carte', 'verification', 'flavonation'],
     content:
-      "Aucun mode de paiement n'est confirme dans cette base FlavoNation. Si le client demande comment payer, indiquer que le mode de paiement sera verifie avec l'equipe avant confirmation; ne pas annoncer especes, carte, virement ou paiement mobile sans article publie.",
+      "Les modes de paiement acceptes chez FlavoNation doivent etre confirmes avec l'equipe. Si le client demande comment payer, indiquer que le mode de paiement sera verifie avec l'equipe avant confirmation. Ne pas annoncer especes, carte, virement ou paiement mobile sans information confirmee dans la base.",
+  },
+  {
+    title: 'Horaires et disponibilite - FlavoNation',
+    category: 'HORAIRES',
+    tags: ['horaires', 'ouverture', 'fermeture', 'disponibilite', 'jours', 'flavonation'],
+    content:
+      "Les horaires d'ouverture et les jours de service de FlavoNation doivent etre confirmes avec l'equipe. Si le client demande les horaires ou si FlavoNation est ouvert, indiquer que les horaires exacts seront confirmes par l'equipe. Ne pas annoncer des horaires specifiques sans information confirmee dans la base.",
+  },
+  {
+    title: 'Contact et support - FlavoNation',
+    category: 'CONTACT',
+    tags: ['contact', 'telephone', 'whatsapp', 'support', 'aide', 'flavonation'],
+    content:
+      "FlavoNation est joignable via WhatsApp pour les commandes, questions et support. Pour les problemes de commande, reclamations ou demandes specifiques, l'agent IA transfère automatiquement vers l'equipe humaine. Si le client a une reclamation ou un probleme, l'equipe FlavoNation prend en charge directement.",
   },
   {
     title: 'Information absente de la base - FlavoNation',
     category: 'SUPPORT',
-    tags: ['verification', 'information', 'absente', 'flavonation'],
+    tags: ['verification', 'information', 'absente', 'confirmation', 'equipe', 'flavonation'],
     content:
-      "Si un plat, un prix, une variante, une boisson, une zone de livraison, une disponibilite ou un mode de paiement demande n'est pas clairement present dans la base FlavoNation, ne pas inventer de reponse. Indiquer au client que l'information va etre verifiee avec l'equipe.",
+      "Si un plat, un prix, une variante, une boisson, une zone de livraison, une disponibilite ou un mode de paiement demande n'est pas clairement documente dans la base FlavoNation, ne pas inventer de reponse. Indiquer au client que l'information sera verifiee avec l'equipe et qu'une reponse suivra rapidement.",
   },
 ];
 

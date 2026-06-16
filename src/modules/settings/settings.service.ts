@@ -255,6 +255,7 @@ export class SettingsService {
       updatedAt: settings.updatedAt,
       businessHours: settings.businessHours,
       aiPolicy: {
+        businessDomain: settings.aiPolicy.businessDomain,
         enabled: settings.aiPolicy.enabled,
         handoffEnabled: settings.aiPolicy.handoffEnabled,
         confidenceThreshold: settings.aiPolicy.confidenceThreshold,
@@ -332,6 +333,7 @@ export class SettingsService {
 
   private buildCompanyAiSettingsView(settings: CompanySettingsEntity) {
     return {
+      businessDomain: settings.aiPolicy.businessDomain,
       enabled: settings.aiPolicy.enabled,
       handoffEnabled: settings.aiPolicy.handoffEnabled,
       responseTone: this.normalizeResponseTone(settings.aiPolicy.responseTone),
@@ -923,6 +925,9 @@ export class SettingsService {
       {
         aiPolicy: {
           ...current.aiPolicy,
+          ...(dto.businessDomain !== undefined
+            ? { businessDomain: dto.businessDomain }
+            : {}),
           ...(dto.enabled !== undefined ? { enabled: dto.enabled } : {}),
           ...(dto.handoffEnabled !== undefined
             ? { handoffEnabled: dto.handoffEnabled }

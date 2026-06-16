@@ -28,6 +28,8 @@ import { KbArticleQueryDto } from './dto/kb-article-query.dto';
 import { IngestKbFileDto } from './dto/ingest-kb-file.dto';
 import { IngestKbSourceDto } from './dto/ingest-kb-source.dto';
 import { KbChunksService } from './kb-chunks.service';
+import { RebuildCompanyKbDto } from './dto/rebuild-company-kb.dto';
+import { FileSecurityService } from './ingestion/file-security.service';
 
 @Controller('knowledge-base/articles')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -36,9 +38,11 @@ export class KbArticlesController {
   constructor(
     private readonly kbArticlesService: KbArticlesService,
     private readonly kbChunksService: KbChunksService,
+    private readonly fileSecurityService: FileSecurityService,
   ) {}
 
   @Post()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   create(
     @Body() createKbArticleDto: CreateKbArticleDto,
     @CurrentUser() actor: AuthenticatedUser,
@@ -47,6 +51,7 @@ export class KbArticlesController {
   }
 
   @Post('ingest')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   ingest(
     @Body() ingestKbSourceDto: IngestKbSourceDto,
     @CurrentUser() actor: AuthenticatedUser,
@@ -55,6 +60,7 @@ export class KbArticlesController {
   }
 
   @Post('ingest/file')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   @UseInterceptors(
     FileInterceptor('file', {
       limits: {
@@ -62,7 +68,7 @@ export class KbArticlesController {
       },
     }),
   )
-  ingestFile(
+  async ingestFile(
     @UploadedFile() file: { buffer: Buffer; originalname: string; mimetype: string; size: number } | undefined,
     @Body() ingestKbFileDto: IngestKbFileDto,
     @CurrentUser() actor: AuthenticatedUser,
@@ -71,7 +77,21 @@ export class KbArticlesController {
       throw new BadRequestException('A file is required');
     }
 
+    await this.fileSecurityService.validate(file);
+
     return this.kbArticlesService.ingestFile(file, ingestKbFileDto, actor);
+  }
+
+  @Post('rebuild')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
+  rebuild(
+    @Body() rebuildCompanyKbDto: RebuildCompanyKbDto,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.kbArticlesService.rebuildCompanyKb(
+      rebuildCompanyKbDto.companyId,
+      actor,
+    );
   }
 
   @Get()
@@ -96,6 +116,7 @@ export class KbArticlesController {
   }
 
   @Put(':id')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   update(
     @Param('id') id: string,
     @Body() updateKbArticleDto: UpdateKbArticleDto,
@@ -105,6 +126,7 @@ export class KbArticlesController {
   }
 
   @Patch(':id/publish')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   publish(
     @Param('id') id: string,
     @Body() publishKbArticleDto: PublishKbArticleDto,
@@ -114,6 +136,7 @@ export class KbArticlesController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY_ADMIN)
   remove(@Param('id') id: string, @CurrentUser() actor: AuthenticatedUser) {
     return this.kbArticlesService.remove(id, actor);
   }

@@ -144,3 +144,13 @@ export type Setting = Prisma.SettingModel
  * 
  */
 export type WebhookEvent = Prisma.WebhookEventModel
+/**
+ * Model PdfImportDraft
+ * 
+ */
+export type PdfImportDraft = Prisma.PdfImportDraftModel
+/**
+ * Model PdfDraftArticle
+ * 
+ */
+export type PdfDraftArticle = Prisma.PdfDraftArticleModel
